@@ -4,15 +4,36 @@
 <!-- vim:set ts=2 expandtab: -->
 <moduleset>
 
+  <repository type="tarball" name="libyaml" href="http://pyyaml.org/download/libyaml/"/>
   <repository type="svn" name="libxc" href="http://www.tddft.org/svn/"/>
+  <repository type="tarball" name="local" href="./"/>
+
+  <autotools id="libyaml" autogen-sh="autoreconf" skip-autogen="true">
+    <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
+  </autotools>
 
   <autotools id="libxc" autogen-sh="autoreconf">
     <branch repo="libxc" version="4.0.3" />
   </autotools>
 
+  <autotools id="futile" autogen-sh="autoreconf">
+    <branch repo="local" module="futile-1.8.tar.gz" version="1.8.0" checkoutdir="futile"/>
+    <dependencies>
+      <dep package="libyaml"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="psolver" autogen-sh="autoreconf">
+    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.0" checkoutdir="psolver"/>
+    <dependencies>
+      <dep package="futile"/>
+    </dependencies>
+  </autotools>
+
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="libxc"/>
+      <dep package="psolver"/>
     </dependencies>
   </metamodule>
 
