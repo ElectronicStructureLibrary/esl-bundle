@@ -4,6 +4,7 @@ test:opensuse:
 
   script:
     - zypper in -y gnu-compilers-hpc gnu-compilers-hpc-devel
+    - source /etc/profile.d/lmod.sh
     - module load gnu/7
     - module list
     - gfortran -v
