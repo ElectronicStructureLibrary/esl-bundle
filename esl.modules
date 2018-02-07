@@ -8,6 +8,7 @@
   <repository type="tarball" name="libyaml" href="http://pyyaml.org/download/libyaml/"/>
   <repository type="git" name="libxc" href="https://gitlab.com/libxc/"/>
   <repository type="tarball" name="local" href="./"/>
+  <repository type="git" name="launchpad" href="https://git.launchpad.net/"/>
 
   <autotools id="libyaml" autogen-sh="autoreconf" skip-autogen="true">
     <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
@@ -35,11 +36,16 @@
     <branch repo="esl" module="pspio" version="0.2.0"/>
   </autotools>
 
+  <autotools id="fdf" autogen-sh="autogen.sh+configure">
+    <branch repo="launchpad" module="libfdf" version="0.1.1"/>
+  </autotools>
+
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="libxc"/>
       <dep package="psolver"/>
       <dep package="pspio"/>
+      <dep package="fdf"/>
     </dependencies>
   </metamodule>
 
