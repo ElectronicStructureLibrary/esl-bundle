@@ -56,6 +56,10 @@
   <autotools id="pspblas" autogen-sh="configure">
     <branch repo="local" module="pspblas-0.0.0.tar.gz" version="0.0.0"/>
   </autotools>
+
+  <autotools id="matrixswitch" autogen-sh="configure">
+    <branch repo="local" module="matrixswitch-0.0.0.tar.gz" version="0.0.0"/>
+  </autotools>
   
   <metamodule id="esl-bundle">
     <dependencies>
