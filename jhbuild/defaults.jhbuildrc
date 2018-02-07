@@ -12,8 +12,8 @@ if 'GTK_PATH' in os.environ.keys():
 modulesets_dir = SRCDIR
 
 # what modules to build?
-moduleset = 'bigdft'
-modules = [ 'bigdft' ]
+moduleset = 'esl'
+modules = [ ]
 
 def basic_configuration():
     return os.environ.get("BIGDFT_CONFIGURE_FLAGS")
@@ -39,12 +39,7 @@ skip = []
 tags = []
 
 # directories
-if os.path.exists('/opt/etsf'):
-    # /opt/etsf has been the default for a long time, and we keep on using it
-    # if it exists
-    prefix = '/opt/etsf'
-else:
-    prefix = os.path.join(os.getcwd(), "install")
+prefix = os.path.join(os.getcwd(), "install")
 
 top_builddir = '_jhbuild'  # If a relative path, prefix will be prepended
 
@@ -100,22 +95,6 @@ module_extra_env = {}
 module_makecheck = {}
 module_nopoison = {}
 
-# Specific autogenargs by default
-module_autogenargs['PyYAML'] = "build_ext -I%(prefix)s/include -L%(prefix)s/lib --rpath=%(prefix)s/lib " % {"prefix": prefix}
-module_autogenargs['etsf_io'] = "--with-moduledir=%(prefix)s/include " % {"prefix": prefix}
-if basic_configuration() is not None:
-    module_autogenargs['libyaml'  ]= basic_configuration() 
-    module_autogenargs['GaIn'     ]= basic_configuration()
-    module_autogenargs['libxc'    ]= basic_configuration()
-    module_autogenargs['chess'    ]= basic_configuration()
-    module_autogenargs['bigdft'   ]= basic_configuration()
-    module_autogenargs['libABINIT']= basic_configuration()
-    module_autogenargs['futile'   ]= basic_configuration()
-    module_autogenargs['psolver'  ]= basic_configuration()
-    module_autogenargs['spred'    ]= basic_configuration()
-
-#branches['PyYAML']='minloader'
- 
 # control parts of the build process
 nonetwork     = False  # never touch the network
 alwaysautogen = False  # always call autogen.sh
@@ -254,5 +233,5 @@ system_prefix = '/usr'
 
 # A tuple of website name and URL. This is displayed in tinderbox output. URL
 # String may contain the variable %(module)s
-help_website = ('BigDFT Live!',
-                'http://www.bigdft.org/Wiki/JhbuildIssues/%(module)s')
+help_website = ('ESL',
+                'https://gitlab.e-cam2020.eu/esl/%(module)s')
