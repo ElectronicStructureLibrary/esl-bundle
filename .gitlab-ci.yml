@@ -1,9 +1,9 @@
-image: opensuse:tumbleweed
-before_script:
-  - zypper in gnu-compilers-hpc gnu-compilers-hpc-devel
+test:opensuse:
 
-test:
+  image: opensuse:tumbleweed
+
   script:
+    - zypper in -y gnu-compilers-hpc gnu-compilers-hpc-devel
     - module load gnu/7
     - module list
     - gfortran -v
