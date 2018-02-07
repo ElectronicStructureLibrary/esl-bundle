@@ -4,6 +4,7 @@
 <!-- vim:set ts=2 expandtab: -->
 <moduleset>
 
+  <repository type="git" name="esl" href="https://gitlab.e-cam2020.eu/esl/"/>
   <repository type="tarball" name="libyaml" href="http://pyyaml.org/download/libyaml/"/>
   <repository type="svn" name="libxc" href="http://www.tddft.org/svn/"/>
   <repository type="tarball" name="local" href="./"/>
@@ -30,10 +31,15 @@
     </dependencies>
   </autotools>
 
+  <autotools id="pspio" autogen-sh="autogen.sh+configure" autogenargs="--enable-fortran">
+    <branch repo="esl" module="pspio" version="0.2.0"/>
+  </autotools>
+
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="libxc"/>
       <dep package="psolver"/>
+      <dep package="pspio"/>
     </dependencies>
   </metamodule>
 
