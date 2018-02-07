@@ -6,7 +6,7 @@
 
   <repository type="git" name="esl" href="https://gitlab.e-cam2020.eu/esl/"/>
   <repository type="tarball" name="libyaml" href="http://pyyaml.org/download/libyaml/"/>
-  <repository type="svn" name="libxc" href="http://www.tddft.org/svn/"/>
+  <repository type="git" name="libxc" href="https://gitlab.com/libxc/"/>
   <repository type="tarball" name="local" href="./"/>
 
   <autotools id="libyaml" autogen-sh="autoreconf" skip-autogen="true">
