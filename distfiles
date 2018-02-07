@@ -1,3 +1,4 @@
 jhbuild/
 jhbuild.py
 esl.modules
+rcfiles/
