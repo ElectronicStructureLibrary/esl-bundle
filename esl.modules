@@ -53,6 +53,10 @@
     <branch repo="launchpad" module="libfdf" version="0.1.1"/>
   </autotools>
 
+  <autotools id="pspblas" autogen-sh="configure">
+    <branch repo="local" module="pspblas-0.0.0.tar.gz" version="0.0.0"/>
+  </autotools>
+  
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="libxc"/>
