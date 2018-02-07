@@ -1,0 +1,19 @@
+<?xml version="1.0"?><!--*- mode: nxml; indent-tabs-mode: nil -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<!-- vim:set ts=2 expandtab: -->
+<moduleset>
+
+  <repository type="svn" name="libxc" href="http://www.tddft.org/svn/"/>
+
+  <autotools id="libxc" autogen-sh="autoreconf">
+    <branch repo="libxc" version="4.0.3" />
+  </autotools>
+
+  <metamodule id="esl-bundle">
+    <dependencies>
+      <dep package="libxc"/>
+    </dependencies>
+  </metamodule>
+
+</moduleset>

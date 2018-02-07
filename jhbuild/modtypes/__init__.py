@@ -601,16 +601,6 @@ class MetaModule(Package):
             else:
                 shutil.copy(os.path.join(SRCDIR, fle), destdir)
 
-                    
-        # Add jhbuild and config files themselves.
-        #shutil.copytree(os.path.join(SRCDIR, "jhbuild"), os.path.join(destdir, "jhbuild"))
-        #shutil.copy(os.path.join(SRCDIR, "jhbuild.py"), destdir)
-        #shutil.copy(os.path.join(SRCDIR, "bigdft.modules"), destdir)
-        #shutil.copy(os.path.join(SRCDIR, "gnome.modules"), destdir)
-        #shutil.copy(os.path.join(SRCDIR, "jhbuildrc"), destdir)
-        #shutil.copy(os.path.join(SRCDIR, "turing.rc"), destdir)
-        #shutil.copy(os.path.join(SRCDIR, "curie.rc"), destdir)
-
         # Create the tar.
         import tarfile
         tar = tarfile.open(os.path.join(self.get_builddir(buildscript),
