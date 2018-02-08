@@ -123,6 +123,7 @@ def setup_env(prefix):
     libdir = os.path.join(prefix, 'lib')
     addpath('LD_LIBRARY_PATH', libdir)
     os.environ['JHBUILD_LIBDIR'] = libdir
+    libdir64 = os.path.join(prefix, 'lib64')
 
     # LDFLAGS and C_INCLUDE_PATH are required for autoconf configure
     # scripts to find modules that do not use pkg-config (such as guile
@@ -133,6 +134,11 @@ def setup_env(prefix):
     if sys.platform.startswith('win'):
         libdir = subprocess_win32.fix_path_for_msys(libdir)
     os.environ['LDFLAGS'] = ('-L%s ' % libdir) + os.environ.get('LDFLAGS', '')
+
+    # Add lib64 for systems that are using it.
+    if os.path.isdir(libdir64):
+        addpath('LD_LIBRARY_PATH', libdir64)
+        os.environ['LDFLAGS'] = ('-L%s ' % libdir64) + os.environ.get('LDFLAGS', '')
 
     includedir = os.path.join(prefix, 'include')
     addpath('C_INCLUDE_PATH', includedir)
