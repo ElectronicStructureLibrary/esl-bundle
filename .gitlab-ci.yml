@@ -1,8 +1,12 @@
 test:opensuse:
-
   image: drfaustroll/esl:opensuse-tumbleweed
-
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/7 openmpi/3.0.0 scalapack/2.0.2
+    - module load gnu/7 
     - ./jhbuild.py build esl-bundle
+test:opensuse-mpi:
+  image: drfaustroll/esl:opensuse-tumbleweed
+  script:
+    - source /etc/profile.d/lmod.sh
+    - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2
+    - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle
