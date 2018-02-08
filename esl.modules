@@ -60,6 +60,14 @@
   <autotools id="matrixswitch" autogen-sh="configure">
     <branch repo="local" module="matrixswitch-0.0.0.tar.gz" version="0.0.0"/>
   </autotools>
+
+  <autotools id="libomm" autogen-sh="configure">
+    <branch repo="local" module="libomm-0.0.0.tar.gz" version="0.0.0"/>
+    <dependencies>
+      <dep package="pspblas"/>
+      <dep package="matrixswitch"/>
+    </dependencies>
+  </autotools>
   
   <metamodule id="esl-bundle">
     <dependencies>
