@@ -53,20 +53,23 @@
     <branch repo="launchpad" module="libfdf" version="0.1.1"/>
   </autotools>
 
-  <autotools id="pspblas" autogen-sh="configure">
+  <autotools id="pspblas">
     <branch repo="local" module="pspblas-0.0.0.tar.gz" version="0.0.0"/>
   </autotools>
 
-  <autotools id="matrixswitch" autogen-sh="configure">
+  <autotools id="matrixswitch">
     <branch repo="local" module="matrixswitch-0.0.0.tar.gz" version="0.0.0"/>
   </autotools>
 
-  <autotools id="libomm" autogen-sh="configure">
+  <autotools id="libomm">
     <branch repo="local" module="libomm-0.0.0.tar.gz" version="0.0.0"/>
     <dependencies>
-      <dep package="pspblas"/>
       <dep package="matrixswitch"/>
     </dependencies>
+  </autotools>
+
+  <autotools id="elpa" autogen-sh="configure">
+    <branch repo="local" module="elpa-2017.05.003.tar.gz" version="2017.05.003"/>
   </autotools>
   
   <metamodule id="esl-bundle">
@@ -76,6 +79,8 @@
       <dep package="pspio"/>
       <dep package="fdf"/>
       <dep package="xmlf90"/>
+      <dep package="libomm"/>
+      <dep package="elpa"/>
     </dependencies>
   </metamodule>
 
