@@ -4,6 +4,7 @@ test:opensuse:
 
   script:
     - groupadd -g 999 drFaustroll && useradd -r -u 999 -g drFaustroll drFaustroll
+    - mkdir /home/drFaustroll && chown -R drFaustroll:drFaustroll /home/drFaustroll
     - zypper in -y gnu-compilers-hpc gnu-compilers-hpc-devel
     - zypper in -y openmpi3-gnu-hpc openmpi3-gnu-hpc-devel libscalapack2-gnu-openmpi3-hpc libscalapack2-gnu-openmpi3-hpc-devel libhdf5-gnu-openmpi3-hpc hdf5-gnu-openmpi3-hpc-devel
     - zypper in -y cmake make autoconf automake libtool python python-xml sudo
