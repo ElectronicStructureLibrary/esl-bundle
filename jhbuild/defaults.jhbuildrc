@@ -98,6 +98,9 @@ module_nopoison = {}
 # Set parameters for LibPSML
 module_autogenargs['libpsml'] = "--with-xmlf90=%s" %prefix
 
+# Set parameters for LibOMM
+module_autogenargs['libomm'] = "--with-msw=%s" %prefix
+
 # control parts of the build process
 nonetwork     = False  # never touch the network
 alwaysautogen = False  # always call autogen.sh

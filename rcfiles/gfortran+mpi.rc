@@ -6,3 +6,10 @@ module_autogenargs['futile'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g 
 module_autogenargs['psolver'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g -Wall -fbounds-check' --enable-dynamic-libraries"
 
 module_autogenargs['libxc'] = "CC=gcc --enable-shared"
+
+module_autogenargs['libomm'] = "MPICC=mpicc MPIFC=mpif90 --enable-shared --with-msw=%s " %(prefix)
+
+module_autogenargs['elpa'] = "FCFLAGS='-ffree-line-length-none'"
+
+
+
