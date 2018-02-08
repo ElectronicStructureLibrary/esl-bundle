@@ -5,7 +5,9 @@ test:opensuse:
   script:
     - zypper in -y gnu-compilers-hpc gnu-compilers-hpc-devel
     - zypper in -y openmpi3-gnu-hpc openmpi3-gnu-hpc-devel libscalapack2-gnu-openmpi3-hpc libscalapack2-gnu-openmpi3-hpc-devel libhdf5-gnu-openmpi3-hpc hdf5-gnu-openmpi3-hpc-devel
+    - zypper in -y cmake make autoconf automake libtool python3
     - source /etc/profile.d/lmod.sh
     - module load gnu/7 openmpi/3.0.0 scalapack/2.0.2
     - module av
     - module list
+    - ./jhbuilder.py build esl-bundle
