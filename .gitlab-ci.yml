@@ -10,3 +10,13 @@ test:opensuse-mpi:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2
     - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle
+
+test:debian:
+  image: drfaustroll/esl:debian-latest
+  script:
+    - ./jhbuild.py build esl-bundle
+
+test:debian-mpi:
+  image: drfaustroll/esl:debian-latest
+  script:
+    - ./jhbuild.py -f rcfiles/gfortran+mpi.rc build esl-bundle
