@@ -5,7 +5,4 @@ test:opensuse:
   script:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7 openmpi/3.0.0 scalapack/2.0.2
-    - su -c zypper in -y git
-    - module av
-    - module list 
     - ./jhbuild.py build esl-bundle
