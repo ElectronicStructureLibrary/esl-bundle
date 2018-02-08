@@ -10,4 +10,4 @@ test:opensuse:
     - module load gnu/7 openmpi/3.0.0 scalapack/2.0.2
     - module av
     - module list
-    - ./jhbuilder.py build esl-bundle
+    - ./jhbuild.py build esl-bundle
