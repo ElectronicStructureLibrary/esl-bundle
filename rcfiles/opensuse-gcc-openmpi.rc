@@ -7,4 +7,4 @@ module_autogenargs['psolver'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g
 
 module_autogenargs['libxc'] = "CC=gcc"
 
-module_makeargs['elsi'] = "MPIFC=mpif90 MPICC=mpicc MPICXX=mpicxx FFLAGS_I='-I%s/include' DISABLE_PEXSI=yes SCALAPACK_LIB='-L$SCALAPACK_DIR/lib64 -lscalapack -lblacs -lblas -llapack'"%(prefix)
+module_makeargs['elsi'] = "MPIFC=mpif90 MPICC=mpicc MPICXX=mpicxx FFLAGS_I='-I%s/include' DISABLE_PEXSI=yes SCALAPACK_LIB='-L$(SCALAPACK_DIR)/lib64 -lscalapack -lblacs -lblas -llapack'"%(prefix)
