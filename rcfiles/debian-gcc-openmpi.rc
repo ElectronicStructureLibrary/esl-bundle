@@ -1,0 +1,13 @@
+# Specific configure arguments for each module
+module_autogenargs['pspio'] = "--enable-shared"
+
+module_autogenargs['futile'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g -Wall -fbounds-check' --enable-dynamic-libraries"
+
+module_autogenargs['psolver'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g -Wall -fbounds-check' --enable-dynamic-libraries"
+
+module_autogenargs['libxc'] = "CC=gcc --enable-shared"
+
+module_makeargs['elsi'] = "MPIFC=mpif90 MPICC=mpicc MPICXX=mpicxx FFLAGS_I='-I%s/include' DISABLE_PEXSI=yes SCALAPACK_LIB='-lscalapack-openmpi -lblacs-openmpi -lblacsCinit-openmpi -lblacsF77init-openmpi -llapack -lblas '"%(prefix)
+
+
+
