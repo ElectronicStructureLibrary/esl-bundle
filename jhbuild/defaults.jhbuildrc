@@ -1,7 +1,6 @@
 # -*- mode: python -*-
 # This file holds the default values for the ~/.config/jhbuildrc file.
 # Do not copy this to ~/.config/jhbuildrc
-# This has been modified for BigDFT needs.
 
 import os, sys, tempfile
 
@@ -13,10 +12,7 @@ modulesets_dir = SRCDIR
 
 # what modules to build?
 moduleset = 'esl'
-modules = [ ]
-
-def basic_configuration():
-    return os.environ.get("BIGDFT_CONFIGURE_FLAGS")
+modules = [ 'esl-bundle' ]
 
 # policy for modules to build, options are:
 #  - all: build everything requested
