@@ -11,6 +11,8 @@
   <repository type="tarball" name="xmlf90" href="https://launchpad.net/xmlf90/trunk/1.5/+download/"/>
   <repository type="git" name="launchpad" href="https://git.launchpad.net/"/>
   <repository type="tarball" name="libpsml" href="https://launchpad.net/libpsml/trunk/1.1/+download/"/>
+  <repository type="git" name="github" href="https://github.com/ElectronicStructureLibrary/"/>
+  <repository type="tarball" name="flook" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
 
   <autotools id="libyaml" autogen-sh="autoreconf" skip-autogen="true">
     <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
@@ -77,9 +79,16 @@
       <patch file="elsi.patch"/>
     </branch>
   </makesys>
-  
+
+  <makesys id="flook">
+    <branch repo="flook" module="flook-0.7.0.tar.gz" version="0.7.0">
+      <patch file="flook-install-prefix.patch" strip="1"/>
+    </branch>
+  </makesys>
+
   <metamodule id="esl-bundle">
     <dependencies>
+      <dep package="flook"/>
       <dep package="libxc"/>
       <dep package="psolver"/>
       <dep package="pspio"/>
