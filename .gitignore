@@ -1,2 +1,12 @@
-*.pyc
+*.py[co]
 tmp
+/fdict-*
+/flook-*
+/futile
+/libfdf
+/libpsml-*
+/libxc
+/psolver
+/pspio
+/xmlf90-*
+/yaml-*
