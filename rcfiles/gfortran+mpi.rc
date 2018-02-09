@@ -9,7 +9,9 @@ module_autogenargs['libxc'] = "CC=gcc --enable-shared"
 
 module_autogenargs['libomm'] = "MPICC=mpicc MPIFC=mpif90 --enable-shared --with-msw=%s " %(prefix)
 
-module_autogenargs['elpa'] = "FCFLAGS='-ffree-line-length-none'"
+module_autogenargs['elpa'] = "FCFLAGS='-ffree-line-length-none' --disable-sse --disable-avx --disable-avx2"
+
+#module_makeargs['elsi'] = "MPIFC=mpifort MPICC=mpicc FFLAGS_I='-I%s/include -I%s/include/elpa-2017.05.003/modules' EXTERNAL_OMM=yes EXTERNAL_ELPA=yes DISABLE_PEXSI=yes ELPA_DIR='-L%s/lib -lelpa' OMM_LIB='-L%s/lib -lOMM -lMatrixSwitch' LIB_DIR='%s/lib' INC_DIR='%s/include' "%(prefix, prefix, prefix, prefix, prefix, prefix)
 
 
-
+module_makeargs['elsi'] = "MPIFC=mpifort MPICC=mpicc FFLAGS_I='-I%s/include' DISABLE_PEXSI=yes SCALAPACK_LIB='-lscalapack -lopenblas'"%(prefix)

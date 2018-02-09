@@ -53,11 +53,11 @@
     <branch repo="launchpad" module="libfdf" version="0.1.1"/>
   </autotools>
 
-  <autotools id="pspblas">
+  <autotools id="pspblas" autogen-sh="configure">
     <branch repo="local" module="pspblas-0.0.0.tar.gz" version="0.0.0"/>
   </autotools>
 
-  <autotools id="matrixswitch">
+  <autotools id="matrixswitch" autogen-sh="configure">
     <branch repo="local" module="matrixswitch-0.0.0.tar.gz" version="0.0.0"/>
   </autotools>
 
@@ -71,6 +71,12 @@
   <autotools id="elpa" autogen-sh="configure">
     <branch repo="local" module="elpa-2017.05.003.tar.gz" version="2017.05.003"/>
   </autotools>
+
+  <makesys id="elsi">
+    <branch repo="local" module="elsi-interface-master-63ce5aa15766d7e8be7e28434c25d6a950d729dd.tar.gz" version="master-63ce5aa15766d7e8be7e28434c25d6a950d729dd">
+      <patch file="elsi.patch"/>
+    </branch>
+  </makesys>
   
   <metamodule id="esl-bundle">
     <dependencies>
@@ -79,8 +85,6 @@
       <dep package="pspio"/>
       <dep package="fdf"/>
       <dep package="xmlf90"/>
-      <dep package="libomm"/>
-      <dep package="elpa"/>
     </dependencies>
   </metamodule>
 
