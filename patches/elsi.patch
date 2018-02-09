@@ -1,0 +1,13 @@
+diff -urN elsi-interface-master-63ce5aa15766d7e8be7e28434c25d6a950d729dd/src/ELSI/Makefile.elsi elsi_new/src/ELSI/Makefile.elsi
+--- src/ELSI/Makefile.elsi	2018-02-05 03:25:55.000000000 +0100
++++ src/ELSI/Makefile.elsi	2018-02-08 17:59:51.553679331 +0100
+@@ -260,5 +260,7 @@
+ 	rm -f *.o *.mod *.x *.a *log*
+ 
+ install:
+-	cp $(BUILD_DIR)/*.a $(LIB_DIR)
+-	cp $(BUILD_DIR)/*.mod $(INC_DIR)
++	mkdir -p $(DESTDIR)/$(prefix)/lib
++	mkdir -p $(DESTDIR)/$(prefix)/include
++	cp $(BUILD_DIR)/*.a $(DESTDIR)/$(prefix)/lib
++	cp $(BUILD_DIR)/*.mod $(DESTDIR)/$(prefix)/include
