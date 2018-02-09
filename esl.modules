@@ -11,6 +11,7 @@
   <repository type="tarball" name="xmlf90" href="https://launchpad.net/xmlf90/trunk/1.5/+download/"/>
   <repository type="git" name="launchpad" href="https://git.launchpad.net/"/>
   <repository type="tarball" name="libpsml" href="https://launchpad.net/libpsml/trunk/1.1/+download/"/>
+  <repository type="tarball" name="fdict" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
 
   <autotools id="libyaml" autogen-sh="autoreconf" skip-autogen="true">
     <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
@@ -59,8 +60,15 @@
     </branch>
   </makesys>
   
+  <makesys id="fdict">
+    <branch repo="fdict" module="fdict-0.5.0.tar.gz" version="0.5.0">
+      <patch file="fdict-install-prefix.patch" strip="1"/>
+    </branch>
+  </makesys>
+
   <metamodule id="esl-bundle">
     <dependencies>
+      <dep package="fdict"/>
       <dep package="libxc"/>
       <dep package="psolver"/>
       <dep package="pspio"/>
