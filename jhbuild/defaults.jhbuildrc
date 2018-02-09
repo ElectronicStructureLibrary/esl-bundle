@@ -91,6 +91,9 @@ module_extra_env = {}
 module_makecheck = {}
 module_nopoison = {}
 
+# Set parameters for Flook
+module_makeargs['flook'] = "liball"
+
 # Set parameters for LibPSML
 module_autogenargs['libpsml'] = "--with-xmlf90=%s" %prefix
 
