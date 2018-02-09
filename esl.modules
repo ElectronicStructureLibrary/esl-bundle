@@ -11,6 +11,7 @@
   <repository type="tarball" name="xmlf90" href="https://launchpad.net/xmlf90/trunk/1.5/+download/"/>
   <repository type="git" name="launchpad" href="https://git.launchpad.net/"/>
   <repository type="tarball" name="libpsml" href="https://launchpad.net/libpsml/trunk/1.1/+download/"/>
+  <repository type="tarball" name="fdict" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
   <repository type="git" name="github" href="https://github.com/ElectronicStructureLibrary/"/>
   <repository type="tarball" name="flook" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
 
@@ -61,6 +62,12 @@
     </branch>
   </makesys>
 
+  <makesys id="fdict">
+    <branch repo="fdict" module="fdict-0.5.0.tar.gz" version="0.5.0">
+      <patch file="fdict-install-prefix.patch" strip="1"/>
+    </branch>
+  </makesys>
+
   <makesys id="flook">
     <branch repo="flook" module="flook-0.7.0.tar.gz" version="0.7.0">
       <patch file="flook-install-prefix.patch" strip="1"/>
@@ -69,6 +76,7 @@
 
   <metamodule id="esl-bundle">
     <dependencies>
+      <dep package="fdict"/>
       <dep package="flook"/>
       <dep package="libxc"/>
       <dep package="psolver"/>

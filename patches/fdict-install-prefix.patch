@@ -1,0 +1,151 @@
+diff -urN fdict-0.5.0.old/Makefile.project fdict-0.5.0.new/Makefile.project
+--- fdict-0.5.0.old/Makefile.project	2017-02-28 14:11:02.000000000 +0100
++++ fdict-0.5.0.new/Makefile.project	2018-02-09 15:03:40.062524615 +0100
+@@ -43,12 +43,12 @@
+ .NOTPARALLEL: install-mod
+ smeka-install: install-mod
+ install-mod:
+-	install -pm $(_OCT_rwrr) -t $(FMOD_DIR) $(F_MODS)
++	install -pm $(_OCT_rwrr) -t $(DESTDIR)$(FMOD_DIR) $(F_MODS)
+ 
+ .NOTPARALLEL: install-settings
+ smeka-install: install-settings
+ install-settings:
+-	install -pm $(_OCT_rwrr) -t $(BIN_DIR) settings.bash
++	install -pm $(_OCT_rwrr) -t $(DESTDIR)$(BIN_DIR) settings.bash
+ 
+ 
+ # Force the deletion of both libraries
+diff -urN fdict-0.5.0.old/README.md fdict-0.5.0.new/README.md
+--- fdict-0.5.0.old/README.md	2017-02-28 14:11:02.000000000 +0100
++++ fdict-0.5.0.new/README.md	2018-02-09 15:01:46.171885707 +0100
+@@ -31,7 +31,7 @@
+ Type `make` and a library called `libfdict.a` is created.  
+ Subsequently the installation may be performed by:
+ 
+-    make PREFIX=/papth/to/fdict install
++    make prefix=/papth/to/fdict install
+ 
+ which installs the required files (modules and libraries) to the folder.
+ 
+diff -urN fdict-0.5.0.old/log.org fdict-0.5.0.new/log.org
+--- fdict-0.5.0.old/log.org	2017-02-28 14:11:02.000000000 +0100
++++ fdict-0.5.0.new/log.org	2018-02-09 15:01:53.783794784 +0100
+@@ -14,7 +14,7 @@
+ to control whether shared/static libraries are build.
+ (Both may be opted individually)
+ Using the new build system an installation script also exists
+-  make PREFIX=... install
++  make prefix=... install
+ 
+ 
+ ** Added test of speed <2015-10-17 Sat>
+diff -urN fdict-0.5.0.old/smeka/Makefile.directory fdict-0.5.0.new/smeka/Makefile.directory
+--- fdict-0.5.0.old/smeka/Makefile.directory	2017-02-28 14:11:02.000000000 +0100
++++ fdict-0.5.0.new/smeka/Makefile.directory	2018-02-09 15:02:27.015397755 +0100
+@@ -16,30 +16,30 @@
+ 
+ 
+ # Default directories
+-PREFIX ?= $(HOME)/$(PROJECT_NAME)
++prefix ?= $(HOME)/$(PROJECT_NAME)
+ # Include directory (.h)
+-INC_DIR ?= $(PREFIX)/include
++INC_DIR ?= $(prefix)/include
+ # Module directory (.mod)
+ FMOD_DIR ?= $(INC_DIR)
+ # Executables
+-BIN_DIR ?= $(PREFIX)/bin
++BIN_DIR ?= $(prefix)/bin
+ # Library directory (.a/.so)
+-LIB_DIR ?= $(PREFIX)/lib
++LIB_DIR ?= $(prefix)/lib
+ # shared folder
+-SHARE_DIR ?= $(PREFIX)/share
++SHARE_DIR ?= $(prefix)/share
+ # Manual folder (man ***)
+ MAN_DIR ?= $(SHARE_DIR)/man
+ # pkg-config files
+ PKG_DIR ?= $(LIB_DIR)/pkgconfig
+ # additional files (settings etc.)
+-ETC_DIR ?= $(PREFIX)/etc
++ETC_DIR ?= $(prefix)/etc
+ 
+ 
+ # Print out settings from this file
+ .PHONY: smeka-settings-dir
+ smeka-settings-dir:
+ 	@echo "Directory settings:"
+-	@echo "Prefix            (PREFIX) : $(PREFIX)"
++	@echo "Prefix            (prefix) : $(prefix)"
+ 	@echo "Includes         (INC_DIR) : $(INC_DIR)"
+ 	@echo "Fortran modules (FMOD_DIR) : $(FMOD_DIR)"
+ 	@echo "Binaries         (BIN_DIR) : $(BIN_DIR)"
+diff -urN fdict-0.5.0.old/smeka/Makefile.install fdict-0.5.0.new/smeka/Makefile.install
+--- fdict-0.5.0.old/smeka/Makefile.install	2017-02-28 14:11:02.000000000 +0100
++++ fdict-0.5.0.new/smeka/Makefile.install	2018-02-09 15:04:49.573693254 +0100
+@@ -13,16 +13,16 @@
+ .NOTPARALLEL: smeka-install-lib
+ smeka-install-lib: smeka-install-init-dir
+ ifneq ($(LIBRARIES),)
+-	install -pm $(_OCT_rwxrxrx) -t $(LIB_DIR) $(LIBRARIES)
++	install -pm $(_OCT_rwxrxrx) -t $(DESTDIR)$(LIB_DIR) $(LIBRARIES)
+ endif
+ 
+ 
+ .PHONY: smeka-install-init-dir
+ .NOTPARALLEL: smeka-install-init-dir
+ smeka-install-init-dir:
+-	-mkdir -p $(INC_DIR)
+-	-mkdir -p $(LIB_DIR)
+-	-mkdir -p $(BIN_DIR)
++	-mkdir -p $(DESTDIR)$(INC_DIR)
++	-mkdir -p $(DESTDIR)$(LIB_DIR)
++	-mkdir -p $(DESTDIR)$(BIN_DIR)
+ 
+ 
+ # Issuing uninstall will forcefully remove the installation directory
+@@ -31,14 +31,14 @@
+ smeka-uninstall-install:
+ 	@echo ""
+ 	@echo "The directory tree:"
+-	@echo "  $(PREFIX)"
++	@echo "  $(DESTDIR)$(prefix)"
+ 	@echo "will be deleted!"
+ 	@echo "You may abort the operation within 2 secs by pressing:"
+ 	@echo ""
+ 	@echo "  Ctrl+C or ^C"
+ 	@echo ""
+ 	@sleep 2
+-	@rm -rf $(PREFIX)
++	@rm -rf $(DESTDIR)$(prefix)
+ uninstall: smeka-uninstall-install
+ 
+ 
+diff -urN fdict-0.5.0.old/src/Makefile.inc fdict-0.5.0.new/src/Makefile.inc
+--- fdict-0.5.0.old/src/Makefile.inc	2017-02-28 14:11:02.000000000 +0100
++++ fdict-0.5.0.new/src/Makefile.inc	2018-02-09 15:17:18.728887508 +0100
+@@ -14,12 +14,12 @@
+ variable.o: iso_var_str.o
+ variable.f90: variable_pp.F90 variable.sh settings.inc var_funcs_inc.inc
+ 	VPATH="$(TOP_DIR)" $(src_DIR)/variable.sh
+-	$(FPP) $(FPPFLAGS) $(INCLUDES) -I$(src_DIR) $< | sed -f $(src_DIR)/filter.sed > $@
++	$(FPP) $(FPPFLAGS) $(INCLUDES) -I. -I$(src_DIR) $< | sed -f $(src_DIR)/filter.sed > $@
+ 
+ dictionary.o: variable.o
+ dictionary.f90: dictionary_pp.F90 dictionary.sh settings.inc dict_funcs_inc.inc
+ 	VPATH="$(TOP_DIR)" $(src_DIR)/dictionary.sh
+-	$(FPP) $(FPPFLAGS) $(INCLUDES) -I$(src_DIR) $< | sed -f $(src_DIR)/filter.sed > $@
++	$(FPP) $(FPPFLAGS) $(INCLUDES) -I. -I$(src_DIR) $< | sed -f $(src_DIR)/filter.sed > $@
+ 
+ 
+ # Define objects that needs compilation
+@@ -30,7 +30,7 @@
+ 
+ 
+ # Ensure that the objects are built with the correct module path
+-$(src_FPP_SOURCES): INCLUDES += -I$(src_DIR)
++$(src_FPP_SOURCES): INCLUDES += -I. -I$(src_DIR)
+ 
+ .PHONY: source-src
+ source-src: $(src_SOURCES)
