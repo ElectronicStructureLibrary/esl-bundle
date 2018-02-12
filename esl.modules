@@ -14,6 +14,7 @@
   <repository type="tarball" name="fdict" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
   <repository type="git" name="github" href="https://github.com/ElectronicStructureLibrary/"/>
   <repository type="tarball" name="flook" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
+  <repository type="tarball" name="scotch" href="https://gforge.inria.fr/frs/download.php/file/34618/"/>
 
   <autotools id="libyaml" autogen-sh="autoreconf" skip-autogen="true">
     <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
@@ -60,7 +61,25 @@
     <branch repo="local" module="elsi-interface-master-63ce5aa15766d7e8be7e28434c25d6a950d729dd.tar.gz" version="master-63ce5aa15766d7e8be7e28434c25d6a950d729dd">
       <patch file="elsi.patch"/>
     </branch>
+    <dependencies>
+      <dep package="superlu_dist"/>
+    </dependencies>
   </makesys>
+
+  <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
+    <branch repo="scotch" module="scotch_6.0.4.tar.gz" version="6.0.4" >
+      <patch file="scotch_make.patch" strip="0"/>
+    </branch>
+  </makesys>
+
+  <cmake id="superlu_dist">
+    <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0">
+      <patch file="superlu.patch" strip="0"/>
+    </branch>
+    <dependencies>
+      <dep package="scotch"/>
+    </dependencies>
+  </cmake>
 
   <makesys id="fdict">
     <branch repo="fdict" module="fdict-0.5.0.tar.gz" version="0.5.0">

@@ -1,0 +1,89 @@
+--- /dev/null	2018-02-10 00:11:08.221711737 +0100
++++ src/Makefile.inc	2018-02-10 14:09:07.351480495 +0100
+@@ -0,0 +1,21 @@
++EXE		=
++LIB		= .so
++OBJ		= .o
++
++MAKE		= make
++AR		= gcc
++ARFLAGS		= -shared -o
++CAT		= cat
++CCS		= gcc
++CCP		= mpicc
++CCD		= mpicc
++CFLAGS		= -O3 -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_PTHREAD -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DSCOTCH_PTHREAD -Drestrict=__restrict -DIDXSIZE64
++CLIBFLAGS	= -shared -fPIC
++LDFLAGS		= -lz -lm -lrt -pthread
++CP		= cp
++LEX		= flex -Pscotchyy -olex.yy.c
++LN		= ln
++MKDIR		= mkdir
++MV		= mv
++RANLIB		= echo
++YACC		= bison -pscotchyy -y -b y
+--- /dev/null	2018-02-10 00:11:08.221711737 +0100
++++ Makefile	2018-02-10 15:38:54.391082355 +0100
+@@ -0,0 +1,6 @@
++
++all:
++	$(MAKE) -C src scotch libscotch
++
++install: 
++	(cd src && $(MAKE) $@) 
+--- src/Makefile.orig	2018-02-10 23:25:22.235848785 +0100
++++ src/Makefile	2018-02-10 23:24:40.602977495 +0100
+@@ -56,11 +56,11 @@ Makefile.inc			:
+ include Makefile.inc
+ 
+ prefix		?= /usr/local
+-bindir		?= $(prefix)/bin
+-includedir	?= $(prefix)/include
+-libdir		?= $(prefix)/lib
+-datarootdir	?= $(prefix)/share
+-mandir		?= $(datarootdir)/man
++bindir		?= $(DESTDIR)$(prefix)/bin
++includedir	?= $(DESTDIR)$(prefix)/include
++libdir		?= $(DESTDIR)$(prefix)/lib
++datarootdir	?= $(DESTDIR)$(prefix)/share
++mandir		?= $(datarootdir)$(prefix)/man
+ 
+ ../bin				:
+ 					-$(MKDIR) ../bin
+@@ -72,22 +72,22 @@ mandir		?= $(datarootdir)/man
+ 					-$(MKDIR) ../lib
+ 
+ $(bindir)			:
+-					-$(MKDIR) $(bindir)
++					-$(MKDIR) -p $(bindir)
+ 
+ $(datarootdir)			:
+-					-$(MKDIR) $(datarootdir)
++					-$(MKDIR) -p $(datarootdir)
+ 
+ $(includedir)			:
+-					-$(MKDIR) $(includedir)
++					-$(MKDIR) -p $(includedir)
+ 
+ $(libdir)			:
+-					-$(MKDIR) $(libdir)
++					-$(MKDIR) -p $(libdir)
+ 
+ $(mandir)			:	$(datarootdir)
+-					-$(MKDIR) $(mandir)
++					-$(MKDIR) -p $(mandir)
+ 
+ $(mandir)/man1			:	$(mandir)
+-					-$(MKDIR) $(mandir)/man1
++					-$(MKDIR) -p $(mandir)/man1
+ 
+ scotch				:	required
+ 					(cd libscotch ;      $(MAKE) VERSION=$(VERSION) RELEASE=$(RELEASE) PATCHLEVEL=$(PATCHLEVEL) scotch && $(MAKE) install)
+@@ -115,6 +115,7 @@ install				:	required	$(bindir)	$(includ
+ 					-$(CP) -f ../bin/[agm]*$(EXE) $(bindir)
+ 					-$(CP) -f ../bin/d[agm]*$(EXE) $(bindir)
+ 					-$(CP) -f ../include/*scotch*.h $(includedir)
++					-$(CP) -f ../include/*metis*.h $(includedir)
+ 					-$(CP) -f ../lib/*scotch*$(LIB) $(libdir)
+ 					-$(CP) -Rf ../man/* $(mandir)
+ 

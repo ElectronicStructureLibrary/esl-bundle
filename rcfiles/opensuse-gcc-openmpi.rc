@@ -7,4 +7,6 @@ module_autogenargs['psolver'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g
 
 module_autogenargs['libxc'] = "CC=gcc"
 
-module_makeargs['elsi'] = "MPIFC=mpif90 MPICC=mpicc MPICXX=mpicxx FFLAGS_I='-I%s/include' DISABLE_PEXSI=yes SCALAPACK_LIB='-L$(SCALAPACK_DIR)/lib64 -lscalapack -lblacs -lblas -llapack'"%(prefix)
+module_makeargs['elsi'] = "MPIFC=mpif90 MPICC=mpicc MPICXX=mpicxx FFLAGS_I='-I%s/include' SCALAPACK_LIB='-L$(SCALAPACK_DIR)/lib64 -lscalapack -lblacs -lblas -llapack' SUPERLU_LIB=-lsuperlu_dist PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lptscotcherr -lscotchmetis -lscotch -lscotcherr -lz -fopenmp -lstdc++' "%(prefix)
+
+module_cmakeargs['superlu_dist'] = "-DUSE_XSDK_DEFAULTS=FALSE -DTPL_PARMETIS_LIBRARIES='ptscotchparmetis' -DTPL_PARMETIS_INCLUDE_DIRS={0:s}/include -DCMAKE_C_FLAGS='-std=c99 -fPIC -lz -L{0:s}/lib -lptscotchparmetis  -lptscotch -lscotchmetis -lscotch -lptscotcherr' -Denable_blaslib=OFF -DTPL_BLAS_LIBRARIES='-lblas' -DCMAKE_C_COMPILER=mpicc ".format(prefix)
