@@ -100,6 +100,9 @@ module_autogenargs['libpsml'] = "--with-xmlf90=%s" %prefix
 # Set parameters for LibOMM
 module_autogenargs['libomm'] = "--with-msw=%s" %prefix
 
+# Set parameters for Pspio (see issue pspio#41 in E-CAM's Gitlab)
+module_autogenargs['pspio'] = "--enable-gsl"
+
 # control parts of the build process
 nonetwork     = False  # never touch the network
 alwaysautogen = False  # always call autogen.sh
