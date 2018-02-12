@@ -1,5 +1,5 @@
 # Specific configure arguments for each module
-module_autogenargs['pspio'] = "--enable-shared"
+module_autogenargs['pspio'] = "--enable-shared --disable-gsl"
 
 module_autogenargs['futile'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g -Wall -fbounds-check' --enable-dynamic-libraries"
 
