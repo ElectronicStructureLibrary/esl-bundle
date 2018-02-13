@@ -41,7 +41,7 @@
   </autotools>
 
   <autotools id="pspio" autogen-sh="autogen.sh+configure" autogenargs="--enable-fortran">
-    <branch repo="esl" module="pspio" tag="0.2.3"/>
+    <branch repo="esl" module="pspio" tag="0.2.4"/>
   </autotools>
 
   <autotools id="xmlf90" autogen-sh="configure" autogenargs="">
