@@ -4,9 +4,12 @@ tmp
 /flook-*
 /futile
 /libfdf
+/libgridxc
 /libpsml-*
 /libxc
 /psolver
 /pspio
+/scotch_*
+/superlu_dist-*
 /xmlf90-*
 /yaml-*
