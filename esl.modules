@@ -96,7 +96,7 @@
   </makesys>
 
   <autotools id="libgridxc" autogen-sh="autogen.sh+configure">
-    <branch repo="local" module="libgridxc-0.8.0.1.tar.gz" version="0.8.0.1" checkoutdir="libgridxc"/>
+    <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>

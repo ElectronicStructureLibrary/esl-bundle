@@ -9,7 +9,7 @@ tmp
 /libxc
 /psolver
 /pspio
-/scotch_*
-/superlu_dist-*
+/scotch_[0-9].[0-9].[0-9]
+/superlu_dist-[0-9].[0-9].[0-9]
 /xmlf90-*
 /yaml-*
