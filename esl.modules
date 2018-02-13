@@ -14,7 +14,9 @@
   <repository type="tarball" name="fdict" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
   <repository type="git" name="github" href="https://github.com/ElectronicStructureLibrary/"/>
   <repository type="tarball" name="flook" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
+<!--
   <repository type="tarball" name="scotch" href="https://gforge.inria.fr/frs/download.php/file/34618/"/>
+-->
 
   <autotools id="libyaml" autogen-sh="autoreconf" skip-autogen="true">
     <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
@@ -67,7 +69,7 @@
   </makesys>
 
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
-    <branch repo="scotch" module="scotch_6.0.4.tar.gz" version="6.0.4" >
+    <branch repo="local" module="scotch_6.0.4.tar.gz" version="6.0.4" >
       <patch file="scotch_make.patch" strip="0"/>
     </branch>
   </makesys>
