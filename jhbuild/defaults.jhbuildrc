@@ -104,7 +104,7 @@ module_autogenargs['libomm'] = "--with-msw=%s" %prefix
 module_autogenargs['pspio'] = "--enable-gsl"
 
 # Set parameters for LibGridXC
-module_autogenargs['libgridxc'] = "--enable-multiconfig"
+module_autogenargs['libgridxc'] = "--enable-multiconfig --with-libxc=%s" % prefix
 
 # Set parameters for LibXC
 module_autogenargs['libxc'] = "--enable-fortran --enable-static --enable-shared"
