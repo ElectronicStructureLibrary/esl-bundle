@@ -22,8 +22,8 @@
     <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
   </autotools>
 
-  <autotools id="libxc" autogen-sh="autoreconf">
-    <branch repo="libxc" version="4.0.3" />
+  <autotools id="libxc" autogen-sh="autoreconf" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
+    <branch repo="libxc" version="3.0.1" />
   </autotools>
 
   <autotools id="futile" autogen-sh="autoreconf">
@@ -40,15 +40,15 @@
     </dependencies>
   </autotools>
 
-  <autotools id="pspio" autogen-sh="autogen.sh+configure" autogenargs="--enable-fortran">
+  <autotools id="pspio" autogen-sh="autogen.sh+configure" autogenargs="--enable-gsl --enable-fortran">
     <branch repo="esl" module="pspio" tag="0.2.4"/>
   </autotools>
 
-  <autotools id="xmlf90" autogen-sh="configure" autogenargs="">
+  <autotools id="xmlf90" autogen-sh="configure">
     <branch repo="xmlf90" module="xmlf90-1.5.3.tar.gz" version="1.5.3"/>
   </autotools>
 
-  <autotools id="libpsml" autogen-sh="configure" autogenargs="">
+  <autotools id="libpsml" autogen-sh="configure" autogenargs="--with-xmlf90=$JHBUILD_PREFIX">
     <branch repo="libpsml" module="libpsml-1.1.7.tar.gz" version="1.1.7"/>
     <dependencies>
       <dep package="xmlf90"/>
@@ -59,7 +59,7 @@
     <branch repo="launchpad" module="libfdf" version="0.1.1"/>
   </autotools>
 
-  <makesys id="elsi">
+  <makesys id="elsi" makeargs="SUPERLU_LIB='-lsuperlu_dist' PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz'">
     <branch repo="local" module="elsi-interface-solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381.tar.gz" version="solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381">
       <patch file="elsi.patch"/>
     </branch>
@@ -74,7 +74,7 @@
     </branch>
   </makesys>
 
-  <cmake id="superlu_dist">
+  <cmake id="superlu_dist" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIX/include">
     <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0">
       <patch file="superlu.patch" strip="0"/>
     </branch>
@@ -89,13 +89,13 @@
     </branch>
   </makesys>
 
-  <makesys id="flook">
+  <makesys id="flook" makeargs="liball">
     <branch repo="flook" module="flook-0.7.0.tar.gz" version="0.7.0">
       <patch file="flook-install-prefix.patch" strip="1"/>
     </branch>
   </makesys>
 
-  <autotools id="libgridxc" autogen-sh="autogen.sh+configure">
+  <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX">
     <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc"/>
     <dependencies>
       <dep package="libxc"/>
@@ -110,7 +110,7 @@
       <dep package="psolver"/>
       <dep package="pspio"/>
       <dep package="fdf"/>
-      <dep package="xmlf90"/>
+      <dep package="libpsml"/>
       <dep package="elsi"/>
       <dep package="libgridxc"/>
     </dependencies>

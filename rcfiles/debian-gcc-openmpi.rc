@@ -1,16 +1,12 @@
+# Global arguments
+
+makeargs="VERBOSE=1"
+
+
 # Specific configure arguments for each module
-module_autogenargs['pspio'] = "--enable-shared --disable-gsl"
 
-module_autogenargs['futile'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g -Wall -fbounds-check' --enable-dynamic-libraries"
+module_autogenargs['libgridxc'] = "F77=gfortran"
 
-module_autogenargs['psolver'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g -Wall -fbounds-check' --enable-dynamic-libraries"
+module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99'"
 
-module_autogenargs['libxc'] = "CC=gcc --enable-shared"
-
-scotch="-lptscotchparmetis  -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz"
-linalg="-lscalapack-openmpi -lblacs-openmpi -lblacsCinit-openmpi -lblacsF77init-openmpi -lblas -llapack"
-module_makeargs['elsi'] = "MPIFC=mpif90 MPICC=mpicc MPICXX=mpicxx FFLAGS_I='-I{0:s}/include' SCALAPACK_LIB='{1:s}' SUPERLU_LIB=-lsuperlu_dist PTSCOTCH_LIB='{2:s} -lgomp -lstdc++' ".format(prefix,linalg,scotch)
-module_cmakeargs['superlu_dist'] = "-DUSE_XSDK_DEFAULTS=FALSE -DCMAKE_C_FLAGS='-std=c99 -fPIC {0:s}' -Denable_blaslib=OFF -DCMAKE_C_COMPILER=mpicc ".format(scotch)
-
-
-
+module_makeargs['elsi'] = "MPIFC=mpifort MPICC=mpicc MPICXX=mpicxx CXXFLAGS='-std=c++11'"

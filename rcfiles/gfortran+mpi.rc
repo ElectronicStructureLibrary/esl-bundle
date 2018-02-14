@@ -1,10 +1,12 @@
+# Global arguments
+
+makeargs="VERBOSE=1"
+
+
 # Specific configure arguments for each module
-module_autogenargs['pspio'] = "--enable-shared"
 
-module_autogenargs['futile'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g -Wall -fbounds-check' --enable-dynamic-libraries"
+module_autogenargs['libgridxc'] = "F77=gfortran"
 
-module_autogenargs['psolver'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g -Wall -fbounds-check' --enable-dynamic-libraries"
+module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99'"
 
-module_autogenargs['libxc'] = "CC=gcc --enable-shared"
-
-module_makeargs['elsi'] = "MPIFC=mpifort MPICC=mpicc FFLAGS_I='-I%s/include' DISABLE_PEXSI=yes SCALAPACK_LIB='-lscalapack -lopenblas'"%(prefix)
+module_makeargs['elsi'] = "MPIFC=mpifort MPICC=mpicc MPICXX=mpicxx CXXFLAGS='-std=c++11'"
