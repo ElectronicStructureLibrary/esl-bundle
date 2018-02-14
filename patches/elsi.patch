@@ -9,5 +9,5 @@ diff -urN elsi-interface-master-63ce5aa15766d7e8be7e28434c25d6a950d729dd/src/ELS
 -	cp $(BUILD_DIR)/*.mod $(INC_DIR)
 +	mkdir -p $(DESTDIR)/$(prefix)/lib
 +	mkdir -p $(DESTDIR)/$(prefix)/include
-+	cp $(BUILD_DIR)/*.a $(DESTDIR)/$(prefix)/lib
-+	cp $(BUILD_DIR)/*.mod $(DESTDIR)/$(prefix)/include
++	cp $(LIB_DIR)/*.a $(DESTDIR)/$(prefix)/lib
++	cp $(INC_DIR)/*.mod $(DESTDIR)/$(prefix)/include
