@@ -48,7 +48,7 @@
     <branch repo="xmlf90" module="xmlf90-1.5.3.tar.gz" version="1.5.3"/>
   </autotools>
 
-  <autotools id="libpsml" autogen-sh="configure" autogenargs="--with-xmlf90=$JHBUILD_PREFIXES">
+  <autotools id="libpsml" autogen-sh="configure" autogenargs="--with-xmlf90=$JHBUILD_PREFIX">
     <branch repo="libpsml" module="libpsml-1.1.7.tar.gz" version="1.1.7"/>
     <dependencies>
       <dep package="xmlf90"/>
@@ -74,7 +74,7 @@
     </branch>
   </makesys>
 
-  <cmake id="superlu_dist" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIXES/include">
+  <cmake id="superlu_dist" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIX/include">
     <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0">
       <patch file="superlu.patch" strip="0"/>
     </branch>
