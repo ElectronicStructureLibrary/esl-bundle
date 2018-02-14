@@ -1,13 +1,13 @@
-diff -urN elsi-interface-master-63ce5aa15766d7e8be7e28434c25d6a950d729dd/src/ELSI/Makefile.elsi elsi_new/src/ELSI/Makefile.elsi
---- src/ELSI/Makefile.elsi	2018-02-05 03:25:55.000000000 +0100
-+++ src/ELSI/Makefile.elsi	2018-02-08 17:59:51.553679331 +0100
-@@ -260,5 +260,7 @@
- 	rm -f *.o *.mod *.x *.a *log*
- 
- install:
--	cp $(BUILD_DIR)/*.a $(LIB_DIR)
--	cp $(BUILD_DIR)/*.mod $(INC_DIR)
+--- Makefile.orig	2018-02-14 12:00:51.134484423 +0100
++++ Makefile	2018-02-14 12:00:27.189838963 +0100
+@@ -211,6 +211,10 @@
+ 	cp $(BUILD_DIR)/ELSI/*.mod $(INC_DIR)
+ 	cp $(BUILD_DIR)/ELSI/*.h $(INC_DIR)
+ 	cp $(BUILD_DIR)/ELSI/*.a $(LIB_DIR)
 +	mkdir -p $(DESTDIR)/$(prefix)/lib
 +	mkdir -p $(DESTDIR)/$(prefix)/include
 +	cp $(LIB_DIR)/*.a $(DESTDIR)/$(prefix)/lib
 +	cp $(INC_DIR)/*.mod $(DESTDIR)/$(prefix)/include
+ 	@echo ================================
+ 	@echo = ELSI installed successfully. =
+ 	@echo ================================
