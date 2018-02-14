@@ -91,24 +91,6 @@ module_extra_env = {}
 module_makecheck = {}
 module_nopoison = {}
 
-# Set parameters for Flook
-module_makeargs['flook'] = "liball"
-
-# Set parameters for LibPSML
-module_autogenargs['libpsml'] = "--with-xmlf90=%s" %prefix
-
-# Set parameters for LibOMM
-module_autogenargs['libomm'] = "--with-msw=%s" %prefix
-
-# Set parameters for Pspio (see issue pspio#41 in E-CAM's Gitlab)
-module_autogenargs['pspio'] = "--enable-gsl"
-
-# Set parameters for LibGridXC
-module_autogenargs['libgridxc'] = "--enable-multiconfig"
-
-# Set parameters for LibXC
-module_autogenargs['libxc'] = "--enable-fortran --enable-static --enable-shared"
-
 # control parts of the build process
 nonetwork     = False  # never touch the network
 alwaysautogen = False  # always call autogen.sh
