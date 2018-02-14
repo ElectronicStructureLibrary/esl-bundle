@@ -22,8 +22,8 @@
     <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
   </autotools>
 
-  <autotools id="libxc" autogen-sh="autoreconf" autogenargs="--enable-fortran">
-    <branch repo="libxc" version="4.0.3" />
+  <autotools id="libxc" autogen-sh="autoreconf" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
+    <branch repo="libxc" version="3.0.1" />
   </autotools>
 
   <autotools id="futile" autogen-sh="autoreconf">
@@ -95,7 +95,7 @@
     </branch>
   </makesys>
 
-  <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig">
+  <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX">
     <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc"/>
     <dependencies>
       <dep package="libxc"/>
