@@ -103,7 +103,7 @@
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc" version="0.1.0"/>
+    <branch repo="local" module="fakepc-0.1.0.tar.gz" version="0.1.0"/>
     <dependencies>
       <dep package="elsi"/>
     </dependencies>
@@ -119,6 +119,7 @@
       <dep package="fdf"/>
       <dep package="xmlf90"/>
       <dep package="elsi"/>
+      <dep package="fakepc"/>
       <dep package="libgridxc"/>
     </dependencies>
   </metamodule>
