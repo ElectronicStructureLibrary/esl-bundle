@@ -23,7 +23,7 @@
   </autotools>
 
   <autotools id="libxc" autogen-sh="autoreconf">
-    <branch repo="libxc" version="4.0.3" />
+    <branch repo="libxc" version="3.0.1" />
   </autotools>
 
   <autotools id="futile" autogen-sh="autoreconf">
