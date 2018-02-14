@@ -7,8 +7,10 @@ module_autogenargs['psolver'] = "FC=mpif90 CFLAGS='-Wall -g -O2' FCFLAGS='-O2 -g
 
 module_autogenargs['libxc'] = "CC=gcc --enable-shared"
 
-module_makeargs['elsi'] = "MPIFC=mpif90 MPICC=mpicc MPICXX=mpicxx FFLAGS_I='-I%s/include' SCALAPACK_LIB='-lscalapack-openmpi -lblacs-openmpi -lblacsCinit-openmpi -lblacsF77init-openmpi -llapack -lblas '"%(prefix)
-module_cmakeargs['superlu_dist'] = "-DUSE_XSDK_DEFAULTS=FALSE -DTPL_PARMETIS_LIBRARIES='ptscotchparmetis' -DTPL_PARMETIS_INCLUDE_DIRS={0:s}/include -DCMAKE_C_FLAGS='-std=c99 -fPIC -lz -L{0:s}/lib -lptscotchparmetis  -lptscotch -lscotchmetis -lscotch -lptscotcherr' -Denable_blaslib=OFF -DTPL_BLAS_LIBRARIES='-lblas' -DCMAKE_C_COMPILER=mpicc ".format(prefix)
+scotch="-lptscotchparmetis  -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz"
+linalg="-lscalapack-openmpi -lblacs-openmpi -lblacsCinit-openmpi -lblacsF77init-openmpi -lblas -llapack"
+module_makeargs['elsi'] = "MPIFC=mpif90 MPICC=mpicc MPICXX=mpicxx FFLAGS_I='-I{0:s}/include' SCALAPACK_LIB='{1:s}' SUPERLU_LIB=-lsuperlu_dist PTSCOTCH_LIB='{2:s} -lgomp -lstdc++' ".format(prefix,linalg,scotch)
+module_cmakeargs['superlu_dist'] = "-DUSE_XSDK_DEFAULTS=FALSE -DCMAKE_C_FLAGS='-std=c99 -fPIC {0:s}' -Denable_blaslib=OFF -DCMAKE_C_COMPILER=mpicc ".format(scotch)
 
 
 
