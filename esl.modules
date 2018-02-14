@@ -59,7 +59,7 @@
     <branch repo="launchpad" module="libfdf" version="0.1.1"/>
   </autotools>
 
-  <makesys id="elsi" makeargs="SUPERLU_LIB='-lsuperlu_dist' PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr'">
+  <makesys id="elsi" makeargs="SUPERLU_LIB='-lsuperlu_dist' PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz'">
     <branch repo="local" module="elsi-interface-solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381.tar.gz" version="solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381">
       <patch file="elsi.patch"/>
     </branch>
@@ -74,7 +74,7 @@
     </branch>
   </makesys>
 
-  <cmake id="superlu_dist" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis  -lptscotch -lscotchmetis -lscotch -lptscotcherr' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIXES/include">
+  <cmake id="superlu_dist" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIXES/include">
     <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0">
       <patch file="superlu.patch" strip="0"/>
     </branch>
