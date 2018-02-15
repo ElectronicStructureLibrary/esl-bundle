@@ -1,0 +1,27 @@
+Binary files psolver-1.8.old/.configure.ac.swp and psolver-1.8.new/.configure.ac.swp differ
+diff -urN psolver-1.8.old/config/m4/mpi.m4 psolver-1.8.new/config/m4/mpi.m4
+--- psolver-1.8.old/config/m4/mpi.m4	2016-05-25 16:47:12.000000000 +0200
++++ psolver-1.8.new/config/m4/mpi.m4	2018-02-15 14:49:10.279402067 +0100
+@@ -15,7 +15,8 @@
+   
+   ac_use_mpi="yes"
+   AC_ARG_ENABLE(mpi, AS_HELP_STRING([--disable-mpi], [Don't use MPI (enabled by default).]),
+-                ac_use_mpi=$enableval, ac_use_mpi="yes")
++                [ac_use_mpi=$enableval; poi_mpi_req="yes"],
++                [ac_use_mpi="yes"; poi_mpi_req="no"])
+   
+   if test "$ac_use_mpi" = "yes"; then
+     dnl We set all flags by hand
+@@ -164,7 +165,11 @@
+     MPI_INCLUDE=
+     MPI_LDFLAGS=
+   fi
+-  
++ 
++  if test "${ac_use_mpi}" = "warn" -a "${poi_mpi_req}" = "yes"; then
++    AC_MSG_FAILURE([MPI was requested by the user but is not available - aborting])
++  fi
++ 
+   AM_CONDITIONAL(USE_MPI, test "$ac_use_mpi" = "yes")
+   AC_SUBST(MPI_LIBS)
+   AC_SUBST(MPI_INCLUDE)

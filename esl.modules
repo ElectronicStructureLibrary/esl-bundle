@@ -34,7 +34,9 @@
   </autotools>
 
   <autotools id="psolver" autogen-sh="autoreconf">
-    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.0" checkoutdir="psolver"/>
+    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.0" checkoutdir="psolver">
+      <patch file="psolver-1.8-buildsys-mpi.patch" strip="1"/>
+    </branch>
     <dependencies>
       <dep package="futile"/>
     </dependencies>
