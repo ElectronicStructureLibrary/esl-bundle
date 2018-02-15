@@ -33,10 +33,17 @@
     </dependencies>
   </autotools>
 
-  <autotools id="psolver" autogen-sh="autoreconf">
+  <autotools id="psolver" autogen-sh="autoreconf" autogenargs="--disable-mpi">
     <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.0" checkoutdir="psolver">
       <patch file="psolver-1.8-buildsys-mpi.patch" strip="1"/>
     </branch>
+    <dependencies>
+      <dep package="futile"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="psolver-mpi" autogen-sh="autoreconf" autogenargs="--enable-mpi">
+    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.0" checkoutdir="psolver-mpi"/>
     <dependencies>
       <dep package="futile"/>
     </dependencies>
@@ -97,8 +104,15 @@
     </branch>
   </makesys>
 
-  <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX">
+  <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
     <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc"/>
+    <dependencies>
+      <dep package="libxc"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="libgridxc-mpi" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
+    <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc-mpi"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
@@ -120,9 +134,22 @@
       <dep package="pspio"/>
       <dep package="fdf"/>
       <dep package="libpsml"/>
+      <dep package="libgridxc"/>
+    </dependencies>
+  </metamodule>
+
+  <metamodule id="esl-bundle-mpi">
+    <dependencies>
+      <dep package="fdict"/>
+      <dep package="flook"/>
+      <dep package="libxc"/>
+      <dep package="psolver-mpi"/>
+      <dep package="pspio"/>
+      <dep package="fdf"/>
+      <dep package="libpsml"/>
       <dep package="elsi"/>
       <dep package="fakepc"/>
-      <dep package="libgridxc"/>
+      <dep package="libgridxc-mpi"/>
     </dependencies>
   </metamodule>
 
