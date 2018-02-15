@@ -23,7 +23,7 @@
   </autotools>
 
   <autotools id="libxc" autogen-sh="autoreconf" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
-    <branch repo="libxc" version="3.0.1" />
+    <branch repo="libxc" module="libxc" tag="3.0.1" />
   </autotools>
 
   <autotools id="futile" autogen-sh="autoreconf">
