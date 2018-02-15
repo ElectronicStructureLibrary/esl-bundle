@@ -102,14 +102,14 @@
   </makesys>
 
   <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
-    <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc" hash="md5:1811f4e98955afb4d769dad4466f5a43"/>
+    <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc" hash="md5:63988a706ebe75bc898f90537aa97dd6"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
   </autotools>
 
   <autotools id="libgridxc-mpi" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
-    <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc-mpi"/>
+    <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc-mpi" hash="md5:63988a706ebe75bc898f90537aa97dd6"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
