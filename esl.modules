@@ -4,16 +4,15 @@
 <!-- vim:set ts=2 expandtab: -->
 <moduleset>
 
-  <repository type="git" name="esl" href="https://gitlab.e-cam2020.eu/esl/"/>
-  <repository type="tarball" name="libyaml" href="http://pyyaml.org/download/libyaml/"/>
-  <repository type="git" name="libxc" href="https://gitlab.com/libxc/"/>
-  <repository type="tarball" name="local" href="./"/>
-  <repository type="tarball" name="xmlf90" href="https://launchpad.net/xmlf90/trunk/1.5/+download/"/>
-  <repository type="git" name="launchpad" href="https://git.launchpad.net/"/>
-  <repository type="tarball" name="libpsml" href="https://launchpad.net/libpsml/trunk/1.1/+download/"/>
-  <repository type="tarball" name="fdict" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
-  <repository type="git" name="github" href="https://github.com/ElectronicStructureLibrary/"/>
-  <repository type="tarball" name="flook" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
+  <repository name="local"     type="tarball" href="./"/>
+  <repository name="esl"       type="git"     href="https://gitlab.e-cam2020.eu/esl/"/>
+  <repository name="libyaml"   type="tarball" href="http://pyyaml.org/download/libyaml/"/>
+  <repository name="libxc"     type="git"     href="https://gitlab.com/libxc/"/>
+  <repository name="xmlf90"    type="tarball" href="https://launchpad.net/xmlf90/trunk/1.5/+download/"/>
+  <repository name="launchpad" type="git"     href="https://git.launchpad.net/"/>
+  <repository name="libpsml"   type="tarball" href="https://launchpad.net/libpsml/trunk/1.1/+download/"/>
+  <repository name="fdict"     type="tarball" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
+  <repository name="flook"     type="tarball" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
 <!--
   <repository type="tarball" name="scotch" href="https://gforge.inria.fr/frs/download.php/file/34618/"/>
 -->
@@ -67,7 +66,7 @@
   </autotools>
 
   <makesys id="elsi" makeargs="SUPERLU_LIB='-lsuperlu_dist' PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz'">
-    <branch repo="local" module="elsi-interface-solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381.tar.gz" version="solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381" hash="md5:cbcc55ebc812ff6af7c21c9564d97b34">
+    <branch repo="local" module="elsi_180215.tar.gz" version="180215">
       <patch file="elsi.patch"/>
     </branch>
     <dependencies>
@@ -117,7 +116,7 @@
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.1.3.tar.gz" version="0.1.3" hash="md5:edf0f69aeb6b7c99237876e12cc2b4cb"/>
+    <branch repo="local" module="fakepc-0.1.4.tar.gz" version="0.1.4"/>
     <dependencies>
       <dep package="elsi"/>
     </dependencies>
