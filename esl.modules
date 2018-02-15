@@ -1,4 +1,107 @@
-gridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
+<?xml version="1.0"?><!--*- mode: nxml; indent-tabs-mode: nil -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<!-- vim:set ts=2 expandtab: -->
+<moduleset>
+
+  <repository name="local"     type="tarball" href="./"/>
+  <repository name="esl"       type="git"     href="https://gitlab.e-cam2020.eu/esl/"/>
+  <repository name="libyaml"   type="tarball" href="http://pyyaml.org/download/libyaml/"/>
+  <repository name="libxc"     type="git"     href="https://gitlab.com/libxc/"/>
+  <repository name="xmlf90"    type="tarball" href="https://launchpad.net/xmlf90/trunk/1.5/+download/"/>
+  <repository name="launchpad" type="git"     href="https://git.launchpad.net/"/>
+  <repository name="libpsml"   type="tarball" href="https://launchpad.net/libpsml/trunk/1.1/+download/"/>
+  <repository name="fdict"     type="tarball" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
+  <repository name="flook"     type="tarball" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
+<!--
+  <repository type="tarball" name="scotch" href="https://gforge.inria.fr/frs/download.php/file/34618/"/>
+-->
+
+  <autotools id="libyaml" autogen-sh="autoreconf" skip-autogen="true">
+    <branch repo="libyaml" module="yaml-0.1.6.tar.gz" version="0.1.6"/>
+  </autotools>
+
+  <autotools id="libxc" autogen-sh="autoreconf" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
+    <branch repo="libxc" module="libxc" tag="3.0.1" />
+  </autotools>
+
+  <autotools id="futile" autogen-sh="autoreconf">
+    <branch repo="local" module="futile-1.8.tar.gz" version="1.8.0" checkoutdir="futile" hash="md5:835e9607d35eafaceb91e1197050450e"/>
+    <dependencies>
+      <dep package="libyaml"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="psolver" autogen-sh="autoreconf" autogenargs="--disable-mpi">
+    <branch repo="local" module="psolver-1.8.1.tar.gz" version="1.8.1" hash="md5:4dc54b2d8f1e046703844f0da3c25e28"/>
+    <dependencies>
+      <dep package="futile"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="psolver-mpi" autogen-sh="autoreconf" autogenargs="--enable-mpi">
+    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.0" checkoutdir="psolver-mpi"/>
+    <dependencies>
+      <dep package="futile"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="pspio" autogen-sh="autogen.sh+configure" autogenargs="--enable-gsl --enable-fortran">
+    <branch repo="esl" module="pspio" tag="0.2.4"/>
+  </autotools>
+
+  <autotools id="xmlf90" autogen-sh="configure">
+    <branch repo="xmlf90" module="xmlf90-1.5.3.tar.gz" version="1.5.3"/>
+  </autotools>
+
+  <autotools id="libpsml" autogen-sh="configure" autogenargs="--with-xmlf90=$JHBUILD_PREFIX">
+    <branch repo="libpsml" module="libpsml-1.1.7.tar.gz" version="1.1.7"/>
+    <dependencies>
+      <dep package="xmlf90"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="fdf" autogen-sh="autogen.sh+configure">
+    <branch repo="launchpad" module="libfdf" version="0.1.1"/>
+  </autotools>
+
+  <makesys id="elsi" makeargs="SUPERLU_LIB='-lsuperlu_dist' PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz'">
+    <branch repo="local" module="elsi_180215.tar.gz" version="180215">
+      <patch file="elsi.patch"/>
+    </branch>
+    <dependencies>
+      <dep package="superlu_dist"/>
+    </dependencies>
+  </makesys>
+
+  <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
+    <branch repo="local" module="scotch_6.0.4.tar.gz" version="6.0.4" hash="md5:d58b825eb95e1db77efe8c6ff42d329f">
+      <patch file="scotch_make.patch" strip="0"/>
+    </branch>
+  </makesys>
+
+  <cmake id="superlu_dist" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIX/include">
+    <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0" hash="md5:4c18539291602f0234b0e54152ccc062">
+      <patch file="superlu.patch" strip="0"/>
+    </branch>
+    <dependencies>
+      <dep package="scotch"/>
+    </dependencies>
+  </cmake>
+
+  <makesys id="fdict">
+    <branch repo="fdict" module="fdict-0.5.0.tar.gz" version="0.5.0">
+      <patch file="fdict-install-prefix.patch" strip="1"/>
+    </branch>
+  </makesys>
+
+  <makesys id="flook" makeargs="liball">
+    <branch repo="flook" module="flook-0.7.0.tar.gz" version="0.7.0">
+      <patch file="flook-install-prefix.patch" strip="1"/>
+    </branch>
+  </makesys>
+
+  <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
     <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135"/>
     <dependencies>
       <dep package="libxc"/>
