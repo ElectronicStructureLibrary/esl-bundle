@@ -79,7 +79,7 @@ specs:
     version: 0.1
     description: ELectronic Structure Infrastructure
     url: https://wordpress.elsi-interchange.org/
-    libs: [elpa, pexsi, OMM, MatrixSwitch]
+    libs: [elsi, elpa, pexsi, OMM, MatrixSwitch]
     deps: [psolver, superlu_dist, scotch]
   fdict:
     name: Fdict
@@ -219,7 +219,7 @@ parser.add_argument("-d", "--delete", action="store_true",
 parser.add_argument("-i", "--install",
     default=os.path.join("install", "lib", "pkgconfig"),
     help="Output file to store the repacked objects")
-parser.add_argument("-s", "--source", default="fakepc-0.1.2", 
+parser.add_argument("-s", "--source", default="fakepc-0.1.3", 
     help="Source directory of the fake package")
 args = parser.parse_args()
 
