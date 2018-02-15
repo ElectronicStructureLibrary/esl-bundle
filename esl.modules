@@ -4,16 +4,15 @@
 <!-- vim:set ts=2 expandtab: -->
 <moduleset>
 
-  <repository type="git" name="esl" href="https://gitlab.e-cam2020.eu/esl/"/>
-  <repository type="tarball" name="libyaml" href="http://pyyaml.org/download/libyaml/"/>
-  <repository type="git" name="libxc" href="https://gitlab.com/libxc/"/>
-  <repository type="tarball" name="local" href="./"/>
-  <repository type="tarball" name="xmlf90" href="https://launchpad.net/xmlf90/trunk/1.5/+download/"/>
-  <repository type="git" name="launchpad" href="https://git.launchpad.net/"/>
-  <repository type="tarball" name="libpsml" href="https://launchpad.net/libpsml/trunk/1.1/+download/"/>
-  <repository type="tarball" name="fdict" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
-  <repository type="git" name="github" href="https://github.com/ElectronicStructureLibrary/"/>
-  <repository type="tarball" name="flook" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
+  <repository name="local"     type="tarball" href="./"/>
+  <repository name="esl"       type="git"     href="https://gitlab.e-cam2020.eu/esl/"/>
+  <repository name="libyaml"   type="tarball" href="http://pyyaml.org/download/libyaml/"/>
+  <repository name="libxc"     type="git"     href="https://gitlab.com/libxc/"/>
+  <repository name="xmlf90"    type="tarball" href="https://launchpad.net/xmlf90/trunk/1.5/+download/"/>
+  <repository name="launchpad" type="git"     href="https://git.launchpad.net/"/>
+  <repository name="libpsml"   type="tarball" href="https://launchpad.net/libpsml/trunk/1.1/+download/"/>
+  <repository name="fdict"     type="tarball" href="https://github.com/zerothi/fdict/releases/download/v0.5.0/"/>
+  <repository name="flook"     type="tarball" href="https://github.com/ElectronicStructureLibrary/flook/releases/download/v0.7.0/"/>
 <!--
   <repository type="tarball" name="scotch" href="https://gforge.inria.fr/frs/download.php/file/34618/"/>
 -->
