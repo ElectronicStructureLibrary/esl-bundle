@@ -78,9 +78,11 @@ specs:
     name: ELSI
     version: 0.1
     description: ELectronic Structure Infrastructure
-    url: http://elsi-interface.org/
-    libs: [elpa, pexsi, OMM, MatrixSwitch, scalapack, blacs, lapack, blas]
+    url: https://wordpress.elsi-interchange.org/
+    libs: [elpa, pexsi, OMM, MatrixSwitch]
+    libs_private: [scalapack, blacs]
     deps: [superlu_dist, scotch]
+    deps_private: [lapack, blas]
   fdict:
     name: Fdict
     version: 0.5.0
@@ -98,7 +100,8 @@ specs:
     version: 6.0.4
     description:
     url: https://gforge.inria.fr/projects/scotch/
-    libs: [ptscotchparmetis, ptscotch, ptscotcherr, scotchmetis, scotch, scotcherr, stdc++, gomp, z]
+    libs: [ptscotchparmetis, ptscotch, ptscotcherr, scotchmetis, scotch, scotcherr]
+    libs_private: [stdc++, gomp, z]
 
 ...
 """
@@ -113,39 +116,59 @@ prefix=@prefix@
 exec_prefix=${prefix}
 bindir=${exec_prefix}/bin
 includedir=${prefix}/include
-libdir=${exec_prefix}/lib
+libdir=${exec_prefix}/lib%(vars_private)s
 
 Name: %(name)s
 Description: %(description)s
-Version: %(version)s%(url)s%(deps)s%(conflicts)s
+Version: %(version)s%(url)s%(deps)s%(deps_private)s%(conflicts)s
 Cflags: -I${includedir}%(moddir)s
-Libs: -L${libdir} %(libs)s
+Libs: -L${libdir} %(libs)s%(libs_private)s
 """
 
 class PkgConfigMaker(object):
 
     def __init__(self, pkg_specs):
 
-        # Init optional package fields
-        self.specs = {"conflicts": "", "deps": "", "moddir": "", "url": ""}
+        # Init optional and special package fields
+        self.specs = {
+            "conflicts": "",
+            "deps": "",
+            "deps_private": "",
+            "libs_private": "",
+            "moddir": "",
+            "url": "",
+            "vars_private": "",
+        }
 
         # Init mandatory package fields
-        for key in ["description", "libs", "name", "version"]:
+        for key in ["description", "name", "version"]:
             self.specs[key] = pkg_specs[key]
 
         # Reformat libraries (assumed to appear in link-time order)
-        self.specs["libs"] = "-l" + " -l".join(self.specs["libs"])
+        self.specs["libs"] = self.libs_to_specs(pkg_specs["libs"])
+        if ( "libs_private" in pkg_specs ):
+            self.specs["vars_private"] = "\nprivate_libs=%s" % \
+                self.libs_to_specs(pkg_specs["libs_private"])
+            self.specs["libs_private"] = "\nLibs.private: ${private_libs}"
 
         # Tune optional package fields if present
-        opt_fields = {"conflicts": "Conflicts", "deps": "Requires", "url": "URL"}
+        opt_fields = {
+            "conflicts": "Conflicts",
+            "deps": "Requires",
+            "deps_private": "Requires.private",
+            "url": "URL",
+        }
         for key in opt_fields.keys():
             if ( key in pkg_specs ):
                 tmp_enum = []
-                for item in pkg_specs:
-                    if ( isinstance(item, str) ):
-                        tmp_enum.append(item)
-                    else:
-                        tmp_enum.append(self.triplet_to_specs(item))
+                if ( isinstance(pkg_specs[key], str) ):
+                    tmp_enum.append(pkg_specs[key])
+                else:
+                    for item in pkg_specs[key]:
+                        if ( isinstance(item, str) ):
+                            tmp_enum.append(item)
+                        else:
+                            tmp_enum.append(self.triplet_to_specs(item))
                 self.specs[key] = "\n%s: %s" % \
                     (opt_fields[key], ", ".join(tmp_enum))
 
@@ -159,7 +182,21 @@ class PkgConfigMaker(object):
         return pkg_config_template % self.specs
 
 
-    def triplet_to_specs(triplet, include_min=False, include_max=False):
+    def libs_to_specs(self, libs):
+
+        ret = ""
+        for item in libs:
+            if ( len(ret) > 0 ):
+                ret += " "
+            if ( item[0] == "$" ):
+                ret += item
+            else:
+                ret += "-l%s" % item
+
+        return ret
+
+
+    def triplet_to_specs(self, triplet, include_min=False, include_max=False):
 
         min_symbol = ">"
         if ( include_min ):
@@ -185,7 +222,7 @@ parser.add_argument("-d", "--delete", action="store_true",
 parser.add_argument("-i", "--install",
     default=os.path.join("install", "lib", "pkgconfig"),
     help="Output file to store the repacked objects")
-parser.add_argument("-s", "--source", default="fakepc-0.1.0", 
+parser.add_argument("-s", "--source", default="fakepc-0.1.1", 
     help="Source directory of the fake package")
 args = parser.parse_args()
 
