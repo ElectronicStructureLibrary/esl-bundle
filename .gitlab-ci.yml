@@ -10,7 +10,7 @@ opensuse-mpi:
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
 
-  opensuse-mpi:
+opensuse-serial:
   image: drfaustroll/esl:opensuse-tumbleweed
   stage: test
   script:
