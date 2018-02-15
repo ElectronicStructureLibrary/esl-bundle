@@ -102,6 +102,13 @@
     </dependencies>
   </autotools>
 
+  <autotools id="fakepc" autogen-sh="configure">
+    <branch repo="local" module="fakepc-0.1.2.tar.gz" version="0.1.2"/>
+    <dependencies>
+      <dep package="elsi"/>
+    </dependencies>
+  </autotools>
+
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="fdict"/>
@@ -112,6 +119,7 @@
       <dep package="fdf"/>
       <dep package="libpsml"/>
       <dep package="elsi"/>
+      <dep package="fakepc"/>
       <dep package="libgridxc"/>
     </dependencies>
   </metamodule>
