@@ -27,14 +27,14 @@
   </autotools>
 
   <autotools id="futile" autogen-sh="autoreconf">
-    <branch repo="local" module="futile-1.8.tar.gz" version="1.8.0" checkoutdir="futile"/>
+    <branch repo="local" module="futile-1.8.tar.gz" version="1.8.0" checkoutdir="futile" hash="md5:835e9607d35eafaceb91e1197050450e"/>
     <dependencies>
       <dep package="libyaml"/>
     </dependencies>
   </autotools>
 
   <autotools id="psolver" autogen-sh="autoreconf" autogenargs="--disable-mpi">
-    <branch repo="local" module="psolver-1.8.1.tar.gz" version="1.8.1"/>
+    <branch repo="local" module="psolver-1.8.1.tar.gz" version="1.8.1" hash="md5:4dc54b2d8f1e046703844f0da3c25e28"/>
     <dependencies>
       <dep package="futile"/>
     </dependencies>
@@ -67,7 +67,7 @@
   </autotools>
 
   <makesys id="elsi" makeargs="SUPERLU_LIB='-lsuperlu_dist' PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz'">
-    <branch repo="local" module="elsi-interface-solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381.tar.gz" version="solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381">
+    <branch repo="local" module="elsi-interface-solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381.tar.gz" version="solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381" hash="md5:cbcc55ebc812ff6af7c21c9564d97b34">
       <patch file="elsi.patch"/>
     </branch>
     <dependencies>
@@ -76,13 +76,13 @@
   </makesys>
 
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
-    <branch repo="local" module="scotch_6.0.4.tar.gz" version="6.0.4" >
+    <branch repo="local" module="scotch_6.0.4.tar.gz" version="6.0.4" hash="md5:d58b825eb95e1db77efe8c6ff42d329f">
       <patch file="scotch_make.patch" strip="0"/>
     </branch>
   </makesys>
 
   <cmake id="superlu_dist" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIX/include">
-    <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0">
+    <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0" hash="md5:4c18539291602f0234b0e54152ccc062">
       <patch file="superlu.patch" strip="0"/>
     </branch>
     <dependencies>
@@ -103,7 +103,7 @@
   </makesys>
 
   <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
-    <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc"/>
+    <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc" hash="md5:1811f4e98955afb4d769dad4466f5a43"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
@@ -117,7 +117,7 @@
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.1.3.tar.gz" version="0.1.3"/>
+    <branch repo="local" module="fakepc-0.1.3.tar.gz" version="0.1.3" hash="md5:edf0f69aeb6b7c99237876e12cc2b4cb"/>
     <dependencies>
       <dep package="elsi"/>
     </dependencies>
