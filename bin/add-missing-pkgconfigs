@@ -80,9 +80,7 @@ specs:
     description: ELectronic Structure Infrastructure
     url: https://wordpress.elsi-interchange.org/
     libs: [elpa, pexsi, OMM, MatrixSwitch]
-    libs_private: [scalapack, blacs]
-    deps: [superlu_dist, scotch]
-    deps_private: [lapack, blas]
+    deps: [psolver, superlu_dist, scotch]
   fdict:
     name: Fdict
     version: 0.5.0
@@ -100,8 +98,7 @@ specs:
     version: 6.0.4
     description:
     url: https://gforge.inria.fr/projects/scotch/
-    libs: [ptscotchparmetis, ptscotch, ptscotcherr, scotchmetis, scotch, scotcherr]
-    libs_private: [stdc++, gomp, z]
+    libs: [ptscotchparmetis, ptscotch, ptscotcherr, scotchmetis, scotch, scotcherr, stdc++, gomp, z]
 
 ...
 """
@@ -222,7 +219,7 @@ parser.add_argument("-d", "--delete", action="store_true",
 parser.add_argument("-i", "--install",
     default=os.path.join("install", "lib", "pkgconfig"),
     help="Output file to store the repacked objects")
-parser.add_argument("-s", "--source", default="fakepc-0.1.1", 
+parser.add_argument("-s", "--source", default="fakepc-0.1.2", 
     help="Source directory of the fake package")
 args = parser.parse_args()
 
