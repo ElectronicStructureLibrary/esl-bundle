@@ -40,7 +40,7 @@
   </autotools>
 
   <autotools id="psolver-mpi" autogen-sh="autoreconf" autogenargs="--enable-mpi">
-    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.0" checkoutdir="psolver-mpi"/>
+    <branch repo="local" module="psolver-1.8.1.tar.gz" version="1.8.1" hash="md5:4dc54b2d8f1e046703844f0da3c25e28"/>
     <dependencies>
       <dep package="futile"/>
     </dependencies>
