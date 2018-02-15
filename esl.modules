@@ -59,7 +59,7 @@
   </autotools>
 
   <makesys id="elsi" makeargs="SUPERLU_LIB='-lsuperlu_dist' PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz'">
-    <branch repo="local" module="elsi-interface-solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381.tar.gz" version="solver_update-39bc9b88cdfda9f39332f52a0c289668b0e1c381">
+    <branch repo="local" module="elsi_180215.tar.gz" version="180215">
       <patch file="elsi.patch"/>
     </branch>
     <dependencies>
