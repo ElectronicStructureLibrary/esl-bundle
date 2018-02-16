@@ -116,7 +116,7 @@
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.1.4.tar.gz" version="0.1.4"/>
+    <branch repo="local" module="fakepc-0.1.5.tar.gz" version="0.1.5"/>
     <dependencies>
       <dep package="elsi"/>
     </dependencies>
