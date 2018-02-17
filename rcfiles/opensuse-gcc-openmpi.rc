@@ -1,7 +1,7 @@
 # Global arguments
 
-autogenargs="F77=gfortran FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF90=mpif90"
-makeargs="F77=gfortran FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF90=mpif90 VERBOSE=1"
+autogenargs="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF90=mpif90"
+makeargs="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF90=mpif90 VERBOSE=1"
 
 # Specific configure arguments for each module
 

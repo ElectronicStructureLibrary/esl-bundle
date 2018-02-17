@@ -40,7 +40,7 @@
   </autotools>
 
   <autotools id="psolver-mpi" autogen-sh="autoreconf" autogenargs="--enable-mpi">
-    <branch repo="local" module="psolver-1.8.1.tar.gz" version="1.8.1" hash="md5:4dc54b2d8f1e046703844f0da3c25e28"/>
+    <branch repo="local" module="psolver-1.8.1.tar.gz" version="1.8.1" hash="md5:4dc54b2d8f1e046703844f0da3c25e28" checkoutdir="psolver-mpi"/>
     <dependencies>
       <dep package="futile"/>
     </dependencies>
@@ -102,21 +102,21 @@
   </makesys>
 
   <autotools id="libgridxc" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
-    <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc" hash="md5:1811f4e98955afb4d769dad4466f5a43"/>
+    <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
   </autotools>
 
   <autotools id="libgridxc-mpi" autogen-sh="autogen.sh+configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
-    <branch repo="local" module="libgridxc-0.8.0.2.tar.gz" version="0.8.0.2" checkoutdir="libgridxc-mpi"/>
+    <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc-mpi" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.1.4.tar.gz" version="0.1.4"/>
+    <branch repo="local" module="fakepc-0.1.5.tar.gz" version="0.1.5"/>
     <dependencies>
       <dep package="elsi"/>
     </dependencies>

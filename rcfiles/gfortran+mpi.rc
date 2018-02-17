@@ -5,7 +5,7 @@ makeargs="VERBOSE=1"
 
 # Specific configure arguments for each module
 
-module_autogenargs['libgridxc'] = "F77=gfortran"
+module_autogenargs['libgridxc']="F77=gfortran FC=gfortran"
 
 module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99'"
 

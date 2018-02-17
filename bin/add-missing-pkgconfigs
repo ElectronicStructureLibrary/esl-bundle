@@ -14,7 +14,7 @@ from ruamel.yaml import YAML
 
 # Configuration of the fake package
 fake_pkg_name = "fakepc"
-fake_pkg_version = "0.1.4"
+fake_pkg_version = "0.1.5"
 
                     # ------------------------------------ #
 
@@ -89,7 +89,7 @@ specs:
     libs: [elsi, elpa, pexsi, OMM, MatrixSwitch, superlu_dist]
     deps: [psolver, scotch]
   fdict:
-    name: Fdict
+    name: fdict
     version: 0.5.0
     description: Fortran type-free variables and type-free dictionaries
     url: https://github.com/zerothi/fdict
@@ -99,9 +99,10 @@ specs:
     version: 0.7.0
     description: Linking Fortran and Lua together
     url: https://github.com/ElectronicStructureLibrary/flook
-    libs: [flook]
+    libs: [flookall, dl]
+    deps: [fdict]
   scotch:
-    name:
+    name: Scotch
     version: 6.0.4
     description:
     url: https://gforge.inria.fr/projects/scotch/
