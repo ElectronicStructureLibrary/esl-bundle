@@ -7,9 +7,8 @@ makeargs="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF
 
 module_autogenargs['futile']=autogenargs+" --with-scalapack=scalapack --with-blacs=blacs"
 module_autogenargs['psolver']=autogenargs+" --with-scalapack=scalapack --with-blacs=blacs"
-module_autogenargs['fdf']="F77=gfortran FC=gfortran"
-module_autogenargs['libxc']="F77=gfortran FC=gfortran CC=gcc"
-module_autogenargs['libgridxc']="F77=gfortran FC=gfortran CC=gcc"
+module_autogenargs['fdf']=" FC=gfortran"
+module_autogenargs['libgridxc'] = "F77=mpif90"
 
 module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99'"
 
