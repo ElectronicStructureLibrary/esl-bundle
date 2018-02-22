@@ -14,7 +14,7 @@ from ruamel.yaml import YAML
 
 # Configuration of the fake package
 fake_pkg_name = "fakepc"
-fake_pkg_version = "0.1.5"
+fake_pkg_version = "0.1.6"
 
                     # ------------------------------------ #
 
@@ -87,7 +87,7 @@ specs:
     description: ELectronic Structure Infrastructure
     url: https://wordpress.elsi-interchange.org/
     libs: [elsi, elpa, pexsi, OMM, MatrixSwitch, superlu_dist]
-    deps: [psolver, scotch]
+    deps: [linalg, psolver, scotch]
   fdict:
     name: fdict
     version: 0.5.0
@@ -264,17 +264,38 @@ test -z "${srcdir}" && srcdir="."
 
 # Fake the behaviour of Autoconf
 prefix="/usr/local"
+linalg=""
 while test "${#}" -gt "0"; do
   if test "${1}" = "--prefix"; then
     shift
     prefix="${1}"
-    break
+    shift
+    continue
   fi
   chk_pfx=`echo "${1}" | grep '^--prefix'`
   if test ! -z "${chk_pfx}"; then
     prefix=`echo "${chk_pfx}" | sed -e 's/--prefix.//'`
+    shift
+    continue
   fi
+  chk_lin=`echo "${1}" | grep '^linalg='`
+  if test ! -z "${chk_lin}"; then
+    linalg=`echo "${chk_lin}" | sed -e 's/linalg=//'`
+    shift
+    continue
+  fi
+
+  shift
 done
+
+# Process the linalg setting
+cat >linalg.pc <<EOF
+Name: LinearAlgebra
+Description: Linear algebra libraries
+Version: 0.0.1
+Cflags:
+Libs: ${linalg}
+EOF
 
 # Set prefix in config files
 for in_file in ${srcdir}/*.in; do
@@ -285,6 +306,7 @@ done
 os.chmod(cfg_path, (stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH))
 
 # Generate makefile
+pc_srcs.append("linalg.pc.in")
 with open(os.path.join(args.source, "Makefile.in"), "w") as mk_file:
     mk_file.write("""\
 # This file has been automatically generated and should not be edited
