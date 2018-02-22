@@ -70,6 +70,7 @@
       <patch file="elsi.patch"/>
     </branch>
     <dependencies>
+      <dep package="fakepc"/>
       <dep package="superlu_dist"/>
     </dependencies>
   </makesys>
@@ -120,9 +121,12 @@
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.1.5.tar.gz" version="0.1.5"/>
+    <branch repo="local" module="fakepc-0.1.6.tar.gz" version="0.1.6"/>
     <dependencies>
-      <dep package="elsi"/>
+      <dep package="fdict"/>
+      <dep package="flook"/>
+      <dep package="scotch"/>
+      <dep package="superlu_dist"/>
     </dependencies>
   </autotools>
 

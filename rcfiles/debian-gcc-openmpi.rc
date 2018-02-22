@@ -4,6 +4,8 @@ autogenargs="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc M
 makeargs="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF90=mpif90 VERBOSE=1"
 
 # Specific configure arguments for each module
+module_autogenargs['fakepc']="linalg='-lscalapack-openmpi -lblacsCinit-openmpi -lblacsF77init-openmpi -llapack -lblas'"
+
 module_autogenargs['fdf']="FC=gfortran"
 
 module_autogenargs['libgridxc'] = "F77=mpif90"
