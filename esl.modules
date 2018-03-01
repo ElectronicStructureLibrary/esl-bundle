@@ -51,7 +51,7 @@
   </autotools>
 
   <autotools id="xmlf90" autogen-sh="configure">
-    <branch repo="xmlf90" module="xmlf90-1.5.3.tar.gz" version="1.5.3"/>
+    <branch repo="xmlf90" module="xmlf90-1.5.4.tar.gz" version="1.5.4"/>
   </autotools>
 
   <autotools id="libpsml" autogen-sh="configure" autogenargs="--with-xmlf90=$JHBUILD_PREFIX">
