@@ -1,16 +1,20 @@
+# Automatically-generated and temporary files
 *.py[co]
 *.tmp
 __pycache__
 /tmp*
+
+# Source trees
 /checkouts/*
 !/checkouts/.gitkeep
-/tarballs/*
 
 # Local source tarballs, to be kept until upstream repositories are made
 # available
-!/tarballs/elsi*.tar.gz
+/tarballs/*
+!/tarballs/elsi_*.tar.gz
 !/tarballs/fakepc-*.tar.gz
 !/tarballs/futile-*.tar.gz
+!/tarballs/libgridxc-*.tar.gz
 !/tarballs/psolver-*.tar.gz
 !/tarballs/scotch-*.tar.gz
 !/tarballs/superlu_dist-*.tar.gz
