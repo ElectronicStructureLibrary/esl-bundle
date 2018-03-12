@@ -1,11 +1,32 @@
-test:opensuse:
+stages:
+  - test 
+
+opensuse-mpi:
   image: drfaustroll/esl:opensuse-tumbleweed
+  stage: test
   script:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2
-    - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle
+    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
 
-test:debian-debian:
-  image: drfaustroll/esl:debian-latest
+opensuse-serial:
+  image: drfaustroll/esl:opensuse-tumbleweed
+  stage: test
   script:
-    - ./jhbuild.py -f rcfiles/debian-gcc-openmpi.rc build esl-bundle
+    - source /etc/profile.d/lmod.sh
+    - module load gnu/7 
+    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - ./jhbuild.py  build esl-bundle
+
+debian-mpi:
+  image: drfaustroll/esl:debian-latest
+  stage: test
+  script:
+    - ./jhbuild.py -f rcfiles/debian-gcc-openmpi.rc build esl-bundle-mpi
+
+debian-serial:
+  image: drfaustroll/esl:debian-latest
+  stage: test
+  script:
+    - ./jhbuild.py build esl-bundle

@@ -3,6 +3,7 @@
 __pycache__
 /tmp*
 /checkouts/*
+!/checkouts/.gitkeep
 /tarballs/*
 
 # Local source tarballs, to be kept until upstream repositories are made

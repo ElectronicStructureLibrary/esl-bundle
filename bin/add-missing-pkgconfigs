@@ -12,6 +12,13 @@ from ruamel.yaml import YAML
                     # ------------------------------------ #
 
 
+# Configuration of the fake package
+fake_pkg_name = "fakepc"
+fake_pkg_version = "0.1.6"
+
+                    # ------------------------------------ #
+
+
 # From the documentation of pkg-config
 # https://people.freedesktop.org/~dbn/pkg-config-guide.html
 #
@@ -79,10 +86,10 @@ specs:
     version: 0.1
     description: ELectronic Structure Infrastructure
     url: https://wordpress.elsi-interchange.org/
-    libs: [elsi, elpa, pexsi, OMM, MatrixSwitch]
-    deps: [psolver, superlu_dist, scotch]
+    libs: [elsi, elpa, pexsi, OMM, MatrixSwitch, superlu_dist]
+    deps: [linalg, psolver, scotch]
   fdict:
-    name: Fdict
+    name: fdict
     version: 0.5.0
     description: Fortran type-free variables and type-free dictionaries
     url: https://github.com/zerothi/fdict
@@ -92,9 +99,10 @@ specs:
     version: 0.7.0
     description: Linking Fortran and Lua together
     url: https://github.com/ElectronicStructureLibrary/flook
-    libs: [flook]
+    libs: [flookall, dl]
+    deps: [fdict]
   scotch:
-    name:
+    name: Scotch
     version: 6.0.4
     description:
     url: https://gforge.inria.fr/projects/scotch/
@@ -219,7 +227,8 @@ parser.add_argument("-d", "--delete", action="store_true",
 parser.add_argument("-i", "--install",
     default=os.path.join("install", "lib", "pkgconfig"),
     help="Output file to store the repacked objects")
-parser.add_argument("-s", "--source", default="fakepc-0.1.3", 
+parser.add_argument("-s", "--source",
+    default="%s-%s" % (fake_pkg_name, fake_pkg_version), 
     help="Source directory of the fake package")
 args = parser.parse_args()
 
@@ -255,17 +264,38 @@ test -z "${srcdir}" && srcdir="."
 
 # Fake the behaviour of Autoconf
 prefix="/usr/local"
+linalg=""
 while test "${#}" -gt "0"; do
   if test "${1}" = "--prefix"; then
     shift
     prefix="${1}"
-    break
+    shift
+    continue
   fi
   chk_pfx=`echo "${1}" | grep '^--prefix'`
   if test ! -z "${chk_pfx}"; then
     prefix=`echo "${chk_pfx}" | sed -e 's/--prefix.//'`
+    shift
+    continue
   fi
+  chk_lin=`echo "${1}" | grep '^linalg='`
+  if test ! -z "${chk_lin}"; then
+    linalg=`echo "${chk_lin}" | sed -e 's/linalg=//'`
+    shift
+    continue
+  fi
+
+  shift
 done
+
+# Process the linalg setting
+cat >linalg.pc <<EOF
+Name: LinearAlgebra
+Description: Linear algebra libraries
+Version: 0.0.1
+Cflags:
+Libs: ${linalg}
+EOF
 
 # Set prefix in config files
 for in_file in ${srcdir}/*.in; do
@@ -276,6 +306,7 @@ done
 os.chmod(cfg_path, (stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH))
 
 # Generate makefile
+pc_srcs.append("linalg.pc.in")
 with open(os.path.join(args.source, "Makefile.in"), "w") as mk_file:
     mk_file.write("""\
 # This file has been automatically generated and should not be edited
@@ -300,3 +331,7 @@ subprocess.run(["cp", os.path.join("..", "bin", "install-sh"),
 # Generate source tarball
 print("Generating source tarball")
 subprocess.run(["tar", "czf", "%s.tar.gz" % args.source, args.source])
+
+# Update esl.modules
+subprocess.run(["sed", "-i", "-e", "/fakepc/s/[0-9]\\.[0-9]\\.[0-9]/%s/g" % fake_pkg_version,
+    os.path.join("..", "esl.modules")])
