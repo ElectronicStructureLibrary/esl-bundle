@@ -39,8 +39,8 @@ prefix = os.path.join(os.getcwd(), "install")
 
 top_builddir = '_jhbuild'  # If a relative path, prefix will be prepended
 
-checkoutroot = SRCDIR
-tarballdir = SRCDIR
+checkoutroot = os.path.join(SRCDIR, "checkouts")
+tarballdir = os.path.join(SRCDIR, "tarballs")
 if os.path.samefile(SRCDIR, os.getcwd()):
     # if set, packages will be built with srcdir!=builddir
     buildroot = os.path.join(os.getcwd(), "build")
