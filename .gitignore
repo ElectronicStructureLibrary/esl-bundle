@@ -1,19 +1,20 @@
+# Automatically-generated and temporary files
 *.py[co]
-tmp*
-/elsi_[0-9][0-9][0-9][0-9][0-9][0-9]
-/fakepc-[0-9].[0-9].[0-9]
-/fdict-*
-/flook-*
-/futile
-/libfdf
-/libgridxc
-/libgridxc-mpi
-/libpsml-*
-/libxc
-/psolver-[0-9].[0-9].[0-9]
-/psolver-mpi
-/pspio
-/scotch_[0-9].[0-9].[0-9]
-/superlu_dist-[0-9].[0-9].[0-9]
-/xmlf90-*
-/yaml-*
+*.tmp
+__pycache__
+/tmp*
+
+# Source trees
+/checkouts/*
+!/checkouts/.gitkeep
+
+# Local source tarballs, to be kept until upstream repositories are made
+# available
+/tarballs/*
+!/tarballs/elsi_*.tar.gz
+!/tarballs/fakepc-*.tar.gz
+!/tarballs/futile-*.tar.gz
+!/tarballs/libgridxc-*.tar.gz
+!/tarballs/psolver-*.tar.gz
+!/tarballs/scotch-*.tar.gz
+!/tarballs/superlu_dist-*.tar.gz
