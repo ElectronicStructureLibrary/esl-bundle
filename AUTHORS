@@ -2,30 +2,19 @@ ESL-Bundle is the result of various long-running collaborations involving
 many researchers, research groups and engineers in the fields of electronic
 structure, quantum chemistry, and computer science. The following author
 list is known to be incomplete. Feel free to extend it, so that it better
-reflects reality.
+reflects reality. ESL-Bundle is made of a collection of libraries and a building
+framework to compile and install those libraries.
 
 
-The source code building framework of ESL-Bundle has been originally
-written by:
-
-  Damien Caliste
-  Alin Marin Elena
-  Micael Oliveira
-  Yann Pouillon
-
-It is distributed under the Mozilla Public License version 2.
-
-
-ESL-Bundle contains a modified version of JHBuild, a package the original
-source code can be found at:
+The building framework is based on a modified version of JHBuild. JHBuild was
+written by James Henstridge. It is part of the GNOME Project and is distributed
+under the GNU General Public License version 2. The the original source code can
+be found at:
 
   https://github.com/GNOME/jhbuild
 
-JHBuild is part of the GNOME Project and is distributed under the GNU General
-Public License version 2.
 
-
-ESL-Bundle builds the following libraries:
+ESL-Bundle includes the following libraries:
 
   - Fdict and Flook, written by Nick Ruebner Papior, and distributed under
     the GNU Lesser Public General License version 3.
@@ -44,16 +33,17 @@ ESL-Bundle builds the following libraries:
     the BSD 3-clause License.
     https://launchpad.net/libpsml
 
-  - LibXC, written by Miguel Marques and Micael Oliveira, and distributed
-    under the Mozilla Public License version 2.
-    https://gitlab.com/libxc/libxc
+  - LibXC, written by Miguel Marques, Micael Oliveira, and Susi
+    Lehtola, and distributed under the Mozilla Public License version 2.
+    http://www.tddft.org/programs/libxc
 
   - PSolver, written by the Developers of BigDFT, and distributed under
     the GNU General Public License version 3.
     http://bigdft.org/
 
-  - Pspio, written by Micael Oliveira, Yann Pouillon and Matthieu Verstraete,
-    and distributed under the GNU Lesser General Public License version 2.1.
+  - Pspio, written by Micael Oliveira, Yann Pouillon, Joseba Alberdi
+    and Matthieu Verstraete, and distributed under the GNU Lesser
+    General Public License version 2.1.
     https://gitlab.e-cam2020.eu/esl/pspio
 
   - XMLF90, written by Alberto Garcia, Jon Wakelin, Toby White and Dan Wilson,
