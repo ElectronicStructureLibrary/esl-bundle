@@ -1,9 +1,9 @@
-ESL-Bundle is the result of various long-running collaborations involving
+The ESL Bundle is the result of various long-running collaborations involving
 many researchers, research groups and engineers in the fields of electronic
 structure, quantum chemistry, and computer science. The following author
 list is known to be incomplete. Feel free to extend it, so that it better
-reflects reality. ESL-Bundle is made of a collection of libraries and a building
-framework to compile and install those libraries.
+reflects reality. The ESL Bundle is made of a collection of libraries and a
+building framework to compile and install those libraries.
 
 
 The building framework is based on a modified version of JHBuild. JHBuild was
@@ -14,7 +14,7 @@ be found at:
   https://github.com/GNOME/jhbuild
 
 
-ESL-Bundle includes the following libraries:
+The ESL Bundle includes the following libraries:
 
   - Fdict and Flook, written by Nick Ruebner Papior, and distributed under
     the GNU Lesser Public General License version 3.
@@ -53,7 +53,7 @@ ESL-Bundle includes the following libraries:
     License.
 
 
-ESL-Bundle also includes the ELSI Bundle, which contains:
+The ESL Bundle also includes the ELSI Bundle, which contains:
 
   - ELPA, written by the ELPA Consortium, and distributed under the
     the GNU Lesser Public General License version 3.

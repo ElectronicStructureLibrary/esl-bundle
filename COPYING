@@ -1,4 +1,4 @@
-ESL-Bundle is made of a collection of libraries and JHBuild, a building
+The ESL Bundle is made of a collection of libraries and JHBuild, a building
 framework to compile and install those libraries. The libraries and JHBuild are
 distributed under their own licenses. The JHbuild copyright notice can be found
 in jhbuild/COPYING file. Separate copyright notices can be found for each
@@ -27,7 +27,7 @@ Currently the following libraries are included:
   - LibYAML, distributed under the BSD 2-clause License.
 
 
-ESL-Bundle also includes the ELSI Bundle, which contains:
+The ESL Bundle also includes the ELSI Bundle, which contains:
 
   - ELPA, distributed under the GNU Lesser Public General License version 3.
 
