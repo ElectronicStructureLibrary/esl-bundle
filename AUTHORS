@@ -34,7 +34,8 @@ The ESL Bundle includes the following libraries:
     https://launchpad.net/libpsml
 
   - LibXC, written by Miguel Marques, Micael Oliveira, and Susi
-    Lehtola, and distributed under the Mozilla Public License version 2.
+    Lehtola, and distributed under the GNU Lesser Public General License
+    version 3.
     http://www.tddft.org/programs/libxc
 
   - PSolver, written by the Developers of BigDFT, and distributed under
