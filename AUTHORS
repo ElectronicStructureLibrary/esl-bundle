@@ -5,6 +5,15 @@ list is known to be incomplete. Feel free to extend it, so that it better
 reflects reality. The ESL Bundle is made of a collection of libraries and a
 building framework to compile and install those libraries.
 
+The ESL Bundle was created by:
+
+  Damien Caliste
+  Alin Marin Elena
+  Micael Oliveira
+  Yann Pouillon
+
+and is maitained by the ESL community.
+
 
 The building framework is based on a modified version of JHBuild. JHBuild was
 written by James Henstridge. It is part of the GNOME Project and is distributed
