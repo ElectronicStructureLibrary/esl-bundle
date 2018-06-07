@@ -3,8 +3,6 @@
 
 Added
 -----
-- esl module set.
-- esl-bundle and esl-bundle-mpi metamodules.
 - Fdict 0.5.0
 - Flook 0.7.0
 - Futile 1.8
@@ -24,3 +22,6 @@ Added
 - SIPs
 - superlu_dist 5.3.0
 - scotch 6.4.0
+- esl module set.
+- esl-bundle and esl-bundle-mpi meta-modules.
+- configuration files: debian-gcc-openmpi.rc, gfortran+mpi.rc, opensuse-gcc-openmpi.rc.
