@@ -101,23 +101,23 @@ appropriate parameters. The command line syntax is the following:
 
 The following global options are available:
   
-  -f, --file config  Use an alternative configuration file instead of the default
-                     ~/.config/jhbuildrc.
-  
-  -m, --moduleset moduleset  Use a module set other than the module set listed in
-                             the configuration file. This option can be a
-                             relative path if the module set is located in the
-                             JHBuild moduleset folder, or an absolute path if
-                             located elsewhere.
+-f, --file config  Use an alternative configuration file instead of the default
+                   ~/.config/jhbuildrc.
 
-  --no-interact  Do not prompt the user for any input. This option is useful if
-                 leaving a build unattended, in order to ensure the build is not
-                 interrupted.
+-m, --moduleset moduleset  Use a module set other than the module set listed in
+                           the configuration file. This option can be a
+                           relative path if the module set is located in the
+                           JHBuild moduleset folder, or an absolute path if
+                           located elsewhere.
+
+--no-interact   Do not prompt the user for any input. This option is useful if
+                leaving a build unattended, in order to ensure the build is not
+                interrupted.
 
   
-In the ``ESL Bundle``, the default module set is `esl`. This module set provides
-a meta-module called `esl-bundle`, which builds and installs all the packages
-included in the bundle. A second meta-module called `esl-bundle-mpi` is
+In the ``ESL Bundle``, the default module set is ``esl``. This module set provides
+a meta-module called ``esl-bundle``, which builds and installs all the packages
+included in the bundle. A second meta-module called ``esl-bundle-mpi`` is
 provided, that builds the packages with MPI support. Note that not all packages
 can be compiled with MPI support. In that case they will be built without it.
 
@@ -130,29 +130,27 @@ it is located.
    directory.
 
 Therefore, a typical way of installing the collection of ESL libraries is the
-following:
-
+following::
     mkdir my_build_dir
     cd my_build_dir
     ../jhbuild.py build
 
-By default, the `build` command will compile all the modules from the
-`esl-bundle` meta-module and install them in the current directory. This, and a
+By default, the ``build`` command will compile all the modules from the
+``esl-bundle`` meta-module and install them in the current directory. This, and a
 few other options, can be changed in the configuration file. Several sample
-configuration files are provided in the `rcfiles` directory. These files should
+configuration files are provided in the ``rcfiles`` directory. These files should
 be suitable to build the bundle in a variety of systems, but they can also be
 used as a starting point to write configuration files more suited to your needs.
 
 The configuration files use Python syntax. Here is a list of some important
 options:
 
-- `modules`: dictionary of modules to build.
-- `prefix`: directory where the modules should be installed.
-- `checkoutroot`: where to unpack the module's sources.
+- ``modules``: dictionary of modules to build.
+- ``prefix``: directory where the modules should be installed.
+- ``checkoutroot``: where to unpack the module's sources.
 
 Configuration options to be passed to the modules build systems can also be
-specified in the configuration file. Here is an example of how to do this:
-
+specified in the configuration file. Here is an example of how to do this::
    # Set the FC variable when invoking the configure script for all modules
    autogenargs="FC=gfortran"
 
@@ -169,18 +167,16 @@ specified in the configuration file. Here is an example of how to do this:
 pkg-config
 ----------
 
-The `ESL Bundle` provides pkg-config_ files for all the modules. These can be
+The ``ESL Bundle`` provides pkg-config_ files for all the modules. These can be
 used to make the installed packages available to other applications.
 
 To use this feature, a working installation of pkg-config_ is necessary.  To
 make the installed packages available to other applications, the most important
 is to set the *PKG_CONFIG_PATH* environment variable. For a Bourne-like shell,
 the command is::
-
   export PKG_CONFIG_PATH="/path/to/esl-bundle/my_build_dir/install/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
 while for a C-like shell it is::
-
   setenv PKG_CONFIG_PATH "/path/to/esl-bundle/my_build_dir/install/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
 where you replace ``/path/to/esl-bundle/my_build_dir`` by the full path to your
