@@ -11,5 +11,5 @@ module_autogenargs['fdf']="FC=gfortran"
 module_autogenargs['libgridxc'] = "F77=mpif90"
 
 module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99'"
-
+module_autogenargs['elpa-mpi']=autogenargs+" CFLAGS='-march=native'"
 module_cmakeargs['elsi'] = "-DCMAKE_Fortran_COMPILER=mpifort -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_CXX_FLAGS='-std=c++11'"
