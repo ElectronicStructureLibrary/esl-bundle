@@ -17,7 +17,7 @@ opensuse-serial:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7 
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - ./jhbuild.py  build esl-bundle
+    - ./jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
 
 debian-mpi:
   image: drfaustroll/esl:debian-latest
@@ -29,4 +29,4 @@ debian-serial:
   image: drfaustroll/esl:debian-latest
   stage: test
   script:
-    - ./jhbuild.py build esl-bundle
+    - ./jhbuild.py -f rcfiles/debian-gcc-serial.rc build esl-bundle
