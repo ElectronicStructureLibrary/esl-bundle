@@ -1,0 +1,7 @@
+# Global arguments
+
+makeargs="VERBOSE=1"
+
+# Specific configure arguments for each module
+
+module_autogenargs['elpa']=" CFLAGS='-march=native' FCFLAGS='-ffree-line-length-none' "
