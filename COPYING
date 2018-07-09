@@ -26,6 +26,10 @@ Currently the following libraries are included:
 
   - LibYAML, distributed under the BSD 2-clause License.
 
+  - SuperLU_DIST, distributed under the BSD 3-clause License.
+
+  - Scotch, distributed under the CeCILL-C free/libre software license.
+
 
 The ESL Bundle also includes the ELSI Bundle, which contains:
 
