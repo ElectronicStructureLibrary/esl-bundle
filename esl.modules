@@ -54,6 +54,14 @@
     <branch repo="local" module="libfdf-0.1.1.tar.gz" version="0.1.1" hash="md5:e70dca3a799069c153e82e76b3760b40"/>
   </autotools>
 
+  <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
+    <branch repo="local" module="elpa-2018.05.001.tar.gz" version="2018.05.001" hash="md5:b64f30f04472a9ad5a1c9e3e17626a2a"/>
+  </autotools>
+
+  <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
+    <branch repo="local" module="elpa-2018.05.001.tar.gz" version="2018.05.001" hash="md5:b64f30f04472a9ad5a1c9e3e17626a2a"/>
+  </autotools>
+  
   <cmake id="elsi" cmakeargs="-DENABLE_PEXSI=ON -DUSE_EXTERNAL_SUPERLU=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS=$JHBUILD_PREFIX/include">
     <branch repo="local" module="elsi-2.0.2.tar.gz" version="2.0.2" hash="md5:7fb21bcf82c0a6dc652ace17af88fbcd"/>
     <dependencies>
