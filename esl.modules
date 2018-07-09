@@ -54,16 +54,14 @@
     <branch repo="local" module="libfdf-0.1.1.tar.gz" version="0.1.1" hash="md5:e70dca3a799069c153e82e76b3760b40"/>
   </autotools>
 
-  <makesys id="elsi" makeargs="SUPERLU_LIB='-lsuperlu_dist' PTSCOTCH_LIB='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz'">
-    <branch repo="local" module="elsi_180215.tar.gz" version="180215">
-      <patch file="elsi.patch"/>
-    </branch>
+  <cmake id="elsi" cmakeargs="-DENABLE_PEXSI=ON -DUSE_EXTERNAL_SUPERLU=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS=$JHBUILD_PREFIX/include">
+    <branch repo="local" module="elsi-2.0.2.tar.gz" version="2.0.2" hash="md5:7fb21bcf82c0a6dc652ace17af88fbcd"/>
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
     </dependencies>
-  </makesys>
-
+  </cmake>
+  
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
     <branch repo="local" module="scotch_6.0.4.tar.gz" version="6.0.4" hash="md5:d58b825eb95e1db77efe8c6ff42d329f">
       <patch file="scotch_make.patch" strip="0"/>
