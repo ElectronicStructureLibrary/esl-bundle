@@ -62,6 +62,15 @@ The ESL Bundle includes the following libraries:
   - LibYAML, written by Kirill Simonov, and distributed under the BSD 2-clause
     License.
 
+  - SuperLU_DIST, written by Xiaoye S. Li, Gustavo Chavez, Laura Grigori, Yang
+    Liu, Meiyue Shao, Piyush Sao, Ichitaro Yamazaki, Jim Demmel, and John
+    Gilbert, and distributed under the BSD 3-clause License.
+    http://crd-legacy.lbl.gov/~xiaoye/SuperLU
+
+  - Scotch, written by Francois Pellegrini, and distributed under the CeCILL-C
+    free/libre software license.
+    https://www.labri.fr/perso/pelegrin/scotch
+
 
 The ESL Bundle also includes the ELSI Bundle, which contains:
 
