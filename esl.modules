@@ -107,6 +107,10 @@
     </dependencies>
   </autotools>
 
+  <autotools id="libvdwxc" autogen-sh="configure">
+    <branch repo="local" module="libvdwxc-0.3.2.tar.gz" version="0.3.2" hash="md5:a65e23b394837765cf7efe057f6db368"/>
+  </autotools>
+
   <autotools id="libgridxc-mpi" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
     <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc-mpi" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135">
       <patch file="libgridxc_have_libxc.patch" strip="0"/>
@@ -136,6 +140,7 @@
       <dep package="fdf"/>
       <dep package="libpsml"/>
       <dep package="libgridxc"/>
+      <dep package="libvdwxc"/>
       <dep package="elpa"/>
     </dependencies>
   </metamodule>
@@ -153,6 +158,7 @@
       <dep package="elsi"/>
       <dep package="fakepc"/>
       <dep package="libgridxc-mpi"/>
+      <dep package="libvdwxc"/>
     </dependencies>
   </metamodule>
 
