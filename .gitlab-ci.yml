@@ -6,7 +6,7 @@ opensuse-mpi:
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2
+    - module load gnu/8  openmpi/3.1.1 scalapack/2.0.2 pfftw3/3.3.6
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
 
@@ -15,7 +15,7 @@ opensuse-serial:
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/7 
+    - module load gnu/8 fftw3/3.3.6 
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - ./jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
 
