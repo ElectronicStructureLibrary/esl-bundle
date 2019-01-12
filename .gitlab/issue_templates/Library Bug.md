@@ -1,4 +1,4 @@
-Reporting a bug that is intrinsically related to a specific library
+Reporting bug that is intrinsically related to a specific library
 
 NOTE: Please select option `Bug` when reporting bugs specific to the esl-bundle
 
@@ -10,5 +10,4 @@ If you have used the bundle to install the library you could add this informatio
 - [ ] Preferably attach your JHbuild `config.rc`
 - [ ] If you have a fix, please let us know! :-)
 
-/title [package]
-/label ~upstream
+/label ~Upstream
