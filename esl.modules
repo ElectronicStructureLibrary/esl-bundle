@@ -81,7 +81,7 @@
   </cmake>
 
   <makesys id="fdict">
-    <branch repo="local" module="fdict-0.5.0.tar.gz" version="0.5.0" hash="md5:32cb2ad01a261ac6aab705a56829d16d">
+    <branch repo="local" module="fdict-0.6.0.tar.gz" version="0.6.0" hash="md5:84f401df365eae284c9204c567d478b6">
       <patch file="fdict-install-prefix.patch" strip="1"/>
     </branch>
   </makesys>
