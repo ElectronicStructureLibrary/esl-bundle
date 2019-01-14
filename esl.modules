@@ -49,15 +49,15 @@
   </autotools>
 
   <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
-    <branch repo="local" module="elpa-2018.05.001.tar.gz" version="2018.05.001" hash="md5:b64f30f04472a9ad5a1c9e3e17626a2a"/>
+    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
   </autotools>
 
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="elpa-2018.05.001.tar.gz" version="2018.05.001" hash="md5:b64f30f04472a9ad5a1c9e3e17626a2a"/>
+    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
   </autotools>
   
-  <cmake id="elsi" cmakeargs='-DENABLE_PEXSI=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_SUPERLU=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2018.05.001/modules"'>
-    <branch repo="local" module="elsi-2.0.2.tar.gz" version="2.0.2" hash="md5:7fb21bcf82c0a6dc652ace17af88fbcd"/>
+  <cmake id="elsi" cmakeargs='-DENABLE_PEXSI=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_SUPERLU=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2018.11.001/modules"'>
+    <branch repo="local" module="elsi-2.1.0.tar.gz" version="2.1.0" hash="md5:32e79233d25bde2cbacc0b53e123dbaf"/>
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
@@ -66,7 +66,7 @@
   </cmake>
   
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
-    <branch repo="local" module="scotch_6.0.4.tar.gz" version="6.0.4" hash="md5:d58b825eb95e1db77efe8c6ff42d329f">
+    <branch repo="local" module="scotch_6.0.0.tar.gz" version="6.0.0" hash="md5:ba117428c0a6cd97d0c93e8b872bb3fe">
       <patch file="scotch_make.patch" strip="0"/>
     </branch>
   </makesys>
