@@ -6,4 +6,5 @@ makeargs="VERBOSE=1"
 
 module_autogenargs['elpa']=" CFLAGS='-march=native' FCFLAGS='-ffree-line-length-none' "
 module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
-
+module_autogenargs['libvdwxc']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx"
+module_makeargs['libvdwxc']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx VERBOSE=1"
