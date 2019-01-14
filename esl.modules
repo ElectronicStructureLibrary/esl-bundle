@@ -6,9 +6,6 @@
 
   <repository name="local" type="tarball" href="./"/>
 
-  <autotools id="libyaml" autogen-sh="configure">
-    <branch repo="local" module="yaml-0.1.6.tar.gz" version="0.1.6" hash="md5:5fe00cda18ca5daeb43762b80c38e06e"/>
-  </autotools>
 
   <autotools id="libxc" autogen-sh="configure" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
     <branch repo="local" module="libxc-3.0.1.tar.gz" version="3.0.1" hash="md5:7891522833953f82f3ac9118dd3bb893"/>
@@ -16,9 +13,6 @@
 
   <autotools id="futile" autogen-sh="configure">
     <branch repo="local" module="futile-1.8.tar.gz" version="1.8.0" hash="md5:835e9607d35eafaceb91e1197050450e"/>
-    <dependencies>
-      <dep package="libyaml"/>
-    </dependencies>
   </autotools>
 
   <autotools id="psolver" autogen-sh="configure" autogenargs="--disable-mpi">
