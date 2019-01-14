@@ -6,19 +6,13 @@
 
   <repository name="local" type="tarball" href="./"/>
 
-  <autotools id="libyaml" autogen-sh="configure">
-    <branch repo="local" module="yaml-0.1.6.tar.gz" version="0.1.6" hash="md5:5fe00cda18ca5daeb43762b80c38e06e"/>
-  </autotools>
 
   <autotools id="libxc" autogen-sh="configure" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
-    <branch repo="local" module="libxc-3.0.1.tar.gz" version="3.0.1" hash="md5:7891522833953f82f3ac9118dd3bb893"/>
+    <branch repo="local" module="libxc-4.2.3.tar.gz" version="4.2.3" hash="md5:6176ac7edf234425d973903f82199350"/>
   </autotools>
 
   <autotools id="futile" autogen-sh="configure">
     <branch repo="local" module="futile-1.8.tar.gz" version="1.8.0" hash="md5:835e9607d35eafaceb91e1197050450e"/>
-    <dependencies>
-      <dep package="libyaml"/>
-    </dependencies>
   </autotools>
 
   <autotools id="psolver" autogen-sh="configure" autogenargs="--disable-mpi">
@@ -55,24 +49,29 @@
   </autotools>
 
   <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
-    <branch repo="local" module="elpa-2018.05.001.tar.gz" version="2018.05.001" hash="md5:b64f30f04472a9ad5a1c9e3e17626a2a"/>
+    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
   </autotools>
 
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="elpa-2018.05.001.tar.gz" version="2018.05.001" hash="md5:b64f30f04472a9ad5a1c9e3e17626a2a"/>
+    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
   </autotools>
   
-  <cmake id="elsi" cmakeargs='-DENABLE_PEXSI=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_SUPERLU=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2018.05.001/modules"'>
-    <branch repo="local" module="elsi-2.0.2.tar.gz" version="2.0.2" hash="md5:7fb21bcf82c0a6dc652ace17af88fbcd"/>
+  <cmake id="NTPoly" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
+    <branch repo="local" module="NTPoly-2.1.tar.gz" version="2.1" hash="md5:dc87aff779e99f892770b6db271a42a5"/>
+  </cmake>
+
+  <cmake id="elsi" cmakeargs='-DENABLE_PEXSI=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_SUPERLU=ON -DUSE_EXTERNAL_NTPOLY=On -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2018.11.001/modules"'>
+    <branch repo="local" module="elsi-2.1.0.tar.gz" version="2.1.0" hash="md5:32e79233d25bde2cbacc0b53e123dbaf"/>
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
       <dep package="elpa-mpi"/>
+      <dep package="NTPoly"/>
     </dependencies>
   </cmake>
   
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
-    <branch repo="local" module="scotch_6.0.4.tar.gz" version="6.0.4" hash="md5:d58b825eb95e1db77efe8c6ff42d329f">
+    <branch repo="local" module="scotch_6.0.0.tar.gz" version="6.0.0" hash="md5:ba117428c0a6cd97d0c93e8b872bb3fe">
       <patch file="scotch_make.patch" strip="0"/>
     </branch>
   </makesys>
@@ -87,7 +86,7 @@
   </cmake>
 
   <makesys id="fdict">
-    <branch repo="local" module="fdict-0.5.0.tar.gz" version="0.5.0" hash="md5:32cb2ad01a261ac6aab705a56829d16d">
+    <branch repo="local" module="fdict-0.6.0.tar.gz" version="0.6.0" hash="md5:84f401df365eae284c9204c567d478b6">
       <patch file="fdict-install-prefix.patch" strip="1"/>
     </branch>
   </makesys>
@@ -99,25 +98,25 @@
   </makesys>
 
   <autotools id="libgridxc" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
-    <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135">
-      <patch file="libgridxc_have_libxc.patch" strip="0"/>
-    </branch>
+    <branch repo="local" module="libgridxc-0.8.4.1.tar.gz" version="0.8.4.1" checkoutdir="libgridxc" hash="md5:936590029e6113bb5658960478e2865a"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
   </autotools>
 
+  <autotools id="libvdwxc" autogen-sh="configure">
+    <branch repo="local" module="libvdwxc-0.3.2.tar.gz" version="0.3.2" hash="md5:a65e23b394837765cf7efe057f6db368"/>
+  </autotools>
+
   <autotools id="libgridxc-mpi" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
-    <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc-mpi" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135">
-      <patch file="libgridxc_have_libxc.patch" strip="0"/>
-    </branch>
+    <branch repo="local" module="libgridxc-0.8.4.1.tar.gz" version="0.8.4.1" checkoutdir="libgridxc-mpi" hash="md5:936590029e6113bb5658960478e2865a"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.1.6.tar.gz" version="0.1.6" hash="md5:ef27b33762447ca2ce1e7506e8ad6be8"/>
+    <branch repo="local" module="fakepc-0.1.8.tar.gz" version="0.1.8" hash="md5:a1cf161f88486fd959710a288b33b876"/>
     <dependencies>
       <dep package="fdict"/>
       <dep package="flook"/>
@@ -136,6 +135,7 @@
       <dep package="fdf"/>
       <dep package="libpsml"/>
       <dep package="libgridxc"/>
+      <dep package="libvdwxc"/>
       <dep package="elpa"/>
     </dependencies>
   </metamodule>
@@ -153,6 +153,7 @@
       <dep package="elsi"/>
       <dep package="fakepc"/>
       <dep package="libgridxc-mpi"/>
+      <dep package="libvdwxc"/>
     </dependencies>
   </metamodule>
 
