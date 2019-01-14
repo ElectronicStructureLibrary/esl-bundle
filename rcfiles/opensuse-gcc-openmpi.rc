@@ -10,7 +10,6 @@ module_autogenargs['fakepc']="linalg='-lscalapack -lblacs -llapack -lblas'"
 module_autogenargs['futile']=autogenargs+" --with-scalapack=scalapack --with-blacs=blacs"
 module_autogenargs['psolver']=autogenargs+" --with-scalapack=scalapack --with-blacs=blacs"
 module_autogenargs['fdf']=" FC=gfortran"
-module_autogenargs['libgridxc'] = "F77=mpif90"
 
 module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99'"
 module_autogenargs['elpa-mpi']=autogenargs+" CFLAGS='-march=native' FCFLAGS='-ffree-line-length-none' "
