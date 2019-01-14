@@ -106,7 +106,7 @@
   </autotools>
 
   <autotools id="libgridxc-mpi" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
-    <branch repo="local" module="libgridxc-0.8.4.1.tar.gz" version="0.8.4.1" checkoutdir="libgridxc-mpi" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135"/>
+    <branch repo="local" module="libgridxc-0.8.4.1.tar.gz" version="0.8.4.1" checkoutdir="libgridxc-mpi" hash="md5:936590029e6113bb5658960478e2865a"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
