@@ -115,7 +115,7 @@
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.1.6.tar.gz" version="0.1.6" hash="md5:ef27b33762447ca2ce1e7506e8ad6be8"/>
+    <branch repo="local" module="fakepc-0.1.8.tar.gz" version="0.1.8" hash="md5:a1cf161f88486fd959710a288b33b876"/>
     <dependencies>
       <dep package="fdict"/>
       <dep package="flook"/>
