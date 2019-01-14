@@ -8,7 +8,7 @@
 
 
   <autotools id="libxc" autogen-sh="configure" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
-    <branch repo="local" module="libxc-3.0.1.tar.gz" version="3.0.1" hash="md5:7891522833953f82f3ac9118dd3bb893"/>
+    <branch repo="local" module="libxc-4.2.3.tar.gz" version="4.2.3" hash="md5:6176ac7edf234425d973903f82199350"/>
   </autotools>
 
   <autotools id="futile" autogen-sh="configure">
@@ -98,9 +98,7 @@
   </makesys>
 
   <autotools id="libgridxc" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
-    <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135">
-      <patch file="libgridxc_have_libxc.patch" strip="0"/>
-    </branch>
+    <branch repo="local" module="libgridxc-0.8.4.1.tar.gz" version="0.8.4.1" checkoutdir="libgridxc" hash="md5:936590029e6113bb5658960478e2865a"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
@@ -111,9 +109,7 @@
   </autotools>
 
   <autotools id="libgridxc-mpi" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
-    <branch repo="local" module="libgridxc-0.8.0.3.tar.gz" version="0.8.0.3" checkoutdir="libgridxc-mpi" hash="md5:73dc4c79a36bfefaf1f2e0d18cd5a135">
-      <patch file="libgridxc_have_libxc.patch" strip="0"/>
-    </branch>
+    <branch repo="local" module="libgridxc-0.8.4.1.tar.gz" version="0.8.4.1" checkoutdir="libgridxc-mpi" hash="md5:936590029e6113bb5658960478e2865a"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
