@@ -56,12 +56,17 @@
     <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
   </autotools>
   
-  <cmake id="elsi" cmakeargs='-DENABLE_PEXSI=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_SUPERLU=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2018.11.001/modules"'>
+  <cmake id="NTPoly" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
+    <branch repo="local" module="NTPoly-2.1.tar.gz" version="2.1" hash="md5:dc87aff779e99f892770b6db271a42a5"/>
+  </cmake>
+
+  <cmake id="elsi" cmakeargs='-DENABLE_PEXSI=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_SUPERLU=ON -DUSE_EXTERNAL_NTPOLY=On -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2018.11.001/modules"'>
     <branch repo="local" module="elsi-2.1.0.tar.gz" version="2.1.0" hash="md5:32e79233d25bde2cbacc0b53e123dbaf"/>
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
       <dep package="elpa-mpi"/>
+      <dep package="NTPoly"/>
     </dependencies>
   </cmake>
   
