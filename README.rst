@@ -22,13 +22,14 @@ be found on the `ESL Wiki`_.
 Requirements
 ------------
 
-To work properly, the ``ESL Bundle`` requires Python 2.7 or above. Fortran and C
-compilers are also required, as most modules are written in one or both of these
-programming languages. Some modules also provide bindings for other
-languages. Depending on the modules you wish to build, some additional packages
-might be required. These are packages that are found in most Linux distributions
-and/or commonly available in HPC facilities, and therefore it was not deemed
-necessary to include them in the ``ESL Bundle``.
+To work properly, the ``ESL Bundle`` requires Python 2.7 (JHBuild_ is not
+available for Python 3.X). Fortran and C compilers are also required, as most
+modules are written in one or both of these programming languages.
+Some modules also provide bindings for other languages. Depending on the modules
+you wish to build, some additional packages might be required. These are
+packages that are found in most Linux distributions and/or commonly available
+in HPC facilities, and therefore it was not deemed necessary to include them
+in the ``ESL Bundle``.
 
 Some modules support parallelization through MPI. A working MPI installation is
 necessary to build modules with MPI support.
