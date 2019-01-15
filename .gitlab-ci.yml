@@ -55,3 +55,16 @@ fedora-mpi:
   script:
     - export PATH=/usr/lib64/openmpi/bin:$PATH
     - ./jhbuild.py -f rcfiles/fedora-gcc-openmpi.rc build esl-bundle-mpi
+
+centos-serial:
+  image: drfaustroll/esl:centos-latest
+  stage: test
+  script:
+    - ./jhbuild.py -f rcfiles/centos-gcc-serial.rc build esl-bundle
+
+centos-mpi:
+  image: drfaustroll/esl:centos-latest
+  stage: test
+  script:
+    - export PATH=/usr/lib64/openmpi/bin:$PATH
+    - ./jhbuild.py -f rcfiles/centos-gcc-openmpi.rc build esl-bundle-mpi
