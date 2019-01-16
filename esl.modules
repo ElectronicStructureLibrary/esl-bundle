@@ -6,7 +6,6 @@
 
   <repository name="local" type="tarball" href="./"/>
 
-
   <autotools id="libxc" autogen-sh="configure" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
     <branch repo="local" module="libxc-4.2.3.tar.gz" version="4.2.3" hash="md5:6176ac7edf234425d973903f82199350"/>
   </autotools>
@@ -49,11 +48,15 @@
   </autotools>
 
   <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
-    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
+    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f">
+      <patch file="01-elpa-remove-hardcoded-cpp.patch" strip="0"/>
+    </branch>
   </autotools>
 
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
+    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f">
+      <patch file="01-elpa-remove-hardcoded-cpp.patch" strip="0"/>
+    </branch>
   </autotools>
   
   <cmake id="NTPoly" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
@@ -69,10 +72,26 @@
       <dep package="NTPoly"/>
     </dependencies>
   </cmake>
+
+  <cmake id="elsi-mac" cmakeargs='-DENABLE_PEXSI=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_SUPERLU=ON -DUSE_EXTERNAL_NTPOLY=On -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2018.11.001/modules"'>
+    <branch repo="local" module="elsi-2.1.0.tar.gz" version="2.1.0" hash="md5:32e79233d25bde2cbacc0b53e123dbaf"/>
+    <dependencies>
+      <dep package="fakepc-mac"/>
+      <dep package="superlu_dist-mac"/>
+      <dep package="elpa-mpi"/>
+      <dep package="NTPoly"/>
+    </dependencies>
+  </cmake>
   
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
     <branch repo="local" module="scotch_6.0.0.tar.gz" version="6.0.0" hash="md5:ba117428c0a6cd97d0c93e8b872bb3fe">
       <patch file="scotch_make.patch" strip="0"/>
+    </branch>
+  </makesys>
+
+  <makesys id="scotch-mac" makeargs="-C  src -j 1 scotch ptscotch" >
+    <branch repo="local" module="scotch_6.0.0.tar.gz" version="6.0.0" hash="md5:ba117428c0a6cd97d0c93e8b872bb3fe">
+      <patch file="scotch_make_mac.patch" strip="0"/>
     </branch>
   </makesys>
 
@@ -82,6 +101,15 @@
     </branch>
     <dependencies>
       <dep package="scotch"/>
+    </dependencies>
+  </cmake>
+
+  <cmake id="superlu_dist-mac" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIX/include">
+    <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0" hash="md5:4c18539291602f0234b0e54152ccc062">
+      <patch file="superlu.patch" strip="0"/>
+    </branch>
+    <dependencies>
+      <dep package="scotch-mac"/>
     </dependencies>
   </cmake>
 
@@ -125,10 +153,31 @@
     </dependencies>
   </autotools>
 
+  <autotools id="fakepc-mac" autogen-sh="configure">
+    <branch repo="local" module="fakepc-0.1.8.tar.gz" version="0.1.8" hash="md5:a1cf161f88486fd959710a288b33b876"/>
+    <dependencies>
+      <dep package="scotch-mac"/>
+      <dep package="superlu_dist-mac"/>
+    </dependencies>
+  </autotools>
+
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="fdict"/>
       <dep package="flook"/>
+      <dep package="libxc"/>
+      <dep package="psolver"/>
+      <dep package="pspio"/>
+      <dep package="fdf"/>
+      <dep package="libpsml"/>
+      <dep package="libgridxc"/>
+      <dep package="libvdwxc"/>
+      <dep package="elpa"/>
+    </dependencies>
+  </metamodule>
+
+  <metamodule id="esl-bundle-mac">
+    <dependencies>
       <dep package="libxc"/>
       <dep package="psolver"/>
       <dep package="pspio"/>
@@ -156,5 +205,20 @@
       <dep package="libvdwxc"/>
     </dependencies>
   </metamodule>
+
+  <metamodule id="esl-bundle-mpi-mac">
+    <dependencies>
+      <dep package="libxc"/>
+      <dep package="psolver-mpi"/>
+      <dep package="pspio"/>
+      <dep package="fdf"/>
+      <dep package="libpsml"/>
+      <dep package="elpa-mpi"/>
+      <dep package="elsi-mac"/>
+      <dep package="fakepc-mac"/>
+      <dep package="libgridxc-mpi"/>
+    </dependencies>
+  </metamodule>
+
 
 </moduleset>

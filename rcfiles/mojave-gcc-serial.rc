@@ -1,0 +1,10 @@
+# Global arguments
+
+makeargs="VERBOSE=1"
+
+# Specific configure arguments for each module
+
+module_autogenargs['elpa']=" CFLAGS='-mtune=native' FCFLAGS='-ffree-line-length-none' --disable-avx2 --disable-avx --disable-sse-assembly "
+module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
+module_autogenargs['futile'] = ' --with-yaml-path=/usr/local/Cellar/libyaml/0.2.1 CPPFLAGS="-I/usr/local/Cellar/libyaml/0.2.1/include" '
+module_autogenargs['libvdwxc'] = '--with-fftw3=/usr/local/Cellar/fftw/3.3.8'

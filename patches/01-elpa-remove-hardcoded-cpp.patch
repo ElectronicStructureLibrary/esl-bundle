@@ -1,0 +1,11 @@
+--- fdep/fortran_dependencies.mk.original	2019-01-15 08:34:09.000000000 -0800
++++ fdep/fortran_dependencies.mk	2019-01-15 08:34:29.000000000 -0800
+@@ -16,7 +16,7 @@ _f90_only_verbose_ = @
+ _f90_only_verbose_0 = @
+ _f90_targets = $(call translate_name,$(PROGRAMS) $(LTLIBRARIES))
+ 
+-FORTRAN_CPP ?= cpp -P -traditional -Wall -Werror
++FORTRAN_CPP ?= $(CPP) -P -traditional -Wall -Werror
+ 
+ # $1 source files
+ #
