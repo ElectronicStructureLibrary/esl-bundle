@@ -14,6 +14,7 @@ Fixed
 -----
 - Name of Libvdwxc in documentatation.
 - ChangeLog.
+- LibGridXC 0.8.4.2 (build-system fixes).
 
 [0.3.0-2] - 2019-01-15
 ========================
