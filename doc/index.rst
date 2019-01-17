@@ -10,6 +10,9 @@ ESL Bundle Documentation
    :maxdepth: 2
    :caption: Contents:
 
+   description
+   release-process
+
 
 Indices and tables
 ==================
