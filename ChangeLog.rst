@@ -16,6 +16,11 @@ Fixed
 - ChangeLog.
 - LibGridXC build-system by updating to v0.8.4.2.
 
+Changed
+-------
+- Futile to align it with upstream BigDFT/Futile v1.8.3.
+- PSolver to align it with upstream BigDFT/PSolver v1.8.3.
+
 [0.3.0-2] - 2019-01-15
 ========================
 
