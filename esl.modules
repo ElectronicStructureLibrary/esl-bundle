@@ -12,18 +12,18 @@
   </autotools>
 
   <autotools id="futile" autogen-sh="configure">
-    <branch repo="local" module="futile-1.8.tar.gz" version="1.8.0" hash="md5:835e9607d35eafaceb91e1197050450e"/>
+    <branch repo="local" module="futile-1.8.tar.gz" version="1.8.3" hash="md5:f30e354b5bae61ac12127efee5f4412d"/>
   </autotools>
 
   <autotools id="psolver" autogen-sh="configure" autogenargs="--disable-mpi">
-    <branch repo="local" module="psolver-1.8.1.tar.gz" version="1.8.1" hash="md5:4dc54b2d8f1e046703844f0da3c25e28"/>
+    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.3" hash="md5:0c13d0405c4cc05325b4be61fa1c4dad"/>
     <dependencies>
       <dep package="futile"/>
     </dependencies>
   </autotools>
 
   <autotools id="psolver-mpi" autogen-sh="configure" autogenargs="--enable-mpi">
-    <branch repo="local" module="psolver-1.8.1.tar.gz" version="1.8.1" hash="md5:4dc54b2d8f1e046703844f0da3c25e28" checkoutdir="psolver-mpi"/>
+    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.3" hash="md5:0c13d0405c4cc05325b4be61fa1c4dad" checkoutdir="psolver-mpi"/>
     <dependencies>
       <dep package="futile"/>
     </dependencies>
@@ -98,7 +98,7 @@
   </makesys>
 
   <autotools id="libgridxc" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
-    <branch repo="local" module="libgridxc-0.8.4.1.tar.gz" version="0.8.4.1" checkoutdir="libgridxc" hash="md5:936590029e6113bb5658960478e2865a"/>
+    <branch repo="local" module="libgridxc-0.8.4.2.tar.gz" version="0.8.4.2" checkoutdir="libgridxc" hash="md5:077247422c89e9370242fe4f6e24c844"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
@@ -109,7 +109,7 @@
   </autotools>
 
   <autotools id="libgridxc-mpi" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
-    <branch repo="local" module="libgridxc-0.8.4.1.tar.gz" version="0.8.4.1" checkoutdir="libgridxc-mpi" hash="md5:936590029e6113bb5658960478e2865a"/>
+    <branch repo="local" module="libgridxc-0.8.4.2.tar.gz" version="0.8.4.2" checkoutdir="libgridxc-mpi" hash="md5:077247422c89e9370242fe4f6e24c844"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
