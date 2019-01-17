@@ -134,6 +134,7 @@ it is located.
 
 Therefore, a typical way of installing the collection of ESL libraries is the
 following::
+
     mkdir my_build_dir
     cd my_build_dir
     ../jhbuild.py build
@@ -154,6 +155,7 @@ options:
 
 Configuration options to be passed to the modules build systems can also be
 specified in the configuration file. Here is an example of how to do this::
+
    # Set the FC variable when invoking the configure script for all modules
    autogenargs="FC=gfortran"
 
@@ -177,6 +179,7 @@ To use this feature, a working installation of pkg-config_ is necessary.  To
 make the installed packages available to other applications, the most important
 is to set the *PKG_CONFIG_PATH* environment variable. For a Bourne-like shell,
 the command is::
+
   export PKG_CONFIG_PATH="/path/to/esl-bundle/my_build_dir/install/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
 while for a C-like shell it is::
