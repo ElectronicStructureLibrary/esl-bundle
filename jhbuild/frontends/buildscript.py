@@ -18,6 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from builtins import object
+
 import os
 import logging
 import subprocess
@@ -27,7 +29,7 @@ from jhbuild.utils import trigger
 from jhbuild.utils import cmds
 from jhbuild.errors import FatalError, CommandError, SkipToPhase, SkipToEnd
 
-class BuildScript:
+class BuildScript(object):
     def __init__(self, config, module_list=None, module_set=None):
         if self.__class__ is BuildScript:
             raise NotImplementedError('BuildScript is an abstract base class')
@@ -81,7 +83,7 @@ class BuildScript:
 
     def _prepare_execute(self, command):
         if self.subprocess_nice_args:
-            if isinstance(command, (str, unicode)):
+            if isinstance(command, (str, str)):
                 command = ' '.join(self.subprocess_nice_args) + ' ' + command
             else:
                 command = self.subprocess_nice_args + command
@@ -262,7 +264,7 @@ class BuildScript:
             try:
                 self.execute(trig.command())
             except CommandError as err:
-                if isinstance(trig.command(), (str, unicode)):
+                if isinstance(trig.command(), (str, str)):
                     displayed_command = trig.command()
                 else:
                     displayed_command = ' '.join(trig.command())

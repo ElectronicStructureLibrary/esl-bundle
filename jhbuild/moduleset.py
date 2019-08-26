@@ -18,10 +18,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from __future__ import generators
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 
 import os
 import sys
-import urlparse
+import urllib.parse
 import logging
 
 from jhbuild.errors import UsageError, FatalError, DependencyCycleError, \
@@ -66,7 +69,7 @@ _default_repo = None
 def get_default_repo():
     return _default_repo
 
-class ModuleSet:
+class ModuleSet(object):
     def __init__(self, config = None, db=None):
         self.config = config
         self.modules = {}
@@ -90,7 +93,7 @@ class ModuleSet:
         if module_name in self.modules or not ignore_case:
             return self.modules[module_name]
         module_name_lower = module_name.lower()
-        for module in self.modules.keys():
+        for module in list(self.modules.keys()):
             if module.lower() == module_name_lower:
                 logging.info(_('fixed case of module \'%(orig)s\' to '
                                '\'%(new)s\'') % {'orig': module_name,
@@ -172,7 +175,7 @@ class ModuleSet:
                             resolved[index] = (node, False)
 
         if module_names == 'all':
-            module_names = self.modules.keys()
+            module_names = list(self.modules.keys())
         try:
             # remove skip modules from module_name list
             modules = [self.get_module(module, ignore_case = True) \
@@ -200,7 +203,7 @@ class ModuleSet:
         test_modules = []
         if seed == []:
             return
-        for mod in self.modules.values():
+        for mod in list(self.modules.values()):
             for test_app in seed:
                 if test_app in mod.tested_pkgs:
                     test_modules.append(mod)
@@ -282,7 +285,7 @@ class ModuleSet:
         from jhbuild.versioncontrol.tarball import TarballBranch
         
         if modules is None:
-            modules = self.modules.keys()
+            modules = list(self.modules.keys())
         inlist = {}
         for module in modules:
             inlist[module] = None
@@ -333,7 +336,7 @@ class ModuleSet:
 
         if clusters:
             # create clusters for MetaModules
-            for modname in inlist.keys():
+            for modname in list(inlist.keys()):
                 mod = self.modules.get(modname)
                 if isinstance(mod, MetaModule):
                     fp.write('  subgraph "cluster_%s" {\n' % mod.name)
@@ -370,7 +373,7 @@ def load(config, uri=None):
                 uri = os.path.join(config.modulesets_dir, uri + '.modules')
             elif os.path.isfile(os.path.join(config.modulesets_dir, uri)):
                 uri = os.path.join(config.modulesets_dir, uri)
-        elif not urlparse.urlparse(uri)[0]:
+        elif not urllib.parse.urlparse(uri)[0]:
             uri = 'https://gitlab.gnome.org/GNOME/jhbuild/raw/master/modulesets' \
                   '/%s.modules' % uri
         ms.modules.update(_parse_module_set(config, uri).modules)
@@ -392,7 +395,7 @@ def load(config, uri=None):
 def load_tests (config, uri=None):
     ms = load (config, uri)
     ms_tests = ModuleSet(config = config)
-    for app, module in ms.modules.iteritems():
+    for app, module in ms.modules.items():
         if module.__class__ == TestModule:
             ms_tests.modules[app] = module
     return ms_tests
@@ -533,7 +536,7 @@ def _parse_module_set(config, uri):
     for node in _child_elements(document.documentElement):
         if node.nodeName == 'include':
             href = node.getAttribute('href')
-            inc_uri = urlparse.urljoin(uri, href)
+            inc_uri = urllib.parse.urljoin(uri, href)
             try:
                 inc_moduleset = _parse_module_set(config, inc_uri)
             except UndefinedRepositoryError:

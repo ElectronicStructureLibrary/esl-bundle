@@ -18,6 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from builtins import object
+
 __metaclass__ = type
 
 import os
@@ -31,7 +33,7 @@ from jhbuild.modtypes import \
 __all__ = [ 'LinuxModule' ]
 
 
-class LinuxConfig:
+class LinuxConfig(object):
 
     def __init__(self, version, path, branch):
         self.version = version

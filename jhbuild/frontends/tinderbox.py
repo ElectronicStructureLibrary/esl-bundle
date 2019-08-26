@@ -18,6 +18,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 
 import os
 import time
@@ -32,7 +35,7 @@ from jhbuild.utils import cmds
 from jhbuild.utils import sysid
 from jhbuild.errors import CommandError, FatalError
 from . import buildscript
-import commands
+import subprocess
 
 index_header = '''<html>
   <head>
@@ -137,8 +140,8 @@ buildlog_footer = '''
 '''
 
 def escape(string):
-    if type(string) is not unicode:
-        string = unicode(string, _encoding, 'replace')
+    if type(string) is not str:
+        string = str(string, _encoding, 'replace')
     string = string.replace('&', '&amp;').replace('<','&lt;').replace(
             '>','&gt;').replace('\n','<br/>').replace(
             '\t','&nbsp;&nbsp;&nbsp;&nbsp;')
@@ -204,7 +207,7 @@ class TinderboxBuildScript(buildscript.BuildScript):
             print_args['cwd'] = os.getcwd()
 
         self.modulefp.write('<pre>')
-        if isinstance(command, (str, unicode)):
+        if isinstance(command, (str, str)):
             kws['shell'] = True
             print_args['command'] = command
         else:

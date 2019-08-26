@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from builtins import object
+
 import sys
 import os
 import subprocess
@@ -26,7 +28,7 @@ try:
 except ImportError:
     dbus = None
 
-class TrayIcon:
+class TrayIcon(object):
     proc = None
 
     def __init__(self, config):

@@ -95,7 +95,7 @@ class cmd_sysdeps(cmd_build):
         have_too_old = False
 
         if options.dump:
-            for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+            for module, (req_version, installed_version, new_enough, systemmodule) in module_state.items():
                 if new_enough:
                     continue
 
@@ -129,7 +129,7 @@ class cmd_sysdeps(cmd_build):
             return
 
         print(_('System installed packages which are new enough:'))
-        for module,(req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module,(req_version, installed_version, new_enough, systemmodule) in module_state.items():
             if (installed_version is not None) and new_enough and (config.partial_build or systemmodule):
                 have_new_enough = True
                 print ('    %s %s' % (module.name,
@@ -141,7 +141,7 @@ class cmd_sysdeps(cmd_build):
 
         print(_('Required packages:'))
         print(_('  System installed packages which are too old:'))
-        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.items():
             if (installed_version is not None) and (not new_enough) and systemmodule:
                 have_too_old = True
                 print ('    %s %s' % (module.name,
@@ -153,7 +153,7 @@ class cmd_sysdeps(cmd_build):
 
         print(_('  No matching system package installed:'))
         uninstalled = []
-        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.items():
             if installed_version is None and (not new_enough) and systemmodule:
                 print ('    %s %s' % (module.name,
                                       fmt_details(module.pkg_config,
@@ -172,7 +172,7 @@ class cmd_sysdeps(cmd_build):
         if config.partial_build:
             print(_('Optional packages: (JHBuild will build the missing packages)'))
             print(_('  System installed packages which are too old:'))
-            for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+            for module, (req_version, installed_version, new_enough, systemmodule) in module_state.items():
                 if (installed_version is not None) and (not new_enough) and (not systemmodule):
                     have_too_old = True
                     print ('    %s %s' % (module.name,
@@ -183,7 +183,7 @@ class cmd_sysdeps(cmd_build):
                 print(_('    (none)'))
 
             print(_('  No matching system package installed:'))
-            for module,(req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+            for module,(req_version, installed_version, new_enough, systemmodule) in module_state.items():
                 if installed_version is None and (not new_enough) and (not systemmodule):
                     print ('    %s %s' % (module.name,
                                           fmt_details(module.pkg_config,

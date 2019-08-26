@@ -19,6 +19,10 @@
 
 from __future__ import print_function
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 
 import os
 import time
@@ -31,9 +35,9 @@ from jhbuild.utils import cmds
 from jhbuild.errors import CommandError
 from . import buildscript
 
-import xmlrpclib
+import xmlrpc.client
 import zlib
-from cStringIO import StringIO
+from io import StringIO
 
 from .tinderbox import get_distro
 from .terminal import TerminalBuildScript, trayicon, t_bold, t_reset
@@ -47,7 +51,7 @@ def fix_encoding(string):
     s = 'VERY BORKEN ENCODING'
     for encoding in [charset, 'utf-8', 'iso-8859-15']:
         try:
-            s = unicode(string, encoding)
+            s = str(string, encoding)
         except:
             continue
         break
@@ -55,17 +59,17 @@ def fix_encoding(string):
 
 def compress_data(data):
     c_data = zlib.compress(data)
-    return xmlrpclib.Binary(c_data)
+    return xmlrpc.client.Binary(c_data)
 
-class ServerProxy(xmlrpclib.ServerProxy):
+class ServerProxy(xmlrpc.client.ServerProxy):
     verbose_timeout = False
 
     def __request(self, methodname, params):
         ITERS = 10
         for i in range(ITERS):
             try:
-                return xmlrpclib.ServerProxy.__request(self, methodname, params)
-            except xmlrpclib.ProtocolError as e:
+                return xmlrpc.client.ServerProxy.__request(self, methodname, params)
+            except xmlrpc.client.ProtocolError as e:
                 if e.errcode != 500:
                     raise
             except socket.error as e:
@@ -96,7 +100,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
         # cleanup environment
         os.environ['TERM'] = 'dumb'
         os.environ['LANG'] = 'C'
-        for k in os.environ.keys():
+        for k in list(os.environ.keys()):
             if k.startswith('LC_'):
                 os.environ[k] = 'C'
 
@@ -130,7 +134,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
         kws = {
             'close_fds': True
             }
-        if isinstance(command, (str, unicode)):
+        if isinstance(command, (str, str)):
             displayed_command = command
             kws['shell'] = True
         else:
@@ -210,7 +214,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
 
         try:
             self.build_id = self.server.start_build(info)
-        except xmlrpclib.ProtocolError as e:
+        except xmlrpc.client.ProtocolError as e:
             if e.errcode == 403:
                 print(_('ERROR: Wrong credentials, please check username/password'), file=sys.stderr)
                 sys.exit(1)
@@ -258,12 +262,12 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
             if self.modules == {}:
                 self.modules = jhbuild.moduleset.load_tests(self.config)
 
-            if module in self.modules.modules.keys() \
+            if module in list(self.modules.modules.keys()) \
                    and self.modules.modules[module].test_type == 'ldtp':
                 self._upload_logfile(module)
 
         if isinstance(error, Exception):
-            error = unicode(error)
+            error = str(error)
         self.server.end_phase(self.build_id, module, phase, compress_data(log), error)
 
     def handle_error(self, module, phase, nextphase, error, altphases):

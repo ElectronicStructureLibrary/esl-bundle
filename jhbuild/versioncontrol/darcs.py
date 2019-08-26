@@ -17,11 +17,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from future import standard_library
+standard_library.install_aliases()
+
 __all__ = []
 __metaclass__ = type
 
 import os
-import urlparse
+import urllib.parse
 
 try:
     import hashlib
@@ -58,7 +61,7 @@ class DarcsRepository(Repository):
         else:
             if module is None:
                 module = name
-            module = urlparse.urljoin(self.href, module)
+            module = urllib.parse.urljoin(self.href, module)
         return DarcsBranch(self, module, checkoutdir)
 
 

@@ -33,6 +33,9 @@ Use like this:
 >>> sxml_to_string (x)
 "<a href="about:blank" title="foo"><i>italics &amp; stuff</i></a>"
 """
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 
 
 __all__ = ['sxml', 'sxml_to_string']
@@ -45,8 +48,8 @@ def smart_str(s, encoding='utf-8', errors='strict'):
         try:
             return str(s)
         except UnicodeEncodeError:
-            return unicode(s).encode(encoding, errors)
-    elif isinstance(s, unicode):
+            return str(s).encode(encoding, errors)
+    elif isinstance(s, str):
         return s.encode(encoding, errors)
     elif s and encoding != 'utf-8':
         return s.decode('utf-8', errors).encode(encoding, errors)
@@ -67,7 +70,7 @@ def sxml_to_string(expr):
     args = [sxml_to_string(arg) for arg in expr[1:]]
     return smart_str(operator(args))
 
-class sxml:
+class sxml(object):
     def __getattr__(self, attr):
         def _trans(k):
             table = {'klass': 'class'}
@@ -77,7 +80,7 @@ class sxml:
                 return ('<%s%s>%s</%s>'
                         % (attr,
                            ''.join([' %s="%s"' % (_trans(k), quote(v))
-                                    for k, v in kw.items()]),
+                                    for k, v in list(kw.items())]),
                            '\n'.join(args),
                            attr))
             render.__name__ = attr

@@ -73,7 +73,7 @@ class cmd_info(Command):
                 return 1
         else:
             # no module names given
-            for module in module_set.modules.values():
+            for module in list(module_set.modules.values()):
                 package_entry = packagedb.get(module.name)
                 if options.installed:
                     if package_entry is not None:
@@ -135,7 +135,7 @@ class cmd_info(Command):
         # dependencies
         if module.dependencies:
             uprint(_('Requires:'), ', '.join(module.dependencies))
-        requiredby = [ mod.name for mod in module_set.modules.values()
+        requiredby = [ mod.name for mod in list(module_set.modules.values())
                        if module.name in mod.dependencies ]
         if requiredby:
             uprint(_('Required by:'), ', '.join(requiredby))
@@ -143,7 +143,7 @@ class cmd_info(Command):
             uprint(_('Suggests:'), ', '.join(module.suggests))
         if module.after:
             uprint(_('After:'), ', '.join(module.after))
-        before = [ mod.name for mod in module_set.modules.values()
+        before = [ mod.name for mod in list(module_set.modules.values())
                    if module.name in mod.after ]
         if before:
             uprint(_('Before:'), ', '.join(before))

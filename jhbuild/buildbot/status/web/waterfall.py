@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 # jhbuild - a tool to ease building collections of source packages
 # Copyright (C) 2008  Igalia S.L., John Carr, Frederic Peters
 #
@@ -21,7 +20,14 @@ from __future__ import absolute_import
 # heavily based on buildbot code,
 #   Copyright (C) Brian Warner <warner-buildbot@lothar.com>
 
-import time, urllib
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import next
+from builtins import str
+from builtins import range
+
+import time, urllib.request, urllib.parse, urllib.error
 
 from buildbot import version
 from buildbot.changes.changes import Change
@@ -129,7 +135,7 @@ class JhWaterfallStatusResource(WaterfallStatusResource):
         lastEventTime = util.now()
         sources = [commit_source] + builders
         changeNames = ["changes"]
-        builderNames = map(lambda builder: builder.getName(), builders)
+        builderNames = [builder.getName() for builder in builders]
         sourceNames = changeNames + builderNames
         sourceEvents = []
         sourceGenerators = []
@@ -300,7 +306,7 @@ class JhWaterfallStatusResource(WaterfallStatusResource):
             builder_name = b.name[len(self.module_name)+1:]
             data += '<th class="%s" title="%s"><a href="%s">%s</a></th>' % (
                     state, state,
-                    request.childLink('../builders/%s' % urllib.quote(b.name, safe='')),
+                    request.childLink('../builders/%s' % urllib.parse.quote(b.name, safe='')),
                     builder_name)
         data += '</tr>\n'
 
@@ -385,7 +391,7 @@ class JhWaterfallStatusResource(WaterfallStatusResource):
             # is a vertical list of events, all for the same source.
             assert(len(chunkstrip) == len(sourceNames))
             maxRows = reduce(lambda x,y: max(x,y),
-                             map(lambda x: len(x), chunkstrip))
+                             [len(x) for x in chunkstrip])
             for i in range(maxRows):
                 if i != maxRows-1:
                     grid[0].append(None)

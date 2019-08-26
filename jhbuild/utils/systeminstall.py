@@ -19,6 +19,11 @@
 
 from __future__ import print_function
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import zip
+from builtins import next
+from builtins import object
 
 import os
 import sys 
@@ -28,7 +33,7 @@ import subprocess
 import pipes
 import imp
 import time
-from StringIO import StringIO
+from io import StringIO
 
 from . import cmds
 
@@ -49,7 +54,7 @@ def get_installed_pkgconfigs(config):
             stdout = subprocess.check_output(['pkg-config', '--modversion'] + pkgs)
             versions = stdout.splitlines()
             if len(versions) == len(pkgs):
-                return dict(zip(pkgs, versions))
+                return dict(list(zip(pkgs, versions)))
         except (subprocess.CalledProcessError, OSError):
             pass
 

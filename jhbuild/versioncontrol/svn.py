@@ -19,12 +19,15 @@
 
 from __future__ import print_function
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 
 __all__ = []
 __metaclass__ = type
 
 import os
-import urlparse
+import urllib.parse
 import subprocess
 
 from jhbuild.errors import CommandError, BuildStateError
@@ -45,14 +48,14 @@ def _make_uri(repo, path):
 
 # Make sure that the urlparse module considers svn:// and svn+ssh://
 # schemes to be netloc aware and set to allow relative URIs.
-if 'svn' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('svn')
-if 'svn' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('svn')
-if 'svn+ssh' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('svn+ssh')
-if 'svn+ssh' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('svn+ssh')
+if 'svn' not in urllib.parse.uses_netloc:
+    urllib.parse.uses_netloc.append('svn')
+if 'svn' not in urllib.parse.uses_relative:
+    urllib.parse.uses_relative.append('svn')
+if 'svn+ssh' not in urllib.parse.uses_netloc:
+    urllib.parse.uses_netloc.append('svn+ssh')
+if 'svn+ssh' not in urllib.parse.uses_relative:
+    urllib.parse.uses_relative.append('svn+ssh')
 
 def get_svn_extra_env():
     # we run Subversion in the C locale, because Subversion localises
@@ -163,9 +166,9 @@ class SubversionRepository(Repository):
 
         # workaround for svn client not handling '..' in URL (#560246, #678869)
         if os.name != 'nt':
-            splitted_href = list(urlparse.urlsplit(module_href))
+            splitted_href = list(urllib.parse.urlsplit(module_href))
             splitted_href[2] = os.path.abspath(splitted_href[2])
-            module_href = urlparse.urlunsplit(splitted_href)
+            module_href = urllib.parse.urlunsplit(splitted_href)
 
         if self.svn_program == 'bzr' and not revision:
             return bzr.BzrBranch(self, module_href, checkoutdir)
@@ -274,11 +277,11 @@ class SubversionBranch(Branch):
 
         uri = get_uri(outputdir)
 
-        if urlparse.urlparse(uri)[:2] != urlparse.urlparse(self.module)[:2]:
+        if urllib.parse.urlparse(uri)[:2] != urllib.parse.urlparse(self.module)[:2]:
             # server and protocol changed, probably because user changed
             # svnroots[] config variable.
-            new_uri = urlparse.urlunparse(
-                    urlparse.urlparse(self.module)[:2] + urlparse.urlparse(uri)[2:])
+            new_uri = urllib.parse.urlunparse(
+                    urllib.parse.urlparse(self.module)[:2] + urllib.parse.urlparse(uri)[2:])
             cmd = ['svn', 'switch', '--relocate', uri, new_uri, '.']
             buildscript.execute(cmd, 'svn', cwd=outputdir,
                     extra_env=get_svn_extra_env())

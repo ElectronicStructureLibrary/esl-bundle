@@ -21,6 +21,8 @@
 # Minor changes made by API (apinheiro@igalia.com) in order to fit with our
 # configuration and last buildbot changes
 
+from builtins import str
+
 import time, re
 
 from twisted.web.resource import Resource
@@ -72,7 +74,7 @@ class FeedResource(XmlResource):
     def getBuilds(self):
         builds = []
         builderNames = self.status.getBuilderNames(categories=self.categories)
-        builders = map(lambda name: self.status.getBuilder(name), builderNames)
+        builders = [self.status.getBuilder(name) for name in builderNames]
         maxFeeds = 5
 
         # Copy all failed builds in a new list.
@@ -185,7 +187,7 @@ class FeedResource(XmlResource):
                               description = description,
                               link=link,pubDate=strFinished)
 
-        if type(data) is unicode:
+        if type(data) is str:
             data = data.encode('utf-8', 'ignore')
         return data
 

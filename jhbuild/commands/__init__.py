@@ -18,6 +18,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 
 __metaclass__ = type
 __all__ = [
@@ -40,7 +43,7 @@ class OptionParser(optparse.OptionParser):
         sys.exit(status)
 
 
-class Command:
+class Command(object):
     """Base class for Command objects"""
 
     doc = ''
@@ -78,7 +81,7 @@ class BuildCommand(Command):
     def required_system_dependencies_installed(self, module_state):
         '''Returns true if all required system dependencies are installed for
         modules in module_state.'''
-        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.items():
             if systemmodule:
                 if not new_enough:
                     return False
@@ -104,7 +107,7 @@ class BuildCommand(Command):
         print(_('Required packages:'))
         print(_('  System installed packages which are too old:'))
         have_too_old = False
-        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.items():
             if (installed_version is not None) and (not new_enough) and systemmodule:
                 have_too_old = True
                 print ('    %s %s' % (module.name,
@@ -116,7 +119,7 @@ class BuildCommand(Command):
 
         print(_('  No matching system package installed:'))
         have_missing = False
-        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.items():
             if installed_version is None and (not new_enough) and systemmodule:
                 have_missing = True
                 print ('    %s %s' % (module.name,
@@ -142,7 +145,7 @@ def print_help():
             pass
 
     uprint(_('JHBuild commands are:'))
-    commands = [(x.name, x.doc) for x in get_commands().values()]
+    commands = [(x.name, x.doc) for x in list(get_commands().values())]
     commands.sort()
     for name, description in commands:
         uprint('  %-15s %s' % (name, description))

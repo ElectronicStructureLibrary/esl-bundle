@@ -18,6 +18,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 
 import sys, os, errno
 import optparse
@@ -25,8 +27,8 @@ import traceback
 import logging
 
 import gettext
-import __builtin__
-__builtin__.__dict__['N_'] = lambda x: x
+import builtins
+builtins.__dict__['N_'] = lambda x: x
 
 import jhbuild.config
 import jhbuild.commands
@@ -54,13 +56,13 @@ except (locale.Error, AssertionError):
     _encoding = 'ascii'
 
 def uencode(s):
-    if type(s) is unicode:
+    if type(s) is str:
         return s.encode(_encoding, 'replace')
     else:
         return s
 
 def udecode(s):
-    if type(s) is not unicode:
+    if type(s) is not str:
         return s.decode(_encoding, 'replace')
     else:
         return s
@@ -72,9 +74,9 @@ def uprint(*args):
     s = args[-1]
     print(uencode(s))
 
-__builtin__.__dict__['uprint'] = uprint
-__builtin__.__dict__['uencode'] = uencode
-__builtin__.__dict__['udecode'] = udecode
+builtins.__dict__['uprint'] = uprint
+builtins.__dict__['uencode'] = uencode
+builtins.__dict__['udecode'] = udecode
 
 class LoggingFormatter(logging.Formatter):
     def __init__(self):
@@ -94,7 +96,7 @@ def main(args):
     localedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'mo'))
     if not os.path.exists(localedir):
         localedir = None
-    gettext.install('jhbuild', localedir=localedir, unicode=True)
+    gettext.install('jhbuild', localedir=localedir, str=True)
 
     if not 'JHBUILD_RUN_AS_ROOT' in os.environ and hasattr(os, 'getuid') and os.getuid() == 0:
         sys.stderr.write(_('You should not run jhbuild as root.\n').encode(_encoding, 'replace'))

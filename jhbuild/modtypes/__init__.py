@@ -17,6 +17,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from builtins import str
+from builtins import object
+
 __metaclass__ = type
 
 __all__ = [
@@ -147,7 +150,7 @@ def get_branch(node, repositories, default_repo, config):
         try:
             repo = repositories[childnode.getAttribute('repo')]
         except KeyError:
-            repo_names = ', '.join([r.name for r in repositories.values()])
+            repo_names = ', '.join([r.name for r in list(repositories.values())])
             raise UndefinedRepositoryError(
                 _('Repository=%(missing)s not found for module id=%(module)s. Possible repositories are %(possible)s'
                   % {'missing': childnode.getAttribute('repo'), 'module': name,
@@ -169,7 +172,7 @@ def get_branch(node, repositories, default_repo, config):
     return repo.branch_from_xml(name, childnode, repositories, default_repo)
 
 
-class Package:
+class Package(object):
     type = 'base'
     PHASE_START = 'start'
     PHASE_DONE  = 'done'
@@ -327,7 +330,7 @@ them into the prefix."""
             # $JHBUILD_PREFIX/_jhbuild/root-foo/$JHBUILD_PREFIX
             # Remove them one by one to clean the tree to the state we expect,
             # so we can better spot leftovers or broken things.
-            prefix_dirs = filter(lambda x: x != '', stripped_prefix.split(os.sep))
+            prefix_dirs = [x for x in stripped_prefix.split(os.sep) if x != '']
             while len(prefix_dirs) > 0:
                 dirname = prefix_dirs.pop()
                 subprefix = os.path.join(*([destdir] + prefix_dirs))
@@ -615,7 +618,7 @@ class MakeModule(Package):
                                                         target=target)
         buildscript.execute(cmd, cwd = self.get_builddir(buildscript), extra_env = self.extra_env)
 
-class DownloadableModule:
+class DownloadableModule(object):
     PHASE_CHECKOUT = 'checkout'
     PHASE_FORCE_CHECKOUT = 'force_checkout'
 

@@ -18,12 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+
 __all__ = []
 __metaclass__ = type
 
 import os
 import sys
-import urlparse
+import urllib.parse
 from subprocess import Popen, PIPE
 
 from jhbuild.errors import FatalError, CommandError
@@ -57,7 +61,7 @@ class HgRepository(Repository):
             if module is None:
                 module = name
             if not self.href.startswith('ssh://'):
-                module = urlparse.urljoin(self.href, module)
+                module = urllib.parse.urljoin(self.href, module)
             else:
                 module = self.href + module
         return HgBranch(self, module, checkoutdir)

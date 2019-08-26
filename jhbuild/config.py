@@ -19,6 +19,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from past.builtins import execfile
+from future import standard_library
+standard_library.install_aliases()
+
+from builtins import object
 import os
 import os.path
 import re
@@ -27,7 +32,7 @@ import traceback
 import time
 import types
 import logging
-import __builtin__
+import builtins
 
 from jhbuild.environment import setup_env, setup_env_defaults, addpath
 from jhbuild.errors import FatalError
@@ -92,7 +97,7 @@ def modify_conditions(conditions, conditions_modifiers):
             else:
                 raise FatalError(_("Invalid condition set modifier: '%s'.  Must start with '+' or '-'.") % mod)
 
-class Config:
+class Config(object):
     _orig_environ = None
 
     def __init__(self, filename, conditions_modifiers):
@@ -208,7 +213,7 @@ class Config:
 
         if not config.get('quiet_mode'):
             unknown_keys = []
-            for k in config.keys():
+            for k in list(config.keys()):
                 if k in _known_keys + ['cvsroots', 'svnroots', 'cflags']:
                     continue
                 if k[0] == '_':
@@ -270,7 +275,7 @@ class Config:
         possible_checkout_modes = ('update', 'clobber', 'export', 'copy')
         if self.checkout_mode not in possible_checkout_modes:
             raise FatalError(_('invalid checkout mode'))
-        for module, checkout_mode in self.module_checkout_mode.items():
+        for module, checkout_mode in list(self.module_checkout_mode.items()):
             seen_copy_mode = seen_copy_mode or (checkout_mode == 'copy')
             if checkout_mode not in possible_checkout_modes:
                 raise FatalError(_('invalid checkout mode (module: %s)') % module)
@@ -323,7 +328,7 @@ class Config:
 
     def apply_env_prepends(self):
         ''' handle environment prepends ... '''
-        for envvar in env_prepends.keys():
+        for envvar in list(env_prepends.keys()):
             for path in env_prepends[envvar]:
                 addpath(envvar, path)
 

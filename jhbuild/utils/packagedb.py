@@ -17,6 +17,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+
 import os
 import sys
 import time
@@ -33,7 +37,7 @@ try:
 except ImportError:
     import elementtree.ElementTree as ET
 
-from StringIO import StringIO
+from io import StringIO
 
 from jhbuild.utils import fileutils
 
@@ -46,7 +50,7 @@ def _parse_isotime(string):
 def _format_isotime(tm):
     return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(tm))
 
-class PackageEntry:
+class PackageEntry(object):
     def __init__(self, package, version, metadata, dirname):
         self.package = package # string
         self.version = version # string
@@ -161,7 +165,7 @@ class PackageEntry:
         # it seems not to exist...
         return None
 
-class PackageDB:
+class PackageDB(object):
     def __init__(self, dbfile, config):
         self.dirname = os.path.dirname(dbfile)
         self.config = config

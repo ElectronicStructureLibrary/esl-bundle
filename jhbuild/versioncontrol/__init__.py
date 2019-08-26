@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from builtins import object
+
 __all__ = [
     'Repository',
     'Branch',
@@ -29,7 +31,7 @@ __metaclass__ = type
 from jhbuild.errors import FatalError, BuildStateError
 import os
 
-class Repository:
+class Repository(object):
     """An abstract class representing a collection of modules."""
 
     # Attributes expected on the <repository> element for this type.
@@ -68,7 +70,7 @@ class Repository:
         return []
 
 
-class Branch:
+class Branch(object):
     """An abstract class representing a branch in a repository."""
 
     def __init__(self, repository, module, checkoutdir):

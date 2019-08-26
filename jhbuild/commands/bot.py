@@ -23,13 +23,17 @@
 # to override just some parts of them).  Buildbot is also licensed under the
 # GNU General Public License.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+
 import os
 import signal
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 from optparse import make_option
 import socket
-import __builtin__
+import builtins
 import csv
 import logging
 
@@ -116,7 +120,7 @@ class cmd_bot(Command):
 
         # make jhbuild config file accessible to buildbot files
         # (master.cfg , steps.py, etc.)
-        __builtin__.__dict__['jhbuild_config'] = config
+        builtins.__dict__['jhbuild_config'] = config
 
         daemonize = False
         pidfile = None
@@ -146,7 +150,7 @@ class cmd_bot(Command):
             os.environ['LC_ALL'] = 'C'
             os.environ['LANGUAGE'] = 'C'
             os.environ['LANG'] = 'C'
-            __builtin__.__dict__['_'] = lambda x: x
+            builtins.__dict__['_'] = lambda x: x
             config.interact = False
             config.nonetwork = True
             os.environ['TERM'] = 'dumb'
@@ -371,7 +375,7 @@ class cmd_bot(Command):
                               "changeHorizon", "logMaxSize", "logMaxTailSize",
                               "logCompressionMethod",
                               )
-                for k in config.keys():
+                for k in list(config.keys()):
                     if k not in known_keys:
                         log.msg("unknown key '%s' defined in config dictionary" % k)
 
@@ -702,7 +706,7 @@ class cmd_bot(Command):
                 # Update any of our existing builders with the current log parameters.
                 # This is required so that the new value is picked up after a
                 # reconfig.
-                for builder in self.botmaster.builders.values():
+                for builder in list(self.botmaster.builders.values()):
                     builder.builder_status.setLogCompressionLimit(logCompressionLimit)
                     builder.builder_status.setLogCompressionMethod(logCompressionMethod)
                     builder.builder_status.setLogMaxSize(logMaxSize)

@@ -17,8 +17,11 @@
 
 # extras not found in old versions of Python
 
+from future import standard_library
+standard_library.install_aliases()
+
 import sys
-import __builtin__
+import builtins
 
 # Windows lacks all sorts of subprocess features that we need to kludge around
 if sys.platform.startswith('win'):

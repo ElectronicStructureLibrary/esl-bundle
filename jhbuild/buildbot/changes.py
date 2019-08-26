@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from builtins import str
+
 from buildbot import util
 from buildbot.changes.mail import MaildirSource
 from buildbot.changes import changes
@@ -127,7 +129,7 @@ class GnomeMaildirSource(MaildirSource):
                 else:
                     comments += line[4:] + '\n'
 
-            comments = unicode(comments.strip(), m.get_content_charset() or 'ascii', 'ignore')
+            comments = str(comments.strip(), m.get_content_charset() or 'ascii', 'ignore')
 
         c = changes.Change(name, files, comments, isdir, revision=revision, links=links, when=when)
         c.project = project

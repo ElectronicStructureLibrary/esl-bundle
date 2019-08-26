@@ -19,6 +19,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from __future__ import print_function
+from __future__ import division
+from builtins import str
+from builtins import input
+from builtins import range
+from past.utils import old_div
 
 import sys
 import os
@@ -139,7 +144,7 @@ class TerminalBuildScript(buildscript.BuildScript):
             progress = 1
 
         columns = curses.tigetnum('cols')
-        width = columns / 2
+        width = old_div(columns, 2)
         num_hashes = int(round(progress * width))
         progress_bar = '[' + (num_hashes * '=') + ((width - num_hashes) * '-') + ']'
 
@@ -176,7 +181,7 @@ class TerminalBuildScript(buildscript.BuildScript):
             except OSError:
                 pass
 
-        if isinstance(command, (str, unicode)):
+        if isinstance(command, (str, str)):
             kws['shell'] = True
             print_args['command'] = command
         else:
@@ -346,7 +351,7 @@ class TerminalBuildScript(buildscript.BuildScript):
                     altphase_label = altphase
                 uprint('  [%d] %s' % (i, _('Go to phase "%s"') % altphase_label))
                 i += 1
-            val = raw_input(uencode(_('choice: ')))
+            val = input(uencode(_('choice: ')))
             val = udecode(val)
             val = val.strip()
             if val == '1':
@@ -393,7 +398,7 @@ class TerminalBuildScript(buildscript.BuildScript):
                 except AttributeError:
                     needs_confirmation = False
                 if needs_confirmation:
-                    val = raw_input(uencode(_('Type "yes" to confirm the action: ')))
+                    val = input(uencode(_('Type "yes" to confirm the action: ')))
                     val = udecode(val)
                     val = val.strip()
                     def normalize(s):
