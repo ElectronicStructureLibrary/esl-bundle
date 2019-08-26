@@ -21,6 +21,7 @@
 import os
 import logging
 import subprocess
+import sys
 
 from jhbuild.utils import trigger
 from jhbuild.utils import cmds
@@ -140,7 +141,6 @@ class BuildScript:
             # The force_phase variable flags that condition.
             force_phase = False
 
-            print module.name,':',build_phases
             while num_phase < len(build_phases):
                 last_phase, phase = phase, build_phases[num_phase]
                 try:
@@ -161,7 +161,7 @@ class BuildScript:
                 try:
                     try:
                         error, altphases = module.run_phase(self, phase)
-                    except SkipToPhase, e:
+                    except SkipToPhase as e:
                         try:
                             num_phase = build_phases.index(e.phase)
                         except ValueError:
@@ -173,6 +173,9 @@ class BuildScript:
                     self._end_phase_internal(module.name, phase, error)
 
                 if error:
+                    if self.config.exit_on_error:
+                        sys.exit(1)
+
                     try:
                         nextphase = build_phases[num_phase+1]
                     except IndexError:
@@ -220,7 +223,7 @@ class BuildScript:
             return 1
         return 0
 
-    def run_triggers(self, module_name):
+    def run_triggers(self, modules):
         """See triggers/README."""
         assert 'JHBUILD_PREFIX' in os.environ
         if os.environ.get('JHBUILD_TRIGGERS') is not None:
@@ -230,11 +233,15 @@ class BuildScript:
         else:
             trigger_path = os.path.join(SRCDIR, 'triggers')
         all_triggers = trigger.load_all(trigger_path)
-        triggers_to_run = []
-        for trig in all_triggers:
+
+        triggers_to_run = set()
+
+        for module_name in modules:
             # Skip if somehow the module isn't really installed
             if self.moduleset.packagedb.installdate(module_name) is None:
+                logging.warning(_('Ignoring uninstalled package: %s') % (module_name, ))
                 continue
+
             pkg = self.moduleset.packagedb.get(module_name)
             assert pkg is not None
 
@@ -243,13 +250,18 @@ class BuildScript:
             if pkg.manifest is None:
                 continue
 
-            if trig.matches(pkg.manifest):
-                triggers_to_run.append(trig)
+            for trig in all_triggers:
+                if trig.matches(pkg.manifest):
+                    triggers_to_run.add(trig)
+
+        if not modules:
+            triggers_to_run = set(all_triggers)
+
         for trig in triggers_to_run:
             logging.info(_('Running post-installation trigger script: %r') % (trig.name, ))
             try:
                 self.execute(trig.command())
-            except CommandError, err:
+            except CommandError as err:
                 if isinstance(trig.command(), (str, unicode)):
                     displayed_command = trig.command()
                 else:
@@ -307,17 +319,15 @@ class BuildScript:
         pass
     def start_phase(self, module, phase):
         '''Hook to perform actions before starting a particular build phase.'''
-        print 'Starting "',phase,'for module "',module,'"...'
         pass
     def end_phase(self, module, phase, error):
         '''Hook to perform actions after finishing a particular build phase.
         The argument is a string containing the error text if something
         went wrong.'''
-        print '...ending phase',phase,"module",module," stderr:",error
         pass
     def _end_phase_internal(self, module, phase, error):
         if error is None and phase == 'install':
-            self.run_triggers(module)
+            self.run_triggers([module])
         self.end_phase(module, phase, error)
 
     def message(self, msg, module_num=-1):

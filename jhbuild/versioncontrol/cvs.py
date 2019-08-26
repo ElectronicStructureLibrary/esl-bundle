@@ -77,6 +77,10 @@ def login(cvsroot, password=None):
     cvsroot = _canonicalise_cvsroot(cvsroot)
     cvspass = os.path.join(os.environ['HOME'], '.cvspass')
 
+    # cvs won't ask for this, so don't write it
+    if password == '':
+        return
+
     # check if the password has already been entered:
     try:
         fp = open(cvspass, 'r')
@@ -208,6 +212,9 @@ class CVSRepository(Repository):
 
     def to_sxml(self):
         return [sxml.repository(type='cvs', name=self.name, cvsroot=self.cvsroot)]
+
+    def get_sysdeps(self):
+        return ['cvs']
 
 
 class CVSBranch(Branch):

@@ -23,7 +23,7 @@ __all__ = [
     'register_module_type',
     'parse_xml_node',
     'Package',
-    'get_dependencies'
+    'get_dependencies',
     'get_branch'
     ]
 
@@ -35,6 +35,7 @@ import logging
 from jhbuild.errors import FatalError, CommandError, BuildStateError, \
              SkipToEnd, UndefinedRepositoryError
 from jhbuild.utils.sxml import sxml
+from jhbuild.commands.sanitycheck import inpath
 import jhbuild.utils.fileutils as fileutils
 
 _module_types = {}
@@ -78,9 +79,9 @@ def get_dependencies(node):
                             node.getAttribute('id'))
                 list.append(package)
 
-    def add_to_system_dependencies(lst, childnode):
+    def add_to_system_dependencies(lst, childnode, tag='dep'):
         for dep in childnode.childNodes:
-            if dep.nodeType == dep.ELEMENT_NODE and dep.nodeName == 'dep':
+            if dep.nodeType == dep.ELEMENT_NODE and dep.nodeName == tag:
                 typ = dep.getAttribute('type')
                 if not typ:
                     raise FatalError(_('%(node)s node for %(module)s module is'
@@ -95,7 +96,10 @@ def get_dependencies(node):
                                      {'node_name'   : 'dep',
                                       'module_name' : node.getAttribute('id'),
                                       'attribute'   : 'name'})
-                lst.append((typ, name))
+                altdeps = []
+                if dep.childNodes:
+                    add_to_system_dependencies(altdeps, dep, 'altdep')
+                lst.append((typ, name, altdeps))
 
     for childnode in node.childNodes:
         if childnode.nodeType != childnode.ELEMENT_NODE: continue
@@ -234,6 +238,20 @@ class Package:
         if os.path.isdir(prefixdir):
             self._clean_la_files_in_dir(self, prefixdir)
 
+    def _clean_texinfo_dir_files(self, buildscript, installroot):
+        """This method removes GNU Texinfo dir files."""
+        assert os.path.isabs(installroot)
+        assert os.path.isabs(buildscript.config.prefix)
+        prefixdir = os.path.join(installroot, buildscript.config.prefix[1:])
+        if os.path.isdir(prefixdir):
+            dirfile = os.path.join(prefixdir, 'share/info/dir')
+            if os.path.isfile(dirfile):
+                try:
+                    logging.info(_('Deleting dir file: %r') % (dirfile, ))
+                    os.unlink(dirfile)
+                except OSError:
+                    pass
+
     def _process_install_files(self, installroot, curdir, prefix, errors):
         """Strip the prefix from all files in the install root, and move
 them into the prefix."""
@@ -277,9 +295,9 @@ them into the prefix."""
                     try:
                         fileutils.rename(src_path, dest_path)
                         num_copied += 1
-                    except OSError, e:
+                    except OSError as e:
                         errors.append("%s: '%s'" % (str(e), dest_path))
-            except OSError, e:
+            except OSError as e:
                 errors.append(str(e))
         return num_copied
 
@@ -287,22 +305,16 @@ them into the prefix."""
         assert self.supports_install_destdir
         destdir = self.get_destdir(buildscript)
         self._clean_la_files(buildscript, destdir)
+        self._clean_texinfo_dir_files(buildscript, destdir)
 
         prefix_without_drive = os.path.splitdrive(buildscript.config.prefix)[1]
         stripped_prefix = prefix_without_drive[1:]
-
-        previous_entry = buildscript.moduleset.packagedb.get(self.name)
-        if previous_entry:
-            previous_contents = previous_entry.get_manifest()
-        else:
-            previous_contents = None
-
-        new_contents = fileutils.accumulate_dirtree_contents(destdir)
 
         install_succeeded = False
         save_broken_tree = False
         broken_name = destdir + '-broken'
         destdir_prefix = os.path.join(destdir, stripped_prefix)
+        new_contents = fileutils.accumulate_dirtree_contents(destdir_prefix)
         errors = []
         if os.path.isdir(destdir_prefix):
             destdir_install = True
@@ -323,7 +335,7 @@ them into the prefix."""
                 assert target.startswith(buildscript.config.prefix)
                 try:
                     os.rmdir(target)
-                except OSError, e:
+                except OSError as e:
                     pass
 
             remaining_files = os.listdir(destdir)
@@ -348,14 +360,20 @@ them into the prefix."""
         if not install_succeeded:
             raise CommandError(_("Module failed to install into DESTDIR %(dest)r") % {'dest': broken_name})
         else:
-            absolute_new_contents = map(lambda x: '/' + x, new_contents)
-            to_delete = []
-            if previous_contents is not None:
-                for path in previous_contents:
-                    if path not in absolute_new_contents:
-                        to_delete.append(path)
-                # Ensure we're only attempting to delete files in the prefix
-                to_delete = fileutils.filter_files_by_prefix(self.config, to_delete)
+            to_delete = set()
+            previous_entry = buildscript.moduleset.packagedb.get(self.name)
+            if previous_entry:
+                previous_contents = previous_entry.get_manifest()
+                if previous_contents:
+                    to_delete.update(fileutils.filter_files_by_prefix(self.config, previous_contents))
+
+            for filename in new_contents:
+                to_delete.discard (os.path.join(self.config.prefix, filename))
+
+            if to_delete:
+                # paranoid double-check
+                assert to_delete == set(fileutils.filter_files_by_prefix(self.config, to_delete))
+
                 logging.info(_('%d files remaining from previous build') % (len(to_delete),))
                 for (path, was_deleted, error_string) in fileutils.remove_files_and_dirs(to_delete, allow_nonempty_dirs=True):
                     if was_deleted:
@@ -368,7 +386,7 @@ them into the prefix."""
                                                                                                           'msg': error_string})
 
             buildscript.moduleset.packagedb.add(self.name, revision or '',
-                                                absolute_new_contents,
+                                                new_contents,
                                                 self.configure_cmd)
 
         if errors:
@@ -399,9 +417,21 @@ them into the prefix."""
           (error-flag, [other-phases])
         """
         method = getattr(self, 'do_' + phase)
+        #modify the behaviour of the dist phase for
+        #upstream packages that have not been compiled locally
+        domethod = True
+        if phase == 'dist' and self.branch is not None:
+            #if the branch is local try to extract the dist file
+            #also if in nonet mode extract all the dist files which are available
+            domethod = self.branch.repository.name == "local" or buildscript.config.nonet
+            if not domethod:
+                tar = os.path.join(SRCDIR, os.path.basename(self.branch.module))
+                domethod = not os.path.exists(tar)
+        if phase == 'setup' and self.branch is not None:
+            domethod = self.branch.repository.name == "local"
         try:
-            method(buildscript)
-        except (CommandError, BuildStateError), e:
+            if domethod: method(buildscript)
+        except (CommandError, BuildStateError) as e:
             error_phases = []
             if hasattr(method, 'error_phases'):
                 error_phases = method.error_phases
@@ -490,19 +520,69 @@ them into the prefix."""
         instance.supports_parallel_build = (node.getAttribute('supports-parallel-builds') != 'no')
         instance.config = config
         pkg_config = find_first_child_node_content(node, 'pkg-config')
-        if pkg_config != '':
+        if pkg_config:
             instance.pkg_config = pkg_config
+            instance.dependencies += ['pkg-config']
+        instance.dependencies += instance.branch.repository.get_sysdeps()
         return instance
+
+class NinjaModule(Package):
+    '''A base class for modules that use the command 'ninja' within the build
+    process.'''
+    def __init__(self, name, branch=None,
+                 ninjaargs='',
+                 ninjainstallargs='',
+                 ninjafile='build.ninja'):
+        Package.__init__(self, name, branch=branch)
+        self.ninjacmd = None
+        self.ninjaargs = ninjaargs
+        self.ninjainstallargs = ninjainstallargs
+        self.ninjafile = ninjafile
+
+    def get_ninjaargs(self, buildscript):
+        ninjaargs = ' %s %s' % (self.ninjaargs,
+                                self.config.module_ninjaargs.get(
+                                  self.name, self.config.ninjaargs))
+        if not self.supports_parallel_build:
+            ninjaargs = re.sub(r'-j\w*\d+', '', ninjaargs) + ' -j 1'
+        return self.eval_args(ninjaargs).strip()
+
+    def get_ninjacmd(self, config):
+        if self.ninjacmd:
+            return self.ninjacmd
+        for cmd in ['ninja', 'ninja-build']:
+            if inpath(cmd, os.environ['PATH'].split(os.pathsep)):
+                self.ninjacmd = cmd
+                break
+        return self.ninjacmd
+
+    def ninja(self, buildscript, target='', ninjaargs=None, env=None):
+        ninjacmd = os.environ.get('NINJA', self.get_ninjacmd(buildscript.config))
+        if ninjacmd is None:
+            raise BuildStateError(_('ninja not found; use NINJA to point to a specific ninja binary'))
+
+        if ninjaargs is None:
+            ninjaargs = self.get_ninjaargs(buildscript)
+
+        extra_env = (self.extra_env or {}).copy()
+        for k in (env or {}):
+            extra_env[k] = env[k]
+
+        cmd = '{ninja} {ninjaargs} {target}'.format(ninja=ninjacmd,
+                                                    ninjaargs=ninjaargs,
+                                                    target=target)
+        buildscript.execute(cmd, cwd=self.get_builddir(buildscript), extra_env=extra_env)
 
 class MakeModule(Package):
     '''A base class for modules that use the command 'make' within the build
     process.'''
     def __init__(self, name, branch=None, makeargs='', makeinstallargs='',
-                  makefile='Makefile'):
+                  makefile='Makefile', needs_gmake=False):
         Package.__init__(self, name, branch=branch)
         self.makeargs = makeargs
         self.makeinstallargs = makeinstallargs
         self.makefile = makefile
+        self.needs_gmake = needs_gmake
 
     def get_makeargs(self, buildscript, add_parallel=True):
         makeargs = ' %s %s' % (self.makeargs,
@@ -517,6 +597,23 @@ class MakeModule(Package):
             makeargs = re.sub(r'-j\w*\d+', '', makeargs) + ' -j 1'
         return self.eval_args(makeargs).strip()
 
+    def get_makecmd(self, config):
+        if self.needs_gmake and 'gmake' in config.conditions:
+            return 'gmake'
+        else:
+            return 'make'
+
+    def make(self, buildscript, target='', pre='', makeargs=None):
+        makecmd = os.environ.get('MAKE', self.get_makecmd(buildscript.config))
+
+        if makeargs is None:
+            makeargs = self.get_makeargs(buildscript)
+
+        cmd = '{pre}{make} {makeargs} {target}'.format(pre=pre,
+                                                        make=makecmd,
+                                                        makeargs=makeargs,
+                                                        target=target)
+        buildscript.execute(cmd, cwd = self.get_builddir(buildscript), extra_env = self.extra_env)
 
 class DownloadableModule:
     PHASE_CHECKOUT = 'checkout'
@@ -546,6 +643,14 @@ class DownloadableModule:
         return False
 
     def do_force_checkout(self, buildscript):
+        # Try to wipe the build directory. Ignore exceptions if the child class
+        # does not implement get_builddir().
+        try:
+            builddir = self.get_builddir(buildscript)
+            if os.path.exists(builddir):
+                shutil.rmtree(builddir)
+        except:
+            pass
         buildscript.set_action(_('Checking out'), self)
         self.branch.force_checkout(buildscript)
     do_force_checkout.error_phases = [PHASE_FORCE_CHECKOUT]
@@ -574,19 +679,18 @@ class MetaModule(Package):
 
         # We get the full dependencies of this meta-module.
         module_list = buildscript.moduleset.get_module_list((self.name, ), buildscript.config.skip)
-        
+
         # Scan all available tars to add to the tarball.
         for mod in module_list:
-            if mod.branch is not None and (mod.branch.repository.name == "local" or
-                                           buildscript.config.nonet):
+            if mod.branch is None: continue
+            if (mod.branch.repository.name == "local" or buildscript.config.nonet):
                 tar = os.path.join(mod.get_builddir(buildscript), os.path.basename(mod.branch.module))
                 try:
-                    print tar
                     shutil.copy(tar, destdir)
                 except:
                     tar = os.path.join(SRCDIR, os.path.basename(mod.branch.module))
                     shutil.copy(tar, destdir)
-            if mod.branch is not None and hasattr(mod.branch, "patches"):
+            if hasattr(mod.branch, "patches"):
                 for patch in mod.branch.patches:
                     shutil.copy(os.path.join(SRCDIR, patch[0]), destdir)
 
@@ -599,7 +703,8 @@ class MetaModule(Package):
                 dr=fle.rstrip('/')
                 shutil.copytree(os.path.join(SRCDIR, dr), os.path.join(destdir, dr))
             else:
-                shutil.copy(os.path.join(SRCDIR, fle), destdir)
+                dr=os.path.dirname(fle)
+                shutil.copy(os.path.join(SRCDIR, fle), os.path.join(destdir, dr))
 
         # Create the tar.
         import tarfile

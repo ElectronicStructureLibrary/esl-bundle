@@ -53,7 +53,7 @@ class cmd_make(Command):
 
     def run(self, config, options, args, help=None):
         # Grab the cwd before anything changes it
-        cwd = os.getcwd()
+        cwd = self.get_cwd()
 
         # Explicitly don't touch the network for this
         options.nonetwork = True
@@ -84,13 +84,20 @@ class cmd_make(Command):
 
         try:
             module = module_set.get_module(modname, ignore_case=True)
-        except KeyError, e:
+        except KeyError as e:
             default_repo = jhbuild.moduleset.get_default_repo()
             if not default_repo:
                 logging.error(_('No module matching current directory %r in the moduleset') % (modname, ))
                 return False
-            from jhbuild.modtypes.autotools import AutogenModule
-            module = AutogenModule(modname, default_repo.branch(modname))
+
+            # Try meson first, then autotools
+            if os.path.exists(os.path.join(self.get_cwd(), 'meson.build')):
+                from jhbuild.modtypes.meson import MesonModule
+                module = MesonModule(modname, default_repo.branch(modname))
+            else:
+                from jhbuild.modtypes.autotools import AutogenModule
+                module = AutogenModule(modname, default_repo.branch(modname))
+
             module.config = config
             logging.info(_('module "%(modname)s" does not exist, created automatically using repository "%(reponame)s"') % \
                          {'modname': modname, 'reponame': default_repo.name})

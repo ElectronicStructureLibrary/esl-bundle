@@ -49,10 +49,14 @@ from jhbuild.utils import httpcache
 from jhbuild.modtypes import MetaModule
 
 try: t_bold = cmds.get_output(['tput', 'bold'])
-except: t_bold = ''
-try: t_reset = cmds.get_output(['tput', 'sgr0'])
-except: t_reset = ''
+except:
+    try: t_bold = cmds.get_output(['tput', 'md'])
+    except: t_bold = ''
 
+try: t_reset = cmds.get_output(['tput', 'sgr0'])
+except:
+    try: t_reset = cmds.get_output(['tput', 'me'])
+    except: t_reset = ''
 
 HTML_AT_TOP = '''<html>
 <head>
@@ -676,7 +680,7 @@ class cmd_goalreport(Command):
                 filename += '?action=raw'
             try:
                 filename = httpcache.load(filename, age=0)
-            except Exception, e:
+            except Exception as e:
                 logging.warning('could not download %s: %s' % (filename, e))
                 return
         for line in file(filename):
@@ -723,7 +727,7 @@ class cmd_goalreport(Command):
                 filename += '?action=raw'
             try:
                 filename = httpcache.load(filename, age=0)
-            except Exception, e:
+            except Exception as e:
                 logging.warning('could not download %s: %s' % (filename, e))
                 return
         for line in file(filename):

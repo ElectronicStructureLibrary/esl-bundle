@@ -42,6 +42,7 @@ class DistutilsModule(Package, DownloadableModule):
         Package.__init__(self, name, branch=branch)
         self.supports_non_srcdir_builds = supports_non_srcdir_builds
         self.supports_install_destdir = True
+        self.python = os.environ.get('PYTHON', 'python')
         self.buildargs = buildargs
 
     def get_srcdir(self, buildscript):
@@ -59,8 +60,7 @@ class DistutilsModule(Package, DownloadableModule):
         buildscript.set_action(_('Building'), self)
         srcdir = self.get_srcdir(buildscript)
         builddir = self.get_builddir(buildscript)
-        python = os.environ.get('PYTHON', 'python')
-        cmd = [python, 'setup.py', 'build']
+        cmd = [self.python, 'setup.py', 'build']
         if srcdir != builddir:
             cmd.extend(['--build-base', builddir])
         buildargs = (self.buildargs + ' ' + self.config.module_autogenargs.get(
@@ -76,8 +76,7 @@ class DistutilsModule(Package, DownloadableModule):
         srcdir = self.get_srcdir(buildscript)
         builddir = self.get_builddir(buildscript)
         destdir = self.prepare_installroot(buildscript)
-        python = os.environ.get('PYTHON', 'python')
-        cmd = [python, 'setup.py']
+        cmd = [self.python, 'setup.py']
         if srcdir != builddir:
             cmd.extend(['build', '--build-base', builddir])
         cmd.extend(['install', 
@@ -98,6 +97,15 @@ class DistutilsModule(Package, DownloadableModule):
         buildscript.execute(cmd, cwd = srcdir, extra_env = self.extra_env)
     do_clean.depends = [PHASE_CHECKOUT]
 
+    def do_dist(self, buildscript):
+        buildscript.set_action(_('Creating tarball for'), self)
+        srcdir = self.get_srcdir(buildscript)
+        builddir = self.get_builddir(buildscript)
+        python = os.environ.get('PYTHON', 'python')
+        cmd = [python, 'setup.py', 'sdist']
+        cmd.extend(['--dist-dir', builddir])
+        buildscript.execute(cmd, cwd = srcdir, extra_env = self.extra_env)
+  
     def xml_tag_and_attrs(self):
         return 'distutils', [('id', 'name', None),
                              ('supports-non-srcdir-builds',
@@ -113,6 +121,9 @@ def parse_distutils(node, config, uri, repositories, default_repo):
             (node.getAttribute('supports-non-srcdir-builds') != 'no')
     if node.hasAttribute('buildargs'):
         instance.buildargs = node.getAttribute('buildargs')
+
+    if node.hasAttribute('python3'):
+        instance.python = os.environ.get('PYTHON3', 'python3')
 
     return instance
 

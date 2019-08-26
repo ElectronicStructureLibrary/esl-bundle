@@ -40,10 +40,15 @@ prefix = os.path.join(os.getcwd(), "install")
 top_builddir = '_jhbuild'  # If a relative path, prefix will be prepended
 
 checkoutroot = os.path.join(SRCDIR, "checkouts")
+
+xdg_cache_home = os.environ.get('XDG_CACHE_HOME',
+                                os.path.join(os.path.expanduser('~'),
+                                             '.cache'))
 tarballdir = os.path.join(SRCDIR, "tarballs")
+
+# Set to None to perform builds within the source trees.
 if os.path.samefile(SRCDIR, os.getcwd()):
-    # if set, packages will be built with srcdir!=builddir
-    buildroot = os.path.join(os.getcwd(), "build")
+    buildroot = os.path.join(os.getcwd(), 'build')
 else:
     buildroot = os.getcwd()
 
@@ -59,7 +64,7 @@ builddir_pattern = '%s'
 try:
     import multiprocessing
     jobs = multiprocessing.cpu_count() + 1
-except ImportError, _e:
+except ImportError as _e:
     try:
         jobs = os.sysconf('SC_NPROCESSORS_ONLN') + 1
     except (OSError, AttributeError, ValueError):
@@ -68,16 +73,13 @@ except ImportError, _e:
 # override environment variables, command line arguments, etc
 autogenargs = ''
 cmakeargs = ''
+mesonargs = '--buildtype=debugoptimized'
 makeargs = ''
+ninjaargs = ''
 cflags = ''
 
-# a alternative install program to use; the included install-check
-# program won't update timestamps if the header hasn't changed
-installprog = os.path.join(os.environ['HOME'], '.local/bin', 'install-check')
-if not os.path.exists(installprog):
-    installprog = '/usr/bin/install-check'
-if not os.path.exists(installprog):
-    installprog = None
+# a alternative install program to use
+installprog = None
 
 # override cvs roots, branch tags, etc
 repos = {}
@@ -86,10 +88,24 @@ svnroots = {}
 branches = {}
 module_autogenargs = {}
 module_cmakeargs = {}
+module_mesonargs = {}
 module_makeargs = {}
+module_ninjaargs = {}
 module_extra_env = {}
 module_makecheck = {}
 module_nopoison = {}
+
+# Specific autogenargs by default
+module_autogenargs['PyYAML'] = "build_ext -I%(prefix)s/include -L%(prefix)s/lib --rpath=%(prefix)s/lib " % {"prefix": prefix}
+module_autogenargs['etsf_io'] = "--with-moduledir=%(prefix)s/include " % {"prefix": prefix}
+autogen_packages=['libyaml','GaIn','libxc','chess','bigdft','libABINIT','futile','psolver','spred']
+
+if basic_configuration() is not None:
+    for pkg in autogen_packages:
+        module_autogenargs[pkg] = basic_configuration()
+    del(pkg)
+
+del(autogen_packages)
 
 # control parts of the build process
 nonetwork     = False  # never touch the network
@@ -110,6 +126,7 @@ build_targets = ['install','test']
 makecheck_advisory = False # whether to pass over 'make check' failures
 
 interact      = True   # whether to interact with the user.
+exit_on_error = False  # whether to immediately exit when a build fails, most useful for noninteractive mode
 quiet_mode    = False  # whether to display running commands output
 progress_bar  = True   # whether to display a progress bar when running in quiet mode
 

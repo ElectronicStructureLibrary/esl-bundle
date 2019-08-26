@@ -20,12 +20,15 @@
 from optparse import make_option
 import logging
 import os.path
+import sys
 
 import jhbuild.moduleset
 from jhbuild.errors import FatalError
 from jhbuild.commands import Command, register_command
 from jhbuild.commands.base import cmd_build
 from jhbuild.utils.systeminstall import SystemInstall
+from jhbuild.modtypes.systemmodule import SystemModule
+from jhbuild.versioncontrol.tarball import TarballBranch
 from jhbuild.utils import cmds
 
 class cmd_sysdeps(cmd_build):
@@ -35,6 +38,12 @@ class cmd_sysdeps(cmd_build):
 
     def __init__(self):
         Command.__init__(self, [
+            make_option('--dump',
+                        action='store_true', default = False,
+                        help=_('Machine readable list of missing sysdeps')),
+            make_option('--dump-all',
+                        action='store_true', default = False,
+                        help=_('Machine readable list of all sysdeps')),
             make_option('--install',
                         action='store_true', default = False,
                         help=_('Install pkg-config modules via system'))])
@@ -61,10 +70,61 @@ class cmd_sysdeps(cmd_build):
         module_set = jhbuild.moduleset.load(config)
         modules = args or config.modules
         module_list = module_set.get_full_module_list(modules, config.skip)
+
+        if options.dump_all:
+            for module in module_list:
+                if (isinstance(module, SystemModule) or isinstance(module.branch, TarballBranch) and
+                                                        module.pkg_config is not None):
+                    if module.pkg_config is not None:
+                        print 'pkgconfig:{0}'.format(module.pkg_config[:-3]) # remove .pc
+
+                    if module.systemdependencies is not None:
+                        for dep_type, value, altdeps in module.systemdependencies:
+                            sys.stdout.write('{0}:{1}'.format(dep_type, value))
+                            for dep_type, value, empty in altdeps:
+                                sys.stdout.write(',{0}:{1}'.format(dep_type, value))
+                            sys.stdout.write('\n')
+
+            return
+
         module_state = module_set.get_module_state(module_list)
 
         have_new_enough = False
         have_too_old = False
+
+        if options.dump:
+            for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+                if new_enough:
+                    continue
+
+                if installed_version is not None and systemmodule:
+                    # it's already installed but it's too old and we
+                    # don't know how to build a new one for ourselves
+                    have_too_old = True
+
+                # request installation in two cases:
+                #   1) we don't know how to build it
+                #   2) we don't want to build it ourselves
+                #
+                # partial_build is on by default so this check will only
+                # fail if someone explicitly turned it off
+                if systemmodule or config.partial_build:
+                    assert (module.pkg_config or module.systemdependencies)
+
+                    if module.pkg_config is not None:
+                        print 'pkgconfig:{0}'.format(module.pkg_config[:-3]) # remove .pc
+
+                    if module.systemdependencies is not None:
+                        for dep_type, value, altdeps in module.systemdependencies:
+                            sys.stdout.write('{0}:{1}'.format(dep_type, value))
+                            for dep_type, value, empty in altdeps:
+                                sys.stdout.write(',{0}:{1}'.format(dep_type, value))
+                            sys.stdout.write('\n')
+
+            if have_too_old:
+                return 1
+
+            return
 
         print _('System installed packages which are new enough:')
         for module,(req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
@@ -90,8 +150,7 @@ class cmd_sysdeps(cmd_build):
             print _('    (none)')
 
         print _('  No matching system package installed:')
-        uninstalled_pkgconfigs = []
-        uninstalled_filenames = []
+        uninstalled = []
         for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
             if installed_version is None and (not new_enough) and systemmodule:
                 print ('    %s %s' % (module.name,
@@ -99,22 +158,11 @@ class cmd_sysdeps(cmd_build):
                                                   req_version,
                                                   installed_version)))
                 if module.pkg_config is not None:
-                    uninstalled_pkgconfigs.append((module.name,
-                                                   # remove .pc
-                                                   module.pkg_config[:-3]))
+                    uninstalled.append((module.name, 'pkgconfig', module.pkg_config[:-3])) # remove .pc
                 elif module.systemdependencies is not None:
-                    for dep_type, value in module.systemdependencies:
-                        if dep_type.lower() == 'path':
-                            uninstalled_filenames.append(
-                                (module.name,
-                                 os.path.join(config.system_prefix, 'bin',
-                                              value),))
-                        elif dep_type.lower() == 'c_include':
-                            uninstalled_filenames.append(
-                                (module.name,
-                                 os.path.join(config.system_prefix, 'include',
-                                              value),))
-        if len(uninstalled_pkgconfigs) + len(uninstalled_filenames) == 0:
+                    for dep_type, value, altdeps in module.systemdependencies:
+                        uninstalled.append((module.name, dep_type, value))
+        if len(uninstalled) == 0:
             print _('    (none)')
 
         have_too_old = False
@@ -140,12 +188,10 @@ class cmd_sysdeps(cmd_build):
                                                       req_version,
                                                       installed_version)))
                     if module.pkg_config is not None:
-                        uninstalled_pkgconfigs.append((module.name,
-                                                       # remove .pc
-                                                       module.pkg_config[:-3]))
+                        uninstalled.append((module.name, 'pkgconfig', module.pkg_config[:-3])) # remove .pc
 
-            if len(uninstalled_pkgconfigs) == 0:
-                print _('  (none)')
+            if len(uninstalled) == 0:
+                print _('    (none)')
 
         if options.install:
             installer = SystemInstall.find_best()
@@ -160,15 +206,11 @@ class cmd_sysdeps(cmd_build):
 
                 raise FatalError(_("Don't know how to install packages on this system"))
 
-            if (len(uninstalled_pkgconfigs) +
-                len(uninstalled_filenames)) == 0:
-                logging.info(_("No uninstalled system dependencies to install for modules: %r" % (modules, )))
+            if len(uninstalled) == 0:
+                logging.info(_("No uninstalled system dependencies to install for modules: %r") % (modules, ))
             else:
-                logging.info(_("Installing dependencies on system: %s" % \
-                               ' '.join([pkg[0] for pkg in
-                                         uninstalled_pkgconfigs +
-                                         uninstalled_filenames])))
-                installer.install(uninstalled_pkgconfigs,
-                                  uninstalled_filenames)
+                logging.info(_("Installing dependencies on system: %s") % \
+                               ' '.join(pkg[0] for pkg in uninstalled))
+                installer.install(uninstalled)
 
 register_command(cmd_sysdeps)

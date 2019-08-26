@@ -115,14 +115,7 @@ class cmd_sanitycheck(Command):
         except:
             uprint(_('Could not find the Perl module %s (usually part of package \'libxml-parser-perl\' or \'perl-XML-Parser\')') % perlmod)
 
-        # check for cvs:
-        if not inpath('cvs', os.environ['PATH'].split(os.pathsep)):
-            uprint(_('%s not found') % 'cvs')
-
-        # check for svn:
-        if not inpath('svn', os.environ['PATH'].split(os.pathsep)):
-            uprint(_('%s not found (usually part of the package \'subversion\')') % 'svn')
-
+        # check for a downloading util:
         if not (inpath('curl', os.environ['PATH'].split(os.pathsep)) or
                 inpath('wget', os.environ['PATH'].split(os.pathsep))):
             uprint(_('curl or wget not found'))
@@ -150,6 +143,16 @@ class cmd_sanitycheck(Command):
         if not inpath('xzcat', os.environ['PATH'].split(os.pathsep)):
             uprint(_('%s not found') % 'xzcat')
 
+        # check for "sysdeps --install" deps:
+        try:
+            import glib
+        except:
+            uprint(_('%s not found') % 'python-gobject')
+        try:
+            import dbus.glib
+        except:
+            uprint(_('%s not found') % 'dbus-python')
+
     def check_m4(self):
         try:
             not_in_path = []
@@ -166,7 +169,7 @@ class cmd_sanitycheck(Command):
                 uprint(_("Please copy the lacking macros (%(macros)s) in one of the following paths: %(path)s") % \
                        {'macros': ', '.join(not_in_path), 'path': ', '.join(path)})
 
-        except CommandError, exc:
+        except CommandError as exc:
             uprint(str(exc))
 
 register_command(cmd_sanitycheck)

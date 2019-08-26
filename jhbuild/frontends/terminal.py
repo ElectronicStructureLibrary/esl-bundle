@@ -22,6 +22,7 @@ import sys
 import os
 import signal
 import subprocess
+import unicodedata
 import locale
 
 from jhbuild.frontends import buildscript
@@ -35,15 +36,32 @@ is_xterm = term.find('xterm') >= 0 or term == 'rxvt'
 del term
 
 try: t_bold = cmds.get_output(['tput', 'bold'])
-except: t_bold = ''
+except:
+    try: t_bold = cmds.get_output(['tput', 'md'])
+    except: t_bold = ''
+
 try: t_reset = cmds.get_output(['tput', 'sgr0'])
-except: t_reset = ''
+except:
+    try: t_reset = cmds.get_output(['tput', 'me'])
+    except: t_reset = ''
+
 t_colour = [''] * 16
 try:
     for i in range(8):
         t_colour[i] = cmds.get_output(['tput', 'setf', '%d' % i])
         t_colour[i+8] = t_bold + t_colour[i]
-except: pass
+except:
+    try:
+        for index, i in enumerate([0, 4, 2, 6, 1, 5, 3, 7]):
+            t_colour[index] = cmds.get_output(['tput', 'setaf', '%d' % i])
+            t_colour[index+8] = t_bold + t_colour[index]
+    except:
+        try:
+            for index, i in enumerate([0, 4, 2, 6, 1, 5, 3, 7]):
+                t_colour[index] = cmds.get_output(['tput', 'AF', '%d' % i])
+                t_colour[index+8] = t_bold + t_colour[index]
+        except:
+            pass
 
 
 user_shell = os.environ.get('SHELL', '/bin/sh')
@@ -174,9 +192,9 @@ class TerminalBuildScript(buildscript.BuildScript):
             if self.config.print_command_pattern:
                 try:
                     print self.config.print_command_pattern % print_args
-                except TypeError, e:
+                except TypeError as e:
                     raise FatalError('\'print_command_pattern\' %s' % e)
-                except KeyError, e:
+                except KeyError as e:
                     raise FatalError(_('%(configuration_variable)s invalid key'
                                        ' %(key)s' % \
                                        {'configuration_variable' :
@@ -206,7 +224,7 @@ class TerminalBuildScript(buildscript.BuildScript):
 
         try:
             p = subprocess.Popen(command, **kws)
-        except OSError, e:
+        except OSError as e:
             raise CommandError(str(e))
 
         output = []
@@ -337,12 +355,26 @@ class TerminalBuildScript(buildscript.BuildScript):
                 return 'fail'
             elif val == '4':
                 cwd = os.getcwd()
+                builddir = module.get_builddir(self)
+                srcdir = module.get_srcdir(self)
                 try:
-                    os.chdir(module.get_builddir(self))
+                    os.chdir(builddir)
                 except OSError:
                     os.chdir(self.config.checkoutroot)
+                unlink_srcdir = False
+                try:
+                    if builddir != srcdir:
+                        os.symlink(srcdir, '.jhbuild-srcdir')
+                        unlink_srcdir = True
+                except OSError:
+                    pass
                 uprint(_('exit shell to continue with build'))
                 os.system(user_shell)
+                if unlink_srcdir:
+                    try:
+                        os.unlink('.jhbuild-srcdir')
+                    except OSError:
+                        pass
                 os.chdir(cwd) # restor working directory
             elif val == '5':
                 self.config.reload()
@@ -362,7 +394,9 @@ class TerminalBuildScript(buildscript.BuildScript):
                     val = raw_input(uencode(_('Type "yes" to confirm the action: ')))
                     val = udecode(val)
                     val = val.strip()
-                    if val.lower() in ('yes', _('yes').lower()):
+                    def normalize(s):
+                        return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').lower()
+                    if normalize(val) in ('yes', normalize(_('yes')), _('yes').lower()):
                         return selected_phase
                     continue
                 return selected_phase

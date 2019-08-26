@@ -112,8 +112,7 @@ class AppWindow(gtk.Window, buildscript.BuildScript):
                 return row.iter
 
         # add selected module in the list
-        if len(self.modules_list_model) > 2 and \
-             self.modules_list_model.get(self.modules_list_model[-3].iter, 1)[0] is False:
+        if self.modules_list_model.get(self.modules_list_model[-3].iter, 1)[0] is False:
             # there is no user-added modules at the moment, add a separator row
             self.modules_list_model.insert_before(
                     self.modules_list_model[-2].iter, ('', True, ''))
@@ -483,7 +482,7 @@ class AppWindow(gtk.Window, buildscript.BuildScript):
 
             try:
                 p = subprocess.Popen(command, **kws)
-            except OSError, e:
+            except OSError as e:
                 raise CommandError(str(e))
             self.child_pid = p.pid
 

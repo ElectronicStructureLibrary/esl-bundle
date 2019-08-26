@@ -56,11 +56,11 @@ class TarballRepository(Repository):
 
     branch_xml_attrs = ['version', 'module', 'checkoutdir',
                         'size', 'md5sum', 'source-subdir',
-                        'hash']
+                        'hash', 'rename-tarball']
 
     def branch(self, name, version, module=None, checkoutdir=None,
                size=None, md5sum=None, hash=None, branch_id=None,
-               source_subdir=None):
+               source_subdir=None, rename_tarball=None):
         if name in self.config.branches:
             module = self.config.branches[name]
             if not module:
@@ -78,10 +78,13 @@ class TarballRepository(Repository):
             size = int(size)
         if md5sum and (not hash or hashlib.__name__ == 'md5'):
             hash = 'md5:' + md5sum
+        if rename_tarball is not None:
+            rename_tarball = rename_tarball.replace('${name}', name).replace('${version}', version)
         return TarballBranch(self, module=module, version=version,
                              checkoutdir=checkoutdir,
                              source_size=size, source_hash=hash,
-                             branch_id=branch_id, source_subdir=source_subdir)
+                             branch_id=branch_id, source_subdir=source_subdir,
+                             tarball_name=rename_tarball)
 
     def branch_from_xml(self, name, branchnode, repositories, default_repo):
         try:
@@ -110,7 +113,8 @@ class TarballBranch(Branch):
     """A class representing a Tarball."""
 
     def __init__(self, repository, module, version, checkoutdir,
-                 source_size, source_hash, branch_id, source_subdir=None):
+                 source_size, source_hash, branch_id, source_subdir=None,
+                 tarball_name=None):
         Branch.__init__(self, repository, module, checkoutdir)
         self.version = version
         self.source_size = source_size
@@ -119,8 +123,11 @@ class TarballBranch(Branch):
         self.quilt = None
         self.branch_id = branch_id
         self.source_subdir = source_subdir
+        self.tarball_name = tarball_name
 
     def _local_tarball(self):
+        if self.tarball_name:
+            return os.path.join(self.config.tarballdir, self.tarball_name)
         basename = os.path.basename(self.module)
         if not basename:
             raise FatalError(_('URL has no filename component: %s') % self.module)
@@ -196,6 +203,8 @@ class TarballBranch(Branch):
                 logging.warning(_('skipped hash check (missing support for %s)') % algo)
 
     def _download_tarball(self, buildscript, localfile):
+        if not os.access(self.config.tarballdir, os.R_OK|os.W_OK|os.X_OK):
+            raise FatalError(_('tarball dir (%s) must be writable') % self.config.tarballdir)
         """Downloads the tarball off the internet, using wget or curl."""
         extra_env = {
             'LD_LIBRARY_PATH': os.environ.get('UNMANGLED_LD_LIBRARY_PATH'),
@@ -218,15 +227,12 @@ class TarballBranch(Branch):
 
     def _download_and_unpack(self, buildscript):
         localfile = self._local_tarball
-        print localfile
         if not os.path.exists(self.config.tarballdir):
             try:
                 os.makedirs(self.config.tarballdir)
             except OSError:
                 raise FatalError(
                         _('tarball dir (%s) can not be created') % self.config.tarballdir)
-        if not os.access(self.config.tarballdir, os.R_OK|os.W_OK|os.X_OK):
-            raise FatalError(_('tarball dir (%s) must be writable') % self.config.tarballdir)
         try:
             self._check_tarball()
         except BuildStateError:
@@ -255,9 +261,9 @@ class TarballBranch(Branch):
                 # patch name has scheme, get patch from network
                 try:
                     patchfile = httpcache.load(patch, nonetwork=buildscript.config.nonetwork)
-                except urllib2.HTTPError, e:
+                except urllib2.HTTPError as e:
                     raise BuildStateError(_('could not download patch (error: %s)') % e.code)
-                except urllib2.URLError, e:
+                except urllib2.URLError as e:
                     raise BuildStateError(_('could not download patch'))
             elif self.repository.moduleset_uri:
                 # get it relative to the moduleset uri, either in the same
@@ -267,7 +273,7 @@ class TarballBranch(Branch):
                             os.path.join(patch_prefix, patch))
                     try:
                         patchfile = httpcache.load(uri, nonetwork=buildscript.config.nonetwork)
-                    except Exception, e:
+                    except Exception as e:
                         continue
                     if not os.path.isfile(patchfile):
                         continue

@@ -174,6 +174,9 @@ class SubversionRepository(Repository):
     def to_sxml(self):
         return [sxml.repository(type='svn', name=self.name, href=self.href)]
 
+    def get_sysdeps(self):
+        return ['svn']
+
 
 class SubversionBranch(Branch):
     """A class representing a Subversion branch"""
@@ -303,7 +306,7 @@ class SubversionBranch(Branch):
         try:
             output = subprocess.Popen(['svn', 'info', '-R'],
                     stdout = subprocess.PIPE, **kws).communicate()[0]
-        except OSError, e:
+        except OSError as e:
             raise CommandError(str(e))
         if '\nConflict' in output:
             raise CommandError(_('Error checking for conflicts'))

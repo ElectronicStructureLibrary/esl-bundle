@@ -31,6 +31,7 @@ import __builtin__
 
 from jhbuild.environment import setup_env, setup_env_defaults, addpath
 from jhbuild.errors import FatalError
+from jhbuild.utils import sysid
 
 if sys.platform.startswith('win'):
     # For munging paths for MSYS's benefit
@@ -45,10 +46,10 @@ _known_keys = [ 'moduleset', 'modules', 'skip', 'tags', 'prefix',
                 'autogenargs', 'makeargs', 'nice_build', 'jobs',
                 'installprog', 'repos', 'branches', 'noxvfb', 'xvfbargs',
                 'builddir_pattern', 'module_autogenargs', 'module_makeargs',
-                'interact', 'buildscript', 'nonetwork', 'nobuild',
-                'alwaysautogen', 'noinstall', 'makeclean', 'makedistclean',
-                'makecheck', 'module_makecheck', 'system_libdirs',
-                'tinderbox_outputdir', 'sticky_date', 'tarballdir',
+                'module_ninjaargs', 'ninjaargs', 'interact', 'buildscript',
+                'nonetwork', 'nobuild', 'alwaysautogen', 'noinstall',
+                'makeclean', 'makedistclean', 'makecheck', 'module_makecheck',
+                'system_libdirs', 'tinderbox_outputdir', 'sticky_date', 'tarballdir',
                 'pretty_print', 'svn_program', 'makedist', 'makedistcheck',
                 'nonotify', 'notrayicon', 'cvs_program', 'checkout_mode',
                 'copy_dir', 'module_checkout_mode', 'build_policy',
@@ -61,10 +62,12 @@ _known_keys = [ 'moduleset', 'modules', 'skip', 'tags', 'prefix',
                 'use_local_modulesets', 'ignore_suggests', 'modulesets_dir',
                 'mirror_policy', 'module_mirror_policy', 'dvcs_mirror_dir',
                 'shallow_clone', 'build_targets', 'cmakeargs', 'module_cmakeargs',
+                'mesonargs', 'module_mesonargs',
                 'print_command_pattern', 'static_analyzer',
                 'module_static_analyzer', 'static_analyzer_template',
                 'static_analyzer_outputdir', 'check_sysdeps', 'system_prefix',
-                'help_website', 'conditions', 'extra_prefixes'
+                'help_website', 'conditions', 'extra_prefixes',
+                'disable_Werror', 'xdg_cache_home', 'exit_on_error'
               ]
 
 env_prepends = {}
@@ -78,29 +81,6 @@ def parse_relative_time(s):
         return float(m.group(1)) * coeffs[m.group(2)]
     else:
         raise ValueError
-
-def get_default_conditions():
-    # the default conditions set.  We determine which set to used based on
-    # the first item in the list which is a prefix of 'sys.platform', which
-    # is a name like 'linux2', 'darwin', 'freebsd10', etc.
-    #
-    # if we watch to match (eg 'freebsd10' more closely than other versions
-    # of 'freebsd') then we just need to make sure the more-specific one
-    # comes first in the list
-    conditions_sets = [
-            ('linux', ['linux', 'wayland', 'udev', 'x11', 'systemd']),
-            ('freebsd', ['freebsd', 'x11', 'bsd']),
-
-            # this must be left here so that at least one will be found
-            ('', ['x11'])
-        ]
-
-    for prefix, flags in conditions_sets:
-        if sys.platform.startswith(prefix):
-            return set(flags)
-
-    # we will only hit this if someone removed the '' entry above
-    raise FatalError('failed to find matching condition set...')
 
 def modify_conditions(conditions, conditions_modifiers):
     for flag in conditions_modifiers:
@@ -182,7 +162,7 @@ class Config:
         # on it to set new autogenargs, for example) but also so that the
         # condition flags given on the commandline will ultimately override
         # those in jhbuildrc.
-        self._config['conditions'] = get_default_conditions()
+        self._config['conditions'] = sysid.get_default_conditions()
         modify_conditions(self._config['conditions'], conditions_modifiers)
         self.load(filename)
         modify_conditions(self.conditions, conditions_modifiers)
@@ -217,7 +197,7 @@ class Config:
         if filename:
             try:
                 execfile(filename, config)
-            except Exception, e:
+            except Exception as e:
                 if isinstance(e, FatalError):
                     # raise FatalErrors back, as it means an error in include()
                     # and it will print a traceback, and provide a meaningful

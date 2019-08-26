@@ -69,7 +69,7 @@ Returns a list, where each item is a 2-tuple:
             else:
                 os.unlink(path)
             results.append((path, True, ''))
-        except OSError, e:
+        except OSError as e:
             if (isdir
                 and allow_nonempty_dirs
                 and len(os.listdir(path)) > 0):
@@ -79,12 +79,15 @@ Returns a list, where each item is a 2-tuple:
     return results
 
 def filter_files_by_prefix(config, file_paths):
-    """Return the set of files in file_paths that are inside the prefix."""
+    """Return the set of files in file_paths that are inside the prefix.
+
+Turns relative paths into absolute paths, as appropriate."""
     canon_prefix = config.prefix
     if not canon_prefix.endswith(os.sep):
         canon_prefix = canon_prefix + os.sep
     result = []
     for path in file_paths:
+        path = os.path.join(config.prefix, path) # doesn't add the prefix if path is already absolute
         if path == canon_prefix or (not path.startswith(canon_prefix)):
             continue
         result.append(path)
@@ -95,7 +98,7 @@ def _windows_rename(src, dst):
     '''atomically rename file src to dst, replacing dst if it exists'''
     try:
         os.rename(src, dst)
-    except OSError, e:
+    except OSError as e:
         if e.errno != errno.EEXIST:
             raise
         # Windows does not allow to unlink open file.
@@ -107,3 +110,37 @@ if os.name == 'nt':
     rename = _windows_rename
 else:
     rename = os.rename
+
+def ensure_unlinked(filename):
+    try:
+        os.unlink(filename)
+    except OSError as e:
+        if e.errno != os.errno.ENOENT:
+            raise
+
+def mkdir_with_parents(filename):
+    try:
+        os.makedirs(filename)
+    except EnvironmentError as e:
+        if e.errno != errno.EEXIST or not os.path.isdir(filename):
+            raise
+
+class SafeWriter(object):
+    def __init__(self, filename):
+        self.filename = filename
+        self.tmpname = filename + '.tmp'
+        self.fp = open(self.tmpname, 'w')
+
+    def commit(self):
+        self.fp.flush()
+        if hasattr(os, 'fdatasync'):
+            os.fdatasync(self.fp.fileno())
+        else:
+            os.fsync(self.fp.fileno())
+        self.fp.close()
+
+        rename(self.tmpname, self.filename)
+
+    def abandon(self):
+        self.fp.close()
+        os.unlink(self.tmpname)
