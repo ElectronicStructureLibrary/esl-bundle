@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # jhbuild - a tool to ease building collections of source packages
 # Copyright (C) 2008  apinheiro@igalia.com, John Carr, Frederic Peters
 #
@@ -25,10 +26,10 @@ from buildbot import interfaces, util
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, EXCEPTION
 from buildbot.status.web.baseweb import WebStatus
 
-from waterfall import JhWaterfallStatusResource
-from changes import  ChangesResource
-from builder import JhBuildersResource
-from bot import JhBuildbotsResource
+from .waterfall import JhWaterfallStatusResource
+from .changes import  ChangesResource
+from .builder import JhBuildersResource
+from .bot import JhBuildbotsResource
 
 
 def content(self, request):

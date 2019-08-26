@@ -347,7 +347,7 @@ class cmd_bot(Command):
                 # have to copy all that code.]
                 localDict = {'basedir': os.path.expanduser(self.basedir)}
                 try:
-                    exec f in localDict
+                    exec(f, localDict)
                 except:
                     log.msg("error while parsing config file")
                     raise
@@ -453,7 +453,7 @@ class cmd_bot(Command):
                         })
 
                 # Status targets
-                if not config.has_key('status'):
+                if 'status' not in config:
                     # let it be possible to define additional status in
                     # master.cfg
                     config['status'] = []
@@ -561,7 +561,7 @@ class cmd_bot(Command):
                     if s.slavename in ("debug", "change", "status"):
                         raise KeyError(
                             "reserved name '%s' used for a bot" % s.slavename)
-                if config.has_key('interlocks'):
+                if 'interlocks' in config:
                     raise KeyError("c['interlocks'] is no longer accepted")
 
                 assert isinstance(change_sources, (list, tuple))
@@ -593,7 +593,7 @@ class cmd_bot(Command):
                 builders = builders_dicts
 
                 for b in builders:
-                    if b.has_key('slavename') and b['slavename'] not in slavenames:
+                    if 'slavename' in b and b['slavename'] not in slavenames:
                         raise ValueError("builder %s uses undefined slave %s" \
                                          % (b['name'], b['slavename']))
                     for n in b.get('slavenames', []):
@@ -652,7 +652,7 @@ class cmd_bot(Command):
                     for l in b.get('locks', []):
                         if isinstance(l, locks.LockAccess): # User specified access to the lock
                             l = l.lockid
-                        if lock_dict.has_key(l.name):
+                        if l.name in lock_dict:
                             if lock_dict[l.name] is not l:
                                 raise ValueError("Two different locks (%s and %s) "
                                                  "share the name %s"
@@ -666,7 +666,7 @@ class cmd_bot(Command):
                         for l in s[1].get('locks', []):
                             if isinstance(l, locks.LockAccess): # User specified access to the lock
                                 l = l.lockid
-                            if lock_dict.has_key(l.name):
+                            if l.name in lock_dict:
                                 if lock_dict[l.name] is not l:
                                     raise ValueError("Two different locks (%s and %s)"
                                                      " share the name %s"

@@ -17,6 +17,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
+from __future__ import absolute_import
+
 import os
 import time
 import subprocess
@@ -26,14 +29,14 @@ import socket
 
 from jhbuild.utils import cmds
 from jhbuild.errors import CommandError
-import buildscript
+from . import buildscript
 
 import xmlrpclib
 import zlib
 from cStringIO import StringIO
 
-from tinderbox import get_distro
-from terminal import TerminalBuildScript, trayicon, t_bold, t_reset
+from .tinderbox import get_distro
+from .terminal import TerminalBuildScript, trayicon, t_bold, t_reset
 import jhbuild.moduleset
 
 def escape(string):
@@ -69,11 +72,11 @@ class ServerProxy(xmlrpclib.ServerProxy):
                 pass
             if i < ITERS-1:
                 if self.verbose_timeout:
-                    print >> sys.stderr, _('Server Error, retrying in %d seconds') % ((i+1)**2)
+                    print(_('Server Error, retrying in %d seconds') % ((i+1)**2), file=sys.stderr)
                 time.sleep((i+1)**2)
             else:
                 if self.verbose_timeout:
-                    print >> sys.stderr, _('Server Error, aborting')
+                    print(_('Server Error, aborting'), file=sys.stderr)
                 raise e
             
 
@@ -135,7 +138,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
 
         self.phasefp.write('<span class="command">%s</span>\n' % escape(displayed_command))
         if self.verbose:
-            print ' $', displayed_command
+            print(' $', displayed_command)
 
         kws['stdin'] = subprocess.PIPE
         kws['stdout'] = subprocess.PIPE
@@ -144,7 +147,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
             def format_line(line, error_output, fp=self.phasefp):
                 if line[-1] == '\n': line = line[:-1]
                 if self.verbose:
-                    print line
+                    print(line)
                 if line.startswith('C '):
                     fp.write('<span class="conflict">%s</span>\n'
                                         % escape(line))
@@ -156,9 +159,9 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
                 if line[-1] == '\n': line = line[:-1]
                 if self.verbose:
                     if error_output:
-                        print >> sys.stderr, line
+                        print(line, file=sys.stderr)
                     else:
-                        print line
+                        print(line)
                 if error_output:
                     fp.write('<span class="error">%s</span>\n'
                                         % escape(line))
@@ -209,16 +212,16 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
             self.build_id = self.server.start_build(info)
         except xmlrpclib.ProtocolError as e:
             if e.errcode == 403:
-                print >> sys.stderr, _('ERROR: Wrong credentials, please check username/password')
+                print(_('ERROR: Wrong credentials, please check username/password'), file=sys.stderr)
                 sys.exit(1)
             raise
 
         
         if self.verbose:
             s = _('Starting Build #%s') % self.build_id
-            print s
-            print '=' * len(s)
-            print ''
+            print(s)
+            print('=' * len(s))
+            print('')
 
 
     def end_build(self, failures):
@@ -229,7 +232,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
 
     def start_module(self, module):
         if self.verbose:
-            print '\n%s' % t_bold + _('**** Starting module %s ****' % module) + t_reset
+            print('\n%s' % t_bold + _('**** Starting module %s ****' % module) + t_reset)
         self.server.start_module(self.build_id, module)
         self.current_module = module
         self.modulefp = StringIO()
@@ -265,7 +268,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
 
     def handle_error(self, module, phase, nextphase, error, altphases):
         '''handle error during build'''
-        print 'FIXME: handle error! (failed build: %s: %s)' % (module, error)
+        print('FIXME: handle error! (failed build: %s: %s)' % (module, error))
         return 'fail'
 
     def _upload_ldtp_logfile (self, module):

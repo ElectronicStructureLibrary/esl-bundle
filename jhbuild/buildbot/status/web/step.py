@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # jhbuild - a tool to ease building collections of source packages
 # Copyright (C) 2008  Frederic Peters
 #
@@ -26,7 +27,7 @@ from buildbot.status.web.base import HtmlResource
 from buildbot.status.web.step import StepsResource, StatusResourceBuildStep
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, EXCEPTION
 
-from logs import JhLogsResource
+from .logs import JhLogsResource
 
 class JhStatusResourceBuildStep(StatusResourceBuildStep):
     def getTitle(self, request):

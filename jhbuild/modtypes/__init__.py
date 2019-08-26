@@ -52,12 +52,12 @@ def register_lazy_module_type(name, module):
     _module_types[name] = parse_func
 
 def parse_xml_node(node, config, uri, repositories, default_repo):
-    if not _module_types.has_key(node.nodeName):
+    if node.nodeName not in _module_types:
         try:
             __import__('jhbuild.modtypes.%s' % node.nodeName)
         except ImportError:
             pass
-    if not _module_types.has_key(node.nodeName):
+    if node.nodeName not in _module_types:
         raise FatalError(_('unknown module type %s') % node.nodeName)
 
     parser = _module_types[node.nodeName]

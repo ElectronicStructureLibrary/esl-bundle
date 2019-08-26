@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import absolute_import
+
 __all__ = [
     'CVSRepository',
     'login',
@@ -31,7 +33,7 @@ try:
 except ImportError:
     import md5 as hashlib
 
-import git
+from . import git
 
 from jhbuild.errors import BuildStateError, CommandError
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # jhbuild - a tool to ease building collections of source packages
 # Copyright (C) 2008  Frederic Peters
 #
@@ -26,7 +27,7 @@ from buildbot.status.web.build import BuildsResource, StatusResourceBuild
 from buildbot.status.web.base import HtmlResource, make_row, make_stop_form, \
      css_classes, make_name_user_passwd_form
 
-from step import JhStepsResource
+from .step import JhStepsResource
 
 
 class JhStatusResourceBuild(StatusResourceBuild):

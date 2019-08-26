@@ -17,6 +17,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
+from __future__ import absolute_import
+
 import os
 import sys 
 import logging
@@ -27,7 +30,7 @@ import imp
 import time
 from StringIO import StringIO
 
-import cmds
+from . import cmds
 
 def get_installed_pkgconfigs(config):
     """Returns a dictionary mapping pkg-config names to their current versions on the system."""
@@ -114,10 +117,10 @@ def systemdependencies_met(module_name, sysdeps, config):
                 shell_split = shlex.split
             try:
                 while True:
-                    arg = itr.next()
+                    arg = next(itr)
                     if arg.strip() in ['-I', '-isystem']:
                         # extract paths handling quotes and multiple paths
-                        paths += shell_split(itr.next())[0].split(os.pathsep)
+                        paths += shell_split(next(itr))[0].split(os.pathsep)
                     elif arg.startswith('-I'):
                         paths += shell_split(arg[2:])[0].split(os.pathsep)
             except StopIteration:
@@ -486,5 +489,5 @@ _classes = [AptSystemInstall, PacmanSystemInstall, PKSystemInstall]
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     installer = SystemInstall.find_best()
-    print "Using %r" % (installer, )
+    print("Using %r" % (installer, ))
     installer.install(sys.argv[1:])

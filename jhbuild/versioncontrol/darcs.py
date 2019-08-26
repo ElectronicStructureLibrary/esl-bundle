@@ -103,7 +103,7 @@ class DarcsBranch(Branch):
                 stat = os.stat(path)
             except OSError as e:
                 continue
-            os.chmod(path, stat.st_mode | 0111)
+            os.chmod(path, stat.st_mode | 0o111)
 
     def checkout(self, buildscript):
         if not inpath('darcs', os.environ['PATH'].split(os.pathsep)):

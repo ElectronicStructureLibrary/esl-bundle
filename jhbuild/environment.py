@@ -110,14 +110,14 @@ def setup_env_defaults(system_libdirs):
         os.environ['ACLOCAL_PATH']='/usr/share/aclocal'
 
     # get rid of gdkxft from the env -- it will cause problems.
-    if os.environ.has_key('LD_PRELOAD'):
+    if 'LD_PRELOAD' in os.environ:
         valarr = os.environ['LD_PRELOAD'].split(' ')
         for x in valarr[:]:
             if x.find('libgdkxft.so') >= 0:
                 valarr.remove(x)
         os.environ['LD_PRELOAD'] = ' '.join(valarr)
 
-    if os.environ.has_key('CONFIG_SITE'):
+    if 'CONFIG_SITE' in os.environ:
         del os.environ['CONFIG_SITE']
 
 def setup_env(prefix):

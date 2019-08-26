@@ -87,7 +87,7 @@ class ModuleSet:
 
     def get_module(self, module_name, ignore_case = False):
         module_name = module_name.rstrip(os.sep)
-        if self.modules.has_key(module_name) or not ignore_case:
+        if module_name in self.modules or not ignore_case:
             return self.modules[module_name]
         module_name_lower = module_name.lower()
         for module in self.modules.keys():
@@ -319,15 +319,15 @@ class ModuleSet:
             
             for dep in self.modules[modname].dependencies:
                 fp.write('  "%s" -> "%s";\n' % (modname, dep))
-                if not inlist.has_key(dep):
+                if dep not in inlist:
                     modules.append(dep)
                 inlist[dep] = None
 
             if suggests:
                 for dep in self.modules[modname].after + self.modules[modname].suggests:
-                    if self.modules.has_key(dep):
+                    if dep in self.modules:
                         fp.write('  "%s" -> "%s" [style=dotted];\n' % (modname, dep))
-                        if not inlist.has_key(dep):
+                        if dep not in inlist:
                             modules.append(dep)
                         inlist[dep] = None
 

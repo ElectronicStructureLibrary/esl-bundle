@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import absolute_import
+
 import os
 import time
 import subprocess
@@ -29,7 +31,7 @@ from jhbuild.main import _encoding
 from jhbuild.utils import cmds
 from jhbuild.utils import sysid
 from jhbuild.errors import CommandError, FatalError
-import buildscript
+from . import buildscript
 import commands
 
 index_header = '''<html>

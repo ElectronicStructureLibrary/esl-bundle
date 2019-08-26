@@ -18,6 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
+
 import sys
 import os
 import signal
@@ -191,7 +193,7 @@ class TerminalBuildScript(buildscript.BuildScript):
         if not self.config.quiet_mode:
             if self.config.print_command_pattern:
                 try:
-                    print self.config.print_command_pattern % print_args
+                    print(self.config.print_command_pattern % print_args)
                 except TypeError as e:
                     raise FatalError('\'print_command_pattern\' %s' % e)
                 except KeyError as e:
@@ -241,13 +243,13 @@ class TerminalBuildScript(buildscript.BuildScript):
                 if line[-1] == '\n': line = line[:-1]
 
                 if line.startswith('C '):
-                    print '%s%s%s' % (t_colour[12], line, t_reset)
+                    print('%s%s%s' % (t_colour[12], line, t_reset))
                 elif line.startswith('M '):
-                    print '%s%s%s' % (t_colour[10], line, t_reset)
+                    print('%s%s%s' % (t_colour[10], line, t_reset))
                 elif line.startswith('? '):
-                    print '%s%s%s' % (t_colour[8], line, t_reset)
+                    print('%s%s%s' % (t_colour[8], line, t_reset))
                 else:
-                    print line
+                    print(line)
 
             cmds.pprint_output(p, format_line)
             if conflicts:
@@ -273,7 +275,7 @@ class TerminalBuildScript(buildscript.BuildScript):
         try:
             if p.wait() != 0:
                 if self.config.quiet_mode:
-                    print ''.join(output)
+                    print(''.join(output))
                 raise CommandError(_('########## Error running %s')
                                    % print_args['command'], p.returncode)
         except OSError:
@@ -296,8 +298,8 @@ class TerminalBuildScript(buildscript.BuildScript):
         else:
             self.message(_('the following modules were not built'))
             for module in failures:
-                print module,
-            print
+                print(module, end=' ')
+            print()
 
     def handle_error(self, module, phase, nextphase, error, altphases):
         '''handle error during build'''
@@ -327,7 +329,7 @@ class TerminalBuildScript(buildscript.BuildScript):
         if not self.config.interact:
             return 'fail'
         while True:
-            print
+            print()
             uprint('  [1] %s' % _('Rerun phase %s') % phase)
             if nextphase:
                 uprint('  [2] %s' % _('Ignore error and continue to %s') % nextphase)

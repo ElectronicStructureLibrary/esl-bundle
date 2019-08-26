@@ -240,7 +240,7 @@ class Config:
             config['repos'].update(config['svnroots'])
 
         # environment variables
-        if config.has_key('cflags') and config['cflags']:
+        if 'cflags' in config and config['cflags']:
             os.environ['CFLAGS'] = config['cflags']
         if config.get('installprog') and os.path.exists(config['installprog']):
             os.environ['INSTALL'] = config['installprog']

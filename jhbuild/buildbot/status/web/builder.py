@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # jhbuild - a tool to ease building collections of source packages
 # Copyright (C) 2008  Frederic Peters
 #
@@ -26,7 +27,7 @@ from buildbot.status.web.builder import BuildersResource, StatusResourceBuilder
 from buildbot.status.web.base import make_row, make_force_build_form, \
              path_to_slave, path_to_builder
 
-from build import JhBuildsResource
+from .build import JhBuildsResource
 
 class JhStatusResourceBuilder(StatusResourceBuilder):
     def getTitle(self, request):

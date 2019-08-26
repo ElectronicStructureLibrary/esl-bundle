@@ -49,9 +49,9 @@ class TestModule(Package, DownloadableModule):
         self.tested_pkgs  = tested_pkgs
 
         ### modify environ for tests to be working
-        if os.environ.has_key('LDTP_DEBUG'):
+        if 'LDTP_DEBUG' in os.environ:
             del os.environ['LDTP_DEBUG'] # get rid of verbose LDTP output
-        if not os.environ.has_key('GNOME_ACCESSIBILITY') or os.environ['GNOME_ACCESSIBILITY'] != 1:
+        if 'GNOME_ACCESSIBILITY' not in os.environ or os.environ['GNOME_ACCESSIBILITY'] != 1:
             os.environ['GNOME_ACCESSIBILITY'] = '1'
 
     def get_srcdir(self, buildscript):

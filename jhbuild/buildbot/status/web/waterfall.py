@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # jhbuild - a tool to ease building collections of source packages
 # Copyright (C) 2008  Igalia S.L., John Carr, Frederic Peters
 #
@@ -31,14 +32,15 @@ from buildbot.status.web.waterfall import WaterfallStatusResource, Spacer
 from buildbot.status.web.base import Box, HtmlResource, IBox, ICurrentBox, \
      ITopBox, td, build_get_class, path_to_build, path_to_step, map_branches
 
-from feeds import Rss20StatusResource, Atom10StatusResource
+from .feeds import Rss20StatusResource, Atom10StatusResource
+from functools import reduce
 
 def insertGaps(g, lastEventTime, idleGap=2, showEvents=False):
     # summary of changes between this function and the one from buildbot:
     #  - do not insert time gaps for events that are not shown
     debug = False
 
-    e = g.next()
+    e = next(g)
     starts, finishes = e.getTimes()
     if debug: log.msg("E0", starts, finishes)
     if finishes == 0:
@@ -54,7 +56,7 @@ def insertGaps(g, lastEventTime, idleGap=2, showEvents=False):
     yield e
 
     while 1:
-        e = g.next()
+        e = next(g)
         if isinstance(e, builder.Event) and not showEvents:
             continue
         starts, finishes = e.getTimes()
@@ -136,7 +138,7 @@ class JhWaterfallStatusResource(WaterfallStatusResource):
         def get_event_from(g):
             try:
                 while True:
-                    e = g.next()
+                    e = next(g)
                     # e might be builder.BuildStepStatus,
                     # builder.BuildStatus, builder.Event,
                     # waterfall.Spacer(builder.Event), or changes.Change .

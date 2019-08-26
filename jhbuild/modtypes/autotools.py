@@ -233,8 +233,8 @@ class AutogenModule(MakeModule, DownloadableModule):
 
         srcdir = self.get_srcdir(buildscript)
         try:
-            if not (os.stat(os.path.join(srcdir, self.autogen_sh))[stat.ST_MODE] & 0111):
-                os.chmod(os.path.join(srcdir, self.autogen_sh), 0755)
+            if not (os.stat(os.path.join(srcdir, self.autogen_sh))[stat.ST_MODE] & 0o111):
+                os.chmod(os.path.join(srcdir, self.autogen_sh), 0o755)
         except:
             pass
 
@@ -245,7 +245,7 @@ class AutogenModule(MakeModule, DownloadableModule):
             else:
                 buildscript.execute(["./" + self.autogen_sh.split("+")[0]], cwd=srcdir,
                         extra_env=extra_env)
-            os.chmod(os.path.join(srcdir, 'configure'), 0755)
+            os.chmod(os.path.join(srcdir, 'configure'), 0o755)
 
         buildscript.execute(cmd, cwd = builddir, extra_env = self.extra_env)
     do_configure.depends = [PHASE_CHECKOUT]
@@ -329,7 +329,7 @@ class AutogenModule(MakeModule, DownloadableModule):
             extra_env.get('ACLOCAL_FLAGS', os.environ.get('ACLOCAL_FLAGS', ''))))
         buildscript.execute(['autoreconf', '-fi'], cwd=srcdir,
                 extra_env=extra_env)
-        os.chmod(os.path.join(srcdir, 'configure'), 0755)
+        os.chmod(os.path.join(srcdir, 'configure'), 0o755)
     do_setup.depends = [PHASE_CHECKOUT]
     do_setup.error_phases = [PHASE_FORCE_CHECKOUT, PHASE_CLEAN]
 

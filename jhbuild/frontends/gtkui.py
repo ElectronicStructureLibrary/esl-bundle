@@ -18,6 +18,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import absolute_import
+
 import pygtk
 pygtk.require('2.0')
 
@@ -37,13 +39,13 @@ try:
 except ImportError:
     vte = None
 
-import buildscript
+from . import buildscript
 import jhbuild.moduleset
 from jhbuild.modtypes import MetaModule
 from jhbuild.errors import CommandError
 from jhbuild.utils import notify
 
-from terminal import t_bold, t_reset
+from .terminal import t_bold, t_reset
 
 
 class ExitRequestedException(Exception):

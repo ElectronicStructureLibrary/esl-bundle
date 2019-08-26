@@ -367,7 +367,7 @@ class cmd_distone(Command):
         module_set = jhbuild.moduleset.load(config)
         try:
             module_list = [module_set.get_module(modname, ignore_case = True) for modname in args]
-        except KeyError, e:
+        except KeyError as e:
             raise FatalError(_("A module called '%s' could not be found.") % e)
 
         if not module_list:
