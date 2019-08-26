@@ -14,6 +14,9 @@ modulesets_dir = SRCDIR
 moduleset = 'esl'
 modules = [ 'esl-bundle' ]
 
+def basic_configuration():
+    return None
+
 # policy for modules to build, options are:
 #  - all: build everything requested
 #  - updated: build only modules that have changed
