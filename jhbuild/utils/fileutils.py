@@ -19,8 +19,6 @@
 #
 # Author: Colin Walters <walters@verbum.org>
 
-from builtins import object
-
 import os
 import sys
 import errno

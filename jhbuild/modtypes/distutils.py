@@ -119,6 +119,7 @@ def parse_distutils(node, config, uri, repositories, default_repo):
     if node.hasAttribute('supports-non-srcdir-builds'):
         instance.supports_non_srcdir_builds = \
             (node.getAttribute('supports-non-srcdir-builds') != 'no')
+
     if node.hasAttribute('buildargs'):
         instance.buildargs = node.getAttribute('buildargs')
 

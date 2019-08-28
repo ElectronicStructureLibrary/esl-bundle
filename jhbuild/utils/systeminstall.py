@@ -17,14 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import print_function
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import zip
-from builtins import next
-from builtins import object
-
 import os
 import sys 
 import logging
@@ -32,6 +24,7 @@ import shlex
 import subprocess
 import pipes
 import imp
+import textwrap
 import time
 from io import StringIO
 
@@ -54,7 +47,7 @@ def get_installed_pkgconfigs(config):
             stdout = subprocess.check_output(['pkg-config', '--modversion'] + pkgs)
             versions = stdout.splitlines()
             if len(versions) == len(pkgs):
-                return dict(list(zip(pkgs, versions)))
+                return dict(zip(pkgs, versions))
         except (subprocess.CalledProcessError, OSError):
             pass
 
@@ -186,6 +179,20 @@ def systemdependencies_met(module_name, sysdeps, config):
             try:
                 imp.find_module(value)
             except:
+                dep_met = False
+
+        elif dep_type == 'python3':
+            python3_script = textwrap.dedent('''
+                import imp
+                import sys
+                try:
+                    imp.find_module(sys.argv[1])
+                except:
+                    exit(1)
+                ''').strip('\n')
+            try:
+                subprocess.check_call(['python3', '-c', python3_script, value])
+            except (subprocess.CalledProcessError, OSError):
                 dep_met = False
 
         elif dep_type == 'xml':

@@ -17,8 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from builtins import str
-
 import os
 import re
 import select
@@ -42,7 +40,7 @@ def get_output(cmd, cwd=None, extra_env=None, get_stderr = True):
         raise CommandError(_('Call to undefined command'))
 
     kws = {}
-    if isinstance(cmd, (str, str)):
+    if isinstance(cmd, str):
         kws['shell'] = True
     if cwd is not None:
         kws['cwd'] = cwd
@@ -113,7 +111,7 @@ class Pipeline(subprocess.Popen):
                 c2cwrite = stdout
 
             self.children.append(
-                subprocess.Popen(cmd, shell=isinstance(cmd, (str, str)),
+                subprocess.Popen(cmd, shell=isinstance(cmd, str),
                                  bufsize=bufsize, close_fds=True,
                                  cwd=cwd, env=env,
                                  stdin=stdin,
@@ -160,7 +158,7 @@ def spawn_child(command, use_pipe=False,
         p = Pipeline(command, cwd=cwd, env=env,
                      stdin=stdin, stdout=stdout, stderr=stderr)
     else:
-        p = subprocess.Popen(command, shell=isinstance(command, (str,str)),
+        p = subprocess.Popen(command, shell=isinstance(command, str),
                              close_fds=True, cwd=cwd, env=env,
                              stdin=stdin, stdout=stdout, stderr=stderr)
     return p

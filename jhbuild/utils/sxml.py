@@ -33,9 +33,6 @@ Use like this:
 >>> sxml_to_string (x)
 "<a href="about:blank" title="foo"><i>italics &amp; stuff</i></a>"
 """
-from builtins import str
-from past.builtins import basestring
-from builtins import object
 
 
 __all__ = ['sxml', 'sxml_to_string']
@@ -80,7 +77,7 @@ class sxml(object):
                 return ('<%s%s>%s</%s>'
                         % (attr,
                            ''.join([' %s="%s"' % (_trans(k), quote(v))
-                                    for k, v in list(kw.items())]),
+                                    for k, v in kw.items()]),
                            '\n'.join(args),
                            attr))
             render.__name__ = attr

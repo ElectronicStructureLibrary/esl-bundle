@@ -17,8 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from builtins import str
-
 __metaclass__ = type
 
 import os, time, signal, sys, subprocess, random, tempfile
@@ -190,7 +188,7 @@ class TestModule(Package, DownloadableModule):
         for group in groups:
             status += 'In Group #%s (%s)\n' % (group_num, group['groupstatus'])
             for script in group['script']:
-                for test in list(script['tests'].keys()):
+                for test in script['tests'].keys():
                     status += 'Test \'%s\' ' % test
                     if script['tests'][test]['pass'] == '0': # failed
                         status += 'failed\n\tErrors'

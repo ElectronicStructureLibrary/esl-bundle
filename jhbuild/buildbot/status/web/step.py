@@ -17,10 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-
 import urllib.request, urllib.parse, urllib.error
 
 from twisted.web.util import Redirect
@@ -30,7 +26,7 @@ from buildbot.status.web.base import HtmlResource
 from buildbot.status.web.step import StepsResource, StatusResourceBuildStep
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, EXCEPTION
 
-from .logs import JhLogsResource
+from logs import JhLogsResource
 
 class JhStatusResourceBuildStep(StatusResourceBuildStep):
     def getTitle(self, request):

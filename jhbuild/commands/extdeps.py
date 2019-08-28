@@ -17,11 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import print_function
-from past.builtins import cmp
-from future import standard_library
-standard_library.install_aliases()
-
 from optparse import make_option
 import re
 import socket
@@ -92,7 +87,7 @@ class cmd_extdeps(Command):
         config.partial_build = False
         self.module_set = jhbuild.moduleset.load(config)
         if options.list_all_modules:
-            module_list = list(self.module_set.modules.values())
+            module_list = self.module_set.modules.values()
         else:
             module_list = self.module_set.get_module_list(args or config.modules, config.skip)
 
@@ -165,7 +160,7 @@ class cmd_extdeps(Command):
 
     def compute_rdeps(self, module):
         rdeps = []
-        for mod in list(self.module_set.modules.values()):
+        for mod in self.module_set.modules.values():
             if mod.type == 'meta': continue
             if module.name in mod.dependencies:
                 rdeps.append(mod.name)

@@ -17,8 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-
 __metaclass__ = type
 
 import sys
@@ -89,7 +87,7 @@ def parse_tarball(node, config, uri, repositories, default_repo):
 
     dependencies, after, suggests, systemdependencies = get_dependencies(node)
 
-    from .autotools import AutogenModule
+    from autotools import AutogenModule
     from jhbuild.versioncontrol.tarball import TarballBranch, TarballRepository
 
     # create a fake TarballRepository, and give it the moduleset uri

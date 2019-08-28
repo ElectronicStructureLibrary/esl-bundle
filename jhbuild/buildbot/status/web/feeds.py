@@ -21,8 +21,6 @@
 # Minor changes made by API (apinheiro@igalia.com) in order to fit with our
 # configuration and last buildbot changes
 
-from builtins import str
-
 import time, re
 
 from twisted.web.resource import Resource

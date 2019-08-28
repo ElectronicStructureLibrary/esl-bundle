@@ -17,13 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import print_function
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from builtins import range
-
 import os
 import time
 import subprocess
@@ -39,8 +32,8 @@ import xmlrpc.client
 import zlib
 from io import StringIO
 
-from .tinderbox import get_distro
-from .terminal import TerminalBuildScript, trayicon, t_bold, t_reset
+from tinderbox import get_distro
+from terminal import TerminalBuildScript, trayicon, t_bold, t_reset
 import jhbuild.moduleset
 
 def escape(string):
@@ -100,7 +93,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
         # cleanup environment
         os.environ['TERM'] = 'dumb'
         os.environ['LANG'] = 'C'
-        for k in list(os.environ.keys()):
+        for k in os.environ.keys():
             if k.startswith('LC_'):
                 os.environ[k] = 'C'
 
@@ -134,7 +127,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
         kws = {
             'close_fds': True
             }
-        if isinstance(command, (str, str)):
+        if isinstance(command, str):
             displayed_command = command
             kws['shell'] = True
         else:
@@ -262,7 +255,7 @@ class AutobuildBuildScript(buildscript.BuildScript, TerminalBuildScript):
             if self.modules == {}:
                 self.modules = jhbuild.moduleset.load_tests(self.config)
 
-            if module in list(self.modules.modules.keys()) \
+            if module in self.modules.modules.keys() \
                    and self.modules.modules[module].test_type == 'ldtp':
                 self._upload_logfile(module)
 

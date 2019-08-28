@@ -17,8 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from builtins import str
-
 import os
 import optparse
 import re
@@ -499,7 +497,7 @@ class cmd_list(Command):
             raise UsageError(_('Conflicting options specified (\'--start-at\' and \'--all-modules\')'))
 
         if options.list_all_modules:
-            module_list = list(module_set.modules.values())
+            module_list = module_set.modules.values()
         else:
             module_list = module_set.get_module_list \
                               (args or config.modules, config.skip,

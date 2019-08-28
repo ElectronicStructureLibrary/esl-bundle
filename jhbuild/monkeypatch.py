@@ -17,9 +17,6 @@
 
 # extras not found in old versions of Python
 
-from future import standard_library
-standard_library.install_aliases()
-
 import sys
 import builtins
 

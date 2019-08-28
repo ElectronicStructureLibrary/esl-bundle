@@ -17,9 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from builtins import str
-from builtins import object
-
 __metaclass__ = type
 
 __all__ = [
@@ -150,7 +147,7 @@ def get_branch(node, repositories, default_repo, config):
         try:
             repo = repositories[childnode.getAttribute('repo')]
         except KeyError:
-            repo_names = ', '.join([r.name for r in list(repositories.values())])
+            repo_names = ', '.join([r.name for r in repositories.values()])
             raise UndefinedRepositoryError(
                 _('Repository=%(missing)s not found for module id=%(module)s. Possible repositories are %(possible)s'
                   % {'missing': childnode.getAttribute('repo'), 'module': name,

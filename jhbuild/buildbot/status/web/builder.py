@@ -17,10 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-
 import urllib.request, urllib.parse, urllib.error, time
 
 from twisted.web import html
@@ -30,7 +26,7 @@ from buildbot.status.web.builder import BuildersResource, StatusResourceBuilder
 from buildbot.status.web.base import make_row, make_force_build_form, \
              path_to_slave, path_to_builder
 
-from .build import JhBuildsResource
+from build import JhBuildsResource
 
 class JhStatusResourceBuilder(StatusResourceBuilder):
     def getTitle(self, request):

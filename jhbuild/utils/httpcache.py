@@ -27,17 +27,13 @@ and draws ideas from feedparser.py.  Strategies include:
     - honour Expires headers returned by server.  If no expiry time is
       given, it defaults to 6 hours.
 '''
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from builtins import object
 
 import os
 import sys
 import urllib.request, urllib.error, urllib.parse
 import urllib.parse
 import time
-import rfc822
+import email.utils as rfc822
 import io
 try:
     import gzip
@@ -127,7 +123,7 @@ class Cache(object):
         document.appendChild(document.createElement('cache'))
         node = document.createTextNode('\n')
         document.documentElement.appendChild(node)
-        for uri in list(self.entries.keys()):
+        for uri in self.entries.keys():
             entry = self.entries[uri]
             node = document.createElement('entry')
             node.setAttribute('uri', entry.uri)
@@ -157,7 +153,7 @@ class Cache(object):
         is_unique = False
         while not is_unique:
             is_unique = True
-            for uri in list(self.entries.keys()):
+            for uri in self.entries.keys():
                 if self.entries[uri].local == base:
                     is_unique = False
                     break

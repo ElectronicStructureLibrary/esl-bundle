@@ -19,8 +19,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from builtins import map
-
 import sys
 import os
 from distutils.sysconfig import get_python_lib
@@ -169,7 +167,7 @@ def setup_env(prefix):
         # Running 'man -p' without specifying a manual page name causes it to
         # exit with status 1.
         systemmanpath = get_output('man -p || true', extra_env={'MANPATH': ''})
-        systemmanpath = list(map(os.path.dirname, systemmanpath.strip().split('\n')))
+        systemmanpath = map(os.path.dirname, systemmanpath.strip().split('\n'))
     elif sys.platform.startswith('openbsd'):
         # I cannot find a command that prints the default search path on
         # OpenBSD, so I add paths found in the default /etc/man.conf here.

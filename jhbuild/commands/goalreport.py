@@ -17,14 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import print_function
-from __future__ import division
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-from past.utils import old_div
-from builtins import object
-
 import os
 import re
 import socket
@@ -210,7 +202,7 @@ class SymbolsCheck(Check):
                         deprecated_and_used[s] = True
         except UnicodeDecodeError:
             raise ExcludedModuleException()
-        self.bad_symbols = list(deprecated_and_used.keys())
+        self.bad_symbols = deprecated_and_used.keys()
         self.compute_status()
 
     def compute_status(self):
@@ -396,7 +388,7 @@ class cmd_goalreport(Command):
 
         module_set = jhbuild.moduleset.load(config)
         if options.list_all_modules:
-            self.module_list = list(module_set.modules.values())
+            self.module_list = module_set.modules.values()
         else:
             self.module_list = module_set.get_module_list(args or config.modules, config.skip)
 
@@ -485,7 +477,7 @@ class cmd_goalreport(Command):
         print('<tbody>', file=output)
 
         suites = []
-        for module_key, module in list(module_set.modules.items()):
+        for module_key, module in module_set.modules.items():
             if not isinstance(module_set.get_module(module_key), MetaModule):
                 continue
             if module_key.endswith('upcoming-deprecations'):
@@ -714,7 +706,7 @@ class cmd_goalreport(Command):
         bug_status = httpcache.load(
                 'http://bugzilla.gnome.org/show_bug.cgi?%s&'
                 'ctype=xml&field=bug_id&field=bug_status&field=emblems&'
-                'field=resolution' % '&'.join(['id=' + x for x in list(self.bugs.values()) if x.isdigit()]),
+                'field=resolution' % '&'.join(['id=' + x for x in self.bugs.values() if x.isdigit()]),
                 age=0)
         tree = ET.parse(bug_status)
         for bug in tree.findall('bug'):
@@ -766,7 +758,7 @@ class cmd_goalreport(Command):
         if not curses:
             return
         columns = curses.tigetnum('cols')
-        width = old_div(columns, 2)
+        width = columns // 2
         num_hashes = int(round(progress * width))
         progress_bar = '[' + (num_hashes * '=') + ((width - num_hashes) * '-') + ']'
 

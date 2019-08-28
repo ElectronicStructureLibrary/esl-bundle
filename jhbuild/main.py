@@ -17,10 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-
 import sys, os, errno
 import optparse
 import traceback
@@ -56,13 +52,13 @@ except (locale.Error, AssertionError):
     _encoding = 'ascii'
 
 def uencode(s):
-    if type(s) is str:
+    if isinstancet(s, str):
         return s.encode(_encoding, 'replace')
     else:
         return s
 
 def udecode(s):
-    if type(s) is not str:
+    if isinstance(s, str):
         return s.decode(_encoding, 'replace')
     else:
         return s
@@ -96,7 +92,7 @@ def main(args):
     localedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'mo'))
     if not os.path.exists(localedir):
         localedir = None
-    gettext.install('jhbuild', localedir=localedir, str=True)
+    gettext.install('jhbuild', localedir=localedir)
 
     if not 'JHBUILD_RUN_AS_ROOT' in os.environ and hasattr(os, 'getuid') and os.getuid() == 0:
         sys.stderr.write(_('You should not run jhbuild as root.\n').encode(_encoding, 'replace'))

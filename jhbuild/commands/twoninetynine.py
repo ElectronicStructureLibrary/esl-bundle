@@ -17,15 +17,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-
 import os
 from optparse import make_option
 import re
 
 from jhbuild.commands import Command, register_command
 
-from .goalreport import cmd_goalreport, ExcludedModuleException, \
+from goalreport import cmd_goalreport, ExcludedModuleException, \
          Check, ShellCheck, DeprecatedSymbolsCheck, FIND_C
 
 class LibBonobo(ShellCheck):

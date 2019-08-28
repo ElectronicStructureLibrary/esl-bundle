@@ -23,10 +23,6 @@
 # to override just some parts of them).  Buildbot is also licensed under the
 # GNU General Public License.
 
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-
 import os
 import signal
 import sys
@@ -351,7 +347,7 @@ class cmd_bot(Command):
                 # have to copy all that code.]
                 localDict = {'basedir': os.path.expanduser(self.basedir)}
                 try:
-                    exec(f, localDict)
+                    exec(f in localDict)
                 except:
                     log.msg("error while parsing config file")
                     raise
@@ -375,7 +371,7 @@ class cmd_bot(Command):
                               "changeHorizon", "logMaxSize", "logMaxTailSize",
                               "logCompressionMethod",
                               )
-                for k in list(config.keys()):
+                for k in config.keys():
                     if k not in known_keys:
                         log.msg("unknown key '%s' defined in config dictionary" % k)
 
@@ -706,7 +702,7 @@ class cmd_bot(Command):
                 # Update any of our existing builders with the current log parameters.
                 # This is required so that the new value is picked up after a
                 # reconfig.
-                for builder in list(self.botmaster.builders.values()):
+                for builder in self.botmaster.builders.values():
                     builder.builder_status.setLogCompressionLimit(logCompressionLimit)
                     builder.builder_status.setLogCompressionMethod(logCompressionMethod)
                     builder.builder_status.setLogMaxSize(logMaxSize)

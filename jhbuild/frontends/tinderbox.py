@@ -17,11 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-
 import os
 import time
 import subprocess
@@ -207,7 +202,7 @@ class TinderboxBuildScript(buildscript.BuildScript):
             print_args['cwd'] = os.getcwd()
 
         self.modulefp.write('<pre>')
-        if isinstance(command, (str, str)):
+        if isinstance(command, str):
             kws['shell'] = True
             print_args['command'] = command
         else:

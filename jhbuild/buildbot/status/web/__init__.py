@@ -17,9 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-from builtins import str
-
 import os
 
 from twisted.web import server, static, resource
@@ -28,10 +25,10 @@ from buildbot import interfaces, util
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, EXCEPTION
 from buildbot.status.web.baseweb import WebStatus
 
-from .waterfall import JhWaterfallStatusResource
-from .changes import  ChangesResource
-from .builder import JhBuildersResource
-from .bot import JhBuildbotsResource
+from waterfall import JhWaterfallStatusResource
+from changes import  ChangesResource
+from builder import JhBuildersResource
+from bot import JhBuildbotsResource
 
 
 def content(self, request):
@@ -96,7 +93,7 @@ class ProjectsSummary(HtmlResource):
                 if not slave in slave_status:
                     slave_status[slave] = ('idle', None)
 
-        if type(parent.moduleset) is list:
+        if isinstance(parent.moduleset, list):
             moduleset = ', '.join(parent.moduleset)
         else:
             moduleset = parent.moduleset
@@ -110,7 +107,7 @@ class ProjectsSummary(HtmlResource):
             else:
                 title = klass
             result += '<th class="%s" title="%s"><a href="bots/%s">%s</a></th>' % (
-                    klass, title, name, name)
+                klass, title, name, name)
         result += '</tr>'
         thead = result
         # stop it here as a row with totals will be added here once every rows
@@ -134,7 +131,7 @@ class ProjectsSummary(HtmlResource):
                 box = ITopBox(builder).getBox(request)
                 lastbuild = ''
                 for bt in box.text:
-                    if bt == 'successful' or bt == 'failed':
+                    if bt in ('successful', 'failed'):
                         lastbuild = bt
 
                 if lastbuild == 'successful':
@@ -169,7 +166,7 @@ class ProjectsSummary(HtmlResource):
                     result += '<td class="%s">%s</td>' % (state, state)
                 else:
                     result += '<td class="%s">%s</td>' % (class_, lastbuild_label)
-                
+
                 if lastbuild in ('failed', 'successful'):
                     slave_results[slave][2] += 1
                     if class_ == 'failedchecks':

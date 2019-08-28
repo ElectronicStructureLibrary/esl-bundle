@@ -17,11 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import generators
-from future import standard_library
-standard_library.install_aliases()
-from builtins import object
-
 import os
 import sys
 import urllib.parse
@@ -93,7 +88,7 @@ class ModuleSet(object):
         if module_name in self.modules or not ignore_case:
             return self.modules[module_name]
         module_name_lower = module_name.lower()
-        for module in list(self.modules.keys()):
+        for module in self.modules.keys():
             if module.lower() == module_name_lower:
                 logging.info(_('fixed case of module \'%(orig)s\' to '
                                '\'%(new)s\'') % {'orig': module_name,
@@ -175,7 +170,7 @@ class ModuleSet(object):
                             resolved[index] = (node, False)
 
         if module_names == 'all':
-            module_names = list(self.modules.keys())
+            module_names = self.modules.keys()
         try:
             # remove skip modules from module_name list
             modules = [self.get_module(module, ignore_case = True) \
@@ -203,7 +198,7 @@ class ModuleSet(object):
         test_modules = []
         if seed == []:
             return
-        for mod in list(self.modules.values()):
+        for mod in self.modules.values():
             for test_app in seed:
                 if test_app in mod.tested_pkgs:
                     test_modules.append(mod)
@@ -285,7 +280,7 @@ class ModuleSet(object):
         from jhbuild.versioncontrol.tarball import TarballBranch
         
         if modules is None:
-            modules = list(self.modules.keys())
+            modules = self.modules.keys()
         inlist = {}
         for module in modules:
             inlist[module] = None
@@ -336,7 +331,7 @@ class ModuleSet(object):
 
         if clusters:
             # create clusters for MetaModules
-            for modname in list(inlist.keys()):
+            for modname in inlist.keys():
                 mod = self.modules.get(modname)
                 if isinstance(mod, MetaModule):
                     fp.write('  subgraph "cluster_%s" {\n' % mod.name)

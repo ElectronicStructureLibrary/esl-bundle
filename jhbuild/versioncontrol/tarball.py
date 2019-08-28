@@ -17,10 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-
 __all__ = []
 __metaclass__ = type
 
@@ -29,7 +25,6 @@ try:
     import hashlib
 except ImportError:
     import md5 as hashlib
-import urllib.parse
 import urllib.request, urllib.error, urllib.parse
 import logging
 

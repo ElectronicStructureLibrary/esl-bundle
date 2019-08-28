@@ -17,11 +17,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import str
-
 import urllib.request, urllib.parse, urllib.error, time
 
 from twisted.web import html
@@ -31,7 +26,7 @@ from buildbot.status.web.build import BuildsResource, StatusResourceBuild
 from buildbot.status.web.base import HtmlResource, make_row, make_stop_form, \
      css_classes, make_name_user_passwd_form
 
-from .step import JhStepsResource
+from step import JhStepsResource
 
 
 class JhStatusResourceBuild(StatusResourceBuild):

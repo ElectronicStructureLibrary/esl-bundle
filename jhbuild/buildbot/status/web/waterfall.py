@@ -20,13 +20,6 @@
 # heavily based on buildbot code,
 #   Copyright (C) Brian Warner <warner-buildbot@lothar.com>
 
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import next
-from builtins import str
-from builtins import range
-
 import time, urllib.request, urllib.parse, urllib.error
 
 from buildbot import version
@@ -38,8 +31,7 @@ from buildbot.status.web.waterfall import WaterfallStatusResource, Spacer
 from buildbot.status.web.base import Box, HtmlResource, IBox, ICurrentBox, \
      ITopBox, td, build_get_class, path_to_build, path_to_step, map_branches
 
-from .feeds import Rss20StatusResource, Atom10StatusResource
-from functools import reduce
+from feeds import Rss20StatusResource, Atom10StatusResource
 
 def insertGaps(g, lastEventTime, idleGap=2, showEvents=False):
     # summary of changes between this function and the one from buildbot:

@@ -18,12 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-from __future__ import division
-from past.builtins import cmp
-from builtins import str
-from past.utils import old_div
-
 import pygtk
 pygtk.require('2.0')
 
@@ -49,7 +43,7 @@ from jhbuild.modtypes import MetaModule
 from jhbuild.errors import CommandError
 from jhbuild.utils import notify
 
-from .terminal import t_bold, t_reset
+from terminal import t_bold, t_reset
 
 
 class ExitRequestedException(Exception):
@@ -360,7 +354,7 @@ class AppWindow(gtk.Window, buildscript.BuildScript):
 
     def start_module(self, module):
         idx = [x.name for x in self.modulelist].index(module)
-        self.progressbar.set_fraction(old_div((1.0*idx), len(self.modulelist)))
+        self.progressbar.set_fraction((1.0*idx) // len(self.modulelist))
         if vte:
             self.terminal.feed('%s*** %s ***%s\n\r' % (t_bold, module, t_reset))
         else:
@@ -452,7 +446,7 @@ class AppWindow(gtk.Window, buildscript.BuildScript):
         if not command:
             raise CommandError(_('No command given'))
 
-        if isinstance(command, (str, str)):
+        if isinstance(command, str):
             short_command = command.split()[0]
         else:
             short_command = command[0]
@@ -460,7 +454,7 @@ class AppWindow(gtk.Window, buildscript.BuildScript):
         if vte is None:
             textbuffer = self.terminal.get_buffer()
 
-            if isinstance(command, (str, str)):
+            if isinstance(command, str):
                 self.terminal.get_buffer().insert_with_tags_by_name(
                         textbuffer.get_end_iter(),
                         ' $ ' + command + '\n', 'stdin')
@@ -471,7 +465,7 @@ class AppWindow(gtk.Window, buildscript.BuildScript):
 
             kws = {
                 'close_fds': True,
-                'shell': isinstance(command, (str,str)),
+                'shell': isinstance(command, str),
                 'stdin': subprocess.PIPE,
                 'stdout': subprocess.PIPE,
                 'stderr': subprocess.PIPE,
@@ -561,7 +555,7 @@ class AppWindow(gtk.Window, buildscript.BuildScript):
             self.child_pid = None
         else:
             # use the vte widget
-            if isinstance(command, (str, str)):
+            if isinstance(command, str):
                 self.terminal.feed(' $ ' + command + '\n\r')
                 command = [os.environ.get('SHELL', '/bin/sh'), '-c', command]
             else:
@@ -571,7 +565,7 @@ class AppWindow(gtk.Window, buildscript.BuildScript):
             if extra_env is not None:
                 env = os.environ.copy()
                 env.update(extra_env)
-                kws['envv'] = ['%s=%s' % x for x in list(env.items())]
+                kws['envv'] = ['%s=%s' % x for x in env.items()]
 
             if cwd:
                 kws['directory'] = cwd
