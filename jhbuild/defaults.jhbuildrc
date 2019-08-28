@@ -99,6 +99,7 @@ module_makecheck = {}
 module_nopoison = {}
 
 # Specific autogenargs by default
+autogen_packages = []
 if basic_configuration() is not None:
     for pkg in autogen_packages:
         module_autogenargs[pkg] = basic_configuration()

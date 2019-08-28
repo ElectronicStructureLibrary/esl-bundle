@@ -26,7 +26,7 @@ import pipes
 import imp
 import textwrap
 import time
-from io import StringIO
+from io import BytesIO, TextIOWrapper
 
 from . import cmds
 
@@ -38,7 +38,8 @@ def get_installed_pkgconfigs(config):
         stdout = proc.communicate()[0]
         proc.wait()
         pkgs = []
-        for line in StringIO(stdout):
+        wrapper = TextIOWrapper(BytesIO(stdout), encoding='utf-8')
+        for line in wrapper.readlines():
             pkg, rest = line.split(None, 1)
             pkgs.append(pkg)
 

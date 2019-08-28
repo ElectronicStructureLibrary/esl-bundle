@@ -52,14 +52,14 @@ except (locale.Error, AssertionError):
     _encoding = 'ascii'
 
 def uencode(s):
-    if isinstancet(s, str):
+    if isinstance(s, str):
         return s.encode(_encoding, 'replace')
     else:
         return s
 
 def udecode(s):
     if isinstance(s, str):
-        return s.decode(_encoding, 'replace')
+        return s
     else:
         return s
 

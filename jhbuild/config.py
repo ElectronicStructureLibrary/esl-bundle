@@ -110,7 +110,7 @@ class Config(object):
 
         env_prepends.clear()
         try:
-            execfile(_defaults_file, self._config)
+            exec(open(_defaults_file, "r").read(), self._config)
         except:
             traceback.print_exc()
             raise FatalError(_('could not load config defaults'))
@@ -187,7 +187,7 @@ class Config(object):
     def include(self, filename):
         '''Read configuration variables from a file.'''
         try:
-            execfile(filename, self._config)
+            exec(open(filename, "r").read(), self._config)
         except:
             traceback.print_exc()
             raise FatalError(_('Could not include config file (%s)') % filename)
@@ -196,7 +196,7 @@ class Config(object):
         config = self._config
         if filename:
             try:
-                execfile(filename, config)
+                exec(open(filename, "r").read(), config)
             except Exception as e:
                 if isinstance(e, FatalError):
                     # raise FatalErrors back, as it means an error in include()

@@ -60,8 +60,9 @@ class PackageEntry(object):
         if not os.path.exists(os.path.join(self.dirname, 'manifests', self.package)):
             return None
         self._manifest = []
-        for line in file(os.path.join(self.dirname, 'manifests', self.package)):
-            self._manifest.append(line.strip())
+        with open(os.path.join(self.dirname, 'manifests', self.package), "r") as m_file:
+            for line in m_file.readlines():
+                self._manifest.append(line.strip())
         return self._manifest
 
     def set_manifest(self, value):
@@ -78,14 +79,14 @@ class PackageEntry(object):
         # write info file
         fileutils.mkdir_with_parents(os.path.join(self.dirname, 'info'))
         writer = fileutils.SafeWriter(os.path.join(self.dirname, 'info', self.package))
-        ET.ElementTree(self.to_xml()).write(writer.fp)
-        writer.fp.write('\n')
+        content = ET.tostring(self.to_xml(), encoding='utf-8')
+        writer.fp.write(content.decode('utf-8') + '\n')
         writer.commit()
 
         # write manifest
         fileutils.mkdir_with_parents(os.path.join(self.dirname, 'manifests'))
         writer = fileutils.SafeWriter(os.path.join(self.dirname, 'manifests', self.package))
-        writer.fp.write('\n'.join(self.manifest).encode('utf-8', 'backslashreplace') + '\n')
+        writer.fp.write('\n'.join(self.manifest).encode('utf-8', 'backslashreplace').decode('utf-8') + '\n')
         writer.commit()
 
     def remove(self):
@@ -179,7 +180,7 @@ class PackageDB(object):
             metadata = {}
         metadata['installed-date'] = time.time() # now
         if configure_cmd:
-            metadata['configure-hash'] = hashlib.md5(configure_cmd).hexdigest()
+            metadata['configure-hash'] = hashlib.md5(configure_cmd.encode('utf-8')).hexdigest()
         pkg = PackageEntry(package, version, metadata, self.dirname)
         pkg.manifest = contents
         pkg.write()
