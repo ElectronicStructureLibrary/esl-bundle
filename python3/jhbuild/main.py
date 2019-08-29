@@ -53,7 +53,7 @@ except (locale.Error, AssertionError):
 
 def uencode(s):
     if isinstance(s, str):
-        return s.encode(_encoding, 'replace')
+        return s
     else:
         return s
 

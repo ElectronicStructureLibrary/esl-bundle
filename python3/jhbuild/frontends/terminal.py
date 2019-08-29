@@ -35,14 +35,14 @@ term = os.environ.get('TERM', '')
 is_xterm = term.find('xterm') >= 0 or term == 'rxvt'
 del term
 
-try: t_bold = cmds.get_output(['tput', 'bold'])
+try: t_bold = cmds.get_output(['tput', 'bold']).decode('ascii', 'ignore')
 except:
-    try: t_bold = cmds.get_output(['tput', 'md'])
+    try: t_bold = cmds.get_output(['tput', 'md']).decode('ascii', 'ignore')
     except: t_bold = ''
 
-try: t_reset = cmds.get_output(['tput', 'sgr0'])
+try: t_reset = cmds.get_output(['tput', 'sgr0']).decode('ascii', 'ignore')
 except:
-    try: t_reset = cmds.get_output(['tput', 'me'])
+    try: t_reset = cmds.get_output(['tput', 'me']).decode('ascii', 'ignore')
     except: t_reset = ''
 
 t_colour = [''] * 16
@@ -120,7 +120,7 @@ class TerminalBuildScript(buildscript.BuildScript):
             self.display_status_line(progress_percent, module_num, msg)
 
         if is_xterm:
-            sys.stdout.write('\033]0;jhbuild:%s%s\007' % (uencode(msg), progress))
+            sys.stdout.write('\x1b]0;jhbuild:%s%s\x07' % (uencode(msg), progress))
             sys.stdout.flush()
         self.trayicon.set_tooltip('%s%s' % (msg, progress))
 
