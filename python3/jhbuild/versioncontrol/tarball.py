@@ -341,7 +341,7 @@ class TarballBranch(Branch):
         md5sum = hashlib.md5()
         if self.patches:
             for patch in self.patches:
-                md5sum.update(patch[0].encode('utf-8'))
+                md5sum.update(patch[0].encode('utf-8', 'ignore'))
         if self.quilt:
             md5sum.update(get_output('quilt files',
                         cwd=self.srcdir,

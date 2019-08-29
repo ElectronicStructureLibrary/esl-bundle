@@ -180,7 +180,7 @@ class PackageDB(object):
             metadata = {}
         metadata['installed-date'] = time.time() # now
         if configure_cmd:
-            metadata['configure-hash'] = hashlib.md5(configure_cmd.encode('utf-8')).hexdigest()
+            metadata['configure-hash'] = hashlib.md5(configure_cmd.encode('utf-8', 'ignore')).hexdigest()
         pkg = PackageEntry(package, version, metadata, self.dirname)
         pkg.manifest = contents
         pkg.write()
