@@ -109,7 +109,7 @@
   </autotools>
 
   <autotools id="libvdwxc" autogen-sh="configure">
-    <branch repo="local" module="libvdwxc-0.3.2.tar.gz" version="0.3.2" hash="md5:a65e23b394837765cf7efe057f6db368"/>
+    <branch repo="local" module="libvdwxc-0.4.0.tar.gz" version="0.4.0" hash="md5:68196798d69d593b62ea9f482468db66"/>
   </autotools>
 
   <autotools id="libgridxc-mpi" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">

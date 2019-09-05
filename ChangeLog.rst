@@ -13,6 +13,10 @@ Fixed
 -----
 - Compilation of Futile with recent intel compilers.
 
+Changed
+-------
+- libvdwxc to v0.4.0.
+
 [0.3.1-2] - 2019-01-18
 ==========================
 
