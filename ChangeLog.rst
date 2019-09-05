@@ -13,6 +13,10 @@ Fixed
 -----
 - Compilation of Futile with recent intel compilers.
 
+Changed
+-------
+- Fdict to v0.7.1.
+
 [0.3.1-2] - 2019-01-18
 ==========================
 

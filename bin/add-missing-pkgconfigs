@@ -90,7 +90,7 @@ specs:
     deps: [linalg, psolver, scotch]
   fdict:
     name: fdict
-    version: 0.5.0
+    version: 0.7.1
     description: Fortran type-free variables and type-free dictionaries
     url: https://github.com/zerothi/fdict
     libs: [fdict]
