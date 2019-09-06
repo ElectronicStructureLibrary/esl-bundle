@@ -12,6 +12,11 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 Fixed
 -----
 - Compilation of Futile with recent intel compilers.
+- Installation of Flook and Fdict on MacOS.
+
+Changed
+-------
+
 
 [0.3.1-2] - 2019-01-18
 ==========================
