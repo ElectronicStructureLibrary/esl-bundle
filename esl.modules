@@ -51,11 +51,11 @@
   </autotools>
 
   <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
-    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
+    <branch repo="local" module="elpa-2019.05.001.tar.gz" version="2019.05.001" hash="md5:520c83a70259538f54880016a9818aa8"/>
   </autotools>
 
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
+    <branch repo="local" module="elpa-2019.05.001.tar.gz" version="2019.05.001" hash="md5:520c83a70259538f54880016a9818aa8"/>
   </autotools>
   
   <cmake id="NTPoly" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
