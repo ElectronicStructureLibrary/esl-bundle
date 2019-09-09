@@ -1,0 +1,12 @@
+diff -ru pexsi_v1.2.0_orig/cmake/modules/FindMETIS.cmake pexsi_v1.2.0/cmake/modules/FindMETIS.cmake
+--- pexsi_v1.2.0_orig/cmake/modules/FindMETIS.cmake	2019-09-09 11:48:26.901111085 +0200
++++ pexsi_v1.2.0/cmake/modules/FindMETIS.cmake	2019-09-09 11:48:36.905107540 +0200
+@@ -167,7 +167,7 @@
+ 
+   string( REGEX REPLACE ${idxwidth_pattern} 
+           "${METIS_IDXWIDTH_STRING}\\1"
+-          METIS_IDXWIDTH_STRING ${metis_idxwidth} )
++          METIS_IDXWIDTH_STRING "${metis_idxwidth}" )
+ 
+   if( ${METIS_IDXWIDTH_STRING} MATCHES "64" )
+     set( METIS_USES_ILP64 TRUE )

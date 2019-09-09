@@ -71,6 +71,16 @@
       <dep package="NTPoly"/>
     </dependencies>
   </cmake>
+
+  <cmake id="pexsi" cmakeargs='-Dsuperlu_dist_INCLUDE_DIR=$JHBUILD_PREFIX/include  -Dsuperlu_dist_LIBRARIES="-L$JHBUILD_PREFIX/lib -lsuperlu_dist"'>
+    <branch repo="local" module="pexsi_v1.2.0.tar.gz" version="1.2.0" hash="md5:dc6ceaf23a3caafe83c05ea4ad72198f">
+      <patch file="pexsi_find_metis.patch" strip="1"/>
+    </branch>
+    <dependencies>
+      <dep package="fakepc"/>
+      <dep package="superlu_dist"/>
+    </dependencies>
+  </cmake>
   
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
     <branch repo="local" module="scotch_6.0.0.tar.gz" version="6.0.0" hash="md5:ba117428c0a6cd97d0c93e8b872bb3fe">
