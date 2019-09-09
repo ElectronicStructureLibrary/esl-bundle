@@ -69,6 +69,7 @@
       <dep package="superlu_dist"/>
       <dep package="elpa-mpi"/>
       <dep package="NTPoly"/>
+      <dep package="pexsi"/>
     </dependencies>
   </cmake>
 
