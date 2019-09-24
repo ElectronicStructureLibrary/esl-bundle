@@ -2,7 +2,7 @@ stages:
   - test 
 
 opensuse-mpi:
-  image: drfaustroll/esl:opensuse-tumbleweed
+  image: eslib/esl:opensuse-tumbleweed
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -11,7 +11,7 @@ opensuse-mpi:
     - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
 
 opensuse-serial:
-  image: drfaustroll/esl:opensuse-tumbleweed
+  image: eslib/esl:opensuse-tumbleweed
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -20,37 +20,37 @@ opensuse-serial:
     - ./jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
 
 debian-mpi:
-  image: drfaustroll/esl:debian-latest
+  image: eslib/esl:debian-buster
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/debian-gcc-openmpi.rc build esl-bundle-mpi
 
 debian-serial:
-  image: drfaustroll/esl:debian-latest
+  image: eslib/esl:debian-buster
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/debian-gcc-serial.rc build esl-bundle
 
 ubuntu-mpi:
-  image: drfaustroll/esl:ubuntu-latest
+  image: eslib/esl:ubuntu-18.04
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/ubuntu-gcc-openmpi.rc build esl-bundle-mpi
 
 ubuntu-serial:
-  image: drfaustroll/esl:ubuntu-latest
+  image: eslib/esl:ubuntu-18.04
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/ubuntu-gcc-serial.rc build esl-bundle
 
 fedora-serial:
-  image: drfaustroll/esl:fedora-latest
+  image: eslib/esl:fedora-29
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/fedora-gcc-serial.rc build esl-bundle
 
 fedora-mpi:
-  image: drfaustroll/esl:fedora-latest
+  image: eslib/esl:fedora-29
   stage: test
   script:
     - export PATH=/usr/lib64/openmpi/bin:$PATH
