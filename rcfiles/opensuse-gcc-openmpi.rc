@@ -11,7 +11,7 @@ module_autogenargs['futile']=autogenargs+" --with-scalapack=scalapack --with-bla
 module_autogenargs['psolver']=autogenargs+" --with-scalapack=scalapack --with-blacs=blacs"
 module_autogenargs['fdf']=" FC=gfortran"
 
-module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99'"
+module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99' -DCMAKE_C_COMPILER='mpicc' -DCMAKE_CXX_COMPILER='mpicxx' -DCMAKE_Fortran_COMPILER='mpifort'"
 module_autogenargs['elpa-mpi']=autogenargs+" CFLAGS='-march=native' FCFLAGS='-ffree-line-length-none' "
 module_cmakeargs['elsi'] = "-DCMAKE_Fortran_COMPILER=mpifort -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_CXX_FLAGS='-std=c++11'"
 module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
