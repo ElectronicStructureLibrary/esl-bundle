@@ -2,7 +2,7 @@ stages:
   - test 
 
 opensuse-mpi:
-  image: eslib/esl:opensuse-tumbleweed
+  image: eslib/esl:opensuse-leap-15.1
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -11,7 +11,7 @@ opensuse-mpi:
     - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
 
 opensuse-serial:
-  image: eslib/esl:opensuse-tumbleweed
+  image: eslib/esl:opensuse-leap-15.1
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
