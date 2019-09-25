@@ -1,2 +1,2 @@
-docker tag fedora-esl:latest drfaustroll/esl:fedora-latest
-docker push drfaustroll/esl:fedora-latest  
+docker tag fedora-esl:29 eslib/esl:fedora-29
+docker push eslib/esl:fedora-29

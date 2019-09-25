@@ -2,4 +2,4 @@
 
 set -x
 
-docker build -t ubuntu-esl:latest . 
+docker build -t ubuntu-esl:18.04 . 

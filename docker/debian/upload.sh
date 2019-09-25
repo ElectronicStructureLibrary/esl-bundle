@@ -1,2 +1,2 @@
-docker tag debian-esl:latest drfaustroll/esl:debian-latest
-docker push drfaustroll/esl:debian-latest   
+docker tag debian-esl:buster eslib/esl:debian-buster
+docker push eslib/esl:debian-buster   

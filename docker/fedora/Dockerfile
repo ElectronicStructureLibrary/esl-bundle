@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM fedora:29
 
 RUN groupadd -g 9999 drFaustroll && useradd -r -u 9999 -g drFaustroll drFaustroll &&  mkdir /home/drFaustroll && chown -R \
 drFaustroll:drFaustroll /home/drFaustroll && dnf upgrade -y && dnf clean all && dnf -y install openmpi-devel cmake \

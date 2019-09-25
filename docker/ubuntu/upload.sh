@@ -1,2 +1,2 @@
-docker tag ubuntu-esl:latest drfaustroll/esl:ubuntu-latest
-docker push drfaustroll/esl:ubuntu-latest   
+docker tag ubuntu-esl:18.04 eslib/esl:ubuntu-18.04
+docker push eslib/esl:ubuntu-18.04

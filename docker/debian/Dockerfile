@@ -1,5 +1,4 @@
-FROM debian:latest
-#FROM opensuse-esl:tumbleweed
+FROM debian:buster
 
 RUN groupadd -g 999 drFaustroll && useradd -r -u 999 -g drFaustroll drFaustroll && mkdir /home/drFaustroll && chown -R drFaustroll:drFaustroll \ 
 /home/drFaustroll && apt update &&  apt install -y libscalapack-mpi-dev cmake make autoconf automake libtool \
