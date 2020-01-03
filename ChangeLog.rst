@@ -16,7 +16,7 @@ Fixed
 
 Changed
 -------
-
+- LibGridXC with autotoolized build system to 0.8.5.1.
 
 Changed
 -------
