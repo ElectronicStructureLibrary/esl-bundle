@@ -10,7 +10,7 @@
   <repository name="poupouille" type="tarball" href="https://poupouille.org/downloads/"/>
 
 
-  <cmake id="atompaw">
+  <cmake id="atompaw" use-ninja="no">
     <branch repo="poupouille" module="atompaw-4.0.1.0.tar.gz" version="4.0.1.0" hash="md5:2a58cd21a5696121741bf948e85eb797"/>
     <dependencies>
       <dep package="lapack"/>
@@ -18,7 +18,7 @@
     </dependencies>
   </cmake>
 
-  <cmake id="lapack">
+  <cmake id="lapack" use-ninja="no">
     <branch repo="poupouille" module="lapack-3.8.0.tar.gz" version="3.8.0" hash="md5:96591affdbf58c450d45c1daa540dbd2"/>
   </cmake>
 
