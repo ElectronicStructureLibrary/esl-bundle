@@ -21,21 +21,18 @@ __all__ = []
 __metaclass__ = type
 
 import os
-try:
-    import hashlib
-except ImportError:
-    import md5 as hashlib
-import urlparse
-import urllib2
+import hashlib
 import logging
+import zipfile
 
 from jhbuild.errors import FatalError, CommandError, BuildStateError
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
 from jhbuild.utils.cmds import has_command, get_output
 from jhbuild.modtypes import get_branch
 from jhbuild.utils.unpack import unpack_archive
-from jhbuild.utils import httpcache
+from jhbuild.utils import httpcache, _
 from jhbuild.utils.sxml import sxml
+from jhbuild.utils import urlutils
 
 
 class TarballRepository(Repository):
@@ -56,32 +53,35 @@ class TarballRepository(Repository):
 
     branch_xml_attrs = ['version', 'module', 'checkoutdir',
                         'size', 'md5sum', 'source-subdir',
-                        'hash']
+                        'hash', 'rename-tarball']
 
     def branch(self, name, version, module=None, checkoutdir=None,
                size=None, md5sum=None, hash=None, branch_id=None,
-               source_subdir=None):
+               source_subdir=None, rename_tarball=None):
         if name in self.config.branches:
             module = self.config.branches[name]
             if not module:
                 raise FatalError(_('branch for %(name)s has wrong override, check your %(filename)s') % \
-                                   {'name'     : name,
-                                    'filename' : self.config.filename})
+                                 {'name'     : name,
+                                  'filename' : self.config.filename})
         else:
             if module is None:
                 module = name
-            module = urlparse.urljoin(self.href, module)
+            module = urlutils.urljoin(self.href, module)
         module = module.replace('${version}', version)
         if checkoutdir is not None:
             checkoutdir = checkoutdir.replace('${version}', version)
         if size is not None:
             size = int(size)
-        if md5sum and (not hash or hashlib.__name__ == 'md5'):
+        if md5sum and not hash:
             hash = 'md5:' + md5sum
+        if rename_tarball is not None:
+            rename_tarball = rename_tarball.replace('${name}', name).replace('${version}', version)
         return TarballBranch(self, module=module, version=version,
                              checkoutdir=checkoutdir,
                              source_size=size, source_hash=hash,
-                             branch_id=branch_id, source_subdir=source_subdir)
+                             branch_id=branch_id, source_subdir=source_subdir,
+                             tarball_name=rename_tarball)
 
     def branch_from_xml(self, name, branchnode, repositories, default_repo):
         try:
@@ -90,7 +90,8 @@ class TarballRepository(Repository):
             raise FatalError(_('branch for %s is not correct, check the moduleset file.') % name)
         # patches represented as children of the branch node
         for childnode in branchnode.childNodes:
-            if childnode.nodeType != childnode.ELEMENT_NODE: continue
+            if childnode.nodeType != childnode.ELEMENT_NODE:
+                continue
             if childnode.nodeName == 'patch':
                 patchfile = childnode.getAttribute('file')
                 if childnode.hasAttribute('strip'):
@@ -110,7 +111,8 @@ class TarballBranch(Branch):
     """A class representing a Tarball."""
 
     def __init__(self, repository, module, version, checkoutdir,
-                 source_size, source_hash, branch_id, source_subdir=None):
+                 source_size, source_hash, branch_id, source_subdir=None,
+                 tarball_name=None):
         Branch.__init__(self, repository, module, checkoutdir)
         self.version = version
         self.source_size = source_size
@@ -119,15 +121,19 @@ class TarballBranch(Branch):
         self.quilt = None
         self.branch_id = branch_id
         self.source_subdir = source_subdir
+        self.tarball_name = tarball_name
 
+    @property
     def _local_tarball(self):
+        if self.tarball_name:
+            return os.path.join(self.config.tarballdir, self.tarball_name)
         basename = os.path.basename(self.module)
         if not basename:
             raise FatalError(_('URL has no filename component: %s') % self.module)
         localfile = os.path.join(self.config.tarballdir, basename)
         return localfile
-    _local_tarball = property(_local_tarball)
 
+    @property
     def raw_srcdir(self):
         if self.checkoutdir:
             return os.path.join(self.checkoutroot, self.checkoutdir)
@@ -150,17 +156,16 @@ class TarballBranch(Branch):
         if localdir.endswith('.src'):
             localdir = localdir[:-4]
         return localdir
-    raw_srcdir = property(raw_srcdir)
 
+    @property
     def srcdir(self):
         if self.source_subdir:
             return os.path.join(self.raw_srcdir, self.source_subdir)
         return self.raw_srcdir
-    srcdir = property(srcdir)
 
+    @property
     def branchname(self):
         return self.version
-    branchname = property(branchname)
 
     def _check_tarball(self):
         """Check whether the tarball has been downloaded correctly."""
@@ -196,6 +201,8 @@ class TarballBranch(Branch):
                 logging.warning(_('skipped hash check (missing support for %s)') % algo)
 
     def _download_tarball(self, buildscript, localfile):
+        if not os.access(self.config.tarballdir, os.R_OK|os.W_OK|os.X_OK):
+            raise FatalError(_('tarball dir (%s) must be writable') % self.config.tarballdir)
         """Downloads the tarball off the internet, using wget or curl."""
         extra_env = {
             'LD_LIBRARY_PATH': os.environ.get('UNMANGLED_LD_LIBRARY_PATH'),
@@ -218,20 +225,17 @@ class TarballBranch(Branch):
 
     def _download_and_unpack(self, buildscript):
         localfile = self._local_tarball
-        print localfile
         if not os.path.exists(self.config.tarballdir):
             try:
                 os.makedirs(self.config.tarballdir)
             except OSError:
                 raise FatalError(
                         _('tarball dir (%s) can not be created') % self.config.tarballdir)
-        if not os.access(self.config.tarballdir, os.R_OK|os.W_OK|os.X_OK):
-            raise FatalError(_('tarball dir (%s) must be writable') % self.config.tarballdir)
         try:
             self._check_tarball()
         except BuildStateError:
             # don't have the tarball, try downloading it and check again
-            res = self._download_tarball(buildscript, localfile)
+            self._download_tarball(buildscript, localfile)
             self._check_tarball()
 
         # now to unpack it
@@ -247,27 +251,29 @@ class TarballBranch(Branch):
         if self.patches:
             self._do_patches(buildscript)
 
-    def _do_patches(self, buildscript):
+    def _get_patch_files(self, buildscript):
+        patch_files = []
+
         # now patch the working tree
         for (patch, patchstrip) in self.patches:
             patchfile = ''
-            if urlparse.urlparse(patch)[0]:
+            if urlutils.urlparse(patch)[0]:
                 # patch name has scheme, get patch from network
                 try:
                     patchfile = httpcache.load(patch, nonetwork=buildscript.config.nonetwork)
-                except urllib2.HTTPError, e:
+                except urlutils.HTTPError as e:
                     raise BuildStateError(_('could not download patch (error: %s)') % e.code)
-                except urllib2.URLError, e:
+                except urlutils.URLError:
                     raise BuildStateError(_('could not download patch'))
             elif self.repository.moduleset_uri:
                 # get it relative to the moduleset uri, either in the same
                 # directory or a patches/ subdirectory
                 for patch_prefix in ('.', 'patches', '../patches'):
-                    uri = urlparse.urljoin(self.repository.moduleset_uri,
+                    uri = urlutils.urljoin(self.repository.moduleset_uri,
                             os.path.join(patch_prefix, patch))
                     try:
                         patchfile = httpcache.load(uri, nonetwork=buildscript.config.nonetwork)
-                    except Exception, e:
+                    except Exception:
                         continue
                     if not os.path.isfile(patchfile):
                         continue
@@ -292,6 +298,14 @@ class TarballBranch(Branch):
                 else:
                     raise CommandError(_('Failed to find patch: %s') % patch)
 
+            patch_files.append((patchfile, patch, patchstrip))
+
+        return patch_files
+
+    def _do_patches(self, buildscript):
+        # now patch the working tree
+        patch_files = self._get_patch_files(buildscript)
+        for (patchfile, patch, patchstrip) in patch_files:
             buildscript.set_action(_('Applying patch'), self, action_target=patch)
             # patchfile can be a relative file
             buildscript.execute('patch -p%d < "%s"'
@@ -317,6 +331,21 @@ class TarballBranch(Branch):
                             cwd=self.srcdir,
                             extra_env={'QUILT_PATCHES' : self.quilt.srcdir})
 
+    def _export(self, buildscript):
+        filename = os.path.basename(self.raw_srcdir) + '.zip'
+
+        if self.config.export_dir is not None:
+            path = os.path.join(self.config.export_dir, filename)
+        else:
+            path = os.path.join(self.checkoutroot, filename)
+
+        with zipfile.ZipFile(path, 'w') as zipped_path:
+            patch_files = self._get_patch_files(buildscript)
+            for (patchfile, patch, patchstrip) in patch_files:
+                zipped_path.write(patchfile, arcname='patches/' + patch)
+
+            zipped_path.write(self._local_tarball, arcname=os.path.basename(self._local_tarball))
+
     def checkout(self, buildscript):
         if self.checkout_mode == 'clobber':
             self._wipedir(buildscript, self.raw_srcdir)
@@ -324,6 +353,9 @@ class TarballBranch(Branch):
             self._download_and_unpack(buildscript)
         if self.quilt:
             self._quilt_checkout(buildscript)
+
+        if self.checkout_mode == 'export':
+            self._export(buildscript)
 
     def may_checkout(self, buildscript):
         if os.path.exists(self._local_tarball):
@@ -336,11 +368,11 @@ class TarballBranch(Branch):
         md5sum = hashlib.md5()
         if self.patches:
             for patch in self.patches:
-                md5sum.update(patch[0])
+                md5sum.update(patch[0].encode("utf-8"))
         if self.quilt:
             md5sum.update(get_output('quilt files',
                         cwd=self.srcdir,
-                        extra_env={'QUILT_PATCHES' : self.quilt.srcdir}))
+                        extra_env={'QUILT_PATCHES' : self.quilt.srcdir}).encode("utf-8"))
         return '%s-%s' % (self.version, md5sum.hexdigest())
 
     def to_sxml(self):

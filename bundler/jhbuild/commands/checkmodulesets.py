@@ -17,13 +17,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-
-
-import urllib2
-from optparse import make_option
 import logging
 
 import jhbuild.moduleset
+from jhbuild.utils import N_, _
 from jhbuild.commands import Command, register_command
 
 class cmd_checkmodulesets(Command):
@@ -32,8 +29,8 @@ class cmd_checkmodulesets(Command):
 
     def run(self, config, options, args, help=None):
         module_set = jhbuild.moduleset.load(config)
-        module_list = module_set.get_full_module_list \
-                          (warn_about_circular_dependencies = True)
+        module_list = module_set.get_full_module_list(
+            warn_about_circular_dependencies = True)
         for mod in module_list:
             if mod.type in ('meta', 'tarball'):
                 continue

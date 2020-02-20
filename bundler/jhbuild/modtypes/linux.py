@@ -26,7 +26,8 @@ import errno
 
 from jhbuild.errors import FatalError, BuildStateError
 from jhbuild.modtypes import \
-     register_module_type, MakeModule
+     register_module_type, MakeModule, get_branch
+from jhbuild.utils import _
 
 __all__ = [ 'LinuxModule' ]
 
@@ -114,8 +115,8 @@ class LinuxModule(MakeModule):
 
             try:
                 os.makedirs(os.path.join(self.branch.srcdir, 'build-' + kconfig.version))
-            except OSError, (e, msg):
-                if e != errno.EEXIST:
+            except OSError as e:
+                if e.errno != errno.EEXIST:
                     raise
 
             if kconfig.branch:
@@ -227,6 +228,7 @@ def get_kconfigs(node, repositories, default_repo):
     id = node.getAttribute('id')
 
     kconfigs = []
+    kconfig = None
 
     for childnode in node.childNodes:
         if childnode.nodeType != childnode.ELEMENT_NODE or childnode.nodeName != 'kconfig':
@@ -238,7 +240,7 @@ def get_kconfigs(node, repositories, default_repo):
                 repo = repositories[repo_name]
             except KeyError:
                 raise FatalError(_('Repository=%(missing)s not found for kconfig in linux id=%(linux_id)s. Possible repositories are %(possible)s'
-                                    % {'missing': repo_name, 'linux_id': id, 'possible': repositories}))
+                                   % {'missing': repo_name, 'linux_id': id, 'possible': repositories}))
         else:
             try:
                 repo = repositories[default_repo]
@@ -272,10 +274,9 @@ def parse_linux(node, config, uri, repositories, default_repo):
         makeargs = node.getAttribute('makeargs')
         makeargs = makeargs.replace('${prefix}', config.prefix)
 
-    dependencies, after, suggests = get_dependencies(node)[0:2]
     branch = get_branch(node, repositories, default_repo, config)
     kconfigs = get_kconfigs(node, repositories, default_repo)
 
-    return LinuxModule(id, branch, dependencies, after, suggests, kconfigs, makeargs)
+    return LinuxModule(id, branch, kconfigs, makeargs)
 
 register_module_type('linux', parse_linux)

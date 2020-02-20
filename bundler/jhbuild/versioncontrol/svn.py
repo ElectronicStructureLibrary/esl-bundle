@@ -17,20 +17,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
+
 __all__ = []
 __metaclass__ = type
 
 import os
-import urlparse
 import subprocess
 
 from jhbuild.errors import CommandError, BuildStateError
 from jhbuild.utils.cmds import get_output, check_version
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import inpath, _, urlutils, udecode
 from jhbuild.utils.sxml import sxml
-
-import bzr, git
+from jhbuild.utils.urlutils import urlparse_mod
 
 svn_one_five = None # is this svn 1.5
 
@@ -42,14 +42,14 @@ def _make_uri(repo, path):
 
 # Make sure that the urlparse module considers svn:// and svn+ssh://
 # schemes to be netloc aware and set to allow relative URIs.
-if 'svn' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('svn')
-if 'svn' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('svn')
-if 'svn+ssh' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('svn+ssh')
-if 'svn+ssh' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('svn+ssh')
+if 'svn' not in urlparse_mod.uses_netloc:
+    urlparse_mod.uses_netloc.append('svn')
+if 'svn' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('svn')
+if 'svn+ssh' not in urlparse_mod.uses_netloc:
+    urlparse_mod.uses_netloc.append('svn+ssh')
+if 'svn+ssh' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('svn+ssh')
 
 def get_svn_extra_env():
     # we run Subversion in the C locale, because Subversion localises
@@ -65,18 +65,20 @@ def get_info(filename):
         ['svn', 'info', filename], extra_env=get_svn_extra_env())
     ret = {}
     for line in output.splitlines():
-        if ':' not in line: continue
+        if ':' not in line:
+            continue
         key, value = line.split(':', 1)
         ret[key.lower().strip()] = value.strip()
     return ret
 
 def get_subdirs(url):
-    print _("Getting SVN subdirs: this operation might be long...")
+    print(_("Getting SVN subdirs: this operation might be long..."))
     output = get_output(
         ['svn', 'ls', '-R', url], extra_env=get_svn_extra_env())
     ret = []
     for line in output.splitlines():
-        if not line[-1] == '/': continue
+        if not line[-1] == '/':
+            continue
         ret.append (line)
     return ret
 
@@ -85,7 +87,8 @@ def get_externals(url):
             extra_env=get_svn_extra_env())
     ret = {}
     for line in output.splitlines():
-        if ' ' not in line: continue
+        if ' ' not in line:
+            continue
         key, value = line.split(' ')
         ret[key.strip()] = value
     return ret
@@ -125,6 +128,8 @@ class SubversionRepository(Repository):
     branch_xml_attrs = ['module', 'checkoutdir', 'revision', 'tag']
 
     def branch(self, name, module=None, checkoutdir=None, revision=None, tag=None):
+        from . import bzr, git
+
         module_href = None
         if name in self.config.branches:
             if self.config.branches[name]:
@@ -160,9 +165,9 @@ class SubversionRepository(Repository):
 
         # workaround for svn client not handling '..' in URL (#560246, #678869)
         if os.name != 'nt':
-            splitted_href = list(urlparse.urlsplit(module_href))
+            splitted_href = list(urlutils.urlsplit(module_href))
             splitted_href[2] = os.path.abspath(splitted_href[2])
-            module_href = urlparse.urlunsplit(splitted_href)
+            module_href = urlutils.urlunsplit(splitted_href)
 
         if self.svn_program == 'bzr' and not revision:
             return bzr.BzrBranch(self, module_href, checkoutdir)
@@ -174,6 +179,9 @@ class SubversionRepository(Repository):
     def to_sxml(self):
         return [sxml.repository(type='svn', name=self.name, href=self.href)]
 
+    def get_sysdeps(self):
+        return ['svn']
+
 
 class SubversionBranch(Branch):
     """A class representing a Subversion branch"""
@@ -183,17 +191,17 @@ class SubversionBranch(Branch):
         self.module_name = module_name
         self.revision = revision
 
+    @property
     def srcdir(self):
         if self.checkoutdir:
             return os.path.join(self.checkoutroot, self.checkoutdir)
         else:
             return os.path.join(self.checkoutroot,
                                 os.path.basename(self.module))
-    srcdir = property(srcdir)
 
+    @property
     def branchname(self):
         return self.revision
-    branchname = property(branchname)
 
     def exists(self):
         try:
@@ -201,7 +209,7 @@ class SubversionBranch(Branch):
                 'LD_LIBRARY_PATH': os.environ.get('UNMANGLED_LD_LIBRARY_PATH'),
                 })
             return True
-        except:
+        except CommandError:
             return False
 
     def _export(self, buildscript):
@@ -268,11 +276,11 @@ class SubversionBranch(Branch):
 
         uri = get_uri(outputdir)
 
-        if urlparse.urlparse(uri)[:2] != urlparse.urlparse(self.module)[:2]:
+        if urlutils.urlparse(uri)[:2] != urlutils.urlparse(self.module)[:2]:
             # server and protocol changed, probably because user changed
             # svnroots[] config variable.
-            new_uri = urlparse.urlunparse(
-                    urlparse.urlparse(self.module)[:2] + urlparse.urlparse(uri)[2:])
+            new_uri = urlutils.urlunparse(
+                    urlutils.urlparse(self.module)[:2] + urlutils.urlparse(uri)[2:])
             cmd = ['svn', 'switch', '--relocate', uri, new_uri, '.']
             buildscript.execute(cmd, 'svn', cwd=outputdir,
                     extra_env=get_svn_extra_env())
@@ -303,8 +311,9 @@ class SubversionBranch(Branch):
         try:
             output = subprocess.Popen(['svn', 'info', '-R'],
                     stdout = subprocess.PIPE, **kws).communicate()[0]
-        except OSError, e:
+        except OSError as e:
             raise CommandError(str(e))
+        output = udecode(output)
         if '\nConflict' in output:
             raise CommandError(_('Error checking for conflicts'))
 
@@ -341,9 +350,9 @@ class SubversionBranch(Branch):
 
     def to_sxml(self):
         return (call_with_info(lambda rev:
-                                   [sxml.branch(repo=self.repository.name,
-                                                module=self.module,
-                                                revision=rev)],
+                    [sxml.branch(repo=self.repository.name,
+                                 module=self.module,
+                                 revision=rev)],
                                self.srcdir, 'last changed rev')
                 or [sxml.branch(repo=self.repository.name,
                                 module=self.module)])

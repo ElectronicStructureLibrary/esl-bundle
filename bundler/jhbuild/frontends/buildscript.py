@@ -21,12 +21,14 @@
 import os
 import logging
 import subprocess
+import sys
 
 from jhbuild.utils import trigger
-from jhbuild.utils import cmds
+from jhbuild.utils import cmds, _
 from jhbuild.errors import FatalError, CommandError, SkipToPhase, SkipToEnd
+from jhbuild.utils.compat import string_types
 
-class BuildScript:
+class BuildScript(object):
     def __init__(self, config, module_list=None, module_set=None):
         if self.__class__ is BuildScript:
             raise NotImplementedError('BuildScript is an abstract base class')
@@ -59,12 +61,21 @@ class BuildScript:
             if not os.access(self.config.copy_dir, os.R_OK|os.W_OK|os.X_OK):
                 raise FatalError(_('checkout copy dir (%s) must be writable') % self.config.copy_dir)
 
+        if self.config.export_dir and not os.path.exists(self.config.export_dir):
+            try:
+                os.makedirs(self.config.export_dir)
+            except OSError:
+                raise FatalError(
+                        _('checkout export dir (%s) can not be created') % self.config.export_dir)
+            if not os.access(self.config.export_dir, os.R_OK|os.W_OK|os.X_OK):
+                raise FatalError(_('checkout export dir (%s) must be writable') % self.config.export_dir)
+
         self.subprocess_nice_args = []
         if config.nice_build:
             chrt_args = ['chrt', '--idle', '0']
             devnull = open(os.devnull, 'w')
             if (cmds.has_command('chrt') and
-                subprocess.call(chrt_args + ['true'], stdout=devnull, stderr=devnull) == 0):
+                    subprocess.call(chrt_args + ['true'], stdout=devnull, stderr=devnull) == 0):
                 self.subprocess_nice_args.extend(chrt_args)
 
             elif cmds.has_command('nice'):
@@ -80,7 +91,7 @@ class BuildScript:
 
     def _prepare_execute(self, command):
         if self.subprocess_nice_args:
-            if isinstance(command, (str, unicode)):
+            if isinstance(command, string_types):
                 command = ' '.join(self.subprocess_nice_args) + ' ' + command
             else:
                 command = self.subprocess_nice_args + command
@@ -99,7 +110,6 @@ class BuildScript:
         self.start_build()
         
         failures = [] # list of modules that couldn't be built
-        successes = []
         self.module_num = 0
         for module in self.modulelist:
             self.module_num = self.module_num + 1
@@ -140,7 +150,6 @@ class BuildScript:
             # The force_phase variable flags that condition.
             force_phase = False
 
-            print module.name,':',build_phases
             while num_phase < len(build_phases):
                 last_phase, phase = phase, build_phases[num_phase]
                 try:
@@ -161,7 +170,7 @@ class BuildScript:
                 try:
                     try:
                         error, altphases = module.run_phase(self, phase)
-                    except SkipToPhase, e:
+                    except SkipToPhase as e:
                         try:
                             num_phase = build_phases.index(e.phase)
                         except ValueError:
@@ -173,6 +182,9 @@ class BuildScript:
                     self._end_phase_internal(module.name, phase, error)
 
                 if error:
+                    if self.config.exit_on_error:
+                        sys.exit(1)
+
                     try:
                         nextphase = build_phases[num_phase+1]
                     except IndexError:
@@ -220,7 +232,7 @@ class BuildScript:
             return 1
         return 0
 
-    def run_triggers(self, module_name):
+    def run_triggers(self, modules):
         """See triggers/README."""
         assert 'JHBUILD_PREFIX' in os.environ
         if os.environ.get('JHBUILD_TRIGGERS') is not None:
@@ -230,11 +242,15 @@ class BuildScript:
         else:
             trigger_path = os.path.join(SRCDIR, 'triggers')
         all_triggers = trigger.load_all(trigger_path)
-        triggers_to_run = []
-        for trig in all_triggers:
+
+        triggers_to_run = set()
+
+        for module_name in modules:
             # Skip if somehow the module isn't really installed
             if self.moduleset.packagedb.installdate(module_name) is None:
+                logging.warning(_('Ignoring uninstalled package: %s') % (module_name, ))
                 continue
+
             pkg = self.moduleset.packagedb.get(module_name)
             assert pkg is not None
 
@@ -243,14 +259,19 @@ class BuildScript:
             if pkg.manifest is None:
                 continue
 
-            if trig.matches(pkg.manifest):
-                triggers_to_run.append(trig)
+            for trig in all_triggers:
+                if trig.matches(pkg.manifest):
+                    triggers_to_run.add(trig)
+
+        if not modules:
+            triggers_to_run = set(all_triggers)
+
         for trig in triggers_to_run:
             logging.info(_('Running post-installation trigger script: %r') % (trig.name, ))
             try:
                 self.execute(trig.command())
-            except CommandError, err:
-                if isinstance(trig.command(), (str, unicode)):
+            except CommandError as err:
+                if isinstance(trig.command(), string_types):
                     displayed_command = trig.command()
                 else:
                     displayed_command = ' '.join(trig.command())
@@ -286,7 +307,7 @@ class BuildScript:
         # remove duplicates
         phases = []
         for phase in tmp_phases:
-            if not phase in phases:
+            if phase not in phases:
                 phases.append(phase)
 
         return phases
@@ -307,17 +328,15 @@ class BuildScript:
         pass
     def start_phase(self, module, phase):
         '''Hook to perform actions before starting a particular build phase.'''
-        print 'Starting "',phase,'for module "',module,'"...'
         pass
     def end_phase(self, module, phase, error):
         '''Hook to perform actions after finishing a particular build phase.
         The argument is a string containing the error text if something
         went wrong.'''
-        print '...ending phase',phase,"module",module," stderr:",error
         pass
     def _end_phase_internal(self, module, phase, error):
         if error is None and phase == 'install':
-            self.run_triggers(module)
+            self.run_triggers([module])
         self.end_phase(module, phase, error)
 
     def message(self, msg, module_num=-1):

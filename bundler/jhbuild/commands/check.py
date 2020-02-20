@@ -21,12 +21,13 @@ from optparse import make_option
 
 import jhbuild.moduleset
 import jhbuild.frontends
-from jhbuild.errors import UsageError, FatalError
+from jhbuild.utils import N_, _
+from jhbuild.errors import FatalError
 from jhbuild.commands import Command, register_command
 
 
 class cmd_check(Command):
-    doc = _('Create tar packages for all modules')
+    doc = N_('Create tar packages for all modules')
 
     name = 'check'
     usage_args = '[ options ... ] [ modules ... ]'

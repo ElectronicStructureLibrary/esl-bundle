@@ -21,16 +21,11 @@ __all__ = []
 __metaclass__ = type
 
 import os
-import urlparse
-
-try:
-    import hashlib
-except ImportError:
-    import md5 as hashlib
+import hashlib
 
 from jhbuild.errors import FatalError, CommandError
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import inpath, _, urlutils
 
 class DarcsRepository(Repository):
     """A class representing a Darcs repository.
@@ -53,29 +48,29 @@ class DarcsRepository(Repository):
             module = self.config.branches[name]
             if not module:
                 raise FatalError(_('branch for %(name)s has wrong override, check your %(filename)s') % \
-                                   {'name'     : name,
-                                    'filename' : self.config.filename})
+                                 {'name'     : name,
+                                  'filename' : self.config.filename})
         else:
             if module is None:
                 module = name
-            module = urlparse.urljoin(self.href, module)
+            module = urlutils.urljoin(self.href, module)
         return DarcsBranch(self, module, checkoutdir)
 
 
 class DarcsBranch(Branch):
     """A class representing a Darcs branch."""
 
+    @property
     def srcdir(self):
         if self.checkoutdir:
             return os.path.join(self.checkoutroot, self.checkoutdir)
         else:
             return os.path.join(self.checkoutroot,
                                 os.path.basename(self.module))
-    srcdir = property(srcdir)
 
+    @property
     def branchname(self):
         return None
-    branchname = property(branchname)
 
     def _checkout(self, buildscript):
         cmd = ['darcs', 'get', self.module]
@@ -101,9 +96,9 @@ class DarcsBranch(Branch):
             path = os.path.join(self.srcdir, filename)
             try:
                 stat = os.stat(path)
-            except OSError, e:
+            except OSError:
                 continue
-            os.chmod(path, stat.st_mode | 0111)
+            os.chmod(path, stat.st_mode | 0o111)
 
     def checkout(self, buildscript):
         if not inpath('darcs', os.environ['PATH'].split(os.pathsep)):
@@ -116,6 +111,6 @@ class DarcsBranch(Branch):
         # this
         if not os.path.exists(self.srcdir):
             return None
-        return hashlib.md5(file(os.path.join(self.srcdir, '_darcs', 'inventory')).read()).hexdigest()
+        return hashlib.md5(open(os.path.join(self.srcdir, '_darcs', 'inventory')).read()).hexdigest()
 
 register_repo_type('darcs', DarcsRepository)

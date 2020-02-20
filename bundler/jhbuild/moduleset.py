@@ -21,18 +21,13 @@ from __future__ import generators
 
 import os
 import sys
-import urlparse
 import logging
+import xml.dom.minidom
+import xml.parsers.expat
 
-from jhbuild.errors import UsageError, FatalError, DependencyCycleError, \
+from jhbuild.utils import _
+from jhbuild.errors import UsageError, FatalError, \
              CommandError, UndefinedRepositoryError
-
-try:
-    import xml.dom.minidom
-    import xml.parsers.expat
-except ImportError:
-    raise FatalError(_('Python XML packages are required but could not be found'))
-
 from jhbuild import modtypes
 from jhbuild.versioncontrol import get_repo_type
 from jhbuild.utils import httpcache
@@ -42,9 +37,26 @@ from jhbuild.modtypes.testmodule import TestModule
 from jhbuild.modtypes.systemmodule import SystemModule
 from jhbuild.versioncontrol.tarball import TarballBranch
 from jhbuild.utils import systeminstall
-from jhbuild.utils import fileutils
+from jhbuild.utils import fileutils, urlutils
+from jhbuild.utils.compat import iteritems
 
 __all__ = ['load', 'load_tests', 'get_default_repo']
+
+virtual_sysdeps = [
+    'automake',
+    'bzr',
+    'cmake',
+    'cvs',
+    'git',
+    'gmake',
+    'hg',
+    'libtool',
+    'make',
+    'ninja',
+    'pkg-config',
+    'svn',
+    'xmlcatalog'
+]
 
 _default_repo = None
 def get_default_repo():
@@ -71,7 +83,7 @@ class ModuleSet:
 
     def get_module(self, module_name, ignore_case = False):
         module_name = module_name.rstrip(os.sep)
-        if self.modules.has_key(module_name) or not ignore_case:
+        if module_name in self.modules or not ignore_case:
             return self.modules[module_name]
         module_name_lower = module_name.lower()
         for module in self.modules.keys():
@@ -92,8 +104,8 @@ class ModuleSet:
         return module_list
 
     def get_full_module_list(self, module_names='all', skip=[],
-                                include_suggests=True, include_afters=False,
-                                warn_about_circular_dependencies=False):
+                             include_suggests=True, include_afters=False,
+                             warn_about_circular_dependencies=True):
 
         def dep_resolve(node, resolved, seen, after):
             ''' Recursive depth-first search of the dependency tree. Creates
@@ -113,12 +125,12 @@ class ModuleSet:
                              if not after_module]
             for edge_name in edges:
                 edge = self.modules.get(edge_name)
-                if edge == None:
+                if edge is None:
                     if node not in [i[0] for i in resolved]:
                         self._warn(_('%(module)s has a dependency on unknown'
                                      ' "%(invalid)s" module') % \
-                                         {'module'  : node.name,
-                                          'invalid' : edge_name})
+                                   {'module'  : node.name,
+                                    'invalid' : edge_name})
                 elif edge_name not in skip and edge not in resolved_deps:
                     if edge in seen:
                         # circular dependency detected
@@ -152,7 +164,7 @@ class ModuleSet:
                 elif not after:
                     # a dependency exists for an after, flag to keep
                     for index, item in enumerate(resolved):
-                        if item[1] == True and item[0] == node:
+                        if item[1] is True and item[0] == node:
                             resolved[index] = (node, False)
 
         if module_names == 'all':
@@ -161,7 +173,7 @@ class ModuleSet:
             # remove skip modules from module_name list
             modules = [self.get_module(module, ignore_case = True) \
                        for module in module_names if module not in skip]
-        except KeyError, e:
+        except KeyError as e:
             raise UsageError(_("A module called '%s' could not be found.") % e)
 
         resolved = []
@@ -230,8 +242,7 @@ class ModuleSet:
 
         return_list = []
 
-        installed_pkgconfig = systeminstall.get_installed_pkgconfigs \
-                                (self.config)
+        installed_pkgconfig = systeminstall.get_installed_pkgconfigs(self.config)
 
         for module in modules:
             if isinstance(module, SystemModule):
@@ -262,7 +273,6 @@ class ModuleSet:
 
     def write_dot(self, modules=None, fp=sys.stdout, suggests=False, clusters=False):
         from jhbuild.modtypes import MetaModule
-        from jhbuild.modtypes.autotools import AutogenModule
         from jhbuild.versioncontrol.tarball import TarballBranch
         
         if modules is None:
@@ -303,15 +313,15 @@ class ModuleSet:
             
             for dep in self.modules[modname].dependencies:
                 fp.write('  "%s" -> "%s";\n' % (modname, dep))
-                if not inlist.has_key(dep):
+                if dep not in inlist:
                     modules.append(dep)
                 inlist[dep] = None
 
             if suggests:
                 for dep in self.modules[modname].after + self.modules[modname].suggests:
-                    if self.modules.has_key(dep):
+                    if dep in self.modules:
                         fp.write('  "%s" -> "%s" [style=dotted];\n' % (modname, dep))
-                        if not inlist.has_key(dep):
+                        if dep not in inlist:
                             modules.append(dep)
                         inlist[dep] = None
 
@@ -334,7 +344,7 @@ class ModuleSet:
         if self.raise_exception_on_warning:
             raise UsageError(msg)
         else:
-            logging.warn(msg)
+            logging.warning(msg)
 
 
 def load(config, uri=None):
@@ -354,16 +364,29 @@ def load(config, uri=None):
                 uri = os.path.join(config.modulesets_dir, uri + '.modules')
             elif os.path.isfile(os.path.join(config.modulesets_dir, uri)):
                 uri = os.path.join(config.modulesets_dir, uri)
-        elif not urlparse.urlparse(uri)[0]:
-            uri = 'http://git.gnome.org/browse/jhbuild/plain/modulesets' \
+        elif not urlutils.urlparse(uri)[0]:
+            uri = 'https://gitlab.gnome.org/GNOME/jhbuild/raw/master/modulesets' \
                   '/%s.modules' % uri
         ms.modules.update(_parse_module_set(config, uri).modules)
+
+    # create virtual sysdeps
+    system_repo_class = get_repo_type('system')
+    virtual_repo = system_repo_class(config, 'virtual-sysdeps')
+    virtual_branch = virtual_repo.branch('virtual-sysdeps') # just reuse this
+    for name in virtual_sysdeps:
+        # don't override it if it's already there
+        if name in ms.modules:
+            continue
+
+        virtual = SystemModule.create_virtual(name, virtual_branch, 'path', name)
+        ms.add(virtual)
+
     return ms
 
 def load_tests (config, uri=None):
     ms = load (config, uri)
     ms_tests = ModuleSet(config = config)
-    for app, module in ms.modules.iteritems():
+    for app, module in iteritems(ms.modules):
         if module.__class__ == TestModule:
             ms_tests.modules[app] = module
     return ms_tests
@@ -424,17 +447,22 @@ def _handle_conditions(config, element):
 def _parse_module_set(config, uri):
     try:
         filename = httpcache.load(uri, nonetwork=config.nonetwork, age=0)
-    except Exception, e:
+    except Exception as e:
         raise FatalError(_('could not download %s: %s') % (uri, e))
     filename = os.path.normpath(filename)
     try:
         document = xml.dom.minidom.parse(filename)
-    except IOError, e:
+    except IOError as e:
         raise FatalError(_('failed to parse %s: %s') % (filename, e))
-    except xml.parsers.expat.ExpatError, e:
+    except xml.parsers.expat.ExpatError as e:
         raise FatalError(_('failed to parse %s: %s') % (uri, e))
 
     assert document.documentElement.nodeName == 'moduleset'
+
+    for node in _child_elements_matching(document.documentElement, ['redirect']):
+        new_url = node.getAttribute('href')
+        logging.info('moduleset is now located at %s', new_url)
+        return _parse_module_set(config, new_url)
 
     _handle_conditions(config, document.documentElement)
 
@@ -474,7 +502,7 @@ def _parse_module_set(config, uri):
                     if mirror.hasAttribute(attr):
                         kws[attr.replace('-','_')] = mirror.getAttribute(attr)
                 mirrors[mirror_type] = mirror_class(config, name, **kws)
-                #mirrors[mirror_type].moduleset_uri = uri
+                # mirrors[mirror_type].moduleset_uri = uri
             setattr(repositories[name], "mirrors", mirrors)
         if node.nodeName == 'cvsroot':
             cvsroot = node.getAttribute('root')
@@ -499,12 +527,12 @@ def _parse_module_set(config, uri):
     for node in _child_elements(document.documentElement):
         if node.nodeName == 'include':
             href = node.getAttribute('href')
-            inc_uri = urlparse.urljoin(uri, href)
+            inc_uri = urlutils.urljoin(uri, href)
             try:
                 inc_moduleset = _parse_module_set(config, inc_uri)
             except UndefinedRepositoryError:
                 raise
-            except FatalError, e:
+            except FatalError as e:
                 if inc_uri[0] == '/':
                     raise e
                 # look up in local modulesets
@@ -544,7 +572,7 @@ def warn_local_modulesets(config):
         # checkout was not done via git
         return
 
-    if type(config.moduleset) == type([]):
+    if isinstance(config.moduleset, list):
         modulesets = config.moduleset
     else:
         modulesets = [ config.moduleset ]

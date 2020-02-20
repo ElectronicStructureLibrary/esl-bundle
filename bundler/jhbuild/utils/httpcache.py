@@ -30,20 +30,14 @@ and draws ideas from feedparser.py.  Strategies include:
 
 import os
 import sys
-import urllib2
-import urlparse
 import time
-import rfc822
-import StringIO
-try:
-    import gzip
-except ImportError:
-    gzip = None
+from email.utils import parsedate_tz, mktime_tz
+import gzip
+import xml.dom.minidom
 
-try:
-    import xml.dom.minidom
-except ImportError:
-    raise SystemExit, _('Python XML packages are required but could not be found')
+from jhbuild.utils import _
+from jhbuild.utils import urlutils
+from jhbuild.utils.compat import BytesIO
 
 def _parse_isotime(string):
     if string[-1] != 'Z':
@@ -55,9 +49,9 @@ def _format_isotime(tm):
     return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(tm))
 
 def _parse_date(date):
-    tm = rfc822.parsedate_tz(date)
+    tm = parsedate_tz(date)
     if tm:
-        return rfc822.mktime_tz(tm)
+        return mktime_tz(tm)
     return 0
 
 class CacheEntry:
@@ -89,15 +83,17 @@ class Cache:
         cindex = os.path.join(self.cachedir, 'index.xml')
         try:
             document = xml.dom.minidom.parse(cindex)
-        except:
+        except Exception:
             return # treat like an empty cache
         if document.documentElement.nodeName != 'cache':
             document.unlink()
             return # doesn't look like a cache
 
         for node in document.documentElement.childNodes:
-            if node.nodeType != node.ELEMENT_NODE: continue
-            if node.nodeName != 'entry': continue
+            if node.nodeType != node.ELEMENT_NODE:
+                continue
+            if node.nodeName != 'entry':
+                continue
             uri = node.getAttribute('uri')
             local = str(node.getAttribute('local'))
             if node.hasAttribute('modified'):
@@ -146,9 +142,10 @@ class Cache:
         '''picks a unique name for a new entry in the cache.
         Very simplistic.'''
         # get the basename from the URI
-        parts = urlparse.urlparse(uri, allow_fragments=False)
+        parts = urlutils.urlparse(uri, allow_fragments=False)
         base = parts[2].split('/')[-1]
-        if not base: base = 'index.html'
+        if not base:
+            base = 'index.html'
 
         is_unique = False
         while not is_unique:
@@ -165,7 +162,7 @@ class Cache:
         '''Downloads the file associated with the URI, and returns a local
         file name for contents.'''
         # pass file URIs straight through -- no need to cache them
-        parts = urlparse.urlparse(uri)
+        parts = urlutils.urlparse(uri)
         if parts[0] in ('', 'file'):
             return parts[2]
         if sys.platform.startswith('win') and uri[1] == ':':
@@ -184,9 +181,8 @@ class Cache:
         if nonetwork:
             raise RuntimeError(_('file not in cache, but not allowed to check network'))
 
-        request = urllib2.Request(uri)
-        if gzip:
-            request.add_header('Accept-encoding', 'gzip')
+        request = urlutils.Request(uri)
+        request.add_header('Accept-encoding', 'gzip')
         if entry:
             if entry.modified:
                 request.add_header('If-Modified-Since', entry.modified)
@@ -194,14 +190,14 @@ class Cache:
                 request.add_header('If-None-Match', entry.etag)
 
         try:
-            response = urllib2.urlopen(request)
+            response = urlutils.urlopen(request)
 
             # get data, and gunzip it if it is encoded
             data = response.read()
-            if gzip and response.headers.get('Content-Encoding', '') == 'gzip':
+            if response.headers.get('Content-Encoding', '') == 'gzip':
                 try:
-                    data = gzip.GzipFile(fileobj=StringIO.StringIO(data)).read()
-                except:
+                    data = gzip.GzipFile(fileobj=BytesIO(data)).read()
+                except Exception:
                     data = ''
 
             expires = response.headers.get('Expires')
@@ -214,7 +210,7 @@ class Cache:
             fp = open(filename, 'wb')
             fp.write(data)
             fp.close()
-        except urllib2.HTTPError, e:
+        except urlutils.HTTPError as e:
             if e.code == 304: # not modified; update validated
                 expires = e.hdrs.get('Expires')
                 filename = os.path.join(self.cachedir, entry.local)
@@ -238,5 +234,6 @@ def load(uri, nonetwork=False, age=None):
     '''Downloads the file associated with the URI, and returns a local
     file name for contents.'''
     global _cache
-    if not _cache: _cache = Cache()
+    if not _cache:
+        _cache = Cache()
     return _cache.load(uri, nonetwork=nonetwork, age=age)

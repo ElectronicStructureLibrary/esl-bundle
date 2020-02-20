@@ -18,32 +18,59 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
+
 import sys
 import os
 import signal
 import subprocess
-import locale
+import unicodedata
 
 from jhbuild.frontends import buildscript
 from jhbuild.utils import cmds
 from jhbuild.utils import trayicon
 from jhbuild.utils import notify
+from jhbuild.utils import uprint, _, uinput
 from jhbuild.errors import CommandError, FatalError
+from jhbuild.utils.compat import string_types
 
 term = os.environ.get('TERM', '')
 is_xterm = term.find('xterm') >= 0 or term == 'rxvt'
 del term
 
-try: t_bold = cmds.get_output(['tput', 'bold'])
-except: t_bold = ''
-try: t_reset = cmds.get_output(['tput', 'sgr0'])
-except: t_reset = ''
-t_colour = [''] * 16
+try:
+    t_bold = cmds.get_output(['tput', 'bold'])
+except CommandError:
+    try:
+        t_bold = cmds.get_output(['tput', 'md'])
+    except CommandError:
+        t_bold = u''
+
+try:
+    t_reset = cmds.get_output(['tput', 'sgr0'])
+except CommandError:
+    try:
+        t_reset = cmds.get_output(['tput', 'me'])
+    except CommandError:
+        t_reset = u''
+
+t_colour = [u''] * 16
 try:
     for i in range(8):
         t_colour[i] = cmds.get_output(['tput', 'setf', '%d' % i])
         t_colour[i+8] = t_bold + t_colour[i]
-except: pass
+except CommandError:
+    try:
+        for index, i in enumerate([0, 4, 2, 6, 1, 5, 3, 7]):
+            t_colour[index] = cmds.get_output(['tput', 'setaf', '%d' % i])
+            t_colour[index+8] = t_bold + t_colour[index]
+    except CommandError:
+        try:
+            for index, i in enumerate([0, 4, 2, 6, 1, 5, 3, 7]):
+                t_colour[index] = cmds.get_output(['tput', 'AF', '%d' % i])
+                t_colour[index+8] = t_bold + t_colour[index]
+        except CommandError:
+            pass
 
 
 user_shell = os.environ.get('SHELL', '/bin/sh')
@@ -55,7 +82,7 @@ except ImportError:
 else:
     try:
         curses.setupterm()
-    except:
+    except curses.error:
         pass
 
 # tray icon stuff ...
@@ -70,7 +97,7 @@ phase_map = {
     'unpack':         'checkout.png',
     'patch':          'checkout.png',
     'configure':      'configure.png',
-    #'clean':          'clean.png',
+    # 'clean':          'clean.png',
     'build':          'build.png',
     'check':          'check.png',
     'install':        'install.png',
@@ -102,7 +129,7 @@ class TerminalBuildScript(buildscript.BuildScript):
             self.display_status_line(progress_percent, module_num, msg)
 
         if is_xterm:
-            sys.stdout.write('\033]0;jhbuild:%s%s\007' % (uencode(msg), progress))
+            uprint('\033]0;jhbuild:%s%s\007' % (msg, progress), end='', file=sys.stdout)
             sys.stdout.flush()
         self.trayicon.set_tooltip('%s%s' % (msg, progress))
 
@@ -134,9 +161,9 @@ class TerminalBuildScript(buildscript.BuildScript):
         else:
             output += ' ' * (columns-text_width)
 
-        sys.stdout.write('\r'+output)
+        uprint('\r'+output, end='')
         if self.is_end_of_build:
-            sys.stdout.write('\n')
+            uprint()
         sys.stdout.flush()
 
 
@@ -156,7 +183,7 @@ class TerminalBuildScript(buildscript.BuildScript):
             except OSError:
                 pass
 
-        if isinstance(command, (str, unicode)):
+        if isinstance(command, string_types):
             kws['shell'] = True
             print_args['command'] = command
         else:
@@ -173,14 +200,14 @@ class TerminalBuildScript(buildscript.BuildScript):
         if not self.config.quiet_mode:
             if self.config.print_command_pattern:
                 try:
-                    print self.config.print_command_pattern % print_args
-                except TypeError, e:
+                    print(self.config.print_command_pattern % print_args)
+                except TypeError as e:
                     raise FatalError('\'print_command_pattern\' %s' % e)
-                except KeyError, e:
+                except KeyError as e:
                     raise FatalError(_('%(configuration_variable)s invalid key'
                                        ' %(key)s' % \
                                        {'configuration_variable' :
-                                            '\'print_command_pattern\'',
+                                        '\'print_command_pattern\'',
                                         'key' : e}))
 
         kws['stdin'] = subprocess.PIPE
@@ -206,12 +233,13 @@ class TerminalBuildScript(buildscript.BuildScript):
 
         try:
             p = subprocess.Popen(command, **kws)
-        except OSError, e:
+        except OSError as e:
             raise CommandError(str(e))
 
         output = []
         if hint in ('cvs', 'svn', 'hg-update.py'):
             conflicts = []
+
             def format_line(line, error_output, conflicts = conflicts, output = output):
                 if line.startswith('C '):
                     conflicts.append(line)
@@ -220,16 +248,17 @@ class TerminalBuildScript(buildscript.BuildScript):
                     output.append(line)
                     return
 
-                if line[-1] == '\n': line = line[:-1]
+                if line[-1] == '\n':
+                    line = line[:-1]
 
                 if line.startswith('C '):
-                    print '%s%s%s' % (t_colour[12], line, t_reset)
+                    print('%s%s%s' % (t_colour[12], line, t_reset))
                 elif line.startswith('M '):
-                    print '%s%s%s' % (t_colour[10], line, t_reset)
+                    print('%s%s%s' % (t_colour[10], line, t_reset))
                 elif line.startswith('? '):
-                    print '%s%s%s' % (t_colour[8], line, t_reset)
+                    print('%s%s%s' % (t_colour[8], line, t_reset))
                 else:
-                    print line
+                    print(line)
 
             cmds.pprint_output(p, format_line)
             if conflicts:
@@ -238,7 +267,8 @@ class TerminalBuildScript(buildscript.BuildScript):
                     sys.stdout.write('%s  %s%s\n'
                                      % (t_colour[12], line, t_reset))
                 # make sure conflicts fail
-                if p.returncode == 0 and hint == 'cvs': p.returncode = 1
+                if p.returncode == 0 and hint == 'cvs':
+                    p.returncode = 1
         elif self.config.quiet_mode:
             def format_line(line, error_output, output = output):
                 output.append(line)
@@ -255,7 +285,7 @@ class TerminalBuildScript(buildscript.BuildScript):
         try:
             if p.wait() != 0:
                 if self.config.quiet_mode:
-                    print ''.join(output)
+                    print(''.join(output))
                 raise CommandError(_('########## Error running %s')
                                    % print_args['command'], p.returncode)
         except OSError:
@@ -278,8 +308,8 @@ class TerminalBuildScript(buildscript.BuildScript):
         else:
             self.message(_('the following modules were not built'))
             for module in failures:
-                print module,
-            print
+                print(module, end=' ')
+            print('')
 
     def handle_error(self, module, phase, nextphase, error, altphases):
         '''handle error during build'''
@@ -288,7 +318,7 @@ class TerminalBuildScript(buildscript.BuildScript):
         try:
             error_message = error.args[0]
             self.message('%s: %s' % (summary, error_message))
-        except:
+        except Exception:
             error_message = None
             self.message(summary)
         self.trayicon.set_icon(os.path.join(icondir, 'error.png'))
@@ -309,7 +339,7 @@ class TerminalBuildScript(buildscript.BuildScript):
         if not self.config.interact:
             return 'fail'
         while True:
-            print
+            print()
             uprint('  [1] %s' % _('Rerun phase %s') % phase)
             if nextphase:
                 uprint('  [2] %s' % _('Ignore error and continue to %s') % nextphase)
@@ -326,8 +356,7 @@ class TerminalBuildScript(buildscript.BuildScript):
                     altphase_label = altphase
                 uprint('  [%d] %s' % (i, _('Go to phase "%s"') % altphase_label))
                 i += 1
-            val = raw_input(uencode(_('choice: ')))
-            val = udecode(val)
+            val = uinput(_('choice: '))
             val = val.strip()
             if val == '1':
                 return phase
@@ -337,12 +366,26 @@ class TerminalBuildScript(buildscript.BuildScript):
                 return 'fail'
             elif val == '4':
                 cwd = os.getcwd()
+                builddir = module.get_builddir(self)
+                srcdir = module.get_srcdir(self)
                 try:
-                    os.chdir(module.get_builddir(self))
+                    os.chdir(builddir)
                 except OSError:
                     os.chdir(self.config.checkoutroot)
+                unlink_srcdir = False
+                try:
+                    if builddir != srcdir:
+                        os.symlink(srcdir, '.jhbuild-srcdir')
+                        unlink_srcdir = True
+                except OSError:
+                    pass
                 uprint(_('exit shell to continue with build'))
                 os.system(user_shell)
+                if unlink_srcdir:
+                    try:
+                        os.unlink('.jhbuild-srcdir')
+                    except OSError:
+                        pass
                 os.chdir(cwd) # restor working directory
             elif val == '5':
                 self.config.reload()
@@ -350,7 +393,7 @@ class TerminalBuildScript(buildscript.BuildScript):
                 try:
                     val = int(val)
                     selected_phase = altphases[val - nb_options]
-                except:
+                except (ValueError, IndexError):
                     uprint(_('invalid choice'))
                     continue
                 try:
@@ -359,10 +402,12 @@ class TerminalBuildScript(buildscript.BuildScript):
                 except AttributeError:
                     needs_confirmation = False
                 if needs_confirmation:
-                    val = raw_input(uencode(_('Type "yes" to confirm the action: ')))
-                    val = udecode(val)
+                    val = uinput(_('Type "yes" to confirm the action: '))
                     val = val.strip()
-                    if val.lower() in ('yes', _('yes').lower()):
+
+                    def normalize(s):
+                        return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').lower()
+                    if normalize(val) in ('yes', normalize(_('yes')), _('yes').lower()):
                         return selected_phase
                     continue
                 return selected_phase

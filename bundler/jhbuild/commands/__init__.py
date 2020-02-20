@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
+
 __metaclass__ = type
 __all__ = [
     'Command',
@@ -26,14 +28,16 @@ __all__ = [
 
 import optparse
 import sys
+import os
 
-from jhbuild.errors import UsageError, FatalError
-
+from jhbuild.errors import FatalError
+from jhbuild.utils import try_import_module, uprint, N_, _
+from jhbuild.utils.compat import iteritems
 
 class OptionParser(optparse.OptionParser):
     def exit(self, status=0, msg=None):
         if msg:
-            sys.stderr.write(uencode(msg))
+            uprint(msg, file=sys.stderr)
         sys.exit(status)
 
 
@@ -53,10 +57,17 @@ class Command:
 
     def parse_args(self, args):
         self.parser = OptionParser(
-            usage='%%prog %s %s' % (self.name, _(self.usage_args)),
-            description=_(self.doc))
+            usage='%%prog %s %s' % (self.name, _(self.usage_args) if self.usage_args else ''),
+            description=_(self.doc) if self.doc else '')
         self.parser.add_options(self.options)
         return self.parser.parse_args(args)
+
+    def get_cwd(self):
+        # Get symbolic link path when inside one
+        cwd = os.getenv('PWD')
+        if not cwd:
+            cwd = os.getcwd()
+        return cwd
 
     def run(self, config, options, args, help=None):
         """The body of the command"""
@@ -68,7 +79,7 @@ class BuildCommand(Command):
     def required_system_dependencies_installed(self, module_state):
         '''Returns true if all required system dependencies are installed for
         modules in module_state.'''
-        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module, (req_version, installed_version, new_enough, systemmodule) in iteritems(module_state):
             if systemmodule:
                 if not new_enough:
                     return False
@@ -91,10 +102,10 @@ class BuildCommand(Command):
             else:
                 return ''
 
-        print _('Required packages:')
-        print _('  System installed packages which are too old:')
+        print(_('Required packages:'))
+        print(_('  System installed packages which are too old:'))
         have_too_old = False
-        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module, (req_version, installed_version, new_enough, systemmodule) in iteritems(module_state):
             if (installed_version is not None) and (not new_enough) and systemmodule:
                 have_too_old = True
                 print ('    %s %s' % (module.name,
@@ -102,19 +113,19 @@ class BuildCommand(Command):
                                                   req_version,
                                                   installed_version)))
         if not have_too_old:
-            print _('    (none)')
+            print(_('    (none)'))
 
-        print _('  No matching system package installed:')
+        print(_('  No matching system package installed:'))
         have_missing = False
-        for module, (req_version, installed_version, new_enough, systemmodule) in module_state.iteritems():
+        for module, (req_version, installed_version, new_enough, systemmodule) in iteritems(module_state):
             if installed_version is None and (not new_enough) and systemmodule:
                 have_missing = True
-                print ('    %s %s' % (module.name,
-                                      fmt_details(module.pkg_config,
-                                                  req_version,
-                                                  installed_version)))
+                print('    %s %s' % (module.name,
+                                     fmt_details(module.pkg_config,
+                                                 req_version,
+                                                 installed_version)))
         if not have_missing:
-            print _('    (none)')
+            print(_('    (none)'))
 
 
 def print_help():
@@ -126,17 +137,14 @@ def print_help():
         name, ext = os.path.splitext(fname)
         if not ext == '.py':
             continue
-        try:
-            __import__('jhbuild.commands.%s' % name)
-        except ImportError:
-            pass
+        try_import_module('jhbuild.commands.%s' % name)
 
     uprint(_('JHBuild commands are:'))
     commands = [(x.name, x.doc) for x in get_commands().values()]
     commands.sort()
     for name, description in commands:
         uprint('  %-15s %s' % (name, description))
-    print
+    print()
     uprint(_('For more information run "jhbuild <command> --help"'))
 
 # handle registration of new commands
@@ -164,10 +172,7 @@ def get_commands():
 def run(command, config, args, help):
     # if the command hasn't been registered, load a module by the same name
     if command not in _commands:
-        try:
-            __import__('jhbuild.commands.%s' % command)
-        except ImportError:
-            pass
+        try_import_module('jhbuild.commands.%s' % command)
     if command not in _commands:
         import jhbuild.moduleset
         module_set = jhbuild.moduleset.load(config)
@@ -184,3 +189,6 @@ def run(command, config, args, help):
 
 
 from jhbuild.commands import base
+
+# flake8: base inits things at import
+base

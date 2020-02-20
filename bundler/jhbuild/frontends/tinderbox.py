@@ -20,16 +20,14 @@
 import os
 import time
 import subprocess
-import locale
 import logging
-import codecs
 import sys
 
-from jhbuild.main import _encoding
 from jhbuild.utils import cmds
+from jhbuild.utils import sysid, _, open_text
 from jhbuild.errors import CommandError, FatalError
-import buildscript
-import commands
+from jhbuild.utils.compat import string_types
+from . import buildscript
 
 index_header = '''<html>
   <head>
@@ -133,42 +131,8 @@ buildlog_footer = '''
 </html>
 '''
 
-def get_distro():
-    # try using the lsb_release tool to get the distro info
-    try:
-        distro = cmds.get_output(['lsb_release', '--short', '--id']) \
-                     .decode(_encoding).strip()
-        release = cmds.get_output(['lsb_release', '--short', '--release']) \
-                      .decode(_encoding).strip()
-        codename = cmds.get_output(['lsb_release', '--short', '--codename']) \
-                       .decode(_encoding).strip()
-        if codename:
-            return '%s %s (%s)' % (distro, release, codename)
-        else:
-            return '%s %s' % (distro, release)
-    except (CommandError, IOError):
-        pass
-
-    # otherwise, look for a /etc/*-release file
-    release_files = ['/etc/redhat-release', '/etc/debian_version' ]
-    release_files.extend([ os.path.join('/etc', fname)
-                           for fname in os.listdir('/etc')
-                             if fname.endswith('release') \
-                                 and fname != 'lsb-release' ])
-    for filename in release_files:
-        if os.path.exists(filename):
-            return open(filename, 'r').readline().strip()
-
-    osx = commands.getoutput('sw_vers -productVersion')
-    if osx:
-        return 'Mac OS X ' + osx;
-
-    # else:
-    return None
-
 def escape(string):
-    if type(string) is not unicode:
-        string = unicode(string, _encoding, 'replace')
+    assert isinstance(string, string_types)
     string = string.replace('&', '&amp;').replace('<','&lt;').replace(
             '>','&gt;').replace('\n','<br/>').replace(
             '\t','&nbsp;&nbsp;&nbsp;&nbsp;')
@@ -195,8 +159,6 @@ class TinderboxBuildScript(buildscript.BuildScript):
             os.makedirs(self.outputdir)
 
         os.environ['TERM'] = 'dumb'
-
-        self.charset = _encoding
 
     def timestamp(self):
         tm = time.time()
@@ -234,7 +196,7 @@ class TinderboxBuildScript(buildscript.BuildScript):
             print_args['cwd'] = os.getcwd()
 
         self.modulefp.write('<pre>')
-        if isinstance(command, (str, unicode)):
+        if isinstance(command, string_types):
             kws['shell'] = True
             print_args['command'] = command
         else:
@@ -245,13 +207,13 @@ class TinderboxBuildScript(buildscript.BuildScript):
                 commandstr = self.config.print_command_pattern % print_args
                 self.modulefp.write('<span class="command">%s</span>\n'
                                     % escape(commandstr))
-            except TypeError, e:
+            except TypeError as e:
                 raise FatalError('\'print_command_pattern\' %s' % e)
-            except KeyError, e:
+            except KeyError as e:
                 raise FatalError(_('%(configuration_variable)s invalid key'
                                    ' %(key)s' % \
                                    {'configuration_variable' :
-                                        '\'print_command_pattern\'',
+                                    '\'print_command_pattern\'',
                                     'key' : e}))
 
         kws['stdin'] = subprocess.PIPE
@@ -259,19 +221,21 @@ class TinderboxBuildScript(buildscript.BuildScript):
         kws['stderr'] = subprocess.PIPE
         if hint == 'cvs':
             def format_line(line, error_output, fp=self.modulefp):
-                if line[-1] == '\n': line = line[:-1]
+                if line[-1] == '\n':
+                    line = line[:-1]
                 if line.startswith('C '):
                     fp.write('<span class="conflict">%s</span>\n'
-                                        % escape(line))
+                             % escape(line))
                 else:
                     fp.write('%s\n' % escape(line))
             kws['stderr'] = subprocess.STDOUT
         else:
             def format_line(line, error_output, fp=self.modulefp):
-                if line[-1] == '\n': line = line[:-1]
+                if line[-1] == '\n':
+                    line = line[:-1]
                 if error_output:
                     fp.write('<span class="error">%s</span>\n'
-                                        % escape(line))
+                             % escape(line))
                 else:
                     fp.write('%s\n' % escape(line))
 
@@ -286,7 +250,7 @@ class TinderboxBuildScript(buildscript.BuildScript):
 
         try:
             p = subprocess.Popen(command, **kws)
-        except OSError, e:
+        except OSError as e:
             self.modulefp.write('<span class="error">Error: %s</span>\n'
                                 % escape(str(e)))
             raise CommandError(str(e))
@@ -309,11 +273,7 @@ class TinderboxBuildScript(buildscript.BuildScript):
 
         info.append(('Build Host', socket.gethostname()))
         info.append(('Architecture', '%s %s (%s)' % (un[0], un[2], un[4])))
-
-        distro = get_distro()
-        if distro:
-            info.append(('Distribution', distro))
-
+        info.append(('System', sysid.get_pretty_name()))
         info.append(('Module Set', self.config.moduleset))
         info.append(('Start Time', self.timestamp()))
 
@@ -322,12 +282,12 @@ class TinderboxBuildScript(buildscript.BuildScript):
             buildplatform += '<tr><th align="left">%s</th><td>%s</td></tr>\n' \
                              % (key, val)
         buildplatform += '</table>\n'
-        
-        self.indexfp = codecs.open(os.path.join(self.outputdir, 'index.html'),
-                'w', encoding=self.charset, errors='xmlcharrefreplace')
+
+        self.indexfp = open_text(os.path.join(self.outputdir, 'index.html'),
+                'w', encoding='utf-8', errors='xmlcharrefreplace')
 
         self.indexfp.write(index_header % { 'buildplatform': buildplatform,
-                                            'charset': self.charset })
+                                            'charset': 'UTF-8' })
         self.indexfp.flush()
 
     def end_build(self, failures):
@@ -353,16 +313,16 @@ class TinderboxBuildScript(buildscript.BuildScript):
                            '<td><a href="%s">%s</a></td>'
                            '<td>\n' % (self.timestamp(), self.modulefilename,
                                        module))
-        self.modulefp = codecs.open(
+        self.modulefp = open_text(
                 os.path.join(self.outputdir, self.modulefilename), 'w',
-                encoding=self.charset, errors='xmlcharrefreplace')
+                encoding='utf-8', errors='xmlcharrefreplace')
 
         for handle in logging.getLogger().handlers:
             if isinstance(handle, logging.StreamHandler):
                 handle.stream = self.modulefp
 
         self.modulefp.write(buildlog_header % { 'module': module,
-                                                'charset': self.charset })
+                                                'charset': 'UTF-8' })
     def end_module(self, module, failed):
         if failed:
             self.message('Failed')
@@ -378,13 +338,13 @@ class TinderboxBuildScript(buildscript.BuildScript):
                 try:
                     help_url = self.config.help_website[1] % {'module' : module}
                     help_html = ' <a href="%s">(help)</a>' % help_url
-                except TypeError, e:
+                except TypeError as e:
                     raise FatalError('"help_website" %s' % e)
-                except KeyError, e:
+                except KeyError as e:
                     raise FatalError(_('%(configuration_variable)s invalid key'
                                        ' %(key)s' % \
                                        {'configuration_variable' :
-                                            '\'help_website\'',
+                                        '\'help_website\'',
                                         'key' : e}))
 
             self.indexfp.write('<td class="failure">failed%s</td>\n' %
@@ -422,7 +382,7 @@ class TinderboxBuildScript(buildscript.BuildScript):
         self.triedcheckout = None
 
         if (self.modulefp and self.config.help_website and
-            self.config.help_website[0] and self.config.help_website[1]):
+                self.config.help_website[0] and self.config.help_website[1]):
             try:
                 help_url = self.config.help_website[1] % \
                                {'module' : module.name}
@@ -433,13 +393,13 @@ class TinderboxBuildScript(buildscript.BuildScript):
                                     ' for more information.</div>'
                                     % {'name' : self.config.help_website[0],
                                        'url'  : help_url})
-            except TypeError, e:
+            except TypeError as e:
                 raise FatalError('"help_website" %s' % e)
-            except KeyError, e:
+            except KeyError as e:
                 raise FatalError(_('%(configuration_variable)s invalid key'
                                    ' %(key)s' % \
                                    {'configuration_variable' :
-                                        '\'help_website\'',
+                                    '\'help_website\'',
                                     'key' : e}))
         return 'fail'
 

@@ -8,11 +8,14 @@ if 'GTK_PATH' in os.environ.keys():
     del os.environ['GTK_PATH']
 
 # module directory
-modulesets_dir = SRCDIR
+modulesets_dir = os.path.join(SRCDIR, 'modulesets')
 
 # what modules to build?
-moduleset = 'esl'
-modules = [ 'esl-bundle' ]
+moduleset = 'gnome-apps-latest'
+modules = [ 'meta-gnome-core' ]
+
+def basic_configuration():
+    return os.environ.get("BIGDFT_CONFIGURE_FLAGS")
 
 # policy for modules to build, options are:
 #  - all: build everything requested
@@ -39,13 +42,21 @@ prefix = os.path.join(os.getcwd(), "install")
 
 top_builddir = '_jhbuild'  # If a relative path, prefix will be prepended
 
-checkoutroot = os.path.join(SRCDIR, "checkouts")
-tarballdir = os.path.join(SRCDIR, "tarballs")
-if os.path.samefile(SRCDIR, os.getcwd()):
-    # if set, packages will be built with srcdir!=builddir
-    buildroot = os.path.join(os.getcwd(), "build")
+if os.path.exists(os.path.expanduser('~/checkout/gnome')):
+    checkoutroot = '~/checkout/gnome/'
 else:
-    buildroot = os.getcwd()
+    checkoutroot = SRCDIR
+
+xdg_cache_home = os.environ.get('XDG_CACHE_HOME',
+                                os.path.join(os.path.expanduser('~'),
+                                             '.cache'))
+tarballdir = os.path.join(SRCDIR, 'tarballs')
+
+# Set to None to perform builds within the source trees.
+if os.path.samefile(SRCDIR, os.getcwd()):
+  buildroot = os.path.join(os.getcwd(), 'build')
+else:
+  buildroot = os.getcwd()
 
 # When using srcdir!=builddir builds, this key allows you to use a
 # different builddir name.  Some people like this because it reduces
@@ -59,7 +70,7 @@ builddir_pattern = '%s'
 try:
     import multiprocessing
     jobs = multiprocessing.cpu_count() + 1
-except ImportError, _e:
+except ImportError as _e:
     try:
         jobs = os.sysconf('SC_NPROCESSORS_ONLN') + 1
     except (OSError, AttributeError, ValueError):
@@ -68,16 +79,13 @@ except ImportError, _e:
 # override environment variables, command line arguments, etc
 autogenargs = ''
 cmakeargs = ''
+mesonargs = '--buildtype=debugoptimized'
 makeargs = ''
+ninjaargs = ''
 cflags = ''
 
-# a alternative install program to use; the included install-check
-# program won't update timestamps if the header hasn't changed
-installprog = os.path.join(os.environ['HOME'], '.local/bin', 'install-check')
-if not os.path.exists(installprog):
-    installprog = '/usr/bin/install-check'
-if not os.path.exists(installprog):
-    installprog = None
+# a alternative install program to use
+installprog = None
 
 # override cvs roots, branch tags, etc
 repos = {}
@@ -86,10 +94,24 @@ svnroots = {}
 branches = {}
 module_autogenargs = {}
 module_cmakeargs = {}
+module_mesonargs = {}
 module_makeargs = {}
+module_ninjaargs = {}
 module_extra_env = {}
 module_makecheck = {}
 module_nopoison = {}
+
+# Specific autogenargs by default
+module_autogenargs['PyYAML'] = "build_ext -I%(prefix)s/include -L%(prefix)s/lib --rpath=%(prefix)s/lib " % {"prefix": prefix}
+module_autogenargs['etsf_io'] = "--with-moduledir=%(prefix)s/include " % {"prefix": prefix}
+autogen_packages=['libyaml','GaIn','libxc','chess','bigdft','libABINIT','futile','psolver','spred']
+
+if basic_configuration() is not None:
+    for pkg in autogen_packages:
+        module_autogenargs[pkg] = basic_configuration()
+    del(pkg)
+
+del(autogen_packages)
 
 # control parts of the build process
 nonetwork     = False  # never touch the network
@@ -110,6 +132,7 @@ build_targets = ['install','test']
 makecheck_advisory = False # whether to pass over 'make check' failures
 
 interact      = True   # whether to interact with the user.
+exit_on_error = False  # whether to immediately exit when a build fails, most useful for noninteractive mode
 quiet_mode    = False  # whether to display running commands output
 progress_bar  = True   # whether to display a progress bar when running in quiet mode
 
@@ -128,6 +151,10 @@ module_checkout_mode = {}
 # in case we use the copy checkout mode, we can set up a copy dir. Defaults to
 # checkout dir
 copy_dir = None
+
+# in case we use the export checkout mode, we can set up a export dir. Defaults
+# to checkout dir
+export_dir = None
 
 # attempt to detect the system library path
 extra_prefixes = []
@@ -191,20 +218,6 @@ noxvfb = False
 # arguments to pass to xvfb
 xvfbargs = ''
 
-# options for jhbuildbot slaves
-jhbuildbot_master = 'build.gnome.org:9070'
-jhbuildbot_slavename = None
-jhbuildbot_password = None
-
-# options for jhbuildbot master
-jhbuildbot_svn_commits_box = None
-try:
-    jhbuildbot_slaves_dir = os.path.abspath(".")
-except OSError:
-    jhbuildbot_slaves_dir = '.'
-jhbuildbot_dir = None
-jhbuildbot_mastercfg = "master.cfg"
-
 # whether to use a local copy of modulesets (instead of fetching them from svn)
 use_local_modulesets = True
 
@@ -221,7 +234,7 @@ shallow_clone = False
 print_command_pattern = '%(command)s'
 
 # Check system dependencies. If not dependencies not met, raise error
-check_sysdeps = True
+check_sysdeps = False
 
 # system_prefix used when searching for files within available packages
 # during 'sysdeps --install'
@@ -229,5 +242,8 @@ system_prefix = '/usr'
 
 # A tuple of website name and URL. This is displayed in tinderbox output. URL
 # String may contain the variable %(module)s
-help_website = ('ESL',
-                'https://gitlab.e-cam2020.eu/esl/%(module)s')
+help_website = ('BigDFT Live!',
+                'http://bigdft.org/Wiki/JhbuildIssues/%(module)s')
+
+# Whether '--disable-Werror' should be passed to automake modules
+disable_Werror = True

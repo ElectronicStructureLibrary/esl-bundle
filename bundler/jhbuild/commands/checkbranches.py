@@ -22,6 +22,7 @@ from optparse import make_option
 import jhbuild.moduleset
 from jhbuild.commands import Command, register_command
 from jhbuild.utils.cmds import get_output
+from jhbuild.utils import uprint, N_, _
 from jhbuild.errors import CommandError
 
 class cmd_checkbranches(Command):
@@ -52,7 +53,7 @@ class cmd_checkbranches(Command):
                 continue
             if not mod.branch or not mod.branch.repository.__class__.__name__ == 'GitRepository':
                 continue
-            if not 'git.gnome.org' in mod.branch.repository.href:
+            if 'git.gnome.org' not in mod.branch.repository.href:
                 continue
             if mod.branch.branch:
                 # there is already a branch defined
@@ -60,7 +61,7 @@ class cmd_checkbranches(Command):
 
             try:
                 if get_output(['git', 'ls-remote',
-                        'git://git.gnome.org/%s' % mod.name,
+                        'https://git.gnome.org/browse/%s' % mod.name,
                         'refs/heads/%s' % branch]):
                     uprint(_('%(module)s is missing branch definition for %(branch)s') % {'module': mod.name, 'branch': branch})
             except CommandError:

@@ -17,16 +17,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
+
 from optparse import make_option
 import re
 import socket
 import sys
 import time
 
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from jhbuild.utils import _, open_text
+from jhbuild.utils.compat import TextIO
 
 import jhbuild.moduleset
 from jhbuild.commands import Command, register_command
@@ -80,14 +80,14 @@ class cmd_extdeps(Command):
 
     def run(self, config, options, args, help=None):
         if options.output:
-            output = StringIO()
+            output = TextIO()
         else:
             output = sys.stdout
 
         config.partial_build = False
         self.module_set = jhbuild.moduleset.load(config)
         if options.list_all_modules:
-            module_list = self.module_set.modules.values()
+            module_list = list(self.module_set.modules.values())
         else:
             module_list = self.module_set.get_module_list(args or config.modules, config.skip)
 
@@ -98,19 +98,19 @@ class cmd_extdeps(Command):
         title = _('External deps for GNOME')
         for ms in moduleset:
             try:
-                gnome_ver = re.findall('\d+\.\d+', ms)[0]
+                gnome_ver = re.findall('\\d+\\.\\d+', ms)[0]
             except IndexError:
                 continue
             title = _('External deps for GNOME %s') % gnome_ver
             break
 
-        print >> output, HTML_AT_TOP % {'title': title}
-        print >> output, '<table>'
-        print >> output, '<tbody>'
+        print(HTML_AT_TOP % {'title': title}, file=output)
+        print('<table>', file=output)
+        print('<tbody>', file=output)
 
-        module_list.sort(lambda x,y: cmp(x.name.lower(), y.name.lower()))
+        module_list.sort(key=lambda x: x.name.lower())
         for mod in module_list:
-            #if not mod.moduleset_name.startswith('gnome-suites-core-deps-base'):
+            # if not mod.moduleset_name.startswith('gnome-suites-core-deps-base'):
             #    continue
 
             if not hasattr(mod.branch, 'version'):
@@ -131,40 +131,41 @@ class cmd_extdeps(Command):
                 if len(rdeps) > 5:
                     classes.append('many')
 
-            print >> output, '<tr class="%s">' % ' '.join(classes)
-            print >> output, '<th>%s</th>' % mod.name
+            print('<tr class="%s">' % ' '.join(classes), file=output)
+            print('<th>%s</th>' % mod.name, file=output)
             version = mod.branch.version
             if mod.branch.patches:
                 version = version + ' (%s)' % _('patched')
-            print >> output, '<td class="version">%s</td>' % version
-            print >> output, '<td class="url"><a href="%s">tarball</a></td>' % mod.branch.module
+            print('<td class="version">%s</td>' % version, file=output)
+            print('<td class="url"><a href="%s">tarball</a></td>' % mod.branch.module, file=output)
             if len(rdeps) > 5:
                 rdeps = rdeps[:4] + [_('and %d others.')  % (len(rdeps)-4)]
-            print >> output, '<td class="rdeps">%s</td>' % ', '.join(rdeps)
-            print >> output, '</tr>'
+            print('<td class="rdeps">%s</td>' % ', '.join(rdeps), file=output)
+            print('</tr>', file=output)
 
-        print >> output, '</tbody>'
-        print >> output, '</table>'
+        print('</tbody>', file=output)
+        print('</table>', file=output)
 
-        print >> output, '<div id="footer">'
-        print >> output, 'Generated:', time.strftime('%Y-%m-%d %H:%M:%S %z')
-        print >> output, 'on ', socket.getfqdn()
-        print >> output, '</div>'
+        print('<div id="footer">', file=output)
+        print('Generated:', time.strftime('%Y-%m-%d %H:%M:%S %z'), file=output)
+        print('on ', socket.getfqdn(), file=output)
+        print('</div>', file=output)
 
-        print >> output, '</body>'
-        print >> output, '</html>'
+        print('</body>', file=output)
+        print('</html>', file=output)
 
         if output != sys.stdout:
-            file(options.output, 'w').write(output.getvalue())
+            open_text(options.output, 'w').write(output.getvalue())
 
 
     def compute_rdeps(self, module):
         rdeps = []
         for mod in self.module_set.modules.values():
-            if mod.type == 'meta': continue
+            if mod.type == 'meta':
+                continue
             if module.name in mod.dependencies:
                 rdeps.append(mod.name)
-        rdeps.sort(lambda x,y: cmp(x.lower(), y.lower()))
+        rdeps.sort(key=lambda x: x.lower())
         return rdeps
 
 register_command(cmd_extdeps)

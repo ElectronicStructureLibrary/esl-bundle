@@ -19,17 +19,12 @@
 
 __metaclass__ = type
 
-import os, time, signal, sys, subprocess, random, tempfile
+import os, time, signal, subprocess, random, tempfile
+import hashlib
 
-try:
-    import hashlib
-except ImportError:
-    import md5 as hashlib
-
-from jhbuild.errors import FatalError, CommandError, BuildStateError
+from jhbuild.errors import CommandError, BuildStateError
 from jhbuild.modtypes import \
      Package, DownloadableModule, register_module_type
-from jhbuild.modtypes.autotools import AutogenModule
 
 import xml.dom.minidom
 
@@ -48,10 +43,10 @@ class TestModule(Package, DownloadableModule):
         self.test_type    = test_type
         self.tested_pkgs  = tested_pkgs
 
-        ### modify environ for tests to be working
-        if os.environ.has_key('LDTP_DEBUG'):
+        # modify environ for tests to be working
+        if 'LDTP_DEBUG' in os.environ:
             del os.environ['LDTP_DEBUG'] # get rid of verbose LDTP output
-        if not os.environ.has_key('GNOME_ACCESSIBILITY') or os.environ['GNOME_ACCESSIBILITY'] != 1:
+        if 'GNOME_ACCESSIBILITY' not in os.environ or os.environ['GNOME_ACCESSIBILITY'] != 1:
             os.environ['GNOME_ACCESSIBILITY'] = '1'
 
     def get_srcdir(self, buildscript):
@@ -241,8 +236,8 @@ class TestModule(Package, DownloadableModule):
         except OSError:
             return -1
         
-        time.sleep(2) #allow Xvfb to start
-        if xvfb.poll() != None:
+        time.sleep(2) # allow Xvfb to start
+        if xvfb.poll() is not None:
             return -1
         return xvfb.pid
 
@@ -257,14 +252,14 @@ class TestModule(Package, DownloadableModule):
         except OSError:
             return -1
         time.sleep(1)
-        if ldtp.poll() != None:
+        if ldtp.poll() is not None:
             return -1
         return ldtp.pid
     
     def do_ldtp_test(self, buildscript):
         src_dir = self.get_srcdir(buildscript)
         old_debug = os.getenv('LDTP_DEBUG')
-        if old_debug != None:
+        if old_debug is not None:
             del os.environ['LDTP_DEBUG']
 
         ldtp_pid = self._start_ldtp()
@@ -277,14 +272,14 @@ class TestModule(Package, DownloadableModule):
             else:
                 buildscript.execute('ldtprunner run.xml', cwd=src_dir,
                         extra_env={'DISPLAY': ':%s' % self.screennum})
-        except CommandError, e:
+        except CommandError as e:
             os.kill(ldtp_pid, signal.SIGINT)
             if e.returncode == 32512:        # ldtprunner not installed
                 raise BuildStateError('ldtprunner not available')
             raise BuildStateError('error %s during test' % e.returncode)
         os.kill(ldtp_pid, signal.SIGINT)
         
-        if old_debug != None:
+        if old_debug is not None:
             os.environ['LDTP_DEBUG'] = old_debug
         
         log_file = self.get_ldtp_log_file(os.path.join (src_dir,'run.xml'))
@@ -295,19 +290,17 @@ class TestModule(Package, DownloadableModule):
             flag, status = self.check_groups(groups)
             if flag:
                 raise BuildStateError(status)
-        except:
+        except Exception:
             raise BuildStateError('malformed log file')
 
     def do_dogtail_test(self, buildscript):
         src_dir = self.get_srcdir(buildscript)
         test_cases = []
-        failed = False
         all_files = os.listdir(src_dir)
         for file in all_files:
             if file[-3:] == '.py':
                 test_cases.append(file)
 
-        status = ''
         if buildscript.config.noxvfb:
             extra_env = {}
         else:
@@ -317,7 +310,7 @@ class TestModule(Package, DownloadableModule):
             try:
                 buildscript.execute('python %s' % test_case,
                         cwd=src_dir, extra_env=extra_env)
-            except CommandError, e:
+            except CommandError as e:
                 if e.returncode != 0:
                     raise BuildStateError('%s failed' % test_case)
 

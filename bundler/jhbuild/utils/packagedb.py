@@ -18,26 +18,14 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import os
-import sys 
-import stat
 import time
 import logging
-import xml.dom.minidom as DOM
-try:
-    import hashlib
-except ImportError:
-    import md5 as hashlib
+import errno
+import hashlib
 
-from jhbuild.utils import lockfile
+import xml.etree.ElementTree as ET
 
-try:
-    import xml.etree.ElementTree as ET
-except ImportError:
-    import elementtree.ElementTree as ET
-
-from StringIO import StringIO
-
-from jhbuild.utils import fileutils
+from jhbuild.utils import fileutils, _, open_text
 
 def _parse_isotime(string):
     if string[-1] != 'Z':
@@ -49,35 +37,68 @@ def _format_isotime(tm):
     return time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(tm))
 
 class PackageEntry:
-    def __init__(self, package, version, metadata, manifests_dir):
+    def __init__(self, package, version, metadata, dirname):
         self.package = package # string
         self.version = version # string
         self.metadata = metadata # hash of string to value
-        self.manifests_dir = manifests_dir
+        self.dirname = dirname
 
     _manifest = None
-    def get_manifest(self):
+
+    @property
+    def manifest(self):
         if self._manifest:
             return self._manifest
-        if not os.path.exists(os.path.join(self.manifests_dir, self.package)):
+        if not os.path.exists(os.path.join(self.dirname, 'manifests', self.package)):
             return None
         self._manifest = []
-        for line in file(os.path.join(self.manifests_dir, self.package)):
+        for line in open_text(os.path.join(self.dirname, 'manifests', self.package)):
             self._manifest.append(line.strip())
         return self._manifest
 
-    def set_manifest(self, value):
+    @manifest.setter
+    def manifest(self, value):
         if value is None:
             self._manifest = value
             return
-        self._manifest = [x.strip() for x in value if not '\n' in value]
+        self._manifest = [x.strip() for x in value if '\n' not in value]
         if len(self._manifest) != len(value):
             logging.error(_('package %s has files with embedded new lines') % self.package)
 
-    manifest = property(get_manifest, set_manifest)
+    def write(self):
+        # write info file
+        fileutils.mkdir_with_parents(os.path.join(self.dirname, 'info'))
+        writer = fileutils.SafeWriter(os.path.join(self.dirname, 'info', self.package))
+        ET.ElementTree(self.to_xml()).write(writer.fp)
+        writer.fp.write(b'\n')
+        writer.commit()
+
+        # write manifest
+        fileutils.mkdir_with_parents(os.path.join(self.dirname, 'manifests'))
+        writer = fileutils.SafeWriter(os.path.join(self.dirname, 'manifests', self.package))
+        writer.fp.write('\n'.join(self.manifest).encode('utf-8', 'backslashreplace') + b'\n')
+        writer.commit()
+
+    def remove(self):
+        # remove info file
+        fileutils.ensure_unlinked(os.path.join(self.dirname, 'info', self.package))
+
+        # remove manifest
+        fileutils.ensure_unlinked(os.path.join(self.dirname, 'manifests', self.package))
+
+    def to_xml(self):
+        entry_node = ET.Element('entry', {'package': self.package,
+                                          'version': self.version})
+        if 'installed-date' in self.metadata:
+            entry_node.attrib['installed'] = _format_isotime(self.metadata['installed-date'])
+        if 'configure-hash' in self.metadata:
+            entry_node.attrib['configure-hash'] = \
+                self.metadata['configure-hash']
+
+        return entry_node
 
     @classmethod
-    def from_xml(cls, node, manifests_dir):
+    def from_xml(cls, node, dirname):
         package = node.attrib['package']
         version = node.attrib['version']
         metadata = {}
@@ -89,143 +110,57 @@ class PackageEntry:
         if configure_hash:
             metadata['configure-hash'] = configure_hash
 
-        dbentry = cls(package, version, metadata, manifests_dir)
-
-        # Transition code for the time when the list of files were stored
-        # in list of xml nodes
-        manifestNode = node.find('manifest')
-        if manifestNode is not None:
-            manifest = []
-            for manifest_child in manifestNode:
-                if manifest_child.tag != 'file':
-                    continue
-                # The strip here is important since presently we
-                # "pretty print" which adds whitespace around <file>.
-                # Since we don't handle files with whitespace in their
-                # names anyways, it's a fine hack.
-                manifest.append(manifest_child.text.strip())
-            dbentry.manifest = manifest
+        dbentry = cls(package, version, metadata, dirname)
 
         return dbentry
 
+    @classmethod
+    def open(cls, dirname, package):
+        try:
+            with open(os.path.join (dirname, 'info', package), "rb") as info:
+                doc = ET.parse(info)
+            node = doc.getroot()
 
-    def to_xml(self, doc):
-        entry_node = ET.Element('entry', {'package': self.package,
-                                          'version': self.version})
-        if 'installed-date' in self.metadata:
-            entry_node.attrib['installed'] = _format_isotime(self.metadata['installed-date'])
-        if 'configure-hash' in self.metadata:
-            entry_node.attrib['configure-hash'] = \
-                self.metadata['configure-hash']
-        if self.manifest is not None:
-            fd = file(os.path.join(self.manifests_dir, self.package + '.tmp'), 'w')
-            fd.write('\n'.join(self.manifest))
-            if hasattr(os, 'fdatasync'):
-                os.fdatasync(fd.fileno())
-            else:
-                os.fsync(fd.fileno())
-            fd.close()
-            fileutils.rename(os.path.join(self.manifests_dir, self.package + '.tmp'),
-                             os.path.join(self.manifests_dir, self.package))
-        return entry_node
+            if node.tag == 'entry':
+                return PackageEntry.from_xml(node, dirname)
+
+        except EnvironmentError as e:
+            if e.errno != errno.ENOENT:
+                raise
+
+        # That didn't work: try the old packagedb.xml file instead.  We
+        # use the manifest file to check if the package 'really exists'
+        # because otherwise we may see the old packagedb.xml entry for
+        # an uninstalled package (since we no longer update that file)
+        #
+        # please delete this code in 2016
+        try:
+            if os.path.exists(os.path.join(dirname, 'manifests', package)):
+                info = open (os.path.join (dirname, 'packagedb.xml'))
+                doc = ET.parse(info)
+                root = doc.getroot()
+
+                if root.tag == 'packagedb':
+                    for node in root:
+                        if node.tag == 'entry' and node.attrib['package'] == package:
+                            return PackageEntry.from_xml(node, dirname)
+
+        except EnvironmentError as e:
+            if e.errno != errno.ENOENT:
+                raise
+
+        # it seems not to exist...
+        return None
 
 class PackageDB:
     def __init__(self, dbfile, config):
-        self.dbfile = dbfile
-        dirname = os.path.dirname(dbfile)
-        self.manifests_dir = os.path.join(dirname, 'manifests')
-        if not os.path.exists(self.manifests_dir):
-            os.makedirs(self.manifests_dir)
+        self.dirname = os.path.dirname(dbfile)
         self.config = config
-        self._lock = lockfile.LockFile.get(os.path.join(dirname, 'packagedb.xml.lock'))
-        self._entries = None # hash
-        self._entries_stat = None # os.stat structure
 
-    def _ensure_cache(function):
-        def decorate(self, *args, **kwargs):
-            if self._entries is None:
-                self._read_cache()
-            elif self._entries_stat is None:
-                # It didn't exist before, see if it does now
-                self._read_cache()
-            else:
-                try:
-                    stbuf = os.stat(self.dbfile)
-                except OSError, e:
-                    pass
-                if not (self._entries_stat[stat.ST_INO] == stbuf[stat.ST_INO]
-                        and self._entries_stat[stat.ST_MTIME] == stbuf[stat.ST_MTIME]):
-                    logging.info(_('Package DB modified externally, rereading'))
-                    self._read_cache()
-            return function(self, *args, **kwargs)
-        return decorate
-
-    def _read_cache(self):
-        self._entries = {}
-        self._entries_stat = None
-        try:
-            f = open(self.dbfile)
-        except OSError, e:
-            return # treat as empty cache
-        except IOError, e:
-            return
-        doc = ET.parse(f)
-        root = doc.getroot()
-        if root.tag != 'packagedb':
-            return # doesn't look like a cache
-        for node in root:
-            if node.tag != 'entry':
-                continue
-            entry = PackageEntry.from_xml(node, self.manifests_dir)
-            self._entries[entry.package] = entry
-        self._entries_stat = os.fstat(f.fileno())
-
-    def _write_cache(self):
-        pkgdb_node = ET.Element('packagedb')
-        doc = ET.ElementTree(pkgdb_node)
-        for package,entry in self._entries.iteritems():
-            node = entry.to_xml(doc)
-            pkgdb_node.append(node)
-
-        tmp_dbfile_path = self.dbfile + '.tmp'
-        tmp_dbfile = open(tmp_dbfile_path, 'w')
-        
-        # Because ElementTree can't pretty-print, we convert it to a string
-        # and then read it back with DOM, then write it out again.  Yes, this
-        # is lame.
-        # http://renesd.blogspot.com/2007/05/pretty-print-xml-with-python.html
-        buf = StringIO()
-        doc.write(buf, encoding='UTF-8')
-        dom_doc = DOM.parseString(buf.getvalue())
-        try:
-            dom_doc.writexml(tmp_dbfile, addindent='  ', newl='\n', encoding='UTF-8')
-        except:
-            tmp_dbfile.close()
-            os.unlink(tmp_dbfile_path)
-            raise
-        tmp_dbfile.flush()
-        os.fsync(tmp_dbfile.fileno())
-        tmp_dbfile.close()
-        fileutils.rename(tmp_dbfile_path, self.dbfile)
-        # Ensure we don't reread what we already have cached
-        self._entries_stat = os.stat(self.dbfile)
-
-    def _locked(function):
-        def decorate(self, *args, **kwargs):
-            self._lock.lock()
-            try:
-                function(self, *args, **kwargs)
-            finally:
-                self._lock.unlock()
-        return decorate
-
-    @_ensure_cache
     def get(self, package):
         '''Return entry if package is installed, otherwise return None.'''
-        return self._entries.get(package)
+        return PackageEntry.open(self.dirname, package)
 
-    @_ensure_cache
-    @_locked
     def add(self, package, version, contents, configure_cmd = None):
         '''Add a module to the install cache.'''
         entry = self.get(package)
@@ -235,11 +170,10 @@ class PackageDB:
             metadata = {}
         metadata['installed-date'] = time.time() # now
         if configure_cmd:
-            metadata['configure-hash'] = hashlib.md5(configure_cmd).hexdigest()
-        self._entries[package] = PackageEntry(package, version, metadata,
-                                              self.manifests_dir)
-        self._entries[package].manifest = contents
-        self._write_cache()
+            metadata['configure-hash'] = hashlib.md5(configure_cmd.encode("utf-8")).hexdigest()
+        pkg = PackageEntry(package, version, metadata, self.dirname)
+        pkg.manifest = contents
+        pkg.write()
 
     def check(self, package, version=None):
         '''Check whether a particular module is installed.'''
@@ -247,7 +181,8 @@ class PackageDB:
         if entry is None:
             return False
         if version is not None:
-            if entry.version != version: return False
+            if entry.version != version:
+                return False
         return True
 
     def installdate(self, package, version=None):
@@ -259,11 +194,12 @@ class PackageDB:
             return None
         return entry.metadata['installed-date']
 
-    @_ensure_cache
-    @_locked
     def uninstall(self, package_name):
         '''Remove a module from the install cache.'''
-        entry = self._entries[package_name]
+        entry = self.get(package_name)
+
+        if entry is None:
+            raise KeyError
 
         if entry.manifest is None:
             logging.error(_("no manifest for '%s', can't uninstall.  Try building again, then uninstalling.") % (package_name,))
@@ -286,9 +222,4 @@ class PackageDB:
                 logging.warn(_("Failed to delete %(file)r: %(msg)s") % { 'file': path,
                                                                          'msg': error_string})
 
-        del self._entries[package_name]
-        self._write_cache()
-
-if __name__ == '__main__':
-    db = PackageDB(sys.argv[1])
-    print "%r" % (db._entries, )
+        entry.remove()

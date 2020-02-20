@@ -27,14 +27,16 @@ import traceback
 import time
 import types
 import logging
-import __builtin__
 
 from jhbuild.environment import setup_env, setup_env_defaults, addpath
 from jhbuild.errors import FatalError
+from jhbuild.utils import sysid, _
+from jhbuild.utils.compat import execfile
 
 if sys.platform.startswith('win'):
     # For munging paths for MSYS's benefit
     import jhbuild.utils.subprocess_win32
+    jhbuild.utils.subprocess_win32
 
 __all__ = [ 'Config' ]
 
@@ -45,26 +47,25 @@ _known_keys = [ 'moduleset', 'modules', 'skip', 'tags', 'prefix',
                 'autogenargs', 'makeargs', 'nice_build', 'jobs',
                 'installprog', 'repos', 'branches', 'noxvfb', 'xvfbargs',
                 'builddir_pattern', 'module_autogenargs', 'module_makeargs',
-                'interact', 'buildscript', 'nonetwork', 'nobuild',
-                'alwaysautogen', 'noinstall', 'makeclean', 'makedistclean',
-                'makecheck', 'module_makecheck', 'system_libdirs',
-                'tinderbox_outputdir', 'sticky_date', 'tarballdir',
+                'module_ninjaargs', 'ninjaargs', 'interact', 'buildscript',
+                'nonetwork', 'nobuild', 'alwaysautogen', 'noinstall',
+                'makeclean', 'makedistclean', 'makecheck', 'module_makecheck',
+                'system_libdirs', 'tinderbox_outputdir', 'sticky_date', 'tarballdir',
                 'pretty_print', 'svn_program', 'makedist', 'makedistcheck',
                 'nonotify', 'notrayicon', 'cvs_program', 'checkout_mode',
-                'copy_dir', 'module_checkout_mode', 'build_policy',
+                'copy_dir', 'export_dir', 'module_checkout_mode', 'build_policy',
                 'trycheckout', 'min_age', 'nopoison', 'module_nopoison',
                 'forcecheck', 'makecheck_advisory', 'quiet_mode',
-                'progress_bar', 'module_extra_env', 'jhbuildbot_master',
-                'jhbuildbot_slavename', 'jhbuildbot_password',
-                'jhbuildbot_svn_commits_box', 'jhbuildbot_slaves_dir',
-                'jhbuildbot_dir', 'jhbuildbot_mastercfg',
+                'progress_bar', 'module_extra_env',
                 'use_local_modulesets', 'ignore_suggests', 'modulesets_dir',
                 'mirror_policy', 'module_mirror_policy', 'dvcs_mirror_dir',
                 'shallow_clone', 'build_targets', 'cmakeargs', 'module_cmakeargs',
+                'mesonargs', 'module_mesonargs',
                 'print_command_pattern', 'static_analyzer',
                 'module_static_analyzer', 'static_analyzer_template',
                 'static_analyzer_outputdir', 'check_sysdeps', 'system_prefix',
-                'help_website', 'conditions', 'extra_prefixes'
+                'help_website', 'conditions', 'extra_prefixes',
+                'disable_Werror', 'xdg_cache_home', 'exit_on_error'
               ]
 
 env_prepends = {}
@@ -78,29 +79,6 @@ def parse_relative_time(s):
         return float(m.group(1)) * coeffs[m.group(2)]
     else:
         raise ValueError
-
-def get_default_conditions():
-    # the default conditions set.  We determine which set to used based on
-    # the first item in the list which is a prefix of 'sys.platform', which
-    # is a name like 'linux2', 'darwin', 'freebsd10', etc.
-    #
-    # if we watch to match (eg 'freebsd10' more closely than other versions
-    # of 'freebsd') then we just need to make sure the more-specific one
-    # comes first in the list
-    conditions_sets = [
-            ('linux', ['linux', 'wayland', 'udev', 'x11', 'systemd']),
-            ('freebsd', ['freebsd', 'x11', 'bsd']),
-
-            # this must be left here so that at least one will be found
-            ('', ['x11'])
-        ]
-
-    for prefix, flags in conditions_sets:
-        if sys.platform.startswith(prefix):
-            return set(flags)
-
-    # we will only hit this if someone removed the '' entry above
-    raise FatalError('failed to find matching condition set...')
 
 def modify_conditions(conditions, conditions_modifiers):
     for flag in conditions_modifiers:
@@ -131,25 +109,23 @@ class Config:
         env_prepends.clear()
         try:
             execfile(_defaults_file, self._config)
-        except:
+        except Exception:
             traceback.print_exc()
             raise FatalError(_('could not load config defaults'))
 
         old_config = os.path.join(os.path.expanduser('~'), '.jhbuildrc')
-        new_config = os.path.join \
-                         (os.environ.get \
-                             ('XDG_CONFIG_HOME',
-                              os.path.join(os.path.expanduser('~'), '.config')),
-                          'jhbuildrc')
+        new_config = os.path.join(os.environ.get('XDG_CONFIG_HOME',
+            os.path.join(os.path.expanduser('~'), '.config')),
+            'jhbuildrc')
 
         if filename:
             if not os.path.exists(filename):
                 raise FatalError(_('could not load config file, %s is missing') % filename)
         else:
             if os.path.isfile(old_config) \
-                and not os.path.islink(old_config) \
-                and os.path.isfile(new_config) \
-                and not os.path.islink(new_config):
+                    and not os.path.islink(old_config) \
+                    and os.path.isfile(new_config) \
+                    and not os.path.islink(new_config):
                 raise FatalError(_('The default location of the configuration '
                                    'file has changed. Please move %(old_path)s'
                                    ' to %(new_path)s.' \
@@ -182,7 +158,7 @@ class Config:
         # on it to set new autogenargs, for example) but also so that the
         # condition flags given on the commandline will ultimately override
         # those in jhbuildrc.
-        self._config['conditions'] = get_default_conditions()
+        self._config['conditions'] = sysid.get_default_conditions()
         modify_conditions(self._config['conditions'], conditions_modifiers)
         self.load(filename)
         modify_conditions(self.conditions, conditions_modifiers)
@@ -208,7 +184,7 @@ class Config:
         '''Read configuration variables from a file.'''
         try:
             execfile(filename, self._config)
-        except:
+        except Exception:
             traceback.print_exc()
             raise FatalError(_('Could not include config file (%s)') % filename)
 
@@ -217,7 +193,7 @@ class Config:
         if filename:
             try:
                 execfile(filename, config)
-            except Exception, e:
+            except Exception as e:
                 if isinstance(e, FatalError):
                     # raise FatalErrors back, as it means an error in include()
                     # and it will print a traceback, and provide a meaningful
@@ -260,15 +236,14 @@ class Config:
             config['repos'].update(config['svnroots'])
 
         # environment variables
-        if config.has_key('cflags') and config['cflags']:
+        if 'cflags' in config and config['cflags']:
             os.environ['CFLAGS'] = config['cflags']
         if config.get('installprog') and os.path.exists(config['installprog']):
             os.environ['INSTALL'] = config['installprog']
 
         for path_key in ('checkoutroot', 'buildroot', 'top_builddir',
                          'tinderbox_outputdir', 'tarballdir', 'copy_dir',
-                         'jhbuildbot_slaves_dir', 'jhbuildbot_dir',
-                         'jhbuildbot_mastercfg', 'modulesets_dir',
+                         'modulesets_dir',
                          'dvcs_mirror_dir', 'static_analyzer_outputdir',
                          'prefix'):
             if config.get(path_key):
@@ -279,7 +254,8 @@ class Config:
             setattr(self, name, config[name])
 
         # default tarballdir to checkoutroot
-        if not self.tarballdir: self.tarballdir = self.checkoutroot
+        if not self.tarballdir:
+            self.tarballdir = self.checkoutroot
 
         # Ensure top_builddir is absolute
         if not os.path.isabs(self.top_builddir):
@@ -314,7 +290,7 @@ class Config:
         if not os.path.isabs(self.tarballdir):
             raise FatalError(_('%s must be an absolute path') % 'tarballdir')
         if (self.tinderbox_outputdir and
-            not os.path.isabs(self.tinderbox_outputdir)):
+                not os.path.isabs(self.tinderbox_outputdir)):
             raise FatalError(_('%s must be an absolute path') %
                              'tinderbox_outputdir')
 
@@ -325,7 +301,7 @@ class Config:
         if not os.path.exists(self.prefix):
             try:
                 os.makedirs(self.prefix)
-            except:
+            except EnvironmentError:
                 raise FatalError(_('install prefix (%s) can not be created') % self.prefix)
 
         if not os.path.exists(self.top_builddir):
@@ -349,11 +325,11 @@ class Config:
 
     def update_build_targets(self):
         # update build targets according to old flags
-        if self.makecheck and not 'check' in self.build_targets:
+        if self.makecheck and 'check' not in self.build_targets:
             self.build_targets.insert(0, 'check')
-        if self.makeclean and not 'clean' in self.build_targets:
+        if self.makeclean and 'clean' not in self.build_targets:
             self.build_targets.insert(0, 'clean')
-        if self.makedistclean and not 'distclean' in self.build_targets:
+        if self.makedistclean and 'distclean' not in self.build_targets:
             self.build_targets.insert(0, 'distclean')
         if self.nobuild:
             # nobuild actually means "checkout"
@@ -361,9 +337,9 @@ class Config:
                 if phase in self.build_targets:
                     self.build_targets.remove(phase)
             self.build_targets.append('checkout')
-        if self.makedist and not 'dist' in self.build_targets:
+        if self.makedist and 'dist' not in self.build_targets:
             self.build_targets.append('dist')
-        if self.makedistcheck and not 'distcheck' in self.build_targets:
+        if self.makedistcheck and 'distcheck' not in self.build_targets:
             self.build_targets.append('distcheck')
 
     def set_from_cmdline_options(self, options=None):
@@ -374,19 +350,19 @@ class Config:
         if hasattr(options, 'autogen') and options.autogen:
             self.alwaysautogen = True
         if hasattr(options, 'check') and (
-                options.check and not 'check' in self.build_targets):
+                options.check and 'check' not in self.build_targets):
             self.build_targets.insert(0, 'check')
         if hasattr(options, 'clean') and (
-                options.clean and not 'clean' in self.build_targets):
+                options.clean and 'clean' not in self.build_targets):
             self.build_targets.insert(0, 'clean')
         if hasattr(options, 'distclean') and (
-                options.distclean and not 'distclean' in self.build_targets):
+                options.distclean and 'distclean' not in self.build_targets):
             self.build_targets.insert(0, 'distclean')
         if hasattr(options, 'dist') and (
-                options.dist and not 'dist' in self.build_targets):
+                options.dist and 'dist' not in self.build_targets):
             self.build_targets.append('dist')
         if hasattr(options, 'distcheck') and (
-                options.distcheck and not 'distcheck' in self.build_targets):
+                options.distcheck and 'distcheck' not in self.build_targets):
             self.build_targets.append('distcheck')
         if hasattr(options, 'ignore_suggests') and options.ignore_suggests:
             self.ignore_suggests = True
@@ -399,10 +375,10 @@ class Config:
             for item in options.tags:
                 self.tags += item.split(',')
         if hasattr(options, 'sticky_date') and options.sticky_date is not None:
-                self.sticky_date = options.sticky_date
+            self.sticky_date = options.sticky_date
         if hasattr(options, 'xvfb') and options.noxvfb is not None:
-                self.noxvfb = options.noxvfb
-        if hasattr(options, 'trycheckout') and  options.trycheckout:
+            self.noxvfb = options.noxvfb
+        if hasattr(options, 'trycheckout') and options.trycheckout:
             self.trycheckout = True
         if hasattr(options, 'nopoison') and options.nopoison:
             self.nopoison = True
@@ -417,7 +393,7 @@ class Config:
                 raise FatalError(_('Failed to parse \'min_age\' relative '
                                    'time'))
         if (hasattr(options, 'check_sysdeps') and
-            options.check_sysdeps is not None):
+                options.check_sysdeps is not None):
             self.check_sysdeps = options.check_sysdeps
 
     def __setattr__(self, k, v):
@@ -425,6 +401,7 @@ class Config:
         if k == 'quiet_mode' and v:
             try:
                 import curses
+                curses
                 logging.getLogger().setLevel(logging.ERROR)
             except ImportError:
                 logging.warning(

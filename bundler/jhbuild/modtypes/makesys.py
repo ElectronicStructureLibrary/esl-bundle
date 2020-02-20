@@ -21,17 +21,12 @@
 __metaclass__ = type
 
 import os
-import stat
 import shutil
-try:
-    import hashlib
-except ImportError:
-    import md5 as hashlib
 
-from jhbuild.errors import FatalError, BuildStateError, CommandError
+from jhbuild.utils import _
+from jhbuild.errors import FatalError
 from jhbuild.modtypes import \
      DownloadableModule, register_module_type, MakeModule
-from jhbuild.versioncontrol.tarball import TarballBranch
 
 __all__ = [ 'MakesysModule' ]
 
@@ -88,7 +83,6 @@ class MakesysModule(MakeModule, DownloadableModule):
 
     def do_clean(self, buildscript):
         buildscript.set_action(_('Cleaning'), self)
-        makeargs = self.get_makeargs(buildscript)
         cmd = '%s clean' % (os.environ.get('MAKE', 'make'))
         buildscript.execute(cmd, cwd = self.branch.srcdir,
                 extra_env = self.extra_env)

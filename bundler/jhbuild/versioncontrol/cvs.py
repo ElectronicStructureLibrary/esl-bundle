@@ -20,22 +20,16 @@
 __all__ = [
     'CVSRepository',
     'login',
-    'get_sticky_tag',
-    ]
+]
 __metaclass__ = type
 
 import sys
 import os
-try:
-    import hashlib
-except ImportError:
-    import md5 as hashlib
-
-import git
+import hashlib
 
 from jhbuild.errors import BuildStateError, CommandError
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import inpath, _, uprint
 from jhbuild.utils.sxml import sxml
 
 
@@ -66,16 +60,22 @@ def descramble(password):
     return ''.join([chr(_shifts[ord(ch)]) for ch in password[1:]])
 
 def _canonicalise_cvsroot(cvsroot):
-    if not cvsroot.startswith(':pserver:'): return cvsroot
+    if not cvsroot.startswith(':pserver:'):
+        return cvsroot
     parts = cvsroot.split(':')
     if parts[3].startswith('/'):
         parts[3] = '2401' + parts[3]
     return ':'.join(parts)
 
 def login(cvsroot, password=None):
-    if not cvsroot.startswith(':pserver:'): return
+    if not cvsroot.startswith(':pserver:'):
+        return
     cvsroot = _canonicalise_cvsroot(cvsroot)
     cvspass = os.path.join(os.environ['HOME'], '.cvspass')
+
+    # cvs won't ask for this, so don't write it
+    if password == '':
+        return
 
     # check if the password has already been entered:
     try:
@@ -93,7 +93,7 @@ def login(cvsroot, password=None):
                 break
     except IOError:
         pass
-     # if we have a password, just write it directly to the .cvspass file
+    # if we have a password, just write it directly to the .cvspass file
     if password is not None:
         fp = open(cvspass, 'a')
         fp.write('/1 %s %s\n' % (cvsroot, scramble(password)))
@@ -101,7 +101,7 @@ def login(cvsroot, password=None):
     else:
         # call cvs login ..
         if os.system('cvs -d %s login' % cvsroot) != 0:
-            sys.stderr.write(_('could not log into %s\n') % cvsroot)
+            uprint(_('could not log into %s') % cvsroot, file=sys.stderr)
             sys.exit(1)
 
 def check_sticky_tag(filename):
@@ -189,6 +189,8 @@ class CVSRepository(Repository):
 
     def branch(self, name, module=None, checkoutdir=None, revision=None,
                update_new_dirs='yes', override_checkoutdir='yes'):
+        from . import git
+
         if module is None:
             module = name
         # allow remapping of branch for module:
@@ -209,6 +211,9 @@ class CVSRepository(Repository):
     def to_sxml(self):
         return [sxml.repository(type='cvs', name=self.name, cvsroot=self.cvsroot)]
 
+    def get_sysdeps(self):
+        return ['cvs']
+
 
 class CVSBranch(Branch):
     """A class representing a CVS branch inside a CVS repository"""
@@ -220,16 +225,16 @@ class CVSBranch(Branch):
         self.update_new_dirs = update_new_dirs
         self.override_checkoutdir = override_checkoutdir
 
+    @property
     def srcdir(self):
         if self.checkoutdir:
             return os.path.join(self.checkoutroot, self.checkoutdir)
         else:
             return os.path.join(self.checkoutroot, self.module)
-    srcdir = property(srcdir)
 
+    @property
     def branchname(self):
         return self.revision
-    branchname = property(branchname)
 
     def _export(self, buildscript):
         cmd = ['cvs', '-z3', '-q', '-d', self.repository.cvsroot,

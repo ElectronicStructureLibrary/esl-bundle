@@ -24,7 +24,7 @@ import tempfile
 
 from jhbuild.utils.cmds import has_command
 from jhbuild.errors import CommandError
-from jhbuild.utils import fileutils
+from jhbuild.utils import fileutils, _
 
 
 def unpack_tar_file(localfile, target_directory):
@@ -50,9 +50,9 @@ def unpack_zip_file(localfile, target_directory):
     def attr_to_file_perm(host, attr):
         if host == 0:
             if attr & 1:
-                perm = 0444
+                perm = 0o444
             else:
-                perm = 0666
+                perm = 0o666
         else:
             perm = attr
             perm &= 0x08FF0000
@@ -61,12 +61,12 @@ def unpack_zip_file(localfile, target_directory):
         return perm
 
     def attr_to_dir_perm(host, attr):
-        if host==0:
+        if host == 0:
             # attr & 16 should be true (this is directory bit)
             if attr & 1:
-                perm = 0444
+                perm = 0o444
             else:
-                perm = 0666
+                perm = 0o666
         else:
             perm = attr
             perm &= 0xFFFF0000
@@ -143,7 +143,7 @@ def unpack_archive(buildscript, localfile, target_directory, checkoutdir=None):
                 unpack_zip_file(localfile, target_directory)
             else:
                 raise CommandError(_('Failed to unpack %s (unknown archive type)') % localfile)
-        except:
+        except Exception:
             raise CommandError(_('Failed to unpack %s') % localfile)
 
     if checkoutdir:

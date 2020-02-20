@@ -21,6 +21,8 @@ import os
 import sys
 import subprocess as real_subprocess
 
+from .compat import file_type
+
 PIPE = real_subprocess.PIPE
 STDOUT = real_subprocess.STDOUT
 
@@ -70,8 +72,10 @@ def cmdline2list(cmd_string):
             if character=='\\':
                 escape = True
             elif character=='"':
-                if in_quotes: in_quotes = False
-                else:         in_quotes = True
+                if in_quotes:
+                    in_quotes = False
+                else:
+                    in_quotes = True
             elif (character==' ' or character==9) and not in_quotes:
                 result.append(current_element)
                 current_element = ""
@@ -129,7 +133,7 @@ class Popen(real_subprocess.Popen):
         if self.__emulate_close_fds:
             for f in self.stdin, self.stdout, self.stderr:
                 # This somehow tells us if we are dealing with a pipe.
-                if isinstance(f, file) and f.name == '<fdopen>':
+                if isinstance(f, file_type) and f.name == '<fdopen>':
                     # Not that it actually matters.
                     f.close()
             sys.stdout.flush()

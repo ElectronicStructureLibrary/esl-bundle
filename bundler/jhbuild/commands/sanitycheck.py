@@ -17,12 +17,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys
 import os
-import re
 
 from jhbuild.commands import Command, register_command
 from jhbuild.utils.cmds import get_output, check_version
+from jhbuild.utils import inpath, uprint, N_, _
 from jhbuild.errors import UsageError, CommandError
 
 def get_aclocal_path():
@@ -31,15 +30,6 @@ def get_aclocal_path():
     data = get_output(['aclocal', '--print-ac-dir'])
     path.append(data[:-1])
     return path
-
-def inpath(filename, path):
-    for dir in path:
-        if os.path.isfile(os.path.join(dir, filename)):
-            return True
-        # also check for filename.exe on Windows
-        if sys.platform.startswith('win') and os.path.isfile(os.path.join(dir, filename + '.exe')):
-            return True
-    return False
 
 
 class cmd_sanitycheck(Command):
@@ -94,7 +84,7 @@ class cmd_sanitycheck(Command):
         xmlcatalog = True
         try:
             get_output(['which', 'xmlcatalog'])
-        except:
+        except CommandError:
             xmlcatalog = False
             uprint(_('Could not find XML catalog (usually part of the package \'libxml2-utils\')'))
 
@@ -104,25 +94,18 @@ class cmd_sanitycheck(Command):
                                  ('http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl',
                                   'DocBook XSL Stylesheets')]:
                 try:
-                    data = get_output(['xmlcatalog', '/etc/xml/catalog', item])
-                except:
+                    get_output(['xmlcatalog', '/etc/xml/catalog', item])
+                except CommandError:
                     uprint(_('Could not find %s in XML catalog (usually part of package \'docbook-xsl\')') % name)
 
         # Perl module used by tools such as intltool:
         perlmod = 'XML::Parser'
         try:
             get_output(['perl', '-M%s' % perlmod, '-e', 'exit'])
-        except:
+        except CommandError:
             uprint(_('Could not find the Perl module %s (usually part of package \'libxml-parser-perl\' or \'perl-XML-Parser\')') % perlmod)
 
-        # check for cvs:
-        if not inpath('cvs', os.environ['PATH'].split(os.pathsep)):
-            uprint(_('%s not found') % 'cvs')
-
-        # check for svn:
-        if not inpath('svn', os.environ['PATH'].split(os.pathsep)):
-            uprint(_('%s not found (usually part of the package \'subversion\')') % 'svn')
-
+        # check for a downloading util:
         if not (inpath('curl', os.environ['PATH'].split(os.pathsep)) or
                 inpath('wget', os.environ['PATH'].split(os.pathsep))):
             uprint(_('curl or wget not found'))
@@ -133,13 +116,13 @@ class cmd_sanitycheck(Command):
         else:
             try:
                 git_help = os.popen('git --help', 'r').read()
-                if not 'clone' in git_help:
+                if 'clone' not in git_help:
                     uprint(_('Installed git program is not the right git'))
                 else:
                     if not check_version(['git', '--version'],
                                  r'git version ([\d.]+)', '1.5.6'):
-                         uprint(_('%s not found') % 'git >= 1.5.6')
-            except:
+                        uprint(_('%s not found') % 'git >= 1.5.6')
+            except EnvironmentError:
                 uprint(_('Could not check git program'))
 
         # check for flex/bison:
@@ -149,6 +132,18 @@ class cmd_sanitycheck(Command):
             uprint(_('%s not found') % 'bison')
         if not inpath('xzcat', os.environ['PATH'].split(os.pathsep)):
             uprint(_('%s not found') % 'xzcat')
+
+        # check for "sysdeps --install" deps:
+        try:
+            from gi.repository import GLib
+            GLib
+        except ImportError:
+            uprint(_('%s not found') % 'python-gobject')
+        try:
+            import dbus.glib
+            dbus.glib
+        except ImportError:
+            uprint(_('%s not found') % 'dbus-python')
 
     def check_m4(self):
         try:
@@ -166,7 +161,7 @@ class cmd_sanitycheck(Command):
                 uprint(_("Please copy the lacking macros (%(macros)s) in one of the following paths: %(path)s") % \
                        {'macros': ', '.join(not_in_path), 'path': ', '.join(path)})
 
-        except CommandError, exc:
+        except CommandError as exc:
             uprint(str(exc))
 
 register_command(cmd_sanitycheck)

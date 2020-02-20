@@ -23,12 +23,11 @@ __metaclass__ = type
 
 import os
 import sys
-import urlparse
 from subprocess import Popen, PIPE
 
 from jhbuild.errors import FatalError, CommandError
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import inpath, _, urlutils, udecode
 
 class HgRepository(Repository):
     """A class representing a Mercurial repository.
@@ -51,32 +50,35 @@ class HgRepository(Repository):
             module = self.config.branches[name]
             if not module:
                 raise FatalError(_('branch for %(name)s has wrong override, check your %(filename)s') % \
-                                   {'name'     : name,
-                                    'filename' : self.config.filename})
+                                 {'name'     : name,
+                                  'filename' : self.config.filename})
         else:
             if module is None:
                 module = name
             if not self.href.startswith('ssh://'):
-                module = urlparse.urljoin(self.href, module)
+                module = urlutils.urljoin(self.href, module)
             else:
                 module = self.href + module
         return HgBranch(self, module, checkoutdir)
+
+    def get_sysdeps(self):
+        return ['hg']
 
 
 class HgBranch(Branch):
     """A class representing a Mercurial branch."""
 
+    @property
     def srcdir(self):
         if self.checkoutdir:
             return os.path.join(self.checkoutroot, self.checkoutdir)
         else:
             return os.path.join(self.checkoutroot,
                                 os.path.basename(self.module))
-    srcdir = property(srcdir)
 
+    @property
     def branchname(self):
         return None
-    branchname = property(branchname)
 
     def _checkout(self, buildscript):
         cmd = ['hg', 'clone', self.module]
@@ -96,7 +98,7 @@ class HgBranch(Branch):
         else:
             hg_update_path = os.path.join(PKGDATADIR, 'hg-update.py')
         hg_update_path = os.path.normpath(hg_update_path)
-        buildscript.execute([hg_update_path], 'hg', cwd=self.srcdir)
+        buildscript.execute([sys.executable, hg_update_path], 'hg', cwd=self.srcdir)
 
     def checkout(self, buildscript):
         if not inpath('hg', os.environ['PATH'].split(os.pathsep)):
@@ -108,9 +110,9 @@ class HgBranch(Branch):
         try:
             hg = Popen(['hg', 'ti', '--template', '{node}'], stdout=PIPE,
                        cwd=self.srcdir)
-        except OSError, e:
+        except OSError as e:
             raise CommandError(str(e))
-        return hg.stdout.read().strip()
+        return udecode(hg.stdout.read()).strip()
 
     def tree_id(self):
         if not os.path.exists(self.srcdir):

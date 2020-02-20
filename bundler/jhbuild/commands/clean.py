@@ -21,7 +21,8 @@ from optparse import make_option
 
 import jhbuild.moduleset
 import jhbuild.frontends
-from jhbuild.errors import UsageError, FatalError
+from jhbuild.errors import FatalError
+from jhbuild.utils import _
 from jhbuild.commands import Command, register_command
 
 

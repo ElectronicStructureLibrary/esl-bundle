@@ -24,6 +24,8 @@ import subprocess
 import sys
 from signal import SIGINT
 from jhbuild.errors import CommandError
+from jhbuild.utils import _, udecode
+from jhbuild.utils.compat import string_types
 
 def get_output(cmd, cwd=None, extra_env=None, get_stderr = True):
     '''Return the output (stdout and stderr) from the command.
@@ -40,7 +42,7 @@ def get_output(cmd, cwd=None, extra_env=None, get_stderr = True):
         raise CommandError(_('Call to undefined command'))
 
     kws = {}
-    if isinstance(cmd, (str, unicode)):
+    if isinstance(cmd, string_types):
         kws['shell'] = True
     if cwd is not None:
         kws['cwd'] = cwd
@@ -59,12 +61,12 @@ def get_output(cmd, cwd=None, extra_env=None, get_stderr = True):
                              stdout=subprocess.PIPE,
                              stderr=stderr_output,
                              **kws)
-    except OSError, e:
+    except OSError as e:
         raise CommandError(str(e))
     stdout, stderr = p.communicate()
     if p.returncode != 0:
         raise CommandError(_('Error running %s') % cmd, p.returncode)
-    return stdout
+    return udecode(stdout)
 
 class Pipeline(subprocess.Popen):
     '''A class that wraps a sequence of subprocess.Popen() objects
@@ -102,7 +104,6 @@ class Pipeline(subprocess.Popen):
         self.children = []
         close_stdin = False
         for index, cmd in enumerate(commands):
-            first_command = (index == 0)
             more_commands = index + 1 < len(commands)
 
             if more_commands:
@@ -111,7 +112,7 @@ class Pipeline(subprocess.Popen):
                 c2cwrite = stdout
 
             self.children.append(
-                subprocess.Popen(cmd, shell=isinstance(cmd, (str, unicode)),
+                subprocess.Popen(cmd, shell=isinstance(cmd, string_types),
                                  bufsize=bufsize, close_fds=True,
                                  cwd=cwd, env=env,
                                  stdin=stdin,
@@ -158,7 +159,7 @@ def spawn_child(command, use_pipe=False,
         p = Pipeline(command, cwd=cwd, env=env,
                      stdin=stdin, stdout=stdout, stderr=stderr)
     else:
-        p = subprocess.Popen(command, shell=isinstance(command, (str,unicode)),
+        p = subprocess.Popen(command, shell=isinstance(command, string_types),
                              close_fds=True, cwd=cwd, env=env,
                              stdin=stdin, stdout=stdout, stderr=stderr)
     return p
@@ -173,36 +174,39 @@ def pprint_output(pipe, format_line):
         read_set.append(pipe.stdout)
     if pipe.stderr:
         read_set.append(pipe.stderr)
-    if not sys.stdin.closed:
+    if not getattr(sys.stdin, "closed", True):
         read_set.append(sys.stdin)
 
-    out_data = err_data = ''
+    def format_line_text(data, *args):
+        return format_line(udecode(data), *args)
+
+    out_data = err_data = b''
     try:
         while read_set:
             rlist, wlist, xlist = select.select(read_set, [], [])
 
             if pipe.stdout in rlist:
                 out_chunk = os.read(pipe.stdout.fileno(), 10000)
-                if out_chunk == '':
+                if out_chunk == b'':
                     pipe.stdout.close()
                     read_set.remove(pipe.stdout)
                     if sys.stdin in read_set:
                         read_set.remove(sys.stdin)
                 out_data += out_chunk
-                while '\n' in out_data:
-                    pos = out_data.find('\n')
-                    format_line(out_data[:pos+1], False)
+                while b'\n' in out_data:
+                    pos = out_data.find(b'\n')
+                    format_line_text(out_data[:pos+1], False)
                     out_data = out_data[pos+1:]
 
             if pipe.stderr in rlist:
                 err_chunk = os.read(pipe.stderr.fileno(), 10000)
-                if err_chunk == '':
+                if err_chunk == b'':
                     pipe.stderr.close()
                     read_set.remove(pipe.stderr)
                 err_data += err_chunk
-                while '\n' in err_data:
-                    pos = err_data.find('\n')
-                    format_line(err_data[:pos+1], True)
+                while b'\n' in err_data:
+                    pos = err_data.find(b'\n')
+                    format_line_text(err_data[:pos+1], True)
                     err_data = err_data[pos+1:]
 
             # safeguard against tinderbox that close stdin
@@ -213,9 +217,9 @@ def pprint_output(pipe, format_line):
 
         # flush the remainder of stdout/stderr data lacking newlines
         if out_data:
-            format_line(out_data, False)
+            format_line_text(out_data, False)
         if err_data:
-            format_line(err_data, True)
+            format_line_text(err_data, True)
 
     except KeyboardInterrupt:
         # interrupt received.  Send SIGINT to child process.
@@ -235,7 +239,7 @@ def has_command(cmd):
 
         # also check for cmd.exe on Windows
         if sys.platform.startswith('win') and os.path.exists(prog + ".exe"):
-             return True
+            return True
     return False
 
 def compare_version(version, minver):
@@ -243,14 +247,14 @@ def compare_version(version, minver):
     for i, ver in enumerate(version):
         part = re.sub(r'^[^\d]*(\d*).*$', r'\1', ver)
         if not part:
-            version[i] = None
+            version[i] = float("-inf")
         else:
             version[i] = int(part)
     minver = minver.split('.')
     for i, ver in enumerate(minver):
         part = re.sub(r'^[^\d]*(\d*).*$', r'\1', ver)
         if not part:
-            minver[i] = None
+            minver[i] = float("-inf")
         else:
             minver[i] = int(part)
     return version >= minver
@@ -258,7 +262,7 @@ def compare_version(version, minver):
 def check_version(cmd, regexp, minver, extra_env=None):
     try:
         data = get_output(cmd, extra_env=extra_env)
-    except:
+    except CommandError:
         return False
     match = re.match(regexp, data, re.MULTILINE)
     if not match:

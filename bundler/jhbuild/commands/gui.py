@@ -18,13 +18,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import pygtk
-pygtk.require('2.0')
-import gtk
-
 from jhbuild.commands import Command, register_command
+from jhbuild.utils import N_
 import jhbuild.frontends
-
 
 class cmd_gui(Command):
     doc = N_('Build targets from a GUI app')
@@ -33,11 +29,15 @@ class cmd_gui(Command):
     usage_args = ''
 
     def run(self, config, options, args, help=None):
+        import gi
+        gi.require_version("Gtk", "3.0")
+        from gi.repository import Gtk
+
         # request GTK build script.
         config.buildscript = 'gtkui'
 
         build = jhbuild.frontends.get_buildscript(config)
         build.show()
-        gtk.main()
+        Gtk.main()
 
 register_command(cmd_gui)

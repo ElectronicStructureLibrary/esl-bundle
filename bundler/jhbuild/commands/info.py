@@ -17,11 +17,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys
+from __future__ import print_function
+
 import time
+
+from optparse import make_option
 
 import jhbuild.moduleset
 import jhbuild.frontends
+from jhbuild.utils import uprint, N_, _
 from jhbuild.errors import FatalError
 from jhbuild.commands import Command, register_command
 from jhbuild.modtypes import MetaModule
@@ -38,21 +42,45 @@ class cmd_info(Command):
     name = 'info'
     usage_args = N_('[ modules ... ]')
 
+    def __init__(self):
+        Command.__init__(self, [
+            make_option('--installed',
+                        action='store_true', dest='installed', default=False,
+                        help=_('only display information for installed modules. '
+                               'This will not list system dependencies. If one or more '
+                               'module names are specified and at least one module is '
+                               'not installed, then the command will return 1.'))
+            ])
 
     def run(self, config, options, args, help=None):
         module_set = jhbuild.moduleset.load(config)
         packagedb = module_set.packagedb
 
         if args:
+            # module names present
+            all_installed = True
             for modname in args:
                 try:
                     module = module_set.get_module(modname, ignore_case = True)
                 except KeyError:
                     raise FatalError(_('unknown module %s') % modname)
-                self.show_info(module, packagedb, module_set)
+                package_entry = packagedb.get(module.name)
+                installed = package_entry is not None
+                all_installed = all_installed and installed
+                if (options.installed and installed) or not options.installed:
+                    self.show_info(module, packagedb, module_set)
+            if options.installed and not all_installed:
+                return 1
         else:
+            # no module names given
             for module in module_set.modules.values():
-                self.show_info(module, packagedb, module_set)
+                package_entry = packagedb.get(module.name)
+                if options.installed:
+                    if package_entry is not None:
+                        self.show_info(module, packagedb, module_set)
+                else:
+                    # no installed option selected, simply show all modules
+                    self.show_info(module, packagedb, module_set)
 
     def show_info(self, module, packagedb, module_set):
         package_entry = packagedb.get(module.name)
@@ -120,6 +148,6 @@ class cmd_info(Command):
         if before:
             uprint(_('Before:'), ', '.join(before))
 
-        print
+        print()
 
 register_command(cmd_info)

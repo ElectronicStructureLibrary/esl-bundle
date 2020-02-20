@@ -18,11 +18,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import os
-import optparse
-import re
-import stat
-import sys
-import time
 from optparse import make_option
 import logging
 
@@ -30,8 +25,7 @@ import jhbuild.moduleset
 import jhbuild.frontends
 from jhbuild.errors import UsageError, FatalError, CommandError
 from jhbuild.commands import Command, BuildCommand, register_command
-
-from jhbuild.config import parse_relative_time
+from jhbuild.utils import uprint, N_, _
 
 
 class cmd_update(Command):
@@ -100,7 +94,7 @@ class cmd_updateone(Command):
         module_set = jhbuild.moduleset.load(config)
         try:
             module_list = [module_set.get_module(modname, ignore_case = True) for modname in args]
-        except KeyError, e:
+        except KeyError as e:
             raise FatalError(_("A module called '%s' could not be found.") % e)
 
         if not module_list:
@@ -138,7 +132,7 @@ class cmd_cleanone(Command):
         module_set = jhbuild.moduleset.load(config)
         try:
             module_list = [module_set.get_module(modname, ignore_case = True) for modname in args]
-        except KeyError, e:
+        except KeyError as e:
             raise FatalError(_("A module called '%s' could not be found.") % e)
 
         if not module_list:
@@ -234,8 +228,8 @@ class cmd_build(BuildCommand):
 
         module_set = jhbuild.moduleset.load(config)
         modules = args or config.modules
-        full_module_list = module_set.get_full_module_list \
-                               (modules, config.skip,
+        full_module_list = module_set.get_full_module_list(
+                                modules, config.skip,
                                 include_suggests=not config.ignore_suggests,
                                 include_afters=options.build_optional_modules)
         full_module_list = module_set.remove_tag_modules(full_module_list,
@@ -254,6 +248,7 @@ class cmd_build(BuildCommand):
             return 0
 
         if config.check_sysdeps:
+            install_cmd = 'jhbuild sysdeps --install' + (' ' + ' '.join(args) if args else '')
             module_state = module_set.get_module_state(full_module_list)
             if not self.required_system_dependencies_installed(module_state):
                 self.print_system_dependencies(module_state)
@@ -261,7 +256,7 @@ class cmd_build(BuildCommand):
                                    ' Install using the command %(cmd)s or to '
                                    'ignore system dependencies use command-line'
                                    ' option %(opt)s' \
-                                   % {'cmd' : "'jhbuild sysdeps --install'",
+                                   % {'cmd' : "'%s'" % install_cmd,
                                       'opt' : '--nodeps'}))
 
         build = jhbuild.frontends.get_buildscript(config, module_list, module_set=module_set)
@@ -308,6 +303,9 @@ class cmd_buildone(BuildCommand):
             make_option('-x', '--no-xvfb',
                         action='store_true', dest='noxvfb', default=False,
                         help=_('run tests in real X and not in Xvfb')),
+            make_option('-N', '--no-poison',
+                        action='store_true', dest='nopoison', default=False,
+                        help=_("don't poison modules on failure")),
             make_option('-f', '--force',
                         action='store_true', dest='force_policy', default=False,
                         help=_('build even if policy says not to')),
@@ -325,7 +323,7 @@ class cmd_buildone(BuildCommand):
             modname = modname.rstrip(os.sep)
             try:
                 module = module_set.get_module(modname, ignore_case=True)
-            except KeyError, e:
+            except KeyError:
                 default_repo = jhbuild.moduleset.get_default_repo()
                 if not default_repo:
                     continue
@@ -367,7 +365,7 @@ class cmd_distone(Command):
         module_set = jhbuild.moduleset.load(config)
         try:
             module_list = [module_set.get_module(modname, ignore_case = True) for modname in args]
-        except KeyError, e:
+        except KeyError as e:
             raise FatalError(_("A module called '%s' could not be found.") % e)
 
         if not module_list:
@@ -407,7 +405,7 @@ class cmd_run(Command):
             return self.run(config, options, args)
         try:
             return os.execlp(args[0], *args)
-        except OSError, exc:
+        except OSError as exc:
             raise FatalError(_("Unable to execute the command '%(command)s': %(err)s") % {
                     'command':args[0], 'err':str(exc)})
 
@@ -417,7 +415,7 @@ class cmd_run(Command):
             module_set = jhbuild.moduleset.load(config)
             try:
                 module = module_set.get_module(module_name, ignore_case = True)
-            except KeyError, e:
+            except KeyError as e:
                 raise FatalError(_("A module called '%s' could not be found.") % e)
 
             build = jhbuild.frontends.get_buildscript(config, [module], module_set=module_set)
@@ -427,7 +425,7 @@ class cmd_run(Command):
                 workingdir = module.get_srcdir(build)
             try:
                 build.execute(args, cwd=workingdir)
-            except CommandError, exc:
+            except CommandError as exc:
                 if args:
                     raise FatalError(_("Unable to execute the command '%s'") % args[0])
                 else:
@@ -437,7 +435,7 @@ class cmd_run(Command):
                 os.execlp(args[0], *args)
             except IndexError:
                 raise FatalError(_('No command given'))
-            except OSError, exc:
+            except OSError as exc:
                 raise FatalError(_("Unable to execute the command '%(command)s': %(err)s") % {
                         'command':args[0], 'err':str(exc)})
 
@@ -557,3 +555,21 @@ class cmd_dot(Command):
         module_set.write_dot(modules, **kwargs)
 
 register_command(cmd_dot)
+
+class cmd_postinst(Command):
+    doc = N_('Run post-install triggers for named modules (or all)')
+
+    name = 'postinst'
+    usage_args = N_('[ modules ... ]')
+
+    def __init__(self):
+        Command.__init__(self, [])
+
+    def run(self, config, options, args, help=None):
+        config.set_from_cmdline_options(options)
+
+        module_set = jhbuild.moduleset.load(config)
+        build = jhbuild.frontends.get_buildscript(config, args, module_set=module_set)
+        return build.run_triggers(args)
+
+register_command(cmd_postinst)

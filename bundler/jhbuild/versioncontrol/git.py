@@ -23,32 +23,31 @@ __metaclass__ = type
 
 import os
 import stat
-import urlparse
 import subprocess
 import re
-import urllib
-import sys
 import logging
 
 from jhbuild.errors import FatalError, CommandError
 from jhbuild.utils.cmds import get_output, check_version
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
-import jhbuild.versioncontrol.svn
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import inpath, _
 from jhbuild.utils.sxml import sxml
+from jhbuild.utils import urlutils
+from jhbuild.utils.urlutils import urlparse_mod
+from jhbuild.utils.compat import iterkeys
 
 # Make sure that the urlparse module considers git:// and git+ssh://
 # schemes to be netloc aware and set to allow relative URIs.
-if 'git' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('git')
-if 'git' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('git')
-if 'git+ssh' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('git+ssh')
-if 'git+ssh' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('git+ssh')
-if 'ssh' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('ssh')
+if 'git' not in urlparse_mod.uses_netloc:
+    urlparse_mod.uses_netloc.append('git')
+if 'git' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('git')
+if 'git+ssh' not in urlparse_mod.uses_netloc:
+    urlparse_mod.uses_netloc.append('git+ssh')
+if 'git+ssh' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('git+ssh')
+if 'ssh' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('ssh')
 
 def get_git_extra_env():
     # we run git without the JHBuild LD_LIBRARY_PATH and PATH, as it can
@@ -112,7 +111,7 @@ class GitRepository(Repository):
                 else:
                     if new_module:
                         module = new_module
-        if not (urlparse.urlparse(module)[0] or module[0] == '/'):
+        if not (urlutils.urlparse(module)[0] or module[0] == '/'):
             if self.href.endswith('/'):
                 base_href = self.href
             else:
@@ -127,6 +126,9 @@ class GitRepository(Repository):
 
     def to_sxml(self):
         return [sxml.repository(type='git', name=self.name, href=self.href)]
+
+    def get_sysdeps(self):
+        return ['git']
 
 
 class GitBranch(Branch):
@@ -150,6 +152,7 @@ class GitBranch(Branch):
             name = name[:-4]
         return name
  
+    @property
     def srcdir(self):
         path_elements = [self.checkoutroot]
         if self.checkoutdir:
@@ -159,11 +162,10 @@ class GitBranch(Branch):
         if self.subdir:
             path_elements.append(self.subdir)
         return os.path.join(*path_elements)
-    srcdir = property(srcdir)
 
+    @property
     def branchname(self):
         return self.branch
-    branchname = property(branchname)
 
     def execute_git_predicate(self, predicate):
         """A git command wrapper for the cases, where only the boolean outcome
@@ -215,10 +217,11 @@ class GitBranch(Branch):
             raise CommandError(_('Unexpected: Checkoutdir is not a git '
                     'repository:' + self.get_checkoutdir()))
         try:
-            return os.path.basename(
-                    get_output(['git', 'symbolic-ref', '-q', 'HEAD'],
+            full_branch = get_output(['git', 'symbolic-ref', '-q', 'HEAD'],
                             cwd=self.get_checkoutdir(),
-                            extra_env=get_git_extra_env()).strip())
+                            extra_env=get_git_extra_env()).strip()
+            # strip refs/heads/ to get the branch name only
+            return full_branch.replace('refs/heads/', '')
         except CommandError:
             return None
 
@@ -282,7 +285,7 @@ class GitBranch(Branch):
 
     def rebase_current_branch(self, buildscript):
         """Pull the current branch if it is tracking a remote branch."""
-        branch = self.get_current_branch();
+        branch = self.get_current_branch()
         if not self.is_tracking_a_remote_branch(branch):
             return
 
@@ -336,18 +339,18 @@ class GitBranch(Branch):
 
     def exists(self):
         try:
-            refs = get_output(['git', 'ls-remote', self.module],
-                    extra_env=get_git_extra_env())
-        except:
+            get_output(['git', 'ls-remote', self.module],
+                       extra_env=get_git_extra_env())
+        except CommandError:
             return False
 
-        #FIXME: Parse output from ls-remote to work out if tag/branch is present
+        # FIXME: Parse output from ls-remote to work out if tag/branch is present
 
         return True
 
     def _get_commit_from_date(self):
         cmd = ['git', 'log', '--max-count=1', '--first-parent',
-                '--until=%s' % self.config.sticky_date, 'master']
+               '--until=%s' % self.config.sticky_date, 'master']
         cmd_desc = ' '.join(cmd)
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 cwd=self.get_checkoutdir(),
@@ -363,8 +366,25 @@ class GitBranch(Branch):
                            % (cmd_desc, stdout))
 
     def _export(self, buildscript):
-        # FIXME: should implement this properly
         self._checkout(buildscript)
+
+        try:
+            output = get_output(['git', 'rev-parse', 'HEAD'],
+                    cwd = self.get_checkoutdir(), get_stderr=False,
+                    extra_env=get_git_extra_env())
+            tag = output.strip()
+        except CommandError:
+            tag = 'unknown'
+
+        filename = self.get_module_basename() + '-' + tag + '.zip'
+
+        if self.config.export_dir is not None:
+            path = os.path.join(self.config.export_dir, filename)
+        else:
+            path = os.path.join(self.checkoutroot, filename)
+
+        git_extra_args = {'cwd': self.get_checkoutdir(), 'extra_env': get_git_extra_env()}
+        buildscript.execute(['git', 'archive', '-o', path, 'HEAD'], **git_extra_args)
 
     def _update_submodules(self, buildscript):
         if os.path.exists(os.path.join(self.get_checkoutdir(), '.gitmodules')):
@@ -381,11 +401,14 @@ class GitBranch(Branch):
         if self.config.nonetwork:
             return
 
-        # Calculate anew in case a configuration reload changed the mirror root.
+        # Calculate a new in case a configuration reload changed the mirror root.
         mirror_dir = get_git_mirror_directory(self.config.dvcs_mirror_dir,
                 self.checkoutdir, self.unmirrored_module)
 
         if os.path.exists(mirror_dir):
+            buildscript.execute(['git', 'remote', 'set-url', 'origin',
+                    self.unmirrored_module], cwd=mirror_dir,
+                    extra_env=get_git_extra_env())
             buildscript.execute(['git', 'fetch'], cwd=mirror_dir,
                     extra_env=get_git_extra_env())
         else:
@@ -429,14 +452,14 @@ class GitBranch(Branch):
                 raise CommandError(_('Failed to update module as it switched to git (you should check for changes then remove the directory).'))
             raise CommandError(_('Failed to update module (missing .git) (you should check for changes then remove the directory).'))
 
+        if update_mirror:
+            self.update_dvcs_mirror(buildscript)
+
         buildscript.execute(['git', 'remote', 'set-url', 'origin',
                 self.module], **git_extra_args)
 
         buildscript.execute(['git', 'remote', 'update', 'origin'],
                 **git_extra_args)
-
-        if update_mirror:
-            self.update_dvcs_mirror(buildscript)
 
         if self.config.sticky_date:
             self.move_to_sticky_date(buildscript)
@@ -529,14 +552,14 @@ class GitSvnBranch(GitBranch):
                     if not comment_line.search(line):
                         ext += ' ' + line
 
-                match = re.compile("^(\.) (.+)").search(". " + ext)
+                match = re.compile("^(\\.) (.+)").search(". " + ext)
             except OSError:
                 raise FatalError(_("External handling failed\n If you are running git version < 1.5.6 it is recommended you update.\n"))
 
         # only parse the final match
         if match:
             branch = match.group(1)
-            external = urllib.unquote(match.group(2).replace("%0A", " ").strip("%20 ")).split()
+            external = urlutils.unquote(match.group(2).replace("%0A", " ").strip("%20 ")).split()
             revision_expr = re.compile(r"-r(\d*)")
             i = 0
             while i < len(external):
@@ -549,7 +572,7 @@ class GitSvnBranch(GitBranch):
                     externals[external[i]] = (external[i+1], None)
                     i = i+2
         
-        for extdir in externals.iterkeys():
+        for extdir in iterkeys(externals):
             uri = externals[extdir][0]
             revision = externals[extdir][1]
             extdir = cwd+os.sep+extdir
@@ -563,6 +586,8 @@ class GitSvnBranch(GitBranch):
                 extbranch._checkout(buildscript)
 
     def _checkout(self, buildscript, copydir=None):
+        from . import svn
+
         if self.config.sticky_date:
             raise FatalError(_('date based checkout not yet supported\n'))
 
@@ -572,7 +597,7 @@ class GitSvnBranch(GitBranch):
 
         # FIXME (add self.revision support)
         try:
-            last_revision = jhbuild.versioncontrol.svn.get_info (self.module)['last changed rev']
+            last_revision = svn.get_info (self.module)['last changed rev']
             if not self.revision:
                 cmd.extend(['-r', last_revision])
         except KeyError:
@@ -590,13 +615,13 @@ class GitSvnBranch(GitBranch):
             cmd = ['git', 'svn', 'show-ignore']
             s = get_output(cmd, cwd = self.get_checkoutdir(copydir),
                     extra_env=get_git_extra_env())
-            fd = file(os.path.join(
+            fd = open(os.path.join(
                         self.get_checkoutdir(copydir), '.git/info/exclude'), 'a')
             fd.write(s)
             fd.close()
             buildscript.execute(cmd, cwd=self.get_checkoutdir(copydir),
                     extra_env=get_git_extra_env())
-        except:
+        except (CommandError, EnvironmentError):
             pass
 
         # FIXME, git-svn should support externals
@@ -639,7 +664,7 @@ class GitSvnBranch(GitBranch):
                 # is known to fail on some versions
                 cmd = "git svn show-ignore >> .git/info/exclude"
                 buildscript.execute(cmd, **git_extra_args)
-            except:
+            except CommandError:
                 pass
 
         # FIXME, git-svn should support externals
@@ -653,12 +678,12 @@ class GitCvsBranch(GitBranch):
     def may_checkout(self, buildscript):
         return Branch.may_checkout(self, buildscript)
 
+    @property
     def branchname(self):
         for b in ['remotes/' + str(self.branch), self.branch, 'trunk', 'master']:
             if self.branch_exist(b):
                 return b
         raise
-    branchname = property(branchname)
 
     def _checkout(self, buildscript, copydir=None):
 

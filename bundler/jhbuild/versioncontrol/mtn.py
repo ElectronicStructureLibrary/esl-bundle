@@ -26,7 +26,7 @@ import os
 from jhbuild.errors import CommandError, FatalError
 from jhbuild.utils.cmds import get_output
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import inpath, _
 
 class MonotoneRepository(Repository):
     """A class representing a Monotone database."""
@@ -50,8 +50,8 @@ class MonotoneRepository(Repository):
             module = self.config.branches[module]
             if not module:
                 raise FatalError(_('branch for %(name)s has wrong override, check your %(filename)s') % \
-                                   {'name'     : name,
-                                    'filename' : self.config.filename})
+                                 {'name'     : name,
+                                  'filename' : self.config.filename})
 
         if not branch:
             branch = self.defbranch
@@ -67,6 +67,7 @@ class MonotoneBranch(Branch):
         self.branch = branch
         self.mtn_module = module
 
+    @property
     def _codir(self):
         if self.checkoutdir:
             return os.path.join(self.checkoutroot, self.checkoutdir)
@@ -74,18 +75,17 @@ class MonotoneBranch(Branch):
             return os.path.join(self.checkoutroot, self.branch)
         else:
             return os.path.join(self.checkoutroot, self.name)
-    _codir = property(_codir)
 
+    @property
     def srcdir(self):
         if self.mtn_module:
             return os.path.join(self._codir, self.mtn_module)
         else:
             return self._codir
-    srcdir = property(srcdir)
 
+    @property
     def branchname(self):
         return self.branch
-    branchname = property(branchname)
 
     def _init(self, buildscript):
         """Initializes the monotone database"""

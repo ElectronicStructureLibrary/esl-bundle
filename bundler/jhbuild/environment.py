@@ -21,14 +21,15 @@
 
 import sys
 import os
+from distutils.sysconfig import get_python_lib
 
-from jhbuild.errors import FatalError, CommandError
 from jhbuild.utils.cmds import get_output
+from jhbuild.utils.compat import maplist
 
 if sys.platform.startswith('win'):
     from jhbuild.utils import subprocess_win32
 
-def addpath(envvar, path):
+def addpath(envvar, path, prepend=True):
     '''Adds a path to an environment variable.'''
     if envvar in [ 'LDFLAGS', 'CFLAGS', 'CXXFLAGS' ]:
         if sys.platform.startswith('win'):
@@ -62,7 +63,10 @@ def addpath(envvar, path):
 
         envval = os.environ.get(envvar, path)
         parts = envval.split(pathsep)
-        parts.insert(0, path)
+        if prepend:
+            parts.insert(0, path)
+        else:
+            parts.append(path)
         # remove duplicate entries:
         i = 1
         while i < len(parts):
@@ -87,31 +91,34 @@ def setup_env_defaults(system_libdirs):
                 addpath('PKG_CONFIG_PATH', full_name)
 
     # GI_TYPELIB_PATH
-    if not 'GI_TYPELIB_PATH' in os.environ:
+    if 'GI_TYPELIB_PATH' not in os.environ:
         for dirname in reversed(system_libdirs):
             full_name = os.path.join(dirname, 'girepository-1.0')
             if os.path.exists(full_name):
                 addpath('GI_TYPELIB_PATH', full_name)
 
     # XDG_DATA_DIRS
-    if not 'XDG_DATA_DIRS' in os.environ:
+    if 'XDG_DATA_DIRS' not in os.environ:
         os.environ['XDG_DATA_DIRS'] = '/usr/local/share:/usr/share'
 
     # XDG_CONFIG_DIRS
-    if not 'XDG_CONFIG_DIRS' in os.environ:
+    if 'XDG_CONFIG_DIRS' not in os.environ:
         os.environ['XDG_CONFIG_DIRS']='/etc/xdg'
 
     # ACLOCAL_PATH
-    if not 'ACLOCAL_PATH' in os.environ:
+    if 'ACLOCAL_PATH' not in os.environ:
         os.environ['ACLOCAL_PATH']='/usr/share/aclocal'
 
     # get rid of gdkxft from the env -- it will cause problems.
-    if os.environ.has_key('LD_PRELOAD'):
+    if 'LD_PRELOAD' in os.environ:
         valarr = os.environ['LD_PRELOAD'].split(' ')
         for x in valarr[:]:
             if x.find('libgdkxft.so') >= 0:
                 valarr.remove(x)
         os.environ['LD_PRELOAD'] = ' '.join(valarr)
+
+    if 'CONFIG_SITE' in os.environ:
+        del os.environ['CONFIG_SITE']
 
 def setup_env(prefix):
     '''set environment variables for using prefix'''
@@ -123,7 +130,6 @@ def setup_env(prefix):
     libdir = os.path.join(prefix, 'lib')
     addpath('LD_LIBRARY_PATH', libdir)
     os.environ['JHBUILD_LIBDIR'] = libdir
-    libdir64 = os.path.join(prefix, 'lib64')
 
     # LDFLAGS and C_INCLUDE_PATH are required for autoconf configure
     # scripts to find modules that do not use pkg-config (such as guile
@@ -135,13 +141,9 @@ def setup_env(prefix):
         libdir = subprocess_win32.fix_path_for_msys(libdir)
     os.environ['LDFLAGS'] = ('-L%s ' % libdir) + os.environ.get('LDFLAGS', '')
 
-    # Add lib64 for systems that are using it.
-    if os.path.isdir(libdir64):
-        addpath('LD_LIBRARY_PATH', libdir64)
-        os.environ['LDFLAGS'] = ('-L%s ' % libdir64) + os.environ.get('LDFLAGS', '')
-
     includedir = os.path.join(prefix, 'include')
     addpath('C_INCLUDE_PATH', includedir)
+    addpath('OBJC_INCLUDE_PATH', includedir)
     addpath('CPLUS_INCLUDE_PATH', includedir)
 
     # On Mac OS X, we use DYLD_FALLBACK_LIBRARY_PATH
@@ -156,16 +158,45 @@ def setup_env(prefix):
     manpathdir = os.path.join(prefix, 'share', 'man')
     addpath('MANPATH', '')
     addpath('MANPATH', manpathdir)
+    # Setting MANPATH on *BSD causes man to ignore its default search path,
+    # so we need to add the default search path to MANPATH.
+    if sys.platform.startswith('freebsd') or sys.platform.startswith('dragonfly'):
+        systemmanpath = get_output('manpath -q', extra_env={'MANPATH': ''})
+        systemmanpath = systemmanpath.strip().split(':')
+    elif sys.platform.startswith('netbsd'):
+        # Running 'man -p' without specifying a manual page name causes it to
+        # exit with status 1.
+        systemmanpath = get_output('man -p || true', extra_env={'MANPATH': ''})
+        systemmanpath = maplist(os.path.dirname, systemmanpath.strip().split('\n'))
+    elif sys.platform.startswith('openbsd'):
+        # I cannot find a command that prints the default search path on
+        # OpenBSD, so I add paths found in the default /etc/man.conf here.
+        systemmanpath = [ '/usr/share/man', '/usr/X11R6/man', '/usr/local/man' ]
+    else:
+        systemmanpath = []
+    for systemmanpathdir in systemmanpath:
+        addpath('MANPATH', systemmanpathdir, prepend=False)
 
     # INFOPATH
     infopathdir = os.path.join(prefix, 'share', 'info')
-    addpath('INFOPATH', infopathdir)
+    infopathports = os.path.join(prefix, 'info')
+    if not os.path.exists(infopathdir) and os.path.exists(infopathports):
+        addpath('INFOPATH', infopathports)
+    else:
+        addpath('INFOPATH', infopathdir)
 
     # PKG_CONFIG_PATH
     pkgconfigdatadir = os.path.join(prefix, 'share', 'pkgconfig')
     pkgconfigdir = os.path.join(libdir, 'pkgconfig')
     addpath('PKG_CONFIG_PATH', pkgconfigdatadir)
     addpath('PKG_CONFIG_PATH', pkgconfigdir)
+    # XXX: The host Python on Fedora uses lib64 while jhbuild defaults
+    # to lib, so any distutils based build will install .pc files
+    # into lib64. To make at least pkg-config happy add the host
+    # libdir layout as well.
+    host_libdir = os.path.dirname(get_python_lib(True, True, prefix))
+    host_pkgconfigdir = os.path.join(host_libdir, 'pkgconfig')
+    addpath('PKG_CONFIG_PATH', host_pkgconfigdir)
 
     # GI_TYPELIB_PATH
     typelibpath = os.path.join(libdir, 'girepository-1.0')
@@ -180,6 +211,17 @@ def setup_env(prefix):
     addpath('XDG_CONFIG_DIRS', xdgconfigdir)
 
     # XCURSOR_PATH
+    if not os.environ.get('XCURSOR_PATH'):
+        # The XCURSOR_PATH envvar overrides the default paths,
+        # so include them here.
+        xcursorpath = [ os.path.join(os.environ['HOME'], '.local', 'share', 'icons'),
+                        os.path.join(os.environ['HOME'], '.icons'),
+                        '/usr/share/icons',
+                        '/usr/share/pixmaps',
+                        '/usr/X11R6/lib/X11/icons' ]
+        for xcursorpathdir in xcursorpath:
+            addpath('XCURSOR_PATH', xcursorpathdir, prepend=False)
+
     xcursordir = os.path.join(prefix, 'share', 'icons')
     addpath('XCURSOR_PATH', xcursordir)
 
@@ -208,6 +250,9 @@ def setup_env(prefix):
     # PERL5LIB
     perl5lib = os.path.join(prefix, 'lib', 'perl5')
     addpath('PERL5LIB', perl5lib)
+
+    # CMAKE_PREFIX_PATH
+    addpath('CMAKE_PREFIX_PATH', prefix)
 
     # These two variables are so that people who use "jhbuild shell"
     # can tweak their shell prompts and such to show "I'm under jhbuild".

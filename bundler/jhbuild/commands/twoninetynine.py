@@ -22,8 +22,9 @@ from optparse import make_option
 import re
 
 from jhbuild.commands import Command, register_command
+from jhbuild.utils import _
 
-from goalreport import cmd_goalreport, ExcludedModuleException, \
+from .goalreport import cmd_goalreport, ExcludedModuleException, \
          Check, ShellCheck, DeprecatedSymbolsCheck, FIND_C
 
 class LibBonobo(ShellCheck):
@@ -54,7 +55,7 @@ class LibGnomeUi(ShellCheck):
                     "gnome-desktop-thumbnail.h|"\
                     "gnome-bg-crossfade.h|"\
                     "gnome-bg.h'", # gnome-desktop installs stuff under libgnomeui/
-        "find -name '*.py' | xargs grep 'import .*gnome\.ui'",
+        "find -name '*.py' | xargs grep 'import .*gnome\\.ui'",
     )
 
 class LibGnomeCanvas(ShellCheck):
@@ -131,7 +132,7 @@ class GObjectIntrospectionSupport(Check):
                 if not gir_file and 'Makefile.am' in filenames:
                     # if there is no .gir, we may simply be in an unbuilt module,
                     # let's look up for a .gir target in the Makefile.am
-                    makefile_am = file(os.path.join(base, 'Makefile.am')).read()
+                    makefile_am = open(os.path.join(base, 'Makefile.am')).read()
                     if re.findall(r'^[A-Za-z0-9.\-\$\(\)_]+\.gir:', makefile_am, re.MULTILINE):
                         gir_file = True
                 if pkg_config and gir_file:

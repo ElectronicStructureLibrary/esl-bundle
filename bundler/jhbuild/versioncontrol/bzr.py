@@ -21,32 +21,31 @@ __all__ = []
 __metaclass__ = type
 
 import os
-import errno
-import urlparse
 import logging
 
 from jhbuild.errors import FatalError, CommandError
 from jhbuild.utils.cmds import get_output
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import inpath, _, urlutils
 from jhbuild.utils.sxml import sxml
+from jhbuild.utils.urlutils import urlparse_mod
 
 # Make sure that the urlparse module considers bzr://, bzr+ssh://, sftp:// and lp:
 # scheme to be netloc aware and set to allow relative URIs.
-if 'bzr' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('bzr')
-if 'bzr' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('bzr')
-if 'bzr+ssh' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('bzr+ssh')
-if 'bzr+ssh' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('bzr+ssh')
-if 'sftp' not in urlparse.uses_netloc:
-    urlparse.uses_netloc.append('sftp')
-if 'sftp' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('sftp')
-if 'lp' not in urlparse.uses_relative:
-    urlparse.uses_relative.append('lp')
+if 'bzr' not in urlparse_mod.uses_netloc:
+    urlparse_mod.uses_netloc.append('bzr')
+if 'bzr' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('bzr')
+if 'bzr+ssh' not in urlparse_mod.uses_netloc:
+    urlparse_mod.uses_netloc.append('bzr+ssh')
+if 'bzr+ssh' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('bzr+ssh')
+if 'sftp' not in urlparse_mod.uses_netloc:
+    urlparse_mod.uses_netloc.append('sftp')
+if 'sftp' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('sftp')
+if 'lp' not in urlparse_mod.uses_relative:
+    urlparse_mod.uses_relative.append('lp')
 
 
 class BzrRepository(Repository):
@@ -72,16 +71,16 @@ class BzrRepository(Repository):
             module_href = self.config.branches[name]
             if not module_href:
                 raise FatalError(_('branch for %(name)s has wrong override, check your %(filename)s') % \
-                                   {'name'     : name,
-                                    'filename' : self.config.filename})
+                                 {'name'     : name,
+                                  'filename' : self.config.filename})
 
         if module is None:
             module = name
 
         if revision or branch:
-            template = urlparse.urljoin(self.href, self.branches_template)
+            template = urlutils.urljoin(self.href, self.branches_template)
         else:
-            template = urlparse.urljoin(self.href, self.trunk_template)
+            template = urlutils.urljoin(self.href, self.trunk_template)
 
         if not module_href:
             module_href = template % {
@@ -101,6 +100,9 @@ class BzrRepository(Repository):
         return [sxml.repository(type='bzr', name=self.name, href=self.href,
                     trunk=self.trunk_template, branches=self.branches_template)]
 
+    def get_sysdeps(self):
+        return ['bzr']
+
 class BzrBranch(Branch):
     """A class representing a Bazaar branch."""
 
@@ -109,10 +111,13 @@ class BzrBranch(Branch):
         self._revspec = None
         self.revspec = (tag, revspec)
 
-    def get_revspec(self):
+    @property
+    def revspec(self):
         return self._revspec
 
-    def set_revspec(self, (tag, revspec)):
+    @revspec.setter
+    def revspec(self, value):
+        tag, revspec = value
         if revspec:
             self._revspec = ['-r%s' % revspec]
         elif tag:
@@ -122,30 +127,29 @@ class BzrBranch(Branch):
             self._revspec = ['-rdate:%s' % self.config.sticky_date]
         else:
             self._revspec = []
-    revspec = property(get_revspec, set_revspec)
 
+    @property
     def srcdir(self):
         if self.checkoutdir:
             return os.path.join(self.checkoutroot, self.checkoutdir)
         else:
             return os.path.join(self.checkoutroot, self.get_module_basename())
-    srcdir = property(srcdir)
 
     def get_module_basename(self):
         return self.checkoutdir
 
+    @property
     def branchname(self):
         try:
             return get_output(['bzr', 'nick', self.srcdir])
-        except:
+        except CommandError:
             return None
-    branchname = property(branchname)
 
     def exists(self):
         try:
             get_output(['bzr', 'ls', self.module])
             return True
-        except:
+        except CommandError:
             return False
 
     def create_mirror(self, buildscript):
@@ -171,7 +175,7 @@ class BzrBranch(Branch):
                 info = get_output(cmd, cwd=cwd)
                 if info.find('checkout of branch: %s' % self.checkoutdir) == -1:
                     raise NameError
-            except:
+            except (CommandError, NameError):
                 raise FatalError(_("""
 Path %s does not seem to be a checkout from dvcs_mirror_dir.
 Remove it or change your dvcs_mirror_dir settings.""") % self.srcdir)

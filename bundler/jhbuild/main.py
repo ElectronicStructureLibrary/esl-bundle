@@ -17,62 +17,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
+
 import sys, os, errno
 import optparse
-import traceback
 import logging
 
 import gettext
-import __builtin__
-__builtin__.__dict__['N_'] = lambda x: x
 
 import jhbuild.config
 import jhbuild.commands
 from jhbuild.errors import UsageError, FatalError
-from jhbuild.utils.cmds import get_output
+from jhbuild.utils import uprint, install_translation, _
 from jhbuild.moduleset import warn_local_modulesets
 
-
-if sys.platform == 'darwin':
-    # work around locale.getpreferredencoding() returning an empty string in
-    # Mac OS X, see http://bugzilla.gnome.org/show_bug.cgi?id=534650 and
-    # http://bazaar-vcs.org/DarwinCommandLineArgumentDecoding
-    sys.platform = 'posix'
-    try:
-        import locale
-    finally:
-        sys.platform = 'darwin'
-else:
-    import locale
-
-try:
-    _encoding = locale.getpreferredencoding()
-    assert _encoding
-except (locale.Error, AssertionError):
-    _encoding = 'ascii'
-
-def uencode(s):
-    if type(s) is unicode:
-        return s.encode(_encoding, 'replace')
-    else:
-        return s
-
-def udecode(s):
-    if type(s) is not unicode:
-        return s.decode(_encoding, 'replace')
-    else:
-        return s
-
-def uprint(*args):
-    '''Print Unicode string encoded for the terminal'''
-    for s in args[:-1]:
-        print uencode(s),
-    s = args[-1]
-    print uencode(s)
-
-__builtin__.__dict__['uprint'] = uprint
-__builtin__.__dict__['uencode'] = uencode
-__builtin__.__dict__['udecode'] = udecode
 
 class LoggingFormatter(logging.Formatter):
     def __init__(self):
@@ -84,18 +42,22 @@ class LoggingFormatter(logging.Formatter):
 
 def print_help(parser):
     parser.print_help()
-    print
+    print()
     jhbuild.commands.print_help()
     parser.exit()
 
 def main(args):
-    localedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'mo'))
+    if DATADIR is not None:
+        localedir = os.path.join(DATADIR, 'locale')
+    else:
+        localedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'mo'))
+
     if not os.path.exists(localedir):
         localedir = None
-    gettext.install('jhbuild', localedir=localedir, unicode=True)
+    install_translation(gettext.translation('jhbuild', localedir=localedir, fallback=True))
 
-    if hasattr(os, 'getuid') and os.getuid() == 0:
-        sys.stderr.write(_('You should not run jhbuild as root.\n').encode(_encoding, 'replace'))
+    if 'JHBUILD_RUN_AS_ROOT' not in os.environ and hasattr(os, 'getuid') and os.getuid() == 0:
+        uprint(_('You should not run jhbuild as root.\n'), file=sys.stderr)
         sys.exit(1)
 
     logging.getLogger().setLevel(logging.INFO)
@@ -124,6 +86,9 @@ def main(args):
     parser.add_option('--no-interact', action='store_true',
                       dest='nointeract', default=False,
                       help=_('do not prompt for input'))
+    parser.add_option('--exit-on-error', action='store_true',
+                      dest='exit_on_error', default=False,
+                      help=_('exit immediately when the build fails'))
     parser.add_option('--conditions', action='append',
                       dest='conditions', default=[],
                       help=_('modify the condition set'))
@@ -132,30 +97,33 @@ def main(args):
 
     try:
         config = jhbuild.config.Config(options.configfile, options.conditions)
-    except FatalError, exc:
-        sys.stderr.write('jhbuild: %s\n' % exc.args[0].encode(_encoding, 'replace'))
+    except FatalError as exc:
+        uprint('jhbuild: %s\n' % exc.args[0], file=sys.stderr)
         sys.exit(1)
 
-    if options.moduleset: config.moduleset = options.moduleset
-    if options.nointeract: config.interact = False
+    if options.moduleset:
+        config.moduleset = options.moduleset
+    if options.nointeract:
+        config.interact = False
+    if options.exit_on_error:
+        config.exit_on_error = True
 
     if not args or args[0][0] == '-':
-        command = 'build' # default to cvs update + compile
+        command = 'help'
     else:
         command = args[0]
         args = args[1:]
 
     warn_local_modulesets(config)
 
-
     try:
         rc = jhbuild.commands.run(command, config, args, help=lambda: print_help(parser))
-    except UsageError, exc:
-        sys.stderr.write('jhbuild %s: %s\n' % (command, exc.args[0].encode(_encoding, 'replace')))
+    except UsageError as exc:
+        uprint('jhbuild %s: %s\n' % (command, exc.args[0]), file=sys.stderr)
         parser.print_usage()
         sys.exit(1)
-    except FatalError, exc:
-        sys.stderr.write('jhbuild %s: %s\n' % (command, exc.args[0].encode(_encoding, 'replace')))
+    except FatalError as exc:
+        uprint('jhbuild %s: %s\n' % (command, exc.args[0]), file=sys.stderr)
         sys.exit(1)
     except KeyboardInterrupt:
         uprint(_('Interrupted'))
@@ -163,9 +131,10 @@ def main(args):
     except EOFError:
         uprint(_('EOF'))
         sys.exit(1)
-    except IOError, e:
+    except IOError as e:
         if e.errno != errno.EPIPE:
             raise
         sys.exit(0)
     if rc:
         sys.exit(rc)
+

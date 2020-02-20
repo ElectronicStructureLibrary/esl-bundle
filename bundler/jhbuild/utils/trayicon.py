@@ -46,7 +46,7 @@ class TrayIcon:
             for item in caps:
                 if item == "persistence":
                     return
-        except:
+        except Exception:
             pass
 
         try:
@@ -91,19 +91,20 @@ class TrayIcon:
         return status
 
     def _send_cmd(self, cmd):
-        if not self.proc: return
+        if not self.proc:
+            return
         try:
             self.proc.stdin.write(cmd)
             self.proc.stdin.flush()
-        except (IOError, OSError), err:
+        except (IOError, OSError):
             self.close()
     def set_icon(self, icon):
-        self._send_cmd('icon: %s\n' % icon)
+        self._send_cmd(b'icon: %s\n' % icon.encode('utf-8'))
     def set_tooltip(self, tooltip):
-        self._send_cmd('tooltip: %s\n' % tooltip.encode('utf-8'))
+        self._send_cmd(b'tooltip: %s\n' % tooltip.encode('utf-8'))
     def set_visible(self, visible):
         if visible:
-            visible = 'true'
+            visible = b'true'
         else:
-            visible = 'false'
-        self._send_cmd('visible: %s\n' % visible)
+            visible = b'false'
+        self._send_cmd(b'visible: %s\n' % visible)

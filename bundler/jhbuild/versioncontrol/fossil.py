@@ -22,13 +22,12 @@ __all__ = []
 __metaclass__ = type
 
 import os
-import sys
 import urlparse
 from subprocess import Popen, PIPE
 
 from jhbuild.errors import FatalError, CommandError
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import inpath, _
 
 class FossilRepository(Repository):
     """A class representing a Fossil repository."""
@@ -47,8 +46,8 @@ class FossilRepository(Repository):
             module = self.config.branches[name]
             if not module:
                 raise FatalError(_('branch for %(name)s has wrong override, check your %(filename)s') % \
-                                   {'name'     : name,
-                                    'filename' : self.config.filename})
+                                 {'name'     : name,
+                                  'filename' : self.config.filename})
         else:
             if module is None:
                 module = name
@@ -59,6 +58,7 @@ class FossilRepository(Repository):
 class FossilBranch(Branch):
     """A class representing a Fossil branch."""
 
+    @property
     def srcdir(self):
         if self.checkoutdir:
             return os.path.join(self.checkoutroot, self.checkoutdir)
@@ -66,18 +66,14 @@ class FossilBranch(Branch):
             return os.path.join(self.checkoutroot,
                                 os.path.basename(self.module))
 
-    srcdir = property(srcdir)
-
+    @property
     def repositoryfile(self):
         return os.path.join(self.checkoutroot,
                             os.path.basename(self.checkoutdir)  + '.fossil')
 
-    repositoryfile = property(repositoryfile)
-
+    @property
     def branchname(self):
         return None
-
-    branchname = property(branchname)
 
     def _checkout(self, buildscript):
         if self.config.sticky_date:
@@ -112,7 +108,7 @@ class FossilBranch(Branch):
 
         try:
             infos = Popen(['fossil', 'info'], stdout=PIPE, cwd=self.srcdir)
-        except OSError, e:
+        except OSError as e:
             raise CommandError(str(e))
         infos = infos.stdout.read().strip()
         return re.search(r"checkout: +(\w+)", infos).group(1)

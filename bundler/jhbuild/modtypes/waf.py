@@ -22,12 +22,11 @@
 __metaclass__ = type
 
 import os
-import re
 
-from jhbuild.errors import FatalError, BuildStateError, CommandError
+from jhbuild.errors import CommandError
 from jhbuild.modtypes import \
      Package, DownloadableModule, register_module_type
-from jhbuild.commands.sanitycheck import inpath
+from jhbuild.utils import _
 
 __all__ = [ 'WafModule' ]
 
@@ -126,7 +125,7 @@ class WafModule(Package, DownloadableModule):
         else:
             cmd = [self.waf_cmd, 'dist']
         buildscript.execute(cmd, cwd=self.get_builddir(buildscript),
-                                extra_env={'PYTHON': self.python_cmd})
+                            extra_env={'PYTHON': self.python_cmd})
     do_dist.depends = [PHASE_BUILD]
     do_dist.error_phases = [PHASE_FORCE_CHECKOUT, PHASE_CONFIGURE]
 

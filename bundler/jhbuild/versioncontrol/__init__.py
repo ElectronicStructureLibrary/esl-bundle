@@ -26,7 +26,8 @@ __all__ = [
 
 __metaclass__ = type
 
-from jhbuild.errors import FatalError, BuildStateError
+from jhbuild.errors import FatalError
+from jhbuild.utils import try_import_module, _
 import os
 
 class Repository:
@@ -64,6 +65,9 @@ class Repository:
         """Return an sxml representation of this repository."""
         raise NotImplementedError
 
+    def get_sysdeps(self):
+        return []
+
 
 class Branch:
     """An abstract class representing a branch in a repository."""
@@ -75,20 +79,20 @@ class Branch:
         self.checkoutdir = checkoutdir
         self.checkoutroot = self.config.checkoutroot
 
-    def get_checkout_mode(self):
+    @property
+    def checkout_mode(self):
         checkout_mode = self.config.checkout_mode
         return self.config.module_checkout_mode.get(self.module, checkout_mode)
-    checkout_mode = property(get_checkout_mode)
 
+    @property
     def srcdir(self):
         """Return the directory where this branch is checked out."""
         raise NotImplementedError
-    srcdir = property(srcdir)
 
+    @property
     def branchname(self):
         """Return an identifier for this branch or None."""
         raise NotImplementedError
-    branchname = property(branchname)
 
     def exists(self):
         """Return True if branch exists or False if not.
@@ -169,14 +173,14 @@ class Branch:
         raise NotImplementedError
 
     def _copy(self, buildscript, copydir):
-         module = self.module
-         if self.checkoutdir:
-             module = self.checkoutdir
-         fromdir = os.path.join(copydir, os.path.basename(module))
-         todir = os.path.join(self.config.checkoutroot, os.path.basename(module))
-         if os.path.exists(todir):
-             self._wipedir(buildscript, self.srcdir)
-         buildscript.execute(['cp', '-R', fromdir, todir])
+        module = self.module
+        if self.checkoutdir:
+            module = self.checkoutdir
+        fromdir = os.path.join(copydir, os.path.basename(module))
+        todir = os.path.join(self.config.checkoutroot, os.path.basename(module))
+        if os.path.exists(todir):
+            self._wipedir(buildscript, self.srcdir)
+        buildscript.execute(['cp', '-R', fromdir, todir])
 
     def to_sxml(self):
         """Return an sxml representation of this checkout."""
@@ -188,10 +192,7 @@ def register_repo_type(name, repo_class):
 
 def get_repo_type(name):
     if name not in _repo_types:
-        try:
-            __import__('jhbuild.versioncontrol.%s' % name)
-        except ImportError:
-            pass
+        try_import_module('jhbuild.versioncontrol.%s' % name)
     if name not in _repo_types:
         raise FatalError(_('unknown repository type %s') % name)
     return _repo_types[name]
