@@ -17,6 +17,7 @@ opensuse-tumbleweed-mpi:
     - source /etc/profile.d/lmod.sh
     - module load gnu/9  openmpi/3.1.4 scalapack/2.1.0 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
 
 opensuse-serial:
@@ -35,36 +36,42 @@ opensuse-tumbleweed-serial:
     - source /etc/profile.d/lmod.sh
     - module load gnu/9 fftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
 
 debian-mpi:
   image: eslib/esl-0.4.x:debian-buster
   stage: test
   script:
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/debian-gcc-openmpi.rc build esl-bundle-mpi
 
 debian-serial:
   image: eslib/esl-0.4.x:debian-buster
   stage: test
   script:
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/debian-gcc-serial.rc build esl-bundle
 
 ubuntu-mpi:
   image: eslib/esl-0.4.x:ubuntu-bionic
   stage: test
   script:
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/ubuntu-gcc-openmpi.rc build esl-bundle-mpi
 
 ubuntu-serial:
   image: eslib/esl-0.4.x:ubuntu-bionic
   stage: test
   script:
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/ubuntu-gcc-serial.rc build esl-bundle
 
 fedora-serial:
   image: eslib/esl-0.4.x:fedora-29
   stage: test
   script:
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/fedora-gcc-serial.rc build esl-bundle
 
 fedora-mpi:
@@ -72,12 +79,14 @@ fedora-mpi:
   stage: test
   script:
     - export PATH=/usr/lib64/openmpi/bin:$PATH
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/fedora-gcc-openmpi.rc build esl-bundle-mpi
 
 #centos-serial:
 #  image: drfaustroll/esl:centos-latest
 #  stage: test
 #  script:
+#    - export JHBUILD_DEFAULTS="esl"
 #    - ./bundler/jhbuild.py -f rcfiles/centos-gcc-serial.rc build esl-bundle
 
 #centos-mpi:
@@ -85,4 +94,5 @@ fedora-mpi:
 #  stage: test
 #  script:
 #    - export PATH=/usr/lib64/openmpi/bin:$PATH
+#    - export JHBUILD_DEFAULTS="esl"
 #    - ./bundler/jhbuild.py -f rcfiles/centos-gcc-openmpi.rc build esl-bundle-mpi
