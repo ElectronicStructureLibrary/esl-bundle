@@ -14,6 +14,9 @@ modulesets_dir = os.path.join(SRCDIR, 'modulesets')
 moduleset = 'gnome-apps-latest'
 modules = [ 'meta-gnome-core' ]
 
+def basic_configuration():
+    return os.environ.get("BIGDFT_CONFIGURE_FLAGS")
+
 # policy for modules to build, options are:
 #  - all: build everything requested
 #  - updated: build only modules that have changed
@@ -35,27 +38,25 @@ skip = []
 tags = []
 
 # directories
-if os.path.exists('/opt/gnome'):
-    # /opt/gnome has been the default for a long time, and we keep on using it
-    # if it exists
-    prefix = '/opt/gnome'
-else:
-    prefix = '~/jhbuild/install'
+prefix = os.path.join(os.getcwd(), "install")
 
 top_builddir = '_jhbuild'  # If a relative path, prefix will be prepended
 
 if os.path.exists(os.path.expanduser('~/checkout/gnome')):
     checkoutroot = '~/checkout/gnome/'
 else:
-    checkoutroot = '~/jhbuild/checkout/'
+    checkoutroot = SRCDIR
 
 xdg_cache_home = os.environ.get('XDG_CACHE_HOME',
                                 os.path.join(os.path.expanduser('~'),
                                              '.cache'))
-tarballdir = os.path.join(xdg_cache_home, 'jhbuild', 'downloads')
+tarballdir = os.path.join(SRCDIR, 'tarballs')
 
 # Set to None to perform builds within the source trees.
-buildroot = os.path.join(xdg_cache_home, 'jhbuild', 'build')
+if os.path.samefile(SRCDIR, os.getcwd()):
+  buildroot = os.path.join(os.getcwd(), 'build')
+else:
+  buildroot = os.getcwd()
 
 # When using srcdir!=builddir builds, this key allows you to use a
 # different builddir name.  Some people like this because it reduces
@@ -76,7 +77,7 @@ except ImportError as _e:
         jobs = 2
 
 # override environment variables, command line arguments, etc
-autogenargs = '--disable-static --disable-gtk-doc'
+autogenargs = ''
 cmakeargs = ''
 mesonargs = '--buildtype=debugoptimized'
 makeargs = ''
@@ -99,6 +100,18 @@ module_ninjaargs = {}
 module_extra_env = {}
 module_makecheck = {}
 module_nopoison = {}
+
+# Specific autogenargs by default
+module_autogenargs['PyYAML'] = "build_ext -I%(prefix)s/include -L%(prefix)s/lib --rpath=%(prefix)s/lib " % {"prefix": prefix}
+module_autogenargs['etsf_io'] = "--with-moduledir=%(prefix)s/include " % {"prefix": prefix}
+autogen_packages=['libyaml','GaIn','libxc','chess','bigdft','libABINIT','futile','psolver','spred']
+
+if basic_configuration() is not None:
+    for pkg in autogen_packages:
+        module_autogenargs[pkg] = basic_configuration()
+    del(pkg)
+
+del(autogen_packages)
 
 # control parts of the build process
 nonetwork     = False  # never touch the network
@@ -206,7 +219,7 @@ noxvfb = False
 xvfbargs = ''
 
 # whether to use a local copy of modulesets (instead of fetching them from svn)
-use_local_modulesets = False
+use_local_modulesets = True
 
 # whether to ignore soft dependencies
 ignore_suggests = False
@@ -221,7 +234,7 @@ shallow_clone = False
 print_command_pattern = '%(command)s'
 
 # Check system dependencies. If not dependencies not met, raise error
-check_sysdeps = True
+check_sysdeps = False
 
 # system_prefix used when searching for files within available packages
 # during 'sysdeps --install'
@@ -229,8 +242,8 @@ system_prefix = '/usr'
 
 # A tuple of website name and URL. This is displayed in tinderbox output. URL
 # String may contain the variable %(module)s
-help_website = ('Gnome Live!',
-                'http://live.gnome.org/JhbuildIssues/%(module)s')
+help_website = ('BigDFT Live!',
+                'http://bigdft.org/Wiki/JhbuildIssues/%(module)s')
 
 # Whether '--disable-Werror' should be passed to automake modules
 disable_Werror = True

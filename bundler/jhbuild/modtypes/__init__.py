@@ -698,7 +698,11 @@ class MetaModule(Package):
                     shutil.copy(os.path.join(SRCDIR, patch[0]), destdir)
 
         # Add jhbuild and config files themselves.
-        listfile=os.path.join(SRCDIR, "distfiles")
+        listfile=os.path.join(SRCDIR, "bundler", "distfiles")
+        _custom_defaults = os.getenv("JHBUILD_DEFAULTS")
+        if _custom_defaults:
+            listfile=os.path.join(SRCDIR, "bundler", "bundles",
+                    _custom_defaults + ".distfiles")
         distfiles=open(listfile,'r').readlines()
         for archive in distfiles:
             fle=archive.rstrip('\n')

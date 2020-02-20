@@ -3,7 +3,10 @@
 
 import sys
 import os
-import __builtin__
+if sys.version_info[0] == 2:
+    import __builtin__ as builtins
+else:
+    import builtins
 
 #USE_CHECKOUT_SRC = True
 
@@ -26,11 +29,11 @@ import __builtin__
 pkgdatadir = None
 datadir = None
 import jhbuild
-srcdir = os.path.abspath(os.path.join(os.path.dirname(jhbuild.__file__), '..'))
+srcdir = os.path.abspath(os.path.join(os.path.dirname(jhbuild.__file__), '../..'))
 
-__builtin__.__dict__['PKGDATADIR'] = pkgdatadir
-__builtin__.__dict__['DATADIR'] = datadir
-__builtin__.__dict__['SRCDIR'] = srcdir
+builtins.__dict__['PKGDATADIR'] = pkgdatadir
+builtins.__dict__['DATADIR'] = datadir
+builtins.__dict__['SRCDIR'] = srcdir
 
 import jhbuild.main
 jhbuild.main.main(sys.argv[1:])

@@ -41,6 +41,10 @@ if sys.platform.startswith('win'):
 __all__ = [ 'Config' ]
 
 _defaults_file = os.path.join(os.path.dirname(__file__), 'defaults.jhbuildrc')
+_custom_defaults = os.getenv("JHBUILD_DEFAULTS")
+if _custom_defaults:
+    _defaults_file = os.path.join(os.path.dirname(__file__), "..", "bundles",
+            _custom_defaults + ".jhbuildrc")
 
 _known_keys = [ 'moduleset', 'modules', 'skip', 'tags', 'prefix',
                 'partial_build', 'checkoutroot', 'buildroot', 'top_builddir',
