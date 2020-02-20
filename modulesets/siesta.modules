@@ -1,0 +1,120 @@
+<?xml version="1.0"?><!--*- mode: nxml; indent-tabs-mode: nil -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<!-- vim:set ts=2 expandtab: -->
+<moduleset>
+
+  <include href="./esl.modules"/>
+
+  <repository name="local" type="tarball" href="./"/>
+  <repository name="poupouille" type="tarball" href="https://poupouille.org/downloads/"/>
+
+
+  <autotools id="gaufre" autogen-sh="configure" autogenargs="--disable-shared --enable-static">
+    <branch repo="poupouille" module="gaufre-0.4.0.tar.gz" version="0.4.0"/>
+  </autotools>
+
+  <autotools id="libgridxc-xc3" autogen-sh="configure" autogenargs="--disable-shared --enable-static --enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
+    <branch repo="poupouille" module="libgridxc-0.8.4.2.tar.gz" version="0.8.4.2" checkoutdir="libgridxc-xc3" hash="md5:077247422c89e9370242fe4f6e24c844"/>
+    <dependencies>
+      <dep package="libxc3"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="libgridxc-xc3-mpi" autogen-sh="configure" autogenargs="--disable-shared --enable-static --enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
+    <branch repo="poupouille" module="libgridxc-0.8.4.2.tar.gz" version="0.8.4.2" checkoutdir="libgridxc-xc3-mpi" hash="md5:077247422c89e9370242fe4f6e24c844"/>
+    <dependencies>
+      <dep package="libxc3"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="libgridxc-xc4" autogen-sh="configure" autogenargs="--disable-shared --enable-static --enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
+    <branch repo="poupouille" module="libgridxc-0.9.3.2.tar.gz" version="0.9.3.2" checkoutdir="libgridxc-xc4" hash="md5:6ad1a852a23c5cff58146af2b02965c9"/>
+    <dependencies>
+      <dep package="libxc4"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="libgridxc-xc4-mpi" autogen-sh="configure" autogenargs="--disable-shared --enable-static --enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
+    <branch repo="poupouille" module="libgridxc-0.9.3.2.tar.gz" version="0.9.3.2" checkoutdir="libgridxc-xc4-mpi" hash="md5:6ad1a852a23c5cff58146af2b02965c9"/>
+    <dependencies>
+      <dep package="libxc4"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="libint" autogen-sh="configure" autogenargs="--disable-shared --enable-static">
+    <branch repo="poupouille" module="libint-1.1.4.tar.gz" version="1.1.4"/>
+  </autotools>
+
+  <autotools id="libxc3" autogen-sh="configure" autogenargs="--disable-shared --enable-static">
+    <branch repo="poupouille" module="libxc-3.0.1.tar.gz" version="3.0.1">
+      <patch strip="1" file="patches/libxc-3.0.1-fixes.patch" hash="md5:65e152706986d7ce53119e4fbbc2db5c"/>
+    </branch>
+  </autotools>
+
+  <cmake id="libxc4" cmakeargs="-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DENABLE_FORTRAN=ON -DENABLE_FORTRAN03=OFF">
+    <branch repo="poupouille" module="libxc-4.3.4.tar.gz" version="4.3.4"/>
+  </cmake>
+
+  <autotools id="netcdf" autogen-sh="configure" autogenargs="--disable-dap --disable-examples --disable-hdf4 --disable-v2 --disable-shared --disable-netcdf-4 --enable-static">
+    <branch repo="poupouille" module="netcdf-4.4.1.1.tar.gz" version="4.4.1.1"/>
+  </autotools>
+
+  <autotools id="netcdf-fortran" autogen-sh="configure" autogenargs="--disable-shared --enable-static --with-netcdf=$JHBUILD_PREFIX">
+    <branch repo="poupouille" module="netcdf-fortran-4.4.4.tar.gz" version="4.4.4"/>
+    <dependencies>
+      <dep package="netcdf"/>
+    </dependencies>
+  </autotools>
+
+  <makesys id="oncvpsp">
+    <branch repo="poupouille" module="oncvpsp-3.3.1.tar.gz" version="3.3.1" hash="md5:efb8c458956f8b42c0488b654aed83bb">
+      <patch strip="1" file="patches/oncvpsp-3.3.1-psml-1.1.patch" hash="md5:e0550232abad5e60c4a05b63477cab9f"/>
+    </branch>
+  </makesys>
+
+  <autotools id="wannier90" autogen-sh="configure" autogenargs="--disable-shared --enable-static">
+    <branch repo="poupouille" module="wannier90-2.0.1.1" version="2.0.1.1"/>
+  </autotools>
+
+  <metamodule id="siesta-bundle">
+    <dependencies>
+      <dep package="fdf"/>
+      <dep package="libgridxc-xc3"/>
+      <dep package="libpsml"/>
+      <dep package="netcdf-fortran"/>
+    </dependencies>
+  </metamodule>
+
+  <metamodule id="siesta-bundle-mpi">
+    <dependencies>
+      <dep package="fdf"/>
+      <dep package="libgridxc-xc3-mpi"/>
+      <dep package="libpsml"/>
+      <dep package="netcdf-fortran"/>
+    </dependencies>
+  </metamodule>
+
+  <metamodule id="siesta-bundle-dev">
+    <dependencies>
+      <dep package="fdf"/>
+      <dep package="gaufre"/>
+      <dep package="libgridxc-xc4"/>
+      <dep package="libint"/>
+      <dep package="libpsml"/>
+      <dep package="netcdf-fortran"/>
+    </dependencies>
+  </metamodule>
+
+  <metamodule id="siesta-bundle-dev-mpi">
+    <dependencies>
+      <dep package="fdf"/>
+      <dep package="gaufre"/>
+      <dep package="libgridxc-xc4-mpi"/>
+      <dep package="libint"/>
+      <dep package="libpsml"/>
+      <dep package="netcdf-fortran"/>
+    </dependencies>
+  </metamodule>
+
+</moduleset>

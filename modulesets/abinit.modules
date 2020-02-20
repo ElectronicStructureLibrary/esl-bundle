@@ -1,0 +1,71 @@
+<?xml version="1.0"?><!--*- mode: nxml; indent-tabs-mode: nil -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<!-- vim:set ts=2 expandtab: -->
+<moduleset>
+
+  <include href="./esl.modules"/>
+
+  <repository name="local" type="tarball" href="./"/>
+  <repository name="poupouille" type="tarball" href="https://poupouille.org/downloads/"/>
+
+
+  <cmake id="atompaw">
+    <branch repo="poupouille" module="atompaw-4.0.1.0.tar.gz" version="4.0.1.0" hash="md5:2a58cd21a5696121741bf948e85eb797"/>
+    <dependencies>
+      <dep package="lapack"/>
+      <dep package="libxc"/>
+    </dependencies>
+  </cmake>
+
+  <cmake id="lapack">
+    <branch repo="poupouille" module="lapack-3.8.0.tar.gz" version="3.8.0" hash="md5:96591affdbf58c450d45c1daa540dbd2"/>
+  </cmake>
+
+  <autotools id="netcdf" autogen-sh="configure" autogenargs="--disable-dap --disable-examples --disable-hdf4 --disable-v2 --disable-shared --disable-netcdf-4 --enable-static">
+    <branch repo="poupouille" module="netcdf-4.4.1.1.tar.gz" version="4.4.1.1"/>
+  </autotools>
+
+  <autotools id="netcdf-fortran" autogen-sh="configure" autogenargs="--disable-shared --enable-static --with-netcdf=$JHBUILD_PREFIX">
+    <branch repo="poupouille" module="netcdf-fortran-4.4.4.tar.gz" version="4.4.4"/>
+    <dependencies>
+      <dep package="netcdf"/>
+    </dependencies>
+  </autotools>
+
+  <makesys id="oncvpsp">
+    <branch repo="poupouille" module="oncvpsp-3.3.1.tar.gz" version="3.3.1" hash="md5:efb8c458956f8b42c0488b654aed83bb">
+      <patch strip="1" file="patches/oncvpsp-3.3.1-psml-1.1.patch" hash="md5:e0550232abad5e60c4a05b63477cab9f"/>
+    </branch>
+  </makesys>
+
+  <autotools id="wannier90" autogen-sh="configure" autogenargs="--disable-shared --enable-static">
+    <branch repo="poupouille" module="wannier90-2.0.1.1.tar.gz" version="2.0.1.1" hash="md5:a8b3819da1325d9dbdd2579761aa4265"/>
+    <dependencies>
+      <dep package="lapack"/>
+    </dependencies>
+  </autotools>
+
+  <metamodule id="abinit-bundle">
+    <dependencies>
+      <dep package="atompaw"/>
+      <dep package="elpa"/>
+      <dep package="libpsml"/>
+      <dep package="libxc"/>
+      <dep package="netcdf-fortran"/>
+      <dep package="wannier90"/>
+    </dependencies>
+  </metamodule>
+
+  <metamodule id="abinit-bundle-mpi">
+    <dependencies>
+      <dep package="atompaw"/>
+      <dep package="elpa-mpi"/>
+      <dep package="libpsml"/>
+      <dep package="libxc"/>
+      <dep package="netcdf-fortran"/>
+      <dep package="wannier90"/>
+    </dependencies>
+  </metamodule>
+
+</moduleset>
