@@ -2,4 +2,4 @@
 
 set -x
 
-docker build -t ubuntu-esl:bionic .
+docker build -t ubuntu-esl:focal .
