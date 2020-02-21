@@ -1,56 +1,74 @@
 stages:
-  - test 
+  - test
 
 opensuse-mpi:
-  image: eslib/esl:opensuse-leap-15.1
+  image: eslib/esl-0.4.x:opensuse-leap-15.2
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2 pfftw3/3.3.6
+    - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2 pfftw3/3.3.8
+    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
+
+opensuse-tumbleweed-mpi:
+  image: eslib/esl-0.4.x:opensuse-tumbleweed
+  stage: test
+  script:
+    - source /etc/profile.d/lmod.sh
+    - module load gnu/9  openmpi/3.1.4 scalapack/2.1.0 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
 
 opensuse-serial:
-  image: eslib/esl:opensuse-leap-15.1
+  image: eslib/esl-0.4.x:opensuse-leap-15.2
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/7 fftw3/3.3.6
+    - module load gnu/7 fftw3/3.3.8
+    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - ./jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
+
+opensuse-tumbleweed-serial:
+  image: eslib/esl-0.4.x:opensuse-tumbleweed
+  stage: test
+  script:
+    - source /etc/profile.d/lmod.sh
+    - module load gnu/9 fftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - ./jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
 
 debian-mpi:
-  image: eslib/esl:debian-buster
+  image: eslib/esl-0.4.x:debian-buster
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/debian-gcc-openmpi.rc build esl-bundle-mpi
 
 debian-serial:
-  image: eslib/esl:debian-buster
+  image: eslib/esl-0.4.x:debian-buster
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/debian-gcc-serial.rc build esl-bundle
 
 ubuntu-mpi:
-  image: eslib/esl:ubuntu-18.04
+  image: eslib/esl-0.4.x:ubuntu-bionic
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/ubuntu-gcc-openmpi.rc build esl-bundle-mpi
 
 ubuntu-serial:
-  image: eslib/esl:ubuntu-18.04
+  image: eslib/esl-0.4.x:ubuntu-bionic
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/ubuntu-gcc-serial.rc build esl-bundle
 
 fedora-serial:
-  image: eslib/esl:fedora-29
+  image: eslib/esl-0.4.x:fedora-29
   stage: test
   script:
     - ./jhbuild.py -f rcfiles/fedora-gcc-serial.rc build esl-bundle
 
 fedora-mpi:
-  image: eslib/esl:fedora-29
+  image: eslib/esl-0.4.x:fedora-29
   stage: test
   script:
     - export PATH=/usr/lib64/openmpi/bin:$PATH

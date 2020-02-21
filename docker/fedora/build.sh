@@ -2,4 +2,4 @@
 
 set -x
 
-docker build -t fedora-esl:29 . 
+docker build -t fedora-esl:29 .

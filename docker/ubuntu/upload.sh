@@ -1,2 +1,2 @@
-docker tag ubuntu-esl:18.04 eslib/esl:ubuntu-18.04
-docker push eslib/esl:ubuntu-18.04
+docker tag ubuntu-esl:bionic eslib/esl-0.4.x:ubuntu-bionic
+docker push eslib/esl-0.4.x:ubuntu-bionic
