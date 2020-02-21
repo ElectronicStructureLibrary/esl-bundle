@@ -78,6 +78,7 @@
       <patch file="pexsi_find_metis.patch" strip="1"/>
       <patch file="pexsi_use_ptscotch.patch" strip="1"/>
       <patch file="pexsi_elsi_2.3.1_happy.patch" strip="1"/>
+      <patch file="pexsi_cmake.patch" strip="1"/>
     </branch>
     <dependencies>
       <dep package="fakepc"/>
