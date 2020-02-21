@@ -1,5 +1,4 @@
-FROM opensuse:tumbleweed 
-#FROM opensuse-esl:tumbleweed
+FROM opensuse/leap:15.1
 
 RUN groupadd -g 999 drFaustroll && useradd -r -u 999 -g drFaustroll drFaustroll &&  mkdir /home/drFaustroll && chown -R \
 drFaustroll:drFaustroll /home/drFaustroll &&  zypper dup -y  && zypper  in -y  gnu-compilers-hpc gnu-compilers-hpc-devel \

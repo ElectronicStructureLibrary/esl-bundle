@@ -2,4 +2,4 @@
 
 set -x
 
-docker build -t debian-esl:latest . 
+docker build -t debian-esl:buster . 

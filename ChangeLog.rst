@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`_,
 and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
-[0.4.0-1] - To be released
-==========================
+[0.4.0-1] - 2020-02-21
+======================
 
 Fixed
 -----
@@ -16,7 +16,15 @@ Fixed
 
 Changed
 -------
-
+- LibGridXC with autotoolized build system to 0.8.5.1.
+- Fdict to v0.7.1.
+- libvdwxc to v0.4.0.
+- Libxc to v4.3.4.
+- ELPA to v2019.05.001.
+- NTPoly to v2.3.1.
+- SuperLU_DIST to v6.1.1.
+- ELSI to v2.3.1
+- PEXSI to v1.2.0.
 
 [0.3.1-2] - 2019-01-18
 ==========================

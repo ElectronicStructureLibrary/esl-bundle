@@ -1,2 +1,2 @@
-docker tag ubuntu-esl:latest drfaustroll/esl:ubuntu-latest
-docker push drfaustroll/esl:ubuntu-latest   
+docker tag ubuntu-esl:bionic eslib/esl-0.4.x:ubuntu-bionic
+docker push eslib/esl-0.4.x:ubuntu-bionic

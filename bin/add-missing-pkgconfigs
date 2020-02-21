@@ -83,14 +83,14 @@ packages:
 specs:
   elsi:
     name: ELSI
-    version: 0.1
+    version: 2.3.1
     description: ELectronic Structure Infrastructure
     url: https://wordpress.elsi-interchange.org/
     libs: [elsi, elpa, pexsi, OMM, MatrixSwitch, superlu_dist]
     deps: [linalg, psolver, scotch]
   fdict:
     name: fdict
-    version: 0.5.0
+    version: 0.7.1
     description: Fortran type-free variables and type-free dictionaries
     url: https://github.com/zerothi/fdict
     libs: [fdict]
