@@ -1,0 +1,12 @@
+--- pexsi_v1.2.0.orig/src/get_perm_c_parmetis.c	2019-01-10 05:08:03.000000000 +0100
++++ pexsi_v1.2.0/src/get_perm_c_parmetis.c	2019-09-24 14:28:41.335598899 +0200
+@@ -21,6 +21,9 @@
+ /* limits.h:  the largest positive integer (INT_MAX) */
+ #include <limits.h>
+ #include <math.h>
++#include <stdint.h>
++#include <stdio.h>
++#include "scotch.h"
+ #include "parmetis.h"
+ #include "superlu_ddefs.h"
+ #define PRNTlevel 0
