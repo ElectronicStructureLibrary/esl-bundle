@@ -2,4 +2,4 @@
 
 set -x
 
-docker build -t ubuntu-esl:18.04 . 
+docker build -t ubuntu-esl:bionic .
