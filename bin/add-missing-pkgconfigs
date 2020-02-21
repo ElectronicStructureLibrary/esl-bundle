@@ -83,7 +83,7 @@ packages:
 specs:
   elsi:
     name: ELSI
-    version: 0.1
+    version: 2.3.1
     description: ELectronic Structure Infrastructure
     url: https://wordpress.elsi-interchange.org/
     libs: [elsi, elpa, pexsi, OMM, MatrixSwitch, superlu_dist]

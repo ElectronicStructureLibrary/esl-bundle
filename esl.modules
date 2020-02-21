@@ -51,27 +51,42 @@
   </autotools>
 
   <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
-    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
+    <branch repo="local" module="elpa-2019.05.001.tar.gz" version="2019.05.001" hash="md5:520c83a70259538f54880016a9818aa8"/>
   </autotools>
 
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="elpa-2018.11.001.tar.gz" version="2018.11.001" hash="md5:733f4cedecdf7150ea23efa67bdd6c8f"/>
+    <branch repo="local" module="elpa-2019.05.001.tar.gz" version="2019.05.001" hash="md5:520c83a70259538f54880016a9818aa8"/>
   </autotools>
   
   <cmake id="NTPoly" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
-    <branch repo="local" module="NTPoly-2.1.tar.gz" version="2.1" hash="md5:dc87aff779e99f892770b6db271a42a5"/>
+    <branch repo="local" module="NTPoly-ntpoly-v2.3.1.tar.gz" version="2.3.1" hash="md5:b2d18c4682e409b5837edf796bef3957"/>
   </cmake>
 
-  <cmake id="elsi" cmakeargs='-DENABLE_PEXSI=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_SUPERLU=ON -DUSE_EXTERNAL_NTPOLY=On -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2018.11.001/modules"'>
-    <branch repo="local" module="elsi-2.1.0.tar.gz" version="2.1.0" hash="md5:32e79233d25bde2cbacc0b53e123dbaf"/>
+  <cmake id="elsi" cmakeargs='-DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=On -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2019.05.001/modules"'>
+    <branch repo="local" module="elsi-2.3.1.tar.gz" version="2.3.1" ha2sh="md5:440965e5e87f22144f70f0e4cf25c4b5"/>
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
       <dep package="elpa-mpi"/>
       <dep package="NTPoly"/>
+      <dep package="pexsi"/>
     </dependencies>
   </cmake>
-  
+
+  <cmake id="pexsi" cmakeargs='-Dsuperlu_dist_INCLUDE_DIR=$JHBUILD_PREFIX/include  -Dsuperlu_dist_LIBRARIES="-L$JHBUILD_PREFIX/lib -lsuperlu_dist" -Dmetis_INCLUDE_DIR=$JHBUILD_PREFIX/include -Dmetis_LIBRARIES="-lscotchmetis -lscotch -lz" -Dparmetis_INCLUDE_DIR=$JHBUILD_PREFIX/include -Dparmetis_LIBRARIES="-lptscotchparmetis -lptscotch -lptscotcherr -lz" '>
+    <branch repo="local" module="pexsi_v1.2.0.tar.gz" version="1.2.0" hash="md5:dc6ceaf23a3caafe83c05ea4ad72198f">
+      <patch file="pexsi_find_metis.patch" strip="1"/>
+      <patch file="pexsi_use_ptscotch.patch" strip="1"/>
+      <patch file="pexsi_elsi_2.3.1_happy.patch" strip="1"/>
+      <patch file="pexsi_cmake.patch" strip="1"/>
+    </branch>
+    <dependencies>
+      <dep package="fakepc"/>
+      <dep package="superlu_dist"/>
+      <dep package="scotch"/>
+    </dependencies>
+  </cmake>
+
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
     <branch repo="local" module="scotch_6.0.0.tar.gz" version="6.0.0" hash="md5:ba117428c0a6cd97d0c93e8b872bb3fe">
       <patch file="scotch_make.patch" strip="0"/>
@@ -79,7 +94,7 @@
   </makesys>
 
   <cmake id="superlu_dist" cmakeargs="-DUSE_XSDK_DEFAULTS=FALSE -Denable_blaslib=OFF -DTPL_PARMETIS_LIBRARIES='-lptscotchparmetis -lptscotch -lscotchmetis -lscotch -lptscotcherr -lz' -DTPL_PARMETIS_INCLUDE_DIRS=$JHBUILD_PREFIX/include">
-    <branch repo="local"  module="superlu_dist-5.3.0.tar.gz" version="5.3.0" hash="md5:4c18539291602f0234b0e54152ccc062">
+    <branch repo="local"  module="superlu_dist-6.1.1.tar.gz" version="6.1.1" hash="md5:767e221ba3752174b65d9257f9a97e06">
       <patch file="superlu.patch" strip="0"/>
     </branch>
     <dependencies>

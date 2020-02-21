@@ -17,15 +17,14 @@ Fixed
 Changed
 -------
 - LibGridXC with autotoolized build system to 0.8.5.1.
-
-Changed
--------
 - Fdict to v0.7.1.
-
-Changed
--------
 - libvdwxc to v0.4.0.
 - Libxc to v4.3.4.
+- ELPA to v2019.05.001.
+- NTPoly to v2.3.1.
+- SuperLU_DIST to v6.1.1.
+- ELSI to v2.3.1
+- PEXSI to v1.2.0.
 
 [0.3.1-2] - 2019-01-18
 ==========================

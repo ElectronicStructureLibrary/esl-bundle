@@ -1,0 +1,147 @@
+--- ./cmake/modules/FindParMETIS.cmake.orig	2020-02-20 12:09:33.307943865 +0000
++++ ./cmake/modules/FindParMETIS.cmake	2020-02-20 12:09:50.088012040 +0000
+@@ -85,7 +85,7 @@
+ #
+ #==================================================================
+ 
+-cmake_minimum_required( VERSION 3.11 ) # Require CMake 3.11+
++cmake_minimum_required( VERSION 3.10.2 ) # Require CMake 3.11+
+ 
+ include(CMakeFindDependencyMacro)
+ 
+--- ./cmake/modules/FindSuperLUDist.cmake.orig	2020-02-20 12:08:36.291712008 +0000
++++ ./cmake/modules/FindSuperLUDist.cmake	2020-02-20 12:08:54.051784266 +0000
+@@ -88,7 +88,7 @@
+ #
+ #==================================================================
+ 
+-cmake_minimum_required( VERSION 3.11 ) # Require CMake 3.11+
++cmake_minimum_required( VERSION 3.10.2 ) # Require CMake 3.11+
+ 
+ include( CMakePushCheckState )
+ include( CheckLibraryExists )
+--- ./cmake/modules/FindMETIS.cmake.orig	2020-02-20 12:10:32.644184917 +0000
++++ ./cmake/modules/FindMETIS.cmake	2020-02-20 12:10:48.332248641 +0000
+@@ -85,7 +85,7 @@
+ #
+ #==================================================================
+ 
+-cmake_minimum_required( VERSION 3.11 ) # Require CMake 3.11+
++cmake_minimum_required( VERSION 3.10.2 ) # Require CMake 3.11+
+ # Set up some auxillary vars if hints have been set
+ 
+ if( metis_PREFIX AND NOT metis_INCLUDE_DIR )
+--- ./cmake/modules/FindLinAlg.cmake.orig	2020-02-20 12:02:02.282097673 +0000
++++ ./cmake/modules/FindLinAlg.cmake	2020-02-20 12:02:13.706144899 +0000
+@@ -94,7 +94,7 @@
+ #
+ #==================================================================
+ 
+-cmake_minimum_required( VERSION 3.11 ) # Require CMake 3.11+
++cmake_minimum_required( VERSION 3.10.2 ) # Require CMake 3.11+
+ 
+ include( CMakePushCheckState )
+ include( CheckLibraryExists )
+--- ./cmake/PEXSICompileFlags.cmake.orig	2020-02-20 11:51:36.455574164 +0000
++++ ./cmake/PEXSICompileFlags.cmake	2020-02-20 12:14:49.477323570 +0000
+@@ -46,7 +46,8 @@
+ add_library( PEXSI::compile_definitions INTERFACE IMPORTED )
+ 
+ # C++11
+-target_compile_features( PEXSI::compile_definitions INTERFACE cxx_std_11 )
++#target_compile_features( PEXSI::compile_definitions INTERFACE cxx_std_11 )
++set_property(TARGET PEXSI::compile_definitions  PROPERTY INTERFACE_COMPILE_FEATURES cxx_std_11)
+ 
+ # Performance Profiling
+ if( PEXSI_ENABLE_PROFILE )
+@@ -77,7 +78,8 @@ endif()
+ # Handle DEBUG / RELEASE flags
+ if( CMAKE_BUILD_TYPE MATCHES Release )
+ 
+-  target_compile_definitions( PEXSI::compile_definitions INTERFACE "-D RELEASE" )
++#target_compile_definitions( PEXSI::compile_definitions INTERFACE "-D RELEASE" )
++set_property(TARGET PEXSI::compile_definitions  PROPERTY INTERFACE_COMPILE_DEFINITIONS "RELEASE")
+ 
+ else()
+ 
+--- ./cmake/PEXSIHandleLinAlg.cmake.orig	2020-02-20 12:03:19.978418870 +0000
++++ ./cmake/PEXSIHandleLinAlg.cmake	2020-02-20 12:15:27.077520360 +0000
+@@ -44,9 +44,11 @@
+ find_package( LinAlg REQUIRED COMPONENTS BLAS LAPACK )
+ 
+ add_library( PEXSI::linalg INTERFACE IMPORTED )
+-target_link_libraries( PEXSI::linalg INTERFACE LinAlg::LAPACK )
++#target_link_libraries( PEXSI::linalg INTERFACE LinAlg::LAPACK )
++set_property(TARGET PEXSI::linalg  PROPERTY INTERFACE_LINK_LIBRARIES LinAlg::LAPACK)
+ 
+ if( LinAlg_BLAS_USES_UNDERSCORE )
+-  target_compile_definitions( PEXSI::linalg INTERFACE "-D Add_" )
++	#target_compile_definitions( PEXSI::linalg INTERFACE "-D Add_" )
++	set_property(TARGET PEXSI::linalg  PROPERTY INTERFACE_COMPILE_DEFINITIONS "Add_")
+ endif()
+ 
+--- ./cmake/PEXSIHandleSuperLU.cmake.orig	2020-02-20 12:07:46.515509490 +0000
++++ ./cmake/PEXSIHandleSuperLU.cmake	2020-02-20 12:12:01.972547766 +0000
+@@ -45,4 +45,5 @@ add_library( PEXSI::superlu INTERFACE IM
+ # Find SuperLUDist
+ find_package( SuperLUDist REQUIRED )
+ 
+-target_link_libraries( PEXSI::superlu INTERFACE SuperLU::superlu_dist )
++#target_link_libraries( PEXSI::superlu INTERFACE SuperLU::superlu_dist )
++set_property(TARGET PEXSI::superlu  PROPERTY INTERFACE_LINK_LIBRARIES SuperLU::superlu_dist)
+--- ./cmake/PEXSITPLDepends.cmake.orig	2020-02-20 12:12:39.320699473 +0000
++++ ./cmake/PEXSITPLDepends.cmake	2020-02-20 12:13:22.784876022 +0000
+@@ -55,5 +55,7 @@ include( PEXSIHandleSuperLU )
+ #
+ 
+ add_library( PEXSI::tpl_depends INTERFACE IMPORTED )
+-target_link_libraries( PEXSI::tpl_depends INTERFACE PEXSI::superlu)
+-target_link_libraries( PEXSI::tpl_depends INTERFACE PEXSI::linalg )
++#target_link_libraries( PEXSI::tpl_depends INTERFACE PEXSI::superlu)
++#target_link_libraries( PEXSI::tpl_depends INTERFACE PEXSI::linalg )
++set_property(TARGET PEXSI::tpl_depends  PROPERTY INTERFACE_LINK_LIBRARIES PEXSI::superlu)
++set_property(TARGET PEXSI::tpl_depends  PROPERTY INTERFACE_LINK_LIBRARIES PEXSI::linalg)
+--- ./cmake/PEXSIBasicDepends.cmake.orig	2020-02-20 11:58:53.365313879 +0000
++++ ./cmake/PEXSIBasicDepends.cmake	2020-02-20 12:01:31.801971666 +0000
+@@ -48,18 +48,24 @@ add_library( PEXSI::parallel_cxx     INT
+ add_library( PEXSI::parallel_c       INTERFACE IMPORTED )
+ add_library( PEXSI::parallel_fortran INTERFACE IMPORTED )
+ 
+-target_link_libraries( PEXSI::parallel_cxx     INTERFACE MPI::MPI_CXX     )
+-target_link_libraries( PEXSI::parallel_c       INTERFACE MPI::MPI_C       )
+-target_link_libraries( PEXSI::parallel_fortran INTERFACE MPI::MPI_Fortran )
++#target_link_libraries( PEXSI::parallel_cxx     INTERFACE MPI::MPI_CXX     )
++#target_link_libraries( PEXSI::parallel_c       INTERFACE MPI::MPI_C       )
++#target_link_libraries( PEXSI::parallel_fortran INTERFACE MPI::MPI_Fortran )
++set_property(TARGET PEXSI::parallel_cxx  PROPERTY INTERFACE_LINK_LIBRARIES MPI::MPI_CXX)
++set_property(TARGET PEXSI::parallel_c  PROPERTY INTERFACE_LINK_LIBRARIES MPI::MPI_C)
++set_property(TARGET PEXSI::parallel_fortran  PROPERTY INTERFACE_LINK_LIBRARIES MPI::MPI_Fortran)
+ 
+ # Handle OpenMP
+ if( PEXSI_ENABLE_OPENMP )
+ 
+   find_package( OpenMP REQUIRED )
+ 
+-  target_link_libraries( PEXSI::parallel_cxx     INTERFACE OpenMP::OpenMP_CXX     )
+-  target_link_libraries( PEXSI::parallel_c       INTERFACE OpenMP::OpenMP_C       )
+-  target_link_libraries( PEXSI::parallel_fortran INTERFACE OpenMP::OpenMP_Fortran )
++  #target_link_libraries( PEXSI::parallel_cxx     INTERFACE OpenMP::OpenMP_CXX     )
++  #target_link_libraries( PEXSI::parallel_c       INTERFACE OpenMP::OpenMP_C       )
++  #target_link_libraries( PEXSI::parallel_fortran INTERFACE OpenMP::OpenMP_Fortran )
++set_property(TARGET PEXSI::parallel_cxx  PROPERTY INTERFACE_LINK_LIBRARIES OpenMP::OpenMP_CXX)
++set_property(TARGET PEXSI::parallel_c  PROPERTY INTERFACE_LINK_LIBRARIES OpenMP::OpenMP_C)
++set_property(TARGET PEXSI::parallel_fortran  PROPERTY INTERFACE_LINK_LIBRARIES OpenMP::OpenMP_Fortran)
+ 
+ endif()
+ 
+--- ./src/CMakeLists.txt.orig	2020-02-20 15:41:13.249395645 +0000
++++ ./src/CMakeLists.txt	2020-02-20 15:38:25.212644028 +0000
+@@ -78,6 +78,8 @@ target_link_libraries( pexsi
+     PEXSI::parallel_cxx
+     PEXSI::parallel_c
+     PEXSI::tpl_depends
++    PEXSI::superlu
++    PEXSI::linalg
+ )
+ 
+ if( PEXSI_ENABLE_FORTRAN )
