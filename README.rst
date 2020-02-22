@@ -23,9 +23,9 @@ Requirements
 ------------
 
 To work properly, the ``ESL Bundle`` requires Python 3.x but still works with
-Python 2.7 for now. Fortran and C compilers are also required, as most modules
-are written in one or both of these programming languages. Some modules also
-provide bindings for other languages. Depending on the modules you wish to
+Python 2.7 for now. Fortran, C and C++ compilers are also required, as most
+modules are written in one or more of these programming languages. Some modules
+also provide bindings for other languages. Depending on the modules you wish to
 build, some additional packages might be required. These are packages that are
 found in most Linux distributions and/or commonly available in HPC facilities,
 and therefore it was not deemed necessary to include them in the ``ESL
