@@ -12,19 +12,19 @@
     <branch repo="local" module="libxc-4.3.4.tar.gz" version="4.3.4" hash="md5:ec17884768fe41bc234f79cedb85af66"/>
   </autotools>
 
-  <autotools id="libyaml" autogen-sh="autoreconf">
+  <autotools id="libyaml" autogen-sh="configure">
     <branch repo="libyaml" module="yaml-0.2.2.tar.gz" version="0.2.2" hash="md5:54bf11ccb8bc488b5b3bec931f5b70dc" checkoutdir="libyaml-0.2.2"/>
   </autotools>
 
   <autotools id="futile" autogen-sh="configure">
     <branch repo="local" module="futile-1.8.tar.gz" version="1.8.3" hash="md5:f30e354b5bae61ac12127efee5f4412d">
       <patch file="futile_intel_bug.patch" strip="1"/>
-      <dependencies>
-        <if condition-set="yaml">
-          <dep package="libyaml"/>
-        </if>
-      </dependencies>
     </branch>
+    <dependencies>
+      <if condition-set="yaml">
+        <dep package="libyaml"/>
+      </if>
+    </dependencies>
   </autotools>
 
   <autotools id="psolver" autogen-sh="configure" autogenargs="--disable-mpi">
