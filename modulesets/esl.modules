@@ -67,7 +67,7 @@
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
     <branch repo="local" module="elpa-2019.05.001.tar.gz" version="2019.05.001" hash="md5:520c83a70259538f54880016a9818aa8"/>
   </autotools>
-  
+
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
     <branch repo="local" module="NTPoly-ntpoly-v2.3.1.tar.gz" version="2.3.1" hash="md5:b2d18c4682e409b5837edf796bef3957"/>
   </cmake>
@@ -159,6 +159,18 @@
     </dependencies>
   </autotools>
 
+  <makesys id="wannier90" makeargs="all COMMS=serial">
+    <branch repo="local" module="wannier90-3.0.0.tar.gz" version="3.0.0" hash="md5:7a1337b187f9b95b7a04b1548a56064d">
+      <patch file="wannier-3.0.0-make.patch" strip="0"/>
+    </branch>
+  </makesys>
+
+  <makesys id="wannier90-mpi" makeargs="all COMMS=mpi">
+    <branch repo="local" module="wannier90-3.0.0.tar.gz" version="3.0.0" hash="md5:7a1337b187f9b95b7a04b1548a56064d">
+      <patch file="wannier-3.0.0-make.patch" strip="0"/>
+    </branch>
+  </makesys>
+
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="fdict"/>
@@ -173,6 +185,7 @@
       <if condition-unset="no_elpa">
         <dep package="elpa"/>
       </if>
+      <dep package="wannier90"/>
     </dependencies>
   </metamodule>
 
@@ -192,6 +205,7 @@
       <if condition-unset="no_elpa">
         <dep package="elpa-mpi"/>
       </if>
+      <dep package="wannier90-mpi"/>
     </dependencies>
   </metamodule>
 
