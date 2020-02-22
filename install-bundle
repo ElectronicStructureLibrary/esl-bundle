@@ -3,6 +3,9 @@
 Wrapper to install bundles with JHBuild
 """
 
+
+from __future__ import print_function
+
 import argparse
 import os
 import re
@@ -34,7 +37,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument("packages",
         default=["esl-bundle"], nargs="*",
         help="Packages to install (defaults to all ESL Bundle components)")
-parser.add_argument("-c", "--compiler",
+parser.add_argument("-c", "--compilers",
         choices=vendors, default="gcc",
         help="Vendor of the compiler to use to build packages")
 parser.add_argument("-f", "--flavor",
