@@ -78,7 +78,7 @@ if not os.path.exists(os.path.join(topdir, "bundler", "bundles", defname)):
 jh_opt = []
 if args.conditions:
     if len(args.conditions) > 0:
-        jh_opt += ["--conditions %s" % item for item in args.conditions]
+        jh_opt += ["--conditions='%s'" % item for item in args.conditions]
 if args.stop:
     jh_opt.append("--exit-on-error")
 if args.unattended:

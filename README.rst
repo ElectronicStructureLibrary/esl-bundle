@@ -126,7 +126,7 @@ the options:
   if leaving a build unattended, in order to ensure that JHBuild will not
   prompt the user for input.
 - --conditions ARGS: Change the way modules are built according to ARGS
-  instead of the defaults. ARGS can be specified as e.g. -elpa (to skip the
+  instead of the defaults. ARGS can be specified as e.g. +no_elpa (to skip the
   build of ELPA) or +yaml (if libyaml is missing on your system). This
   feature is still experimental and provides the above-mentioned examples
   only for now.

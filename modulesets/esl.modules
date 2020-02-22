@@ -5,15 +5,25 @@
 <moduleset>
 
   <repository name="local" type="tarball" href="./"/>
+  <repository name="libyaml" type="tarball" href="http://pyyaml.org/download/libyaml/"/>
 
 
   <autotools id="libxc" autogen-sh="configure" autogenargs="--enable-fortran --enable-static --enable-shared LIBS='-lm'">
     <branch repo="local" module="libxc-4.3.4.tar.gz" version="4.3.4" hash="md5:ec17884768fe41bc234f79cedb85af66"/>
   </autotools>
 
+  <autotools id="libyaml" autogen-sh="autoreconf">
+    <branch repo="libyaml" module="yaml-0.2.2.tar.gz" version="0.2.2" hash="md5:54bf11ccb8bc488b5b3bec931f5b70dc" checkoutdir="libyaml-0.2.2"/>
+  </autotools>
+
   <autotools id="futile" autogen-sh="configure">
     <branch repo="local" module="futile-1.8.tar.gz" version="1.8.3" hash="md5:f30e354b5bae61ac12127efee5f4412d">
       <patch file="futile_intel_bug.patch" strip="1"/>
+      <dependencies>
+        <if condition-set="yaml">
+          <dep package="libyaml"/>
+        </if>
+      </dependencies>
     </branch>
   </autotools>
 
@@ -67,9 +77,11 @@
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
-      <dep package="elpa-mpi"/>
       <dep package="NTPoly"/>
       <dep package="pexsi"/>
+      <if condition-unset="no_elpa">
+        <dep package="elpa-mpi"/>
+      </if>
     </dependencies>
   </cmake>
 
@@ -158,7 +170,9 @@
       <dep package="libpsml"/>
       <dep package="libgridxc"/>
       <dep package="libvdwxc"/>
-      <dep package="elpa"/>
+      <if condition-unset="no_elpa">
+        <dep package="elpa"/>
+      </if>
     </dependencies>
   </metamodule>
 
@@ -171,11 +185,13 @@
       <dep package="pspio"/>
       <dep package="fdf"/>
       <dep package="libpsml"/>
-      <dep package="elpa-mpi"/>
       <dep package="elsi"/>
       <dep package="fakepc"/>
       <dep package="libgridxc-mpi"/>
       <dep package="libvdwxc-mpi"/>
+      <if condition-unset="no_elpa">
+        <dep package="elpa-mpi"/>
+      </if>
     </dependencies>
   </metamodule>
 
