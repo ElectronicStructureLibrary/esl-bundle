@@ -8,6 +8,7 @@ opensuse-mpi:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
 
 opensuse-tumbleweed-mpi:
@@ -27,6 +28,7 @@ opensuse-serial:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7 fftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - export JHBUILD_DEFAULTS="esl"
     - ./bundler/jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
 
 opensuse-tumbleweed-serial:
