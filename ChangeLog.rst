@@ -13,6 +13,10 @@ Fixed
 -----
 - URLs of several package websites.
 
+Changed
+-------
+- LibPSML to v1.1.8.
+
 [0.4.0-1] - 2020-02-21
 ======================
 
