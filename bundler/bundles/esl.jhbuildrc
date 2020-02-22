@@ -231,4 +231,8 @@ help_website = ('ESL Live!',
                 'https://esl.cecam.org/')
 
 # Whether '--disable-Werror' should be passed to automake modules
-disable_Werror = True
+# FIXME: The changes brought to the upstream version of JHBuild cause
+#        configure scripts to emit a warning when this option is set to
+#        True because this is an Automake option only meant to be used
+#        with autogen.sh scripts, not further on.
+disable_Werror = False
