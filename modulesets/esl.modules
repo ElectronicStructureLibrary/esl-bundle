@@ -85,7 +85,7 @@
     </dependencies>
   </cmake>
 
-  <cmake id="pexsi" cmakeargs='-Dsuperlu_dist_INCLUDE_DIR=$JHBUILD_PREFIX/include  -Dsuperlu_dist_LIBRARIES="-L$JHBUILD_PREFIX/lib -lsuperlu_dist" -Dmetis_INCLUDE_DIR=$JHBUILD_PREFIX/include -Dmetis_LIBRARIES="-lscotchmetis -lscotch -lz" -Dparmetis_INCLUDE_DIR=$JHBUILD_PREFIX/include -Dparmetis_LIBRARIES="-lptscotchparmetis -lptscotch -lptscotcherr -lz" '>
+  <cmake id="pexsi" use-ninja="no" cmakeargs='-Dsuperlu_dist_INCLUDE_DIR=$JHBUILD_PREFIX/include  -Dsuperlu_dist_LIBRARIES="-L$JHBUILD_PREFIX/lib -lsuperlu_dist" -Dmetis_INCLUDE_DIR=$JHBUILD_PREFIX/include -Dmetis_LIBRARIES="-lscotchmetis -lscotch -lz" -Dparmetis_INCLUDE_DIR=$JHBUILD_PREFIX/include -Dparmetis_LIBRARIES="-lptscotchparmetis -lptscotch -lptscotcherr -lz" '>
     <branch repo="local" module="pexsi_v1.2.0.tar.gz" version="1.2.0" hash="md5:dc6ceaf23a3caafe83c05ea4ad72198f">
       <patch file="pexsi_find_metis.patch" strip="1"/>
       <patch file="pexsi_use_ptscotch.patch" strip="1"/>
