@@ -8,7 +8,8 @@ opensuse-mpi:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-tumbleweed-mpi:
   image: eslib/esl-0.4.x:opensuse-tumbleweed
@@ -17,7 +18,8 @@ opensuse-tumbleweed-mpi:
     - source /etc/profile.d/lmod.sh
     - module load gnu/9  openmpi/3.1.4 scalapack/2.1.0 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - ./jhbuild.py -f rcfiles/opensuse-gcc-openmpi.rc build esl-bundle-mpi
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-serial:
   image: eslib/esl-0.4.x:opensuse-leap-15.2
@@ -26,7 +28,8 @@ opensuse-serial:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7 fftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - ./jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system opensuse --compilers gcc --flavor serial esl-bundle
 
 opensuse-tumbleweed-serial:
   image: eslib/esl-0.4.x:opensuse-tumbleweed
@@ -35,54 +38,63 @@ opensuse-tumbleweed-serial:
     - source /etc/profile.d/lmod.sh
     - module load gnu/9 fftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - ./jhbuild.py -f rcfiles/opensuse-gcc-serial.rc build esl-bundle
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system opensuse --compilers gcc --flavor serial esl-bundle
 
 debian-mpi:
   image: eslib/esl-0.4.x:debian-buster
   stage: test
   script:
-    - ./jhbuild.py -f rcfiles/debian-gcc-openmpi.rc build esl-bundle-mpi
+    - export JHBUILD_DEFAULTS="esl"
+    - python ./install-bundle --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
 
 debian-serial:
   image: eslib/esl-0.4.x:debian-buster
   stage: test
   script:
-    - ./jhbuild.py -f rcfiles/debian-gcc-serial.rc build esl-bundle
+    - export JHBUILD_DEFAULTS="esl"
+    - python ./install-bundle --system debian --compilers gcc --flavor serial esl-bundle
 
 ubuntu-mpi:
   image: eslib/esl-0.4.x:ubuntu-bionic
   stage: test
   script:
-    - ./jhbuild.py -f rcfiles/ubuntu-gcc-openmpi.rc build esl-bundle-mpi
+    - export JHBUILD_DEFAULTS="esl"
+    - python ./install-bundle --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
 ubuntu-serial:
   image: eslib/esl-0.4.x:ubuntu-bionic
   stage: test
   script:
-    - ./jhbuild.py -f rcfiles/ubuntu-gcc-serial.rc build esl-bundle
+    - export JHBUILD_DEFAULTS="esl"
+    - python ./install-bundle --system ubuntu --compilers gcc --flavor serial esl-bundle
 
 fedora-serial:
   image: eslib/esl-0.4.x:fedora-29
   stage: test
   script:
-    - ./jhbuild.py -f rcfiles/fedora-gcc-serial.rc build esl-bundle
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system fedora --compilers gcc --flavor serial esl-bundle
 
 fedora-mpi:
   image: eslib/esl-0.4.x:fedora-29
   stage: test
   script:
     - export PATH=/usr/lib64/openmpi/bin:$PATH
-    - ./jhbuild.py -f rcfiles/fedora-gcc-openmpi.rc build esl-bundle-mpi
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system fedora --compilers gcc --flavor openmpi esl-bundle-mpi
 
 #centos-serial:
 #  image: drfaustroll/esl:centos-latest
 #  stage: test
 #  script:
-#    - ./jhbuild.py -f rcfiles/centos-gcc-serial.rc build esl-bundle
+#    - export JHBUILD_DEFAULTS="esl"
+#    - ./install-bundle --system centos --compilers gcc --flavor serial esl-bundle
 
 #centos-mpi:
 #  image: drfaustroll/esl:centos-latest
 #  stage: test
 #  script:
 #    - export PATH=/usr/lib64/openmpi/bin:$PATH
-#    - ./jhbuild.py -f rcfiles/centos-gcc-openmpi.rc build esl-bundle-mpi
+#    - export JHBUILD_DEFAULTS="esl"
+#    - ./install-bundle --system centos --compilers gcc --flavor openmpi esl-bundle-mpi

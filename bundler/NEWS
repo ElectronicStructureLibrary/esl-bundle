@@ -1,0 +1,1587 @@
+==============
+Version 3.35.2
+==============
+
+- JHBuild now requires Python 3.5+, Python 2 support has been dropped
+- Python 3 fixes for the svn and hg modules
+- Moduleset updates
+- Translation updates
+
+==============
+Version 3.35.1
+==============
+
+- JHBuild now works with Python 2.7+ and Python 3.5+.
+  Use './autogen.sh --with-python=python3' to force an interpreter at
+  configure time. If nothing is specified Python 3 will be used.
+  Python 2 support will likely be dropped in the near future.
+- 'jhbuild gui' ported from pygtk to PyGObject
+- Improvements/Fixes for the apt based sysdeps install
+- Removed (long broken) buildbot support
+- Moduleset updates
+- Translation updates
+
+==============
+Version 3.34.0
+==============
+
+A new tarball is released in order to update the JHBuild manual available
+online at:
+https://developer.gnome.org/jhbuild/stable/
+
+- Support 'python3' sysdeps.
+- Speed up AptSystemInstall.
+- Improvements to the documentation.
+- CI improvements.
+- Moduleset updates.
+- Translation updates.
+
+===============
+Version 3.33.92
+===============
+
+A new tarball is released in order to update the JHBuild manual available
+online at:
+https://developer.gnome.org/jhbuild/
+
+Important changes:
+- The GNOME release team no longer uses JHBuild, it has been superseded by
+  BuildStream for this use.
+- Remove the modulesets for past GNOME versions, keep only the latest.
+- Support for the Meson build system.
+- Various improvements to the jhbuild tool.
+- Lots of updates to the modulesets.
+- Bug fixes.
+- Translation updates.
+
+Some other important changes may be missing from this news entry.
+
+===============
+Version 3.15.92
+===============
+
+Fixed bugs:
+
+ - #634617, use ACLOCAL_PATH
+ - #655417, build, tinderbox, list, info commands are slow
+ - #655553, sysdeps: Do not use jhbuilt pkg-config
+ - #677672, jhbuild'ing evolution-data-server: libtool relink error
+ - #691394, jhbuild doesn't know about xml or python module sysdeps
+ - #723053, zeitgeist is missing a dependency on python-rdflib
+ - #724771, Aisleriot really does depend on gconf
+ - #725986, sysdeps: look in C{,PLUS}_INCLUDE_PATH for headers
+ - #726684, JHBuild looks for package x when it should look for x-devel
+ - #726755, add new command 'jhbuild postinst'
+ - #727335, Yorba repository: git://yorba.org no longer reachable
+ - #727962, Jhbuild sysdeps --install crash (PackageKit API change)
+ - #729489, gnome-shell only use libgsystem on Linux
+ - #730543, spice-gtk depends on spice-protocol
+ - #730768, 3.14: add mir as an optional depend of gtk+
+ - #730970, app-3-14: add Hitori
+ - #731132, nemiver depends on vte-2.90
+ - #731174, gnome-world-3.14: metacity
+ - #732205, gnome-settings-daemon optionally depends on NetworkManager
+ - #733082, evolution in 3.14 modules needs dependency on gnome-icon-theme
+ - #733083, shotwell's repository is old
+ - #733141, NameError: name 'use_lib64' is not defined.
+ - #733704, Jhbuild does not function correctly when multiple versions of
+            python are installed
+ - #734375, Add Budgie-Desktop in GNOME-World-3.14 Modules
+ - #734583, Dependency missing from adwaita-icon-theme to librsvg
+ - #734586, Dependency missing from gnome-terminal to appdata-tools
+ - #734593, The geoip module uses GeoIP-1.5.1 which has a broken .pc file
+ - #734637, gnome-world-3.14: add gnome-flashback
+ - #734710, Upgrade gnutls version to 3.x in modulesets targetting 3.14 and
+            above
+ - #735019, Missing ltdl dependency for libcanberra
+ - #735517, FreeBSD-specific autogenargs and dependencies
+ - #735641, gtk+ depends on adwaita-icon-theme
+ - #736605, mutter depends on libxkbcommon and gbm
+ - #736976, Update WebKit1 to 2.4.5 in core-deps-3.14
+ - #737201, Add libchamplainmm
+ - #737481, Backtrace from running jhbuild sysdeps --inistall on FC21 to be
+ - #739957, Add gnome-characters to jhbuild
+ - #740307, java-atk-wrapper should be added as a module
+ - #740866, Sluggish startup
+ - #741266, gnome-sysdeps-3.16: add xmlto
+ - #741461, 3.16: update spice-gtk version
+ - #741484, 3.16: add gl and egl sysdeps
+ - #741496, sysdeps: add two new modes
+ - #741536, 3.16: add c++ sysdep
+ - #741537, Some trivial bugfixes for 'jhbuild sysdeps'
+ - #741538, 3.16: fill in a lot of base system depends
+ - #741774, Fix security warning when using sysdeps --install
+ - #741905, modulesets: fix libgusb location
+ - #741908, 3.16: gdm depends on plymouth by default now
+ - #741931, environment: set OBJC_INCLUDE_PATH
+ - #742051, gdm should not depend on plymouth on non-Linux systems
+ - #742134, 3.16: tweak some deps on macos
+ - #742258, Syntax error in sysdeps.py
+ - #742264, "virtual" system depends
+ - #742267, add 'sysid' submodule
+ - #742268, systeminstall: search for path files in sbin
+ - #742269, Debian sysdeps whac-a-mole
+ - #742292, jhbuild: figure out how to deal with make vs. gmake
+ - #742298, various improvements for packagedb
+ - #742305, Mutter doesn't need gbm when wayland is not available
+ - #742381, apps-3.16: update gnome-maps dependencies
+ - #742475, CMake support out of source builds
+ - #742481, OSX Bootstrap improvements
+ - #742544, git.gnome.org URL changed to HTTPS
+ - #742545, append() takes exactly one argument (2 given)
+ - #742671, Add gnome-2048 to world module set
+ - #742959, Switch clutter-gst3 package to stable branch
+ - #743127, packagedb: move to using separate files for package info
+ - #744285, world: add xdg-app
+ - #744903, triggers: fix LiteralMatch vs REMatch problems
+ - #744910, jhbuild inappropriately creates '~/.cvspass' file
+ - #745591, Update Sound Juicer dependencies
+ - #745822, ibus-hangul does not get installed with jhbuild sysdeps
+            --install
+
+Translators:
+
+- Samir Ribic (bs)
+- Marek Černocký (cs)
+- MarMav (el)
+- Daniel Mustieles (es)
+- Andika Triwidada (id)
+- Seong-ho Cho (ko)
+- Kjartan Maraas (nb)
+- Rafael Ferreira, Enrico Nicoletto (pt_BR)
+- Dušan Kazik (sk)
+- Matej Urbančič (sl)
+- Sebastian Rasmussen (sv)
+- Muhammet Kara (tr)
+
+Documentation translators:
+
+- Maria  Mavridou, marablack3 (el)
+- Daniel Mustieles (es)
+- Rafael Ferreira (pt_BR)
+
+Many thanks to all contributors: Emmanuele Bassi, MarMav, Kjartan Maraas,
+Zeeshan Ali (Khattak), Seong-ho Cho, William Jon McCann, Rafael Ferreira,
+Enrico Nicoletto, Nicklas Lindgren, Rui Matos, Philip Withnall, Richard
+Mark, Samir Ribic, Jiro Matsuzawa, Vadim Rutkovsky, Juan Pablo Ugarte,
+Javier Jardón, Yanko Kaneti, Debarshi Ray, Jens Georg, Bastien Nocera, Juan
+R. García Blanco, Fabiano Fidêncio, Owen W. Taylor, Ting-Wei Lan, Maria
+Mavridou, Kalev Lember, Alberts Muktupāvels, Ignacio Casal Quinteiro, David
+King, Piotr Drąg, Víctor Manuel Jáquez Leal, Jasper St. Pierre, Thiago F.
+G. Albuquerque, Ryan Lortie, Igor Gnatenko, Damián Nohales, Marek
+Černocký, Matthias Clasen, Christian Hergert, Tristan Brindle, Sébastien
+Wilmet, Murray Cumming, Patrick Griffis, Claudio Saavedra, Jesse van den
+Kieboom, Juan A. Suarez Romero, Matej Urbančič, marablack3, Giovanni
+Campagna, Michael Catanzaro, Gergely POLONKAI, Lionel Landwerlin, Dmitry
+Shachnev, Paolo Borelli, Andika Triwidada, Muhammet Kara, Magdalen Berns,
+Carlos Garcia Campos, Sebastian Pölsterl, LAN-TW, alexis diavatis, Richard
+Hughes, Sebastian Rasmussen, Rico Tzschichholz, Phillip Wood, Dan Winship,
+Olav Vitters, Daniel Mustieles, Florian Müllner, Dušan Kazik, Erick Pérez
+Castellanos, Marc-André Lureau
+
+
+==============
+Version 3.12.0
+==============
+
+Fixed bugs:
+
+ - #655714, Change default install directory to inside users home directory
+ - #669721, need to be more careful about dbus
+ - #693052, getting started page mention jhbuild bootstrap (which cause
+            failure on debian like distro)
+ - #697401, Inconsistent valac versioning dependencies for dconf and
+            NetworkManager
+ - #701181, a small cleanup in the monkeypatch
+ - #704768, bad hints in documentation will hardcode $PATH in .bashrc
+ - #705506, 3.10: Add xwayland to the modulesets
+ - #707174, trunk branch is missing empty m4 and build-aux directory ,
+            prevents ./autogen.sh
+ - #710236, Publish a new jhbuild tarball
+ - #712147, autogen.sh does not work
+ - #712305, gcr depends on vapigen
+ - #712312, deps-3.12: libgusb depends on vala
+ - #712351, jhbuild sysdeps --install breaks if you build polkit
+ - #715102, 3.12 modulesets changes needed to build on Debian
+ - #719759, Add libgfbgraph to the modulesets
+ - #720068, jhbuild's ./autogen.sh hardcodes #!/bin/bash
+ - #720083, sysdeps: grok -isystem
+ - #720118, improve jhbuild paths manipulation
+ - #720119, simple install: use 'cc', not 'gcc'
+ - #720129, jhbuild's fontconfig setup makes installing cantarell useless
+ - #720285, bootstrap: get libtool as .tar.gz, not .tar.xz
+ - #720486, sanitycheck outputs confusing '[Errno 2] No such file or
+            directory' line
+ - #720547, Add ClutterGst 3.0
+ - #720562, itstool: build out of git
+ - #720574, Update for js24 release
+ - #720654, itstool: upgrade to 2.0.2
+ - #720755, bootstrap: use ./configure for xz
+ - #720756, p11-kit: bump to version 0.20.1
+ - #720839, ability to conditionalise dependencies and autogen args
+ - #721323, moduleset: teach jhbuild how to build itself
+ - #721378, bring back libcanberra
+ - #721532, License text contains obsolete FSF postal address
+ - #721801, core-deps: libgdata depends on json-glib
+ - #721808, core: mutter depends on upower
+ - #722098, autotools: after a distclean configure needs to happen before
+            build
+ - #722239, apps: libosinfo requires libsoup
+ - #722561, gnome-clocks needs vala master to build
+ - #722978, ibus: update to 1.5.5 and add a patch
+ - #723070, gnome-photos requires gegl-0-2
+ - #723080, Totem fails to build in jhbuild due to missing appdata-xml.m4
+ - #723082, 'trychekout' gets confused on consecutive errors
+ - #723313, gnome-chat not included in gnome-world-3.10.modules/ gnome-
+            world-3.12.modules
+ - #723416, gob2: update version and path
+ - #723436, sanitycheck can't find xmlcatalog modules even after installing
+            docbook-xsl
+ - #723494, xkbcommon requires xcb-xkb >= 1.10
+ - #723700, core-3.12: NetworkManager now requires libndp
+ - #723945, Shotwell plugin shotwell-publishing requires json-glib
+ - #723947, world-3.12: Add gnome-code-assistance
+ - #723948, world-3.12: Add gedit-code-assistance
+ - #723959, NetworkManager requires iptables
+ - #723966, Totem requires gnome-icon-theme
+ - #723971, spice-gtk requires pulseaudio
+ - #723973, pulseaudio requires libcap
+ - #724116, get rid of libcelt
+ - #724622, do not hardcode make
+ - #724801, Sound Juicer now uses yelp-tools
+ - #724993, gjs now depends on lcov due to --enable-coverage
+ - #727508, libgweather requires geocode-glib
+
+Translators:
+
+- Marek Černocký (cs)
+- Daniel Mustieles (es)
+- Andika Triwidada (id)
+- Kjartan Maraas (nb)
+- Rafael Ferreira, Enrico Nicoletto (pt_BR)
+- Matej Urbančič (sl)
+- Wylmer Wang, 世海 黄 (zh_CN)
+
+Documentation translators:
+
+- Daniel Mustieles (es)
+- Rafael Ferreira (pt_BR)
+- Yuri Myasoedov (ru)
+- Wylmer Wang (zh_CN)
+
+Many thanks to all contributors: Dan Winship, Kalev Lember, Jasper St.
+Pierre, Enrico Nicoletto, Colin Walters, Rui Matos, Alban Browaeys, Sam
+Thursfield, Christophe Fergeau, Vadim Rutkovsky, Juan Pablo Ugarte, Javier
+Jardón, Jens Georg, Debarshi Ray, Sebastien Lafargue, Bastien Nocera,
+Sindhu S, Zeeshan Ali (Khattak), Luca Ferretti, Alberto Ruiz, Rafael
+Ferreira, David King, 世海 黄, Piotr Drąg, Víctor Manuel Jáquez Leal,
+William Jon McCann, Ryan Lortie, Volker Sobek, Jussi Kukkonen, Adam Dingle,
+Marek Černocký, Matthias Clasen, Tim Lunn, Martyn Russell, Wylmer Wang,
+Kjartan Maraas, Guillaume Desmottes, Juan A. Suarez Romero, Matej
+Urbančič, Giovanni Campagna, Michael Catanzaro, Emanuele Aina, Lionel
+Landwerlin, Antoine Jacoutot, Tristan Van Berkom, Andika Triwidada, Carlos
+Garcia Campos, Luca Bruno, Yuri Myasoedov, Phillip Wood, Baptiste Mille-
+Mathias, Andrés G. Aragoneses, Daniel Mustieles
+
+==============
+Version 3.10.0
+==============
+
+Fixed bugs:
+
+ - #644643, build: make Makefile.plain work with Msys
+ - #654582, Clean up module XML parsing
+ - #656081, offer to git clean -dfx over "make distclean"
+ - #668368, Use new documentation infrastructure (yelp-tools instead of
+            gnome-doc-utils)
+ - #670240, jhbuild doesn't handle correctly drive when DESTDIR is used
+ - #681342, use systemmodule for 3.6 modulesets
+ - #681344, sysdeps --install doesn't work for path systemmodule and
+            c_include systemmodule
+ - #682104, Improve the error message when apt-file is not present
+ - #682262, Dies when a directory is not writable
+ - #682951, jhbuild update --help uses 'build' instead of 'update' in two
+            places
+ - #683374, if changes to configure arguments, force run autogen.sh
+ - #683408, bootstrap: Update libtool to 2.4.2
+ - #683416, bring back -a --autogen command-line option
+ - #683566, OSError: [Errno 2] No such file or directory:
+            '/opt/gnome/_jhbuild/root-libgphoto2/opt/gnome/include/gphoto2
+ - #683624, recent change to autotools skip_configure() breaks some builds
+ - #683639, Better error message for misspelled or missing branch/@repo
+ - #683832, jhbuild crashes if there isn't an installed pkg-config
+ - #683846, manifests filelists incorrect when module has soft links
+ - #683848, Checking for libdb4 headers is, actually, checking for the
+            newest libdb headers
+ - #684205, OSError: [Errno 17] File exists when installing  gnome-devel-
+            docs
+ - #684335, empathy links to gstreamer and webkit
+ - #684652, jhbuild sysdeps --install not working on Fedora 18+
+ - #684796, libproxy is build against webkitgtk 1 which bring gstreamer
+            0.10 into a few gstreamer 1.0 applications
+ - #684878, ensure gstreamer is built correctly
+ - #684883, default target should be GNOME core
+ - #684908, don't build avahi-ui by default
+ - #685042, move brasero from core to apps
+ - #685149, strings - Consistently Capitalize PID
+ - #685150, strings -  Consistently capitalize acronyms and package names
+ - #685264, The dot command fails.
+ - #685268, systemmodules should be in a different colour in dot output
+ - #685335, gnome-suites-core-deps-3.{6,8}.modules: make gnome libgdata
+            dependencies non-optional
+ - #685337, Add command to get information about the JHBuild environment.
+ - #685348, Add a sysdep for the xorg-wacom package
+ - #685349, gnome-suites-core-deps-3.{6,8}.modules: ibus requires gconf
+ - #685350, pango.trigger: Make /etc/pango if it doesn't exist
+ - #685351, gnome-suites-core-3.{6,8}.modules: make gnome-shell hard
+            require gdm
+ - #685489, sysdeps should respect skip
+ - #686019, make (help) link in tinderbox output configurable
+ - #686906, Update wayland module set, add gtk
+ - #687203, geoclue gtk+2 dep can be dropped?
+ - #687272, Gmone-terminal doesn't start from overview in 3.7.1
+ - #687403, autotools: run "make distclean" only if there is a Makefile
+ - #687601, uninstall: support automatically created modules
+ - #687692, Install python2 symlink in ~/.local/bin when running on Debian
+ - #687699, re-enable parallel builds for webkit?
+ - #687715, should build udisks2
+ - #687716, libgtop has undeclared dependency on texinfo
+ - #687720, libgxps has undeclared dependency on libarchive.pc
+ - #687743, Provide pygobject for python 2 and 3
+ - #687814, reenable gvfs' http when gvfs updates for libsoup API changes
+ - #687837, 3.8: drop fallback mode
+ - #687891, gnome-settings-daemon has an undeclared dependency on bin/cups-
+            config
+ - #688011, world-3.8: fix closing dependencies tag in bijiben
+ - #688062, add py3cairo to the 3.8 modulesets
+ - #688075, fix gypsy build
+ - #688119, ibus-pinyin has an undeclared dependency on sqlite3
+ - #688696, missing dependency - xcb-dri2
+ - #688828, Pango requires harfbuzz 0.9.7
+ - #688846, gypsy: re-add Wno-error=deprecated-declarations
+ - #688872, bijiben has moved to git.gnome.org
+ - #689010, nautilus depends on tracker-sparql-0.14.pc
+ - #689011, gnome-initial-setup depends on clutter-gst-1.0
+ - #689194, jhbuild tinderbox slows down builds
+ - #689196, gnome-disk-utility: add libdvdread dependency
+ - #689226, nemiver has an undeclared dependency on gdb
+ - #689227, speech-dispatcher has an undeclared dependency on dotconf
+ - #689228, deps: switch graphviz to ./configure
+ - #689507, pulseaudio is built with inappropriate options
+ - #689755, Should build gnome-shell-extensions with --enable-extensions
+            =classic-mode
+ - #690103, current vala officially does not support out of source builds
+ - #691395, atk asks You need to install gnome-common from the GNOME CVS
+ - #691407, jhbuild fedora 18 dependency libnotify-devel is missing
+ - #691408, jhbuild fontconfig dependency gperf is missing in fedora 18
+ - #691412, jhbuild gnome-session dependency 'sm' is missing in fedora 18
+ - #692390, commit 8a353753 creates OS -> apps dependency
+ - #692565, moduleset: Add modules required to build with js17
+ - #692675, a couple of impossible-to-install sysdeps on Ubuntu
+ - #692709, gnome-control-center depends on colord-gtk
+ - #692825, `make install' fails on Debian systems if called more than once
+ - #693451, [PATCH] udisks module was erroneously removed
+ - #693729, 3.8: Update spice-gtk version
+ - #693788, missing iso-codes dependency for gnome-desktop module
+ - #694452, totem-pl-parser should depend on libquvi
+ - #694466, JHBuild deletes the whole checkout root if being passed a
+            module with trailing slashes
+ - #694527, Smoketesting 3.7.90 moduleset using JHBuild fails
+ - #694900, G-C-C can't run with jhbuild due to old libs deps
+ - #695271, apps-3.8: Update libvirt version
+ - #695751, totem-pl-parser should depend on gnome-common
+ - #696081, Switch clutter-gst to 2.0 branch
+ - #696082, Switch clutter-gst to 2.0 branch
+ - #696144, gnome-ostree depends on gjs
+ - #696184, Add `make check-modulesets` target
+ - #696294, Add libarchive dependency to ostree
+ - #696784, gsettings-desktop-schemas depends on gnome-common
+ - #696887, gnome-suites-core-deps-3.8.0.modules on ftp.gnome.org has bad
+            branch-def for cantarell-fonts
+ - #697818, [PATCH] Add "shallow_clone" option
+ - #697875, [PATCH] autogen.sh: Add a hack to work in the gnome-ostree
+            build system
+ - #697925, Error during phase checkout: gnome-suites-core-3.8.modules:
+            gnome-icon-theme has no 3.8 branch
+ - #698108, Libsecret is a hard dep of evince in 3.8
+ - #698684, 3.{8,10}: Add gtk+-2 dependency on gnome-themes-standard
+ - #699928, jhbuild runs parallel build even when module specifies
+            makeargs=-j 1
+ - #699931, jhbuild bootstrap not working: missing gnome-doc-utils
+            definition
+ - #699936, git: Rebase rather than pull
+ - #699938, allow skipping all dependencies
+ - #700475, support for shallow_clone option in bazaar
+ - #700557, autoreconf -i fails in cases of ltmain.sh mismatch
+ - #700731, Fix --in-[checkout|build]dir when passing no args to the `run'
+            command
+ - #700834, Add moduleset for the dLeyna/Rygel DLNA stack as other/dleyna
+ - #701051, should pass -j1 when supports-parallel-builds="no"
+ - #701059, update-desktop-database trigger does not run
+ - #701147, librsvg needs pango as dependency
+ - #701181, a small cleanup in the monkeypatch
+ - #701776, world-3.10: Add the dLeyna servers as dependencies for GNOME
+            Photos
+ - #701868, In grc deps, p11-kit version is wrong
+ - #702020, Bump p11-kit to 0.19.1, due to gcr dependency
+ - #702065, libxkbcommon has moved to github, configure script exits with
+            error
+ - #702603, FBTS: gdx-pixbuf doesn't build on 3.6
+ - #702682, FTBFS: master doesn't to build pangocairo in 3.10
+ - #702776, FTBFS: building dconf in 3.6 fails because of newer vala
+ - #702777, FTBFS: librsvg fails to build 3.6 because of newer dependency
+ - #702805, 3.10: Add quvi 0.9 modules
+ - #702830, 3.10: Add gexiv2 and libraw to the Shotwell system dependencies
+ - #703633, Drop zeitgeist-1.0
+ - #703698, python.pc not found on Debian Wheezy
+ - #703954, Clean up the code handling --in-builddir and --in-checkoutdir
+ - #704768, bad hints in documentation will hardcode $PATH in .bashrc
+ - #705136, update libpwquality to 1.2.2
+ - #705496, add mutter-wayland to modulesets
+ - #705996, Need to pump to gettext 0.18.3
+ - #706497, "configure without autotools" option doesn't work
+ - #706518, Confusing message printed on the console at "make install"
+ - #707009, 3.10 should use networkmanager and network-manager-applet 0.9.8
+ - #707174, trunk branch is missing empty m4 and build-aux directory ,
+            prevents ./autogen.sh
+ - #707561, Unable to find multiarch'ed header files (eg. tiff.h on Debian)
+ - #707843, Add libXtst to at-spi2-core dependencies
+ - #708376, autogen.sh --simple-install option is broken
+ - #709019, Out of date default moduleset
+ - #710569, 3.12: Polari add dconf as suggest dependency
+ - #712147, autogen.sh does not work
+ - #712150, Add appdata-tools to core-deps-3.12 moduleset
+ - #712305, gcr depends on vapigen
+ - #712312, deps-3.12: libgusb depends on vala
+
+Translators:
+
+- Marek Černocký, Lucas Lommer (cs)
+- Christian Kirbach (de)
+- Dimitris Spingos, Tom Tryfonidis (el)
+- Daniel Mustieles (es)
+- Fran Diéguez (gl)
+- Andika Triwidada (id)
+- Jiro Matsuzawa (ja)
+- Seong-ho Cho (ko)
+- Kjartan Maraas (nb)
+- Enrico Nicoletto, Rafael Ferreira (pt_BR)
+- Matej Urbančič (sl)
+- Victor Ibragimov (tg)
+- Wylmer Wang (zh_CN)
+
+Documentation translators:
+
+- Dimitris Spingos, Tom Tryfonidis (el)
+- Daniel Mustieles (es)
+- Jiro Matsuzawa (ja)
+- Rafael Ferreira (pt_BR)
+
+Many thanks to all contributors: Zeeshan Ali (Khattak), Jasper St. Pierre,
+Colin Walters, Vadim Rutkovsky, Behdad Esfahbod, Kalev Lember, Alessandro
+Campagni, Rafael Ferreira, David King, Fran Diéguez, Darxus, Ryan Lortie,
+Nuno Araujo, Adam Dingle, Alexandre Franke, Rob Bradford, Jesse van den
+Kieboom, Matej Urbančič, Jonh Wendell, Emanuele Aina, Gustavo Noronha
+Silva, Krzesimir Nowak, Magdalen Berns, Daiki Ueno, Carlos Garcia Campos,
+Richard Hughes, Emmanuele Bassi, Travis Reitter, Matthew Waters, Cosimo
+Cecchi, Alban Browaeys, Sam Thursfield, Jiro Matsuzawa, Claudio Saavedra,
+Javier Jardón, Bastien Nocera, Christian Kirbach, Christian Persch, Martyn
+Russell, Dimitris Spingos, Seán de Búrca, Stefano Facchini, Andika
+Triwidada, Sebastian Pölsterl, Xabier Rodriguez Calvar, Andrés G.
+Aragoneses, Daniel Mustieles, William Jon McCann, Seong-ho Cho, Thomas
+Hindoe Paaboel Andersen, Philip Withnall, Christophe Fergeau, Dan Winship,
+Philipp Kaluza, Javier Hernández, Jens Georg, Adel Gadllah, Lucas Lommer,
+Luca Ferretti, Felix Riemann, Rui Matos, José Aliste, Wylmer Wang, Marek
+Černocký, Matthias Clasen, Javier, Alberto Garcia, Murray Cumming, Craig
+Keogh, Giovanni Campagna, Thomas Bechtold, Tristan Van Berkom, Victor
+Ibragimov, Eugen Dedu, Marcin Wojdyr, Diego Escalante Urrelo, Martin Pitt,
+John Ralls, Joanmarie Diggs, Thomas Wood, Ondrej Holy, Kjartan Maraas,
+Enrico Nicoletto, Sindhu S, Owen W. Taylor, Paolo Borelli, Xan Lopez,
+Ignacio Casal Quinteiro, Volker Sobek, Lionel Landwerlin, Tim Lunn, Tom
+Tryfonidis, Sébastien Wilmet, Mike Gorse, Juan A. Suarez Romero, Ernst
+Sjostrand, Fabiano Fidêncio, Alejandro Piñeiro, Florian Müllner, Pierre-
+Yves Luyten, Michael Wood, Stef Walter, Martin Robinson, Michael Terry,
+José Alburquerque, Germán Poo-Caamaño
+
+==============
+Version 3.5.91
+==============
+
+Fixed bugs:
+
+ - #656081, offer to git clean -dfx over "make distclean"
+ - #660844, Default to running autogen.sh on build
+ - #670213, supports-parallel-builds="no" should work if makeargs="-j 4"
+            set in .jhbuildrc
+ - #670240, jhbuild doesn't handle correctly drive when DESTDIR is used
+ - #681289, --distclean and --clean should just distclean
+ - #681290, document --distclean in manual
+ - #681342, use systemmodule for 3.6 modulesets
+ - #681886, sysdeps should list package name and pkg-config name
+ - #682904, jhbuild fails on opencc
+ - #682951, jhbuild update --help uses 'build' instead of 'update' in two
+            places
+ - #683408, bootstrap: Update libtool to 2.4.2
+
+Translators:
+
+- Daniel Mustieles (es)
+- Matej Urbančič (sl)
+
+Documentation translators:
+
+- Daniel Mustieles (es)
+
+Many thanks to all contributors: Juan A. Suarez Romero, Paolo Borelli,
+Giovanni Campagna, Carlos Garcia Campos, William Jon McCann, Craig Keogh,
+Colin Walters, Rui Matos, Philip Withnall, Daniel Mustieles, Matej
+Urbančič, Christophe Fergeau, Matthias Clasen, Claudio Saavedra, Volker
+Sobek, Javier Jardón, Stef Walter, Jens Georg, Dan Winship, Marcin Wojdyr
+
+=============
+Version 3.5.5
+=============
+
+Fixed bugs:
+
+ - #581515, Don't build DeviceKit-disks by default
+ - #656081, offer to git clean -dfx over "make distclean"
+ - #671042, enhance system dependencies beyond pkg-config to detect include
+            files & executable files
+ - #672697, [RFC] branch/@version not required for tarball?
+ - #678361, jhbuild: don't call get_system_modules() when
+            config.check_sysdeps is False
+ - #678709, create a new JHBuild tarball
+ - #678869, jhbuild: svn URLs broken by calling os.path.abspath()
+ - #679022, libnl-3 has wrong name for pkg-config file
+ - #679375, The python version in the example/jhbuild-session
+ - #679643, core-3.6: Add ibus dependency for g-s-d and g-c-c
+ - #679792, jhbuild cmake: use os.makedirs() to create builddir directory
+ - #679817, Add gnome-calendar to jhbuild
+ - #679948, Packages have unmet dependencies
+ - #679966, world-3.6: declare NetworkManager vala dependency
+ - #680389, gnome-shell has undeclared runtime dependency on gdm
+ - #681113, 3.6: nautilus requires tracker
+
+Translators:
+
+- Daniel Mustieles (es)
+- Andika Triwidada (id)
+- Seong-ho Cho (ko)
+- Kjartan Maraas (nb)
+- Matej Urbančič (sl)
+
+Documentation translators:
+
+- Daniel Mustieles (es)
+
+Many thanks to all contributors: Seong-ho Cho, Colin Walters, Philip
+Withnall, Christophe Fergeau, Dan Winship, Javier Jardón, Bastien Nocera,
+Luca Ferretti, Xan Lopez, Tommi Vainikainen, Rui Matos, Ryan Lortie, Ray
+Strode, Marcin Wojdyr, Alexandre Franke, Craig Keogh, Matej Urbančič,
+Andika Triwidada, Carlos Garcia Campos, Stef Walter, Matthias Clasen, Daniel
+Mustieles
+
+=============
+Version 3.5.3
+=============
+
+Fixed bugs:
+
+ - #581515, Don't build DeviceKit-disks by default
+ - #612886, Add ability to "skip-install"
+ - #646510, jhbuild should use g_get_user_config_dir()
+ - #655501, jhbuild list shouldn't load package database packagedb.xml
+ - #655763, JHBuild should work without a config file ~/.jhbuildrc, use
+            defaults
+ - #656818, make bootstrap all or nothing
+ - #667586, autotools: Move towards GNOME Build API logic
+ - #668368, Use new documentation infrastructure (yelp-tools instead of
+            gnome-doc-utils)
+ - #669369, Problems building gnome-common and gtk-doc
+ - #669554, Inform user if required system dependencies are missing
+            (systemmodule)
+ - #670220, [jhbuild, cmake, Windows] add -G "Unix Makefiles" to cmake
+            arguments
+ - #670225, jhbuild on Windows: common os.rename() problem
+ - #670335, babl 0.1.2 fails to build on MacOSX
+ - #670683, jhbuild autotools: re.sub() with path as repl gives error for
+            some paths
+ - #670696, Make --no-network more useful for tarball modules
+ - #670814, checkout_mode = 'clobber' interacts badly with tarball source-
+            subdir
+ - #672205, jhbuild: add supports-non-srcdir-builds attr for cmake
+ - #672974, jhbuild tolerates relative paths in .jhbuildrc
+ - #673202, autogen-sh=autoreconf always replaced with configure
+ - #673329, Please release jhbuild 3.4
+ - #673987, Fix installation of tracker error "Not a directory"
+ - #674010, Fix libmusicbrainz .pc installation path
+ - #674315, polkit fails checkout stage
+ - #674353, 'prefix' should also get the special expanduser treatment
+ - #675416, Don’t run `make install` after `jhbuild make uninstall`
+ - #675570, jhbuild: allow no "triggers" directory
+ - #676224, display circular dependencies in 'jhbuild checkmodulesets'
+            command
+ - #676490, tarballs with buildroot set results in directory name same as
+            filename
+ - #677271, jhbuild make: Automatically create modules for non-existent
+            ones
+ - #677860, Add realmd
+ - #677979, jhbuilds setting PYTHONPATH does not work with python 3.x
+ - #678132, check_sysdeps setting in config file is ignored
+ - #678159, folks depends on libzeitgeist
+ - #678372, ekiga requires a higher versions of ptlib & opal to compile
+ - #678704, libproxy 0.4.7 does not build with newer GCC (4.7)
+ - #678723, Folks does not build
+ - #678802, cant build gnome-online-accounts because of missing libsecret
+ - #678958, apps-3.6: use svn branches for ptlib and opal
+ - #679124, file-roller depends on autoconf version 2.69 or higher
+ - #679407, GST_PLUGIN_PATH and GST_REGISTRY override broken for dual
+            install
+
+Translators:
+
+- Marek Černocký (cs)
+- Daniel Winzen (de)
+- Vasilis Tsivikis (el)
+- Daniel Mustieles (es)
+- Fran Diéguez (gl)
+- Andika Triwidada (id)
+- Luca Ferretti (it)
+- Daniel Șerbănescu (ro)
+- Martin Srebotnjak, Matej Urbančič (sl)
+
+Documentation translators:
+
+- Daniel Mustieles (es)
+- Martin Srebotnjak (sl)
+
+Many thanks to all contributors: Dan Winship, Kalev Lember, Joanmarie Diggs,
+Jasper St. Pierre, Thomas Hindoe Paaboel Andersen, Colin Walters, Philip
+Withnall, Cosimo Cecchi, Christophe Fergeau, Jeremy Whiting, Javier Jardón,
+Bastien Nocera, Owen W. Taylor, Luca Ferretti, Xan Lopez, Ignacio Casal
+Quinteiro, David King, Fran Diéguez, Piotr Drąg, Víctor Manuel Jáquez
+Leal, Ray Strode, Marek Černocký, Marcin Wojdyr, Olav Vitters, Tshepang
+Lekhonkhobe, Vasilis Tsivikis, Frederic Peters, Guillaume Desmottes, Craig
+Keogh, Stef Walter, Krzesimir Nowak, Giovanni Campagna, Simon Feltman,
+Andika Triwidada, Carlos Garcia Campos, Martin Srebotnjak, Matej Urbančič,
+Daniel Șerbănescu, Matthias Clasen, Daniel Mustieles, Florian Müllner,
+Marc-André Lureau, Daniel Winzen
+
+=============
+Version 3.4.0
+=============
+
+Fixed bugs:
+
+ - #634985, Tilde character in .jhbuildrc is misinterpreted
+ - #650533, Make notifications less annoying
+ - #654555, Don't have two ways to be installed
+ - #654686, parallel make by default
+ - #654872, Delete no longer shipped files at install time
+ - #655164, All tests were broken by recent changes
+ - #655688, Improve error message when command not found
+ - #656399, remove arch support
+ - #656789, Add '3.2.x' to version in JHBuild bugzilla
+ - #658601, checkout_mode export can't get version attribute from svn
+ - #660939, Update autotools configuration
+ - #661010, jhbuild modulesets require out-of-date version of libgee (0.6.0
+            instead of 0.6.2.1)
+ - #661367, 'jhbuild make' not documented in manual
+ - #661412, Make.py should import logging
+ - #661533, gtk+ depends on glib 2.31.0
+ - #661641, gdk-pixbuf request glib 2.31.0
+ - #661848, jhbuild dependencies issues
+ - #662392, Error when pwd is removed
+ - #662928, The include-check rule in Makefile.plain always fails
+ - #663003, "Failed to parse" error for moduleset definitions blames wrong
+            file
+ - #663189, Make "jhbuild make" smarter
+ - #663255, config: Export GST_PLUGIN_PATH
+ - #663839, Cannot compile cogl in jhbuild: requested branch is not
+            available
+ - #664154, 3.4: Add Boxes & its deps
+ - #664230, autogen.sh should complain about make (or automake?) not being
+            present
+ - #664231, configure_without_autotools should not prompt "now type make"
+            if it doesn't find key dependencies
+ - #664304, make: Allow specifying make flags
+ - #664796, add libvirt to 3.4 moduleset
+ - #665030, IOError: [Errno 2] No such file or directory:
+            '/proc/22621/status'
+ - #665499, JHBuild fails to build if MAKE contains a space
+ - #666425, Handle alphabetic parts of version string
+ - #666546, tiny bug in sample.jhbuildrc
+ - #666577, Add '3.4.x' to version in JHBuild bugzilla
+ - #668107, jhbuild update does not really update git repositories
+ - #668368, Use new documentation infrastructure (yelp-tools instead of
+            gnome-doc-utils)
+ - #668434, tracker is listed in the build order after nautilus even though
+            tracker has a hard dependency on nautilus
+ - #668879, packagedb.add takes 4 args, linux.py & perl.py supply 3
+ - #669205, nspr/nss: update to latest versions
+ - #669437, libxml2 symbol versioning causes problems
+ - #669475, jhbuild gui doesn't work
+ - #669589, bootstrap: bump to automake 1.11.3
+ - #669658, moduleset.dtd: element moduleset missing cmake
+ - #669750, Should set GST_REGISTRY
+ - #669953, jhbuild's udev is too old to support gnome-boxes
+ - #669956, don't autogen avahi
+ - #670094, cmake/Windows fix
+ - #670123, libxklavier 5.2 needs patch to fix introspection
+ - #670127, shared-mime-info 1.0 is not safe for parallel builds
+ - #670154, use os.sep instead of literal '/' in hbuild/utils/fileutils.py
+ - #670343, udev libtool pain
+ - #670349, jhbuild: fix handling of pretty_print=False
+ - #670533, cairomm: missing dep on libsigc++2
+ - #670625, autotools: Don't run make check in parallel
+ - #670698, bluez: mismatching checksum
+ - #670774, apps-3.4: gnome-games depends on yelp-tools now
+ - #670799, gmime module needs gpgme as a system dependency
+ - #670801, jhbuild: small clean up in modtypes/cmake.py
+ - #670917, gnome-doc-utils requires rarian-compat: "/bin/sh: scrollkeeper-
+            config: command not found"
+ - #670940, gnome-themes-standard: missing dependency on gtk+
+ - #670943, js185 fails checkout stage
+ - #670993, WebKit: dependency on geoclue should be stronger
+ - #671162, jhbuild doesn't work if old chrt or ionice is installed
+ - #671217, liboauth fails checkout stage
+ - #671226, avoid message about unknown key e
+ - #671353, outdated text on Python scripts
+ - #671365, libgxps: missing dependency on liblcms2
+ - #671460, jhbuild: bazaar not working in checkout_mode = 'export'
+ - #671634, fix for supports-non-srcdir-builds in autotools
+ - #671697, core-deps-base-3.4: lcms2, ical: use ./configure
+ - #671700, core-deps-3.4: build libgsf from git
+ - #671789, fix eog dependencies and suggests
+ - #671891, Bump poppler dependency from 0.18.0 to 0.18.4 to fix some
+            compile errors
+ - #672172, jhbuild: fix for undefined name in bzr.py
+ - #672206, jhbuild moduleset.dtd: added pkg-config, removed ant
+ - #672266, Don't run triggers if not installing
+ - #672634, tracker has undeclared dependency against totem-pl-parser
+ - #673950, core-deps-base-3.[4|6]: dbus-glib depends on expat
+ - #673957, deps-3.6: fix caribou deps depending on gee-0.6 (gee-1.0)
+ - #673994, deps-3.6: gstreamer has been branched
+ - #673999, gnome-terminal gnome suites 3.6 fails to build
+ - #674007, core-deps-3.[4,6]: fix musicbrainz build
+
+Translators:
+
+- Marek Černocký (cs)
+- Mario Blättermann, Christian Kirbach (de)
+- Kristjan SCHMIDT (eo)
+- Daniel Mustieles (es)
+- Fran Diéguez (gl)
+- Jiro Matsuzawa (ja)
+- Seong-ho Cho, Seong-ho, Cho (ko)
+- Kjartan Maraas (nb)
+- Kirill Moseevskih (ru)
+- Matej Urbančič (sl)
+- Wylmer Wang, Yinghua Wang (zh_CN)
+
+Documentation translators:
+
+- Daniel Mustieles (es)
+- OKANO Takayoshi, Jiro Matsuzawa (ja)
+
+Many thanks to all contributors: Emmanuele Bassi, Gert Kulyk, John Ralls,
+Travis Reitter, Jon McCann, Zeeshan Ali (Khattak), Jasper St. Pierre, Seong-
+ho Cho, Thomas Hindoe Paaboel Andersen, Yinghua Wang, Mario Blättermann,
+Richard Hughes, Philip Withnall, Javier Jardón, Christophe Fergeau, Jiro
+Matsuzawa, Kjartan Maraas, Seong-ho, Cho, Cosimo Cecchi, Jens Georg, Ryan
+Lortie, Bastien Nocera, Owen W. Taylor, Marc-André Lureau, Paolo Borelli,
+Danielle Madeley, Christian Kirbach, Felix Riemann, Christian Persch, David
+King, Fran Diéguez, Piotr Drąg, Tshepang Lekhonkhobe, Thomas Wood, Andre
+Klapper, Shaun McCance, Marek Černocký, Matthias Clasen, Kristjan SCHMIDT,
+Xan Lopez, Wylmer Wang, Guillaume Desmottes, Murray Cumming, Craig Keogh,
+Alejandro G. Castro, Juan A. Suarez Romero, Stef Walter, Damien Lespiau,
+Alejandro Piñeiro, Colin Walters, Giovanni Campagna, Juan Pablo Ugarte,
+Gustavo Noronha Silva, Krzesimir Nowak, Kirill Moseevskih, Carlos Garcia
+Campos, Luca Ferretti, Matej Urbančič, Yuri Myasoedov, Martin Robinson,
+OKANO Takayoshi, Marcin Wojdyr, Daniel Mustieles, Michael Terry, Martin
+Pitt, Florian Müllner, Robert Bragg, Matthew Barnes
+
+=============
+Version 3.2.1
+=============
+
+Fixed bugs:
+
+ - #648990, [PATCH] Support running scan-build (Clang Static Analyzer) with
+            autotools projects
+ - #653050, "jhbuild make" command
+ - #654701, consider hacks for Debian and other tar+wget wrappers that
+            don't have RPM-like Provides: pkgconfig(foo)
+ - #655164, All tests were broken by recent changes
+ - #655417, build, tinderbox, list, info commands are slow
+ - #660455, Accerciser changes in 3.2 and 3.4 modulesets
+ - #660527, jhbuild fails to run on mac or windows
+ - #660853, Broken bz2 files terminates jhbuild
+ - #660939, Update autotools configuration
+ - #660995, change the error message on command not found
+ - #661010, jhbuild modulesets require out-of-date version of libgee (0.6.0
+            instead of 0.6.2.1)
+
+Translators:
+
+- Marek Černocký (cs)
+- Mario Blättermann (de)
+- Daniel Mustieles, Jorge González (es)
+- Alexandre Franke (fr)
+- Matej Urbančič, Martin Srebotnjak (sl)
+
+Documentation translators:
+
+- Daniel Mustieles (es)
+
+Many thanks to all contributors: Javier Hernández, Kalev Lember, Joanmarie
+Diggs, Thomas Hindoe Paaboel Andersen, Colin Walters, Javier Jardón, Dan
+Winship, Cosimo Cecchi, Jeremy Huddleston, Xan Lopez, Jorge González, Marek
+Černocký, Matthias Clasen, Alexandre Franke, Guillaume Desmottes, Craig
+Keogh, Matej Urbančič, Mario Blättermann, Björn Lindqvist, Krzesimir
+Nowak, Martin Srebotnjak, Stef Walter, Daniel Mustieles, Michael Terry
+
+=============
+Version 3.2.0
+=============
+
+Fixed bugs:
+
+ - #564373, packagekit - how to best exploit it in jhbuild
+ - #606414, after failed installation offer distclean/remove-and-rebuild
+ - #606664, add support for running "make distclean"
+ - #619002, libproxy doesn't build
+ - #636888, nested modules don't work with dvcs_mirror_dir
+ - #637728, Restore support for absolute moduleset paths
+ - #637917, evolution-data-server no longer needs --enable-gtk3 argument
+ - #637989, Dependency error - Clutter should be built after Atk
+ - #638212, cannot build via jhbuild  gnome-themes-extras
+ - #638254, there's no evolution-mapi entry for 3.0 module
+ - #638521, libchamplain uses GTK+3 now
+ - #638919, [buildbot] commit links don't work for all modules
+ - #639052, Many modules depend on unknown module in 3.0 modulesets
+ - #639968, accerciser is missing from 3.0 moduleset
+ - #640429, update jhbuild moduleset for glabels
+ - #640562, pulseuadio version not compilable for gnome-shell
+ - #640889, Missing  module gnome-python in 3.0
+ - #641307, libsoup errors out because it requires non-built glib-
+            networking
+ - #642155, local patch files are sometimes not found by "patch" tool
+ - #642245, angosso.net
+ - #642897, pyatspi2 should suggest at-spi2-core
+ - #643864, warnings during jhbuild sanitycheck
+ - #643962, gnome-sharp module doesn't exist but f-spot and taglib-sharp
+            depend on it
+ - #644303, UPower requires gudev 0.147, need to update from 0.145
+ - #644326, Xulrunner needs to be updated to 1.9.2.15
+ - #644506, Update Tracker version to 0.10.2
+ - #644639, build: Don't choke on Windows with PATH containing '.'
+ - #644646, Vino and Vinagre dependencies updates
+ - #645187, Set DBUS_SYSTEM_BUS_ADDRESS in environment
+ - #645296, Breaks when error occurs with the -C option
+ - #645301, gudev failing to build
+ - #645386, Install xz-utils when not available
+ - #645543, at-spi2-atk should include his dependency with at-spi2-core
+ - #645883, Use upstream gettext instead the glib one
+ - #645971, mozilla xulrunner 1.9.2.15 unavailable
+ - #646356, jhbuild bootstrap installs autoconf 2.65 but telepathy logger
+            requires 2.66
+ - #647231, Add "workdir", use make install DESTDIR=, and clean .la files
+ - #647431, moduleset: Import expat
+ - #647433, Also set moduleset_name if URI does not end in '.modules'
+ - #647445, gnome-desktop needs a hard dependency on gobject-introspection
+ - #647537, git: Fix switching to the currently configured dvcs-mirror
+ - #647545, modtypes: use tree_id() consistently as revsion
+ - #647643, autotools: apparent copypaste error in do_distcheck.depends and
+            do_distcheck.error_phases
+ - #647868, gudev depends on gobject-introspection but that's not modelled
+ - #649075, gitignore: Ignore several generated files
+ - #649463, Less duplicated work when parsing modulesets
+ - #649888, set INFOPATH
+ - #649959, gnome-user-docs: build failure: *** missing separator.  Stop.
+ - #650440, disable notifications by default
+ - #650443, terminal: Print cwd of command
+ - #650445, gnome-suites-core-deps-3.2: Switch over to js185 release for
+            gjs
+ - #650533, Make notifications less annoying
+ - #650612, libproxy: Remove mozilla dependency
+ - #651580, building gnome-games builds gtk+-2 (but should not)
+ - #651649, [3.2] Totem has clutter-gtk as a dependency
+ - #652666, ant modtype broken
+ - #653048, config: Set JHBUILD_PREFIX in environment
+ - #653102, terminal: Add new terminal_background_build key, implement it
+ - #653156, Be more robust processing files in installroot
+ - #653173, Add java bindings to core-deps
+ - #653272, 3.2: Update to vala 0.13
+ - #653273, 3.2: Update to gdata 0.9
+ - #653842, DESTDIR usage breaks installation of Pango, gdk-pixbuf, rsvg,
+            etc
+ - #653853, Do not build old versions of automake
+ - #653928, ability for global and per-module post-install commands
+ - #654013, Revert "Clean .la files post-install"
+ - #654062, Log when we're moving files from temporary DESTDIR
+ - #654466, tinderbox outputs lots of DESTDIR
+ - #654492, Can't build due to Permission denied: '/etc/pkcs11'
+ - #654512, Add some more triggers
+ - #654516, Update of accerciser's modulesets
+ - #654522, Don't fail builds if the manifest is not set
+ - #654578, autogen.sh: remove obsolete USE_GNOME2_MACROS
+ - #654582, Clean up module XML parsing
+ - #654592, Do something with modules that don't support DESTDIR
+ - #654708, KeyError: 'nice_buildinstallprog'
+ - #654768, XDG_DATA_DIRS in jhbuild/config.py breaks build (at least on
+            stock lucid)
+ - #654855, partial: Keep building when a system dependency transitions
+            from too old -> new enough
+ - #655056, Can't build gnome-settings-daemon due to missing dependency on
+            upower
+ - #655077, vala needs to be >0.12 for bootstrapping properly
+ - #655079, Add gnome-tweak-tool
+ - #655157, [3.2] gudev fails to build due to mismatched libtool
+ - #655340, triggers do not respect quiet_mode nor tinderbox
+ - #655417, build, tinderbox, list, info commands are slow
+ - #655484, re-write the place-hoders %s in python strings for convenience
+            of translation
+ - #655542, Add various missing pkg-config IDs
+ - #655546, [PATCH] Support SystemInstall on non-packagekit systems
+ - #655553, sysdeps: Do not use jhbuilt pkg-config
+ - #655555, Bump libmapi to 0.11 and bump samba to alpha16 (but tarball
+            misses autogen.sh's)
+ - #655613, sysdeps command not documented in manual
+ - #656331, gdk-pixbuf should have a dependency on gobject-introspection
+ - #656400, [patches] update pygobject to paralell install pygobject 3.0
+            and pygobject 2.28
+ - #656427, gnome-icon-theme-symbolic should have dependency on gtk+-2
+ - #656640, [3.2] Fix colord and packagekit repos
+ - #656653, python version built by jhbuild bootstrap is outdated
+ - #656697, jhbuild for telepathy-glib fails
+ - #656730, evince has a missing dependency on nautilus
+ - #656748, jhbulding ATs does not pull in at-spi2-atk
+ - #656880, gnome-icon-theme: missing depends on gtk+
+ - #656944, dbus-sharp: missing dependency on mono
+ - #656964, dbus-sharp-glib.dll sought in /opt/gnome/lib instead of
+            /opt/gnome/lib64
+ - #656966, WebKit: missing dependency on gst-plugins-base
+ - #657144, Files missing in POTFILES.in
+ - #657226, While running any operation with jhbuild, I am getting the
+            following error-
+ - #657258, uninstall: Fix broken error message
+ - #657543, hamster-applet: missing Depends on gnome-control-center
+ - #658361, jhbuild attempts to 'gunzip -dc'
+ - #658881, Error when starting up jhbuild: Non-ASCII character in
+            .jhbuildrc
+ - #659115, polkit tries and fails to 'make' before 'configure'
+
+Translators:
+
+- Gil Forcada (ca)
+- Marek Černocký, Wouter Bolsterlee (cs)
+- Mario Blättermann, Wouter Bolsterlee (de)
+- Wouter Bolsterlee (en_GB)
+- Daniel Mustieles, Jorge González, Wouter Bolsterlee (es)
+- Alexandre Franke, Bruno Brouard, Wouter Bolsterlee (fr)
+- Fran Dieguez, Wouter Bolsterlee, Fran Diéguez (gl)
+- Luca Ferretti, Wouter Bolsterlee (it)
+- Wouter Bolsterlee (ja)
+- Kjartan Maraas, Wouter Bolsterlee (nb)
+- Wouter Bolsterlee (nl)
+- Rodrigo Padula de Oliveira, Wouter Bolsterlee, Gabriel F. Vilar (pt_BR)
+- Martin Srebotnjak, Matej Urbančič, Wouter Bolsterlee (sl)
+- Daniel Nylander, Wouter Bolsterlee (sv)
+- Wouter Bolsterlee (uk)
+- Wylmer Wang, Aron Xu, Yinghua Wang, Wouter Bolsterlee (zh_CN)
+
+Documentation translators:
+
+- dmustieles, Daniel Mustieles (es)
+- Claude Paroz (fr)
+
+Many thanks to all contributors: Kalev Lember, Jasper St. Pierre, Colin
+Walters, Sean Finney, Zeeshan Ali (Khattak), David King, Fran Diéguez,
+Andre Klapper, Alexandre Franke, Daniel Nylander, Bruno Brouard, Chris
+Kühl, Stef Walter, Philip Withnall, Krzesimir Nowak, Carlos Garcia Campos,
+Richard Hughes, Brian Nitz, Olivier Le Thanh Duong, Emmanuele Bassi,
+Stéphane Maniaci, Gil Forcada, Travis Reitter, Claudio Saavedra, Javier
+Jardón, Bastien Nocera, Christian Kirbach, Christian Persch, Jorge
+González, John Stowers, Martyn Russell, Aron Xu, Rodrigo Padula de
+Oliveira, dmustieles, Łukasz Jernaś, Emilio Pozuelo Monfort, Jürg
+Billeter, Sebastian Pölsterl, Daniel Mustieles, Felix Riemann, Marc-André
+Lureau, Michael J. Chudobiak, William Jon McCann, Thomas Hindoe Paaboel
+Andersen, Yinghua Wang, Needs, Mario Blättermann, Dirk Wallenstein, Dan
+Winship, Cosimo Cecchi, Javier Hernández, Jens Georg, Vincent Untz, Luca
+Ferretti, Alberto Ruiz, Piotr Drąg, José Aliste, Claude Paroz, Wylmer
+Wang, Marek Černocký, Matthias Clasen, Ryan Lortie, Wouter Bolsterlee,
+John (J5) Palmieri, Craig Keogh, Jason D. Clinton, Damien Lespiau, Eugen
+Dedu, Olav Vitters, Diego Escalante Urrelo, Matthew Barnes, Fran Dieguez,
+Joanmarie Diggs, Carlos Martín Nieto, Javier Jardon, Federico Mena
+Quintero, Enrico Minack, Kjartan Maraas, Owen W. Taylor, Paolo Borelli, Xan
+Lopez, Ignacio Casal Quinteiro, Gabriel F. Vilar, Guillaume Desmottes,
+Murray Cumming, Raul Gutierrez Segales, Juan A. Suarez Romero, Alejandro
+Piñeiro, Martin Srebotnjak, Matej Urbančič, Michael Terry, Florian
+Müllner
+
+==============
+Version 2.32.4
+==============
+
+Fixed bugs:
+
+ - #560237, Can't download from svn servers with validation error
+ - #599212, Add support for distcheck to jhbuild autobuild command
+ - #602682, Python 2.5.2 doesn't build on OSX 10.6 with gcc-4.2.1
+ - #610054, autobuild crashes when build fails
+ - #610943, Please add anjuta-extras
+ - #616659, failure in phase "build" cannot be ignored
+ - #618499, building nss in default moduleset breaks jhbuild
+ - #618992, Remove obsolete gconf-dbus module
+ - #619659, Need to integrate at-spi2 modules
+ - #621152, -a and -t parameters are incompatible in "jhbuild list"
+ - #621194, cmake doesn't configure (reconfigure) when --autogen
+ - #622287, [3.0] Remove deprecated esound and audiofile libraries
+ - #622316, jhbuild cannot find pyclutter source
+ - #622542, gnome-doc-utils doesn´t compile
+ - #622859, poppler 0.14.0 fails to build: parseargs.o: undefined reference
+            to symbol 'gatof'
+ - #623230, [git] Add optional branch attributes to snapshot
+ - #623425, Remove --enable-gstreamer argument from gnome-control-center
+ - #623439, DeviceKit-power is now UPower and Jhbuild fails
+ - #623500, Error during phase build of gtk+ with Jhbuild: Cairo was not
+            compiled with support fot the xlib backend
+ - #623662, [git] Add '-dirty' suffix to tree_id if dirty
+ - #623668, [PATCH] build: Suppress the 195 lines of warnings from Automake
+ - #623768, libproxy build fail: "jsapi.h not found"
+ - #623930, [git] Let sticky date move back and forth along master
+ - #623931, [git] Make it possible to leave the sticky-date branch
+ - #624077, Manual should detail running a Single GNOME Application
+ - #624079, Manual shouldn't have Frequently Asked Questions (FAQ)
+ - #624436, docs for the 'patch' feature are incorrect
+ - #624969, gnome-media depends on gnome-control-center
+ - #626039, Remove PolicyKit/PolicyKit-gnome from external deps modulesets
+ - #626042, [2.32] Make sure we only build GNOME 2.32 against GTK+ 2
+ - #626288, network-manager-applet should suggest mobile-broadband-
+            provider-info
+ - #626369, autogen fails to download
+ - #626808, gnome-disk-utility depends on avahi-ui
+ - #626839, Mozilla version is outdated
+ - #627576, totem requires libpeas 0.5.5
+ - #628339, Review CMake support enhancement
+ - #628368, Deprecate glade?
+ - #628556, Add glib-networking to jhbuild
+ - #628560, Bump libproxy to version 0.4.6
+ - #628738, D-Bus misconfigured in jhbuild
+ - #629240, Fix docs for <patch> and <quilt> in tarball <branch>es
+ - #629316, [Review] Fixed crash in CMake clean
+ - #630079, gnome-suites-3.0: Evolution seems to require gnome-desktop-3
+ - #630726, Replicate checkoutdir directory trees below buildroot
+ - #631108, libtasn1 URL changed
+ - #631354, Broken dependencies in gnome-suites-3.0 moduleset
+ - #631583, gnome-menu build error (jhbuild)
+ - #632265, Fix status line in quiet mode
+ - #632435, turn the hard dependency on dbus into a soft dependency
+ - #632843, farlight2 needs a patch
+ - #632859, [bzr] Never generate copydir location with srcdir property
+ - #632863, [git] Account for '.git' suffix removal in srcdir
+ - #633740, gnome 3 module-set: gnome-shell needs gnome-desktop-3
+ - #633751, gnome 3 module set: gnome-shell needs gsettings-desktop-schemas
+ - #633794, evolution-exchange and evolution-mapi are wrongly picked from
+            master with evolution 2-32
+ - #633850, [3.0]  Suggest accountsservice for gnome-control-center
+ - #634373, fail to build due jhbuild error
+ - #634382, gnome-desktop dependency error on gnome-themes
+ - #634866, documentation says min-time, actual name is min-age
+ - #634867, min-age option is broken
+ - #634953, Use xulrunner 1.9.2.x in 3.0 moduleset
+ - #635081, Modulesets with dependencies on trunk versions are wrong
+ - #635498, jhbuild gui: add check for icon
+ - #635551, default moduleset is not as claimed
+ - #635862, autotools modtype should prefer configure over autogen.sh for
+            tarballs
+ - #636032, add '2.32.x' and '3.0.x' to Bugzilla versions
+ - #636169, Fixes for building empathy in 3.0 module sets
+ - #636196, [PATCH] Update pulseaudio.modules
+ - #636199, [PATCH] Update libsndfile to 1.0.23 in gnome-suites-core-
+            deps-3.0.modules
+ - #636205, Closing tag missing in documentation example
+ - #636253, Fix build issues building empathy
+ - #636359, support directory in moduleset config option
+ - #636595, [PATCH] Adapt WebKit to API change in gdk_window_get_geometry
+ - #636618, add cairo dependency to gobject-introspection
+ - #636772, shared-mime-info is not built for Evince
+ - #636823, nss should be built before NetworkManager
+ - #636877, jhbuild uninstall automake-1.8 leads to an error
+ - #636921, Error compiling guile with jhbuild bootstrap
+ - #637098, mozilla should depend on libnotify
+ - #637119, Document configuration option dvcs_mirror_dir in Manual
+ - #637218, error in moduleset.py
+ - #637488, jhbuild not building Gnome 2.32, error messages
+ - #637513, the number of methods to run JHBuild GNOME in JHBuild Manual is
+            wrong
+ - #637550, gnome-user-share: missing dep on libunique
+ - #637728, Restore support for absolute moduleset paths
+
+Translators:
+
+- Mario Blättermann (de)
+- Daniel Mustieles, Jorge González (es)
+- Bruno Brouard, Claude Paroz (fr)
+- Fran Diéguez (gl)
+- Takayuki KUSANO (ja)
+- Djavan Fagundes (pt_BR)
+- Matej Urbančič (sl)
+- Daniel Nylander (sv)
+- Maxim V. Dziumanenko (uk)
+- Aron Xu (zh_CN)
+
+Documentation translators:
+
+- Mario Blättermann (de)
+- Daniel Mustieles, Jorge González (es)
+- Claude Paroz (fr)
+- Jiro Matsuzawa, Hiroyuki Sekihara (ja)
+
+Many thanks to all contributors: Emmanuele Bassi, Gil Forcada, Djavan
+Fagundes, Zeeshan Ali (Khattak), William Jon McCann, Víctor Manuel Jáquez
+Leal, Federico Mena Quintero, Mario Blättermann, Richard Hughes, Philip
+Withnall, Cosimo Cecchi, Filippo Argiolas, Jiro Matsuzawa, Kjartan Maraas,
+Javier Jardón, Travis Reitter, Nicolas Dufresne, Sven Herzberg, Jiří
+Techet, Bastien Nocera, Maxim V. Dziumanenko, Owen W. Taylor, Takayuki
+KUSANO, Juan A. Suarez Romero, Paolo Borelli, Luca Ferretti, Xan Lopez,
+Vincent Untz, Ignacio Casal Quinteiro, Jorge González, Fran Diéguez,
+Mikkel Kamstrup Erlandsen, Tshepang Lekhonkhobe, Thomas Wood, Vivien
+Malerba, Claude Paroz, Andre Klapper, Ray Strode, Lucas Rocha, Torsten
+Schönfeld, Matthias Clasen, Martyn Russell, Aron Xu, Hiroyuki Sekihara, Dan
+Williams, Guillaume Desmottes, Murray Cumming, Craig Keogh, Bruno Brouard,
+Daniel Nylander, Chris Kühl, Stef Walter, Andika Triwidada, Jonh Wendell,
+Colin Walters, Benjamin Otte, Damien Lespiau, Florian Gawrilowicz, Guido
+Günther, Johannes Schmid, Dirk Wallenstein, Krzesimir Nowak, Milan Bouchet-
+Valat, Danielle Madeley, Matej Urbančič, Dan Ziemba, Christian Kirbach,
+Olav Vitters, Daniel Mustieles, Łukasz Jernaś, Michael Meeks, Pablo
+Castellano, Jon TURNEY, Marc-André Lureau
+
+==============
+Version 2.30.2
+==============
+
+Fixed bugs:
+
+ - #560237, Can't download from svn servers with validation error
+ - #581262, FTBFS: libsndfile: libsqlite3.so: undefined reference to
+            `dlsym'
+ - #581515, Don't build DeviceKit-disks by default
+ - #592438, "bot --step check" doesn't do anything
+ - #596385, nss 3.12 have not CERT_RegisterAlternateOCSPAIAInfoCallBack
+ - #597954, '--clean' argument/makeclean configuration option problems
+ - #598524, evolution depends on nm by default
+ - #604204, libsndfile library does not include the ldl
+ - #605932, Problem with libtool
+ - #606217, versioncontrol: add fossil
+ - #606218, autotools: chmod +x configure
+ - #606360, commands: add help
+ - #606398, log slave config parsing errors
+ - #606658, cleanone needs network access
+ - #606924, Add ardour
+ - #608322, jhbuild fails to clone gstreamer
+ - #608520, Gnumeric needs libgsf >= 1.14.15
+ - #608521, Tracker depends on libgee
+ - #608840, system man pages don't work inside jhbuild
+ - #608845, jhbuild autobuild --clean does not clean
+ - #608875, TypeError: run() takes exactly 4 arguments (5 given)
+ - #609250, Upgrade autoconf version to 2.65
+ - #609366, Bump external dep on system-tools-backends
+ - #609368, [PATCH] Please update new postr repository
+ - #609455, Bump PackageKit tarball in external dep to 0.6.0
+ - #609874, Add Déjà Dup
+ - #610024, Please add telegnome support
+ - #610936, gtksourceview master requires automake 1.11.1 and intltool 0.41
+ - #610943, Please add anjuta-extras
+ - #611283, Add pdfmod
+ - #612297, jhbuild bootstrap: meta-bootstrap has a dependency on unknown
+            "automake-1.4" module
+ - #613917, add support for buildbot 0.7.12
+ - #614948, po/Makefile.in.in is broken, translations aren't installed
+ - #614957, Manual Frequently Asked Questions, Building GNOME instructions
+            inaccurate
+ - #615413, README and INSTALL files out of date
+ - #615473, Various fixes for testmodule modules
+ - #615801, Tarball xz support
+ - #615802, Out of the source tree builds and autoreconf
+ - #615803, DTD is not complete
+ - #616104, PA minimum dep is 0.9.16
+ - #616417, Building mozilla: tarball not on server anymore
+ - #616593, [docs] branch, repo atrributes & cvs/svn progs
+ - #617083, correct dvcs_mirror dirs for git & md5 is deprecated
+ - #617099, [PATCH] Evolution missing dependencies
+ - #617114, Bzr improvements
+ - #617200, gjs needs gobject-introspection greater or equal to 0.6.10
+ - #617270, Portland fails on configure phase
+ - #617794, jhbuild unusable in some locales
+ - #618254, build_policy updated and updated-deps should honor dirty git
+            worktrees
+ - #618301, UPower 0.9.1 doesn't build
+ - #618313, Update repository for librest
+ - #618609, cloning does not consider git user accounts
+ - #618855, Wrong filename in modulesets/gnome-external-deps-3.0.modules
+            for xslt
+ - #618865, Error building libnl
+ - #618974, [PATCH 00/14] Restructure the _update member of GitBranch
+ - #619000, nspr fails to build
+ - #619002, libproxy doesn't build
+ - #619525, [3.0] libproxy ignores python installed by jhbuild
+ - #619935, [info] Additional output for git branches
+ - #619940, [cleanone] Restrict execution to the 'clean' phase
+ - #620648, [info] Display the source directory for all branch types
+ - #620729, [3.0] Add libpeas
+ - #620741, Error building sqlite in the gnome-3.0 moduleset
+ - #620974, [doc] Document git branch attributes
+ - #621199, libproxy 0.4.0 doesn't install libproxy-1.0.pc
+ - #621206, pycairo build failure (Python 2.6 needed)
+ - #621280, telepathy-mission-control 5.4.0 build failure: undefined
+            reference to symbol 'dbus_g_connection_unref', not linking
+            libdbus glib
+ - #621461, Automatically set GI_TYPELIB_PATH
+ - #621855, Clean python dependencies
+ - #622129, libgsf incorrectly lists gnome-vfs and libbonobo as hard
+            dependencies
+
+Translators:
+
+- Petr Kovar (cs)
+- Mario Blättermann (de)
+- Philip Withnall (en_GB)
+- Daniel Mustieles (es)
+- Claude Paroz (fr)
+- Kjartan Maraas (nb)
+- Matej Urbančič (sl)
+- Daniel Nylander (sv)
+- Maxim V. Dziumanenko (uk)
+
+Documentation translators:
+
+- Pavlos Tournaris (el)
+- Daniel Mustieles (es)
+- Claude Paroz (fr)
+- Matej Urbančič (sl)
+
+Many thanks to all contributors: Dmitrijs Ledkovs, Kjartan Maraas, Zeeshan
+Ali (Khattak), William Jon McCann, Federico Mena Quintero, Mario
+Blättermann, Dirk Wallenstein, Claudio Saavedra, Javier Jardón, Vincent
+Untz, Maxim V. Dziumanenko, Paolo Borelli, Luca Ferretti, Christian Kirbach,
+Petr Kovar, Vivien Malerba, Claude Paroz, Andre Klapper, Wouter Bolsterlee,
+Matthias Clasen, Bertrand Lorentz, Guillaume Desmottes, Murray Cumming,
+Craig Keogh, Daniel Nylander, Juan A. Suarez Romero, Matej Urbančič,
+Johnny Jacob, Pavlos Tournaris, Philip Withnall, Łukasz Jernaś, Carlos
+Garcia Campos, Pablo Castellano, Steve Frécinaux, Milan Bouchet-Valat,
+Eugen Dedu, Dan Winship, Baptiste Mille-Mathias, Daniel Mustieles, Michael
+Terry, Florian Müllner, Sascha Silbe, Jon TURNEY, Marc-André Lureau
+
+==============
+Version 2.29.3
+==============
+
+Fixed bugs:
+
+ - #587489, Crash when checking out pango
+ - #591231, BuildBot: add support for using the "Nightly" scheduler
+            (instead of "Periodic")
+ - #601276, Please add at-spi2-core, at-spi2-atk, and pyatspi2
+ - #605101, Remove evolution-data-server-dbus
+ - #606099, Jhbuild installs gobject-introspection 0.6.5 while some modules
+            require 0.6.7
+ - #606222, Removing obsolete dependencies in gnome-suites-2.30.modules
+
+Translators:
+
+ - Mario Blättermann, Christian.Kirbach (de)
+ - Daniel Mustieles, Benjamin Valero Espinosa (es)
+ - Daniel Nylander (sv)
+ - Maxim V. Dziumanenko (uk)
+
+Documentation translators:
+
+ - Mario Blättermann (de)
+ - Daniel Mustieles, Jorge González (es)
+ - Claude Paroz (fr)
+
+Many thanks to all contributors: Frederic Crozat, gnome, Luca Ferretti,
+William Jon McCann, Pablo Castellano, Gustavo Carneiro, Daniel Nylander,
+Mario Blättermann, Jorge González, Christian Kirbach, Baptiste Mille-
+Mathias, Claude Paroz, Daniel Mustieles, Ross Burton, Javier Jardón, Maxim
+V. Dziumanenko, Vincent Untz, Benjamin Valero Espinosa, Christian.Kirbach,
+Paolo Borelli
+
+==============
+Version 2.29.2
+==============
+
+Fixed bugs:
+
+ - #531543, Allow selective choice of poisoning dep tree
+ - #560092, Jhbuild should use XDG_CACHE_HOME
+ - #591239, add check for wget/curl in sanitycheck
+ - #592433, add command and option to run build phase "check"
+ - #595730, Manual should refer to sample.jhbuildrc and not mention GNOME
+            svn
+ - #596129, add nm-applet plugins
+ - #596905, Better documentation of branches variable
+ - #597437, 'jhbuild run --inbuilddir=module' doesn't work
+ - #598391, Manual doesn't document module_makecheck
+ - #598537, where is libnl?
+ - #598689, where is pyxdg?
+ - #601324, Add a new module: PyGI
+
+Translators:
+
+ - Mario Blättermann, Christian Kirbach (de)
+ - Daniel Mustieles, Jorge González (es)
+ - Matej Urbančič (sl)
+ - Daniel Nylander (sv)
+
+Documentation translators:
+
+ - Mario Blättermann (de)
+ - Daniel Mustieles, Jorge González, Benjamin Valero (es)
+ - Claude Paroz (fr)
+
+Many thanks to all contributors: Simon van der Linden, Alexander Larsson,
+Zeeshan Ali (Khattak), Luca Ferretti, Christian Kirbach, Benjamin Valero,
+Guillaume Desmottes, Daniel Nylander, Mario Blättermann, Jorge González,
+Matej Urbančič, Claude Paroz, Daniel Mustieles, Jonh Wendell, Vincent
+Untz, Craig Keogh, Jon TURNEY
+
+==============
+Version 2.28.0
+==============
+
+Fixed bugs:
+
+ - #106737, "start at" Option for "jhbuild update"
+ - #583515, Selecting [1] rerun stage configure after configure failure
+            runs build
+ - #589326, nss fails to build due to incompatible /usr/lib/libplc4.so
+ - #590273, When a git clone is interrupted during the compressing objects
+            state, there's no way to recover from it automatically.
+ - #591142, Clean up deprecated dependencies in gnome-suites-2.28.modules
+ - #591470, jhbuild can't "switch" to gnome-2-28 branch
+ - #591508, should strip .git from repo name when finding checkout dir name
+ - #591553, support msdos-created zipfiles
+ - #592427, Wrong python2.6 path
+ - #592438, "bot --step check" doesn't do anything
+ - #592558, Python path depending on the prefix
+ - #592602, Add gnome-pilot
+ - #592801, some spelling and grammar mistakes
+ - #594135, Documentation could provide examples in section Configuration
+            File Reference
+ - #594981, Support configuring a buildroot for out of tree builds
+ - #595440, [2.28] Epiphany branch gnome-2-28 does not exist
+ - #595441, Brasero 2.28 branch should be brasero-2-28, not gnome-2-28
+
+Translators:
+
+ - Mario Blättermann (de)
+ - Philip Withnall (en_GB)
+ - Daniel Mustieles (es)
+ - Claude Paroz (fr)
+ - Francisco Diéguez (gl)
+ - Daniel Nylander (sv)
+
+Documentation translators:
+
+ - Mario Blättermann (de)
+ - Daniel Mustieles (es)
+ - Claude Paroz (fr)
+
+Many thanks to all contributors: Zeeshan Ali (Khattak), Mario Blättermann,
+Philip Withnall, Sam Thursfield, Kjartan Maraas, Javier Jardón, Vincent
+Untz, Paolo Borelli, Luca Ferretti, Christian Kirbach, Daniel Elstner,
+Claude Paroz, Lucas Rocha, Murray Cumming, Daniel Nylander, Craig Keogh, Tim
+Janik, Carlos Garcia Campos, Sebastian Pölsterl, Francisco Diéguez, Daniel
+Mustieles
+
+===============
+Version 2.27.90
+===============
+
+Fixed bugs:
+
+ - #583515, Selecting [1] rerun stage configure after configure failure
+            runs build
+ - #589237, libchamplain vs clutter-cairo-0.8 vs clutter-0.9
+ - #590064, Set ACLOCAL as well as ACLOCAL_FLAGS
+ - #590102, move gnome-js-common and gobject-introspection to external
+            deps?
+ - #590103, Crash if hash="" in moduleset
+ - #590273, When a git clone is interrupted during the compressing objects
+            state, there's no way to recover from it automatically.
+ - #590359, Remove libgail-gnome where possible
+ - #591142, Clean up deprecated dependencies in gnome-suites-2.28.modules
+ - #591236, Review all clutter stuff
+ - #591470, jhbuild can't "switch" to gnome-2-28 branch
+
+Translators:
+
+ - Daniel Mustieles (es)
+ - Daniel Nylander (sv)
+
+
+==============
+Version 2.27.5
+==============
+
+Fixed bugs:
+
+ - #588928, Don't try to import md5 twice
+ - #582446, Options and commands containing the word "checkout" can be
+            confused with git's meaning of "checkout"
+ - #584322, [gnome-2.28] add gnome-js-common and update seed dependency
+ - #585996, force_checkout considered harmful with git
+ - #588688, Update modest repository
+ - #588862, Update mono to 2.4.2.2
+ - #589227, WebKit module fetched from wrong moduleset
+ - #589234, Dates, Tasks and Contacts are now in git.gnome.org
+ - #589296, Build pulseaudio before gst-plugins-good
+ - #589383, loudmouth module fails checkout
+ - #589482, Add claws-mail repo
+ - #589660, pango has a soft dependency on gobject-introspection
+ - #589762, Balsa branch seems to be outdated
+ - #589767, Add midori repo
+ - #590103, Crash if hash="" in moduleset
+
+Translators:
+
+ - Daniel Mustieles (es)
+ - Daniel Nylander (sv)
+
+Documentation translators:
+
+ - Daniel Mustieles (es)
+
+
+==============
+Version 2.27.4
+==============
+
+Major change:
+ - Support for more hashing algorithms
+
+Fixed bugs:
+
+ - #586523, set XCURSOR_PATH so custom cursors work
+ - #503907, Add WAF support
+ - #586073, Install desktop file
+ - #586185, gconf support
+ - #586874, Fix Makefile syntax in sed command in Makefile.plain
+ - #587058, Mercurial seems broken
+ - #587303, Add hashing ability other than md5
+ - #587764, Revert excessive simplifcation of gconf support
+ - #588300, No rule to make target `optparse.py', needed by `install-
+            appPYTHON'
+ - #588363, add automake 1.11 to bootstrap
+
+Translators:
+
+ - Daniel Mustieles (es)
+ - Claude Paroz (fr)
+ - Daniel Nylander (sv)
+
+
+==============
+Version 2.27.3
+==============
+
+Major changes:
+ - Rewritten GUI
+ - Many win32 improvements
+
+Fixed bugs:
+
+ - #584283, endless loop when executing command "clean" if the module type
+            doesn't support it
+ - #581515, Don't build DeviceKit-disks by default
+ - #582165, Fix gui option
+ - #582490, Jhbuild crashing (NameError)
+ - #583455, [win32 fixes] jhbuild uses subprocess.Popen incompatibly with
+            win32
+ - #583838, libtool 2.x breaks guile build
+ - #583849, output directory for tinderbox build not configurable on the
+            command line
+ - #583969, update should be possible from dvcs_mirror_dir with --no-
+            network
+ - #584028, bootstrap: gmp fails to build on amd64 (Intel E5450)
+ - #584052, Missing dependency in jhbuild
+ - #585084, Fix Fill & Expand properties on preferences window
+ - #585787, Perl modules don't build
+
+Translators:
+
+ - Claude Paroz (fr)
+ - Daniel Nylander (sv)
+
+Documentation translators:
+ - Claude Paroz (fr)
+
+
+==============
+Version 2.27.2
+==============
+
+Major changes:
+
+ - Updated building state machine to an inter-phases dependency system
+ - Added support for more options in buildbot slave xml description
+ - Improved autotoolization
+
+Fixed bugs:
+
+ - #119088, Best effort flag
+ - #143221, Maybe add "jhbuild clean"
+ - #368820, Should reload jhbuildrc after configure failure
+ - #385120, should GTK_MODULES be unset ?
+ - #400302, add support for module uninstalling
+ - #419879, [RFC] consider having -HEAD modulesets
+ - #560688, Use xulrunner for mozilla module
+ - #580815, jhbuild git copy checkout mode broken
+ - #580910, cp in jhbuild copy checkout mode needs -f for svn
+ - #580949, jhbuild does not create copy_dir
+ - #581232, [patch] add (g)parted
+ - #581262, FTBFS: libsndfile: libsqlite3.so: undefined reference to
+            `dlsym'
+ - #581515, Don't build DeviceKit-disks by default
+ - #581547, build -C shouldn't nuke modules that have .git
+ - #581634, Do not force writable prefix for some commands
+ - #581981, fix git-cvsimport update
+ - #582172, Tarball not buildable (?)
+ - #582177, [misc] Make .desktop file valid
+ - #582180, jhbuild/main.py is not executable and contains "#!/usr/bin/env
+            python"
+ - #582193, anjuta should suggest glade3
+ - #582490, Jhbuild crashing (NameError)
+ - #582754, tracker depends on raptor, which jhbuild knows nothing about
+ - #582802, base: fix can't find bootstrap moduleset
+ - #582829, use PKGDATADIR to find patches directory
+ - #582930, tarball modules don't honour global makeargs
+ - #583006, AttributeError: 'MetaModule' object has no attribute
+            'do_checkout'
+ - #583227, jhbuildrc include support
+ - #583294, pyxdg should be an external dependency
+ - #583309, gnome-icon-theme should depend on glib
+ - #583420, crash when trying to apply patches for hicolor-icon-theme
+ - #583453, [win32 fixes] inpath and has_command should take .exe extension
+            into account
+ - #583518, --no-poison only works sometimes
+ - #583532, buildbot directory is not installed properly to create a server
+
+Translators:
+
+ - Jorge Gonzalez, Daniel Mustieles (es)
+
+Documentation translators:
+
+ - Jorge Gonzalez, Daniel Mustieles (es)
+
+
+==============
+Version 2.27.0
+==============
+
+First published tarball.

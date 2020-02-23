@@ -1,0 +1,276 @@
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+
+moduleset =
+  element moduleset {
+    attlist.moduleset,
+    (repository
+     | \include
+     | autotools
+     | metamodule
+     | tarball
+     | distutils
+     | perl
+     | linux
+     | testmodule
+     | cvsroot
+     | cvsmodule
+     | waf
+     | cmake
+     | meson
+     | systemmodule)+
+  }
+attlist.moduleset &= attribute name { text }?
+repository = element repository { attlist.repository, mirror* }
+attlist.repository &=
+  attribute name { text },
+  attribute type {
+    "arch"
+    | "bzr"
+    | "cvs"
+    | "darcs"
+    | "fossil"
+    | "git"
+    | "hg"
+    | "mtn"
+    | "svn"
+    | "system"
+    | "tarball"
+  },
+  [ a:defaultValue = "no" ] attribute default { "yes" | "no" }?,
+  attribute password { text }?,
+  attribute cvsroot { text }?,
+  attribute archive { text }?,
+  attribute href { text }?,
+  attribute server { text }?,
+  attribute database { text }?,
+  attribute defbranch { text }?,
+  attribute developer-href-example { text }?,
+  attribute trunk-template { text }?,
+  attribute branches-template { text }?,
+  attribute tags-template { text }?
+# note the following attributes are specific to some repository types:
+# - CVS: password & cvsroot
+# - Arch: archive & href
+# - Monotone: server, database, defbranch
+# - Subversion: *-template
+mirror = element mirror { attlist.mirror, empty }
+attlist.mirror &=
+  attribute type {
+    "arch"
+    | "bzr"
+    | "cvs"
+    | "darcs"
+    | "fossil"
+    | "git"
+    | "hg"
+    | "svn"
+    | "tarball"
+  },
+  attribute trunk-template { text }?,
+  attribute branches-template { text }?,
+  attribute href { text }?
+\include = element include { attlist.include, empty }
+attlist.include &= attribute href { text }
+# As parsed by get_dependencies()
+dependencieselements = dependencies?, suggests?, after?, systemdependencies?
+argsif = element if { attlist.if & argsif* & autogenargs* & makeargs* & makeinstallargs* }
+autotools =
+  element autotools {
+    attlist.autotools, argsif*, autogenargs*, makeargs*, makeinstallargs*, pkg-config?, branch, dependencieselements
+  }
+# Note: Here the ID type is not used as some existing IDs in modsets are not
+# valid XML ID types - instead CDATA is used
+attlist.autotools &=
+  attribute id { text },
+  attribute autogenargs { text }?,
+  attribute makeargs { text }?,
+  attribute makeinstallargs { text }?,
+  attribute autogen-sh { text }?,
+  attribute makefile { text }?,
+  attribute bootstrap { "true" | "false" }?,
+  [ a:defaultValue = "false" ]
+  attribute skip-autogen { "true" | "false" | "never" }?,
+  [ a:defaultValue = "yes" ]
+  attribute uninstall-before-install { "true" | "false" }?,
+  attribute supports-non-srcdir-builds { "yes" | "no" }?,
+  attribute force-non-srcdir-builds { "yes" | "no" }?,
+  attribute supports-parallel-builds { "yes" | "no" }?,
+  attribute supports-unknown-configure-options { "yes" | "no" }?,
+  attribute autogen-template { text }?,
+  [ a:defaultValue = "true" ]
+  attribute check-target { "true" | "false" }?
+autogenargs = element autogenargs { attlist.autogenargs }
+attlist.autogenargs &= attribute value { text }
+makeargs = element makeargs { attlist.makeargs }
+attlist.makeargs &= attribute value { text }
+makeinstallargs = element makeinstallargs { attlist.autogenargs }
+attlist.makeinstallargs &= attribute value { text }
+waf =
+  element waf { attlist.waf, branch, dependencieselements }
+# Note: Here the ID type is not used as some existing IDs in modsets are not
+# valid XML ID types - instead CDATA is used
+attlist.waf &=
+  attribute id { text },
+  attribute waf-command { text }?
+systemmodule =
+  element systemmodule { attlist.systemmodule, pkg-config?, branch, dependencieselements }
+attlist.systemmodule &=
+  attribute id { text },
+  attribute supports-parallel-builds { "yes" | "no" }?
+pkg-config = element pkg-config { text }
+metamodule =
+  element metamodule { attlist.metamodule, dependencieselements }
+attlist.metamodule &= attribute id { text }
+# tarball module type is deprecated, a tarball repository inside the
+# appropriate modtype should be used instead
+tarball =
+  element tarball {
+    attlist.tarball,
+    pkg-config?,
+    source,
+    branch?,
+    dependencieselements,
+    patches?
+  }
+attlist.tarball &=
+  attribute id { text },
+  attribute version { text },
+  attribute checkoutdir { text }?,
+  attribute autogenargs { text }?,
+  attribute makeargs { text }?,
+  attribute autogen-sh { text }?,
+  [ a:defaultValue = "yes" ]
+  attribute supports-non-srcdir-builds { "yes" | "no" }?
+distutils =
+  element distutils {
+    attlist.distutils, branch?, dependencies?, after?
+  }
+attlist.distutils &=
+  attribute id { xsd:ID },
+  [ a:defaultValue = "yes" ]
+  attribute python3 { "1" }?,
+  attribute supports-non-srcdir-builds { "yes" | "no" }?
+cmakeargsif = element if { attlist.if & cmakeargsif* & cmakeargs* & makeargs* & ninjaargs* }
+cmake = element cmake { attlist.cmake, cmakeargsif*, cmakeargs*, makeargs*, ninjaargs*, pkg-config?, branch?, dependencieselements }
+attlist.cmake &=
+  attribute id { text },
+  attribute cmakeargs { text }?,
+  attribute makeargs { text }?,
+  attribute ninjaargs { text }?,
+  attribute use-ninja { "yes" | "no" }?,
+  attribute supports-non-srcdir-builds { "yes" | "no" }?,
+  attribute force-non-srcdir-builds { "yes" | "no" }?
+cmakeargs = element cmakeargs { attlist.cmakeargs }
+attlist.cmakeargs &= attribute value { text }
+ninjaargs = element ninjaargs { attlist.ninjaargs }
+attlist.ninjaargs &= attribute value { text }
+mesonargsif = element if { attlist.if & mesonargsif* & mesonargs* & ninjaargs* }
+meson = element meson { attlist.meson, mesonargsif*, mesonargs*, ninjaargs*, pkg-config?, branch?, dependencieselements }
+attlist.meson &=
+  attribute id { text },
+  attribute mesonargs { text }?,
+  attribute ninjaargs { text }?
+mesonargs = element mesonargs { attlist.mesonargs }
+attlist.mesonargs &= attribute value { text }
+perl = element perl { attlist.perl, branch?, dependencies?, after? }
+attlist.perl &=
+  attribute id { text },
+  attribute makeargs { text }?
+linux =
+  element linux {
+    attlist.linux, branch?, dependencies?, after?, kconfig+
+  }
+attlist.linux &=
+  attribute id { text },
+  attribute makeargs { text }?
+ant = element ant { attlist.ant, branch?, dependencies?, after? }
+attlist.ant &=
+  attribute id { text },
+  attribute makeargs { text }?
+testmodule =
+  element testmodule {
+    attlist.testmodule, branch?, dependencies?, after?, testedmodules?
+  }
+attlist.testmodule &=
+  attribute id { text },
+  attribute type { text }
+cvsroot = element cvsroot { attlist.cvsroot, empty }
+attlist.cvsroot &=
+  attribute name { text },
+  attribute root { text },
+  [ a:defaultValue = "" ] attribute password { text }?
+cvsmodule =
+  element cvsmodule {
+    attlist.cvsmodule, dependencieselements
+  }
+attlist.cvsmodule &=
+  attribute id { text },
+  attribute cvsroot { text },
+  [ a:defaultValue = "yes" ]
+  attribute supports-non-srcdir-builds { "yes" | "no" }?
+# Tarball's children
+source = element source { attlist.source, empty }
+attlist.source &=
+  attribute href { text },
+  attribute size { text }?,
+  attribute md5sum { text }?,
+  attribute hash { text }?
+patches = element patches { attlist.patches, patch* }
+attlist.patches &= empty
+patch = element patch { attlist.patch, empty }
+attlist.patch &=
+  attribute file { text },
+  [ a:defaultValue = "0" ] attribute strip { text }?
+# Linux's children
+kconfig = element kconfig { attlist.kconfig, empty }
+attlist.kconfig &=
+  attribute repo { text }?,
+  attribute version { text },
+  attribute module { text }?,
+  attribute config { text }?
+# Testmodule's children
+testedmodules = element testedmodules { attlist.testedmodules, tested }
+attlist.testedmodules &= empty
+tested = element tested { attlist.tested, empty }
+attlist.tested &= attribute package { text }
+# Other children
+attlist.if = attribute condition-set { text } | attribute condition-unset { text }
+depif = element if { attlist.if & depif* & dep* }
+dependencies = element dependencies { attlist.dependencies & depif* & dep* }
+attlist.dependencies &= empty
+suggests = element suggests { attlist.suggests & depif* & dep* }
+attlist.suggests &= empty
+after = element after { attlist.after & depif* & dep* }
+attlist.after &= empty
+systemdependencies = element systemdependencies { attlist.systemdependencies, sysdep* }
+attlist.systemdependencies &= empty
+dep = element dep { attlist.dep, empty }
+attlist.dep &= attribute package { text }
+sysdep = element dep { attlist.sysdep, altdep* }
+attlist.sysdep &= attribute type { text }, attribute name { text }
+altdep = element altdep { attlist.sysdep }
+branch = element branch { attlist.branch, patch*, quilt* }
+attlist.branch &=
+  attribute repo { text }?,
+  attribute module { text }?,
+  attribute checkoutdir { text }?,
+  [ a:defaultValue = "yes" ]
+  attribute override-checkoutdir { "yes" | "no" }?,
+  [ a:defaultValue = "yes" ]
+  attribute update-new-dirs { "yes" | "no" }?,
+  attribute source-subdir { text }?,
+  attribute revision { text }?,
+  attribute tag { text }?,
+  attribute user { text }?,
+  attribute revspec { text }?,
+  attribute branch { text }?,
+  attribute version { text }?,
+  attribute size { text }?,
+  attribute md5sum { text }?,
+  attribute hash { text }?,
+  attribute rename-tarball { text }?
+# override-checkoutdir and update-new-dirs are CVS only
+# source-subdir is tarballs only
+quilt = element quilt { attlist.quilt, branch }
+attlist.quilt &= attribute id { text }
+start = moduleset | ant

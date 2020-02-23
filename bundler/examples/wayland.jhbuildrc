@@ -1,0 +1,8 @@
+# -*- mode: python -*-
+moduleset = 'other/wayland'
+modules = ['weston']
+checkoutroot = '~/checkout/wayland'
+prefix = '~/wayland'
+autogenargs=''
+
+os.environ['EGL_PLATFORM'] = 'wayland'

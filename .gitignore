@@ -8,3 +8,6 @@ __pycache__
 /checkouts/*
 !/checkouts/.gitkeep
 
+# Build dirs
+/build
+/install
