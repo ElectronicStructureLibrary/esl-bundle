@@ -46,28 +46,28 @@ debian-mpi:
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
+    - python ./install-bundle --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
 
 debian-serial:
   image: eslib/esl-0.4.x:debian-buster
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --system debian --compilers gcc --flavor serial esl-bundle
+    - python ./install-bundle --system debian --compilers gcc --flavor serial esl-bundle
 
 ubuntu-mpi:
   image: eslib/esl-0.4.x:ubuntu-bionic
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
+    - python ./install-bundle --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
 ubuntu-serial:
   image: eslib/esl-0.4.x:ubuntu-bionic
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --system ubuntu --compilers gcc --flavor serial esl-bundle
+    - python ./install-bundle --system ubuntu --compilers gcc --flavor serial esl-bundle
 
 fedora-serial:
   image: eslib/esl-0.4.x:fedora-29
