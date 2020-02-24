@@ -1,2 +1,2 @@
-docker tag centos-esl:latest drfaustroll/esl:centos-latest
-docker push drfaustroll/esl:centos-latest  
+docker tag centos-esl:7 eslib/esl-0.5.x:centos-7
+docker push eslib/esl-0.5.x:centos-7
