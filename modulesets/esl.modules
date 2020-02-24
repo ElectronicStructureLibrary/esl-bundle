@@ -150,7 +150,7 @@
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.1.8.tar.gz" version="0.1.8" hash="md5:a1cf161f88486fd959710a288b33b876"/>
+    <branch repo="local" module="fakepc-0.2.0.tar.gz" version="0.2.0" hash="md5:ae032a40153a231d9ba1d639c6cd4e92"/>
     <dependencies>
       <dep package="fdict"/>
       <dep package="flook"/>
