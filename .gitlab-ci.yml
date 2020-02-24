@@ -77,15 +77,29 @@ debian-serial:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --system debian --compilers gcc --flavor serial esl-bundle
 
-ubuntu-mpi:
+ubuntu-mpi-bionic:
+  image: eslib/esl-0.5.x:ubuntu-bionic
+  stage: test
+  script:
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
+
+ubuntu-mpi-focal:
   image: eslib/esl-0.5.x:ubuntu-focal
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
-ubuntu-serial:
+ubuntu-serial-focal:
   image: eslib/esl-0.5.x:ubuntu-focal
+  stage: test
+  script:
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system ubuntu --compilers gcc --flavor serial esl-bundle
+
+ubuntu-serial-bionic:
+  image: eslib/esl-0.5.x:ubuntu-bionic
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
