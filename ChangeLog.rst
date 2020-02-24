@@ -9,8 +9,13 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 [0.5.0-1] - To be relesase
 ==========================
 
+Fixed
+-----
+- spglib fix cmake to install Fortran interface and .pc
+
 Changed
 -------
+- sgplib to v1.14.1
 
 [0.4.2-1] - 25-02-2020
 ======================
