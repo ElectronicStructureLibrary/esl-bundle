@@ -149,6 +149,18 @@
     </dependencies>
   </autotools>
 
+  <makesys id="wannier90" makeargs="all COMMS=serial PREFIX=''">
+    <branch repo="local" module="wannier90-3.0.0.tar.gz" version="3.0.0" hash="md5:7a1337b187f9b95b7a04b1548a56064d">
+      <patch file="wannier90-3.0.0-make.patch" strip="0"/>
+    </branch>
+  </makesys>
+
+  <makesys id="wannier90-mpi" makeargs="all COMMS=mpi PREFIX=''">
+    <branch repo="local" module="wannier90-3.0.0.tar.gz" version="3.0.0" hash="md5:7a1337b187f9b95b7a04b1548a56064d">
+      <patch file="wannier90-3.0.0-make.patch" strip="0"/>
+    </branch>
+  </makesys>
+
   <autotools id="fakepc" autogen-sh="configure">
     <branch repo="local" module="fakepc-0.2.0.tar.gz" version="0.2.0" hash="md5:ae032a40153a231d9ba1d639c6cd4e92"/>
     <dependencies>
@@ -180,6 +192,7 @@
         <dep package="elpa"/>
       </if>
       <dep package="spglib"/>
+      <dep package="wannier90"/>
     </dependencies>
   </metamodule>
 
@@ -200,6 +213,7 @@
         <dep package="elpa-mpi"/>
       </if>
       <dep package="spglib"/>
+      <dep package="wannier90-mpi"/>
     </dependencies>
   </metamodule>
 
