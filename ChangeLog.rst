@@ -13,9 +13,9 @@ Added
 -----
 - sgplib v1.14.1
 - wannier90 v3.0.0
-  =======
+- ELSI-RCI v0.1.0
 
-Changed
+  Changed
 -------
 - Fdict to v0.8.0.
 - Flook to v0.8.1.
