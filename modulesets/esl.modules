@@ -67,7 +67,7 @@
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
     <branch repo="local" module="elpa-2019.05.002.tar.gz" version="2019.05.002" hash="md5:f2213cebfa8e2ae3a55a2479fa7dab5d"/>
   </autotools>
-  
+
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
     <branch repo="local" module="NTPoly-ntpoly-v2.3.1.tar.gz" version="2.3.1" hash="md5:b2d18c4682e409b5837edf796bef3957"/>
   </cmake>
@@ -159,6 +159,12 @@
     </dependencies>
   </autotools>
 
+  <cmake id="elsi_rci" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DENABLE_TESTS=off'>
+    <branch repo="local" module="elsi_rci-0.1.0.tar.bz2" version="0.1.0" hash="md5:2510e7d7749171b5aae26c61a59a5759">
+      <patch file="elsi_rci-0.1.0-cmake.patch" strip="0"/>
+    </branch>
+  </cmake>
+
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="fdict"/>
@@ -173,6 +179,7 @@
       <if condition-unset="no_elpa">
         <dep package="elpa"/>
       </if>
+      <dep package="else_rci"/>
     </dependencies>
   </metamodule>
 
@@ -192,6 +199,7 @@
       <if condition-unset="no_elpa">
         <dep package="elpa-mpi"/>
       </if>
+      <dep package="else_rci"/>
     </dependencies>
   </metamodule>
 
