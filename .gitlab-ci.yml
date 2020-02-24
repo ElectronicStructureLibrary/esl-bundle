@@ -2,7 +2,7 @@ stages:
   - test
 
 opensuse-mpi:
-  image: eslib/esl-0.4.x:opensuse-leap-15.2
+  image: eslib/esl-0.5.x:opensuse-leap-15.2
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -11,8 +11,19 @@ opensuse-mpi:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
 
+opensuse-mpi-python2:
+  image: eslib/esl-0.5.x:opensuse-leap-15.2
+  stage: test
+  when: manual
+  script:
+    - source /etc/profile.d/lmod.sh
+    - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2 pfftw3/3.3.8
+    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - export JHBUILD_DEFAULTS="esl"
+    - python ./install-bundle --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
+
 opensuse-tumbleweed-mpi:
-  image: eslib/esl-0.4.x:opensuse-tumbleweed
+  image: eslib/esl-0.5.x:opensuse-tumbleweed
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -22,7 +33,7 @@ opensuse-tumbleweed-mpi:
     - ./install-bundle --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-serial:
-  image: eslib/esl-0.4.x:opensuse-leap-15.2
+  image: eslib/esl-0.5.x:opensuse-leap-15.2
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -31,8 +42,19 @@ opensuse-serial:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --system opensuse --compilers gcc --flavor serial esl-bundle
 
+opensuse-serial-python2:
+  image: eslib/esl-0.5.x:opensuse-leap-15.2
+  stage: test
+  when: manual
+  script:
+    - source /etc/profile.d/lmod.sh
+    - module load gnu/7 fftw3/3.3.8
+    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    - export JHBUILD_DEFAULTS="esl"
+    - python ./install-bundle --system opensuse --compilers gcc --flavor serial esl-bundle
+
 opensuse-tumbleweed-serial:
-  image: eslib/esl-0.4.x:opensuse-tumbleweed
+  image: eslib/esl-0.5.x:opensuse-tumbleweed
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -42,59 +64,73 @@ opensuse-tumbleweed-serial:
     - ./install-bundle --system opensuse --compilers gcc --flavor serial esl-bundle
 
 debian-mpi:
-  image: eslib/esl-0.4.x:debian-buster
+  image: eslib/esl-0.5.x:debian-buster
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
-    - python ./install-bundle --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
 
 debian-serial:
-  image: eslib/esl-0.4.x:debian-buster
+  image: eslib/esl-0.5.x:debian-buster
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
-    - python ./install-bundle --system debian --compilers gcc --flavor serial esl-bundle
+    - ./install-bundle --system debian --compilers gcc --flavor serial esl-bundle
 
-ubuntu-mpi:
-  image: eslib/esl-0.4.x:ubuntu-bionic
+ubuntu-mpi-bionic:
+  image: eslib/esl-0.5.x:ubuntu-bionic
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
-    - python ./install-bundle --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
-ubuntu-serial:
-  image: eslib/esl-0.4.x:ubuntu-bionic
+ubuntu-mpi-focal:
+  image: eslib/esl-0.5.x:ubuntu-focal
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
-    - python ./install-bundle --system ubuntu --compilers gcc --flavor serial esl-bundle
+    - ./install-bundle --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
+
+ubuntu-serial-focal:
+  image: eslib/esl-0.5.x:ubuntu-focal
+  stage: test
+  script:
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system ubuntu --compilers gcc --flavor serial esl-bundle
+
+ubuntu-serial-bionic:
+  image: eslib/esl-0.5.x:ubuntu-bionic
+  stage: test
+  script:
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --system ubuntu --compilers gcc --flavor serial esl-bundle
 
 fedora-serial:
-  image: eslib/esl-0.4.x:fedora-29
+  image: eslib/esl-0.5.x:fedora-31
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --system fedora --compilers gcc --flavor serial esl-bundle
 
 fedora-mpi:
-  image: eslib/esl-0.4.x:fedora-29
+  image: eslib/esl-0.5.x:fedora-31
   stage: test
   script:
     - export PATH=/usr/lib64/openmpi/bin:$PATH
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --system fedora --compilers gcc --flavor openmpi esl-bundle-mpi
 
-#centos-serial:
-#  image: drfaustroll/esl:centos-latest
-#  stage: test
-#  script:
-#    - export JHBUILD_DEFAULTS="esl"
-#    - ./install-bundle --system centos --compilers gcc --flavor serial esl-bundle
+centos-serial:
+  image: eslib/esl-0.5.x:centos-7
+  stage: test
+  script:
+    - export JHBUILD_DEFAULTS="esl"
+    - python ./install-bundle --system centos --compilers gcc --flavor serial esl-bundle
 
-#centos-mpi:
-#  image: drfaustroll/esl:centos-latest
-#  stage: test
-#  script:
-#    - export PATH=/usr/lib64/openmpi/bin:$PATH
-#    - export JHBUILD_DEFAULTS="esl"
-#    - ./install-bundle --system centos --compilers gcc --flavor openmpi esl-bundle-mpi
+centos-mpi:
+  image: eslib/esl-0.5.x:centos-7
+  stage: test
+  script:
+    - export PATH=/usr/lib64/openmpi/bin:$PATH
+    - export JHBUILD_DEFAULTS="esl"
+    - python ./install-bundle --system centos --compilers gcc --flavor openmpi esl-bundle-mpi

@@ -2,4 +2,4 @@
 
 set -x
 
-docker build -t centos-esl:latest . 
+docker build -t centos-esl:7 .
