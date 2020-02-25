@@ -69,7 +69,7 @@
   </autotools>
   
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
-    <branch repo="local" module="NTPoly-ntpoly-v2.3.1.tar.gz" version="2.3.1" hash="md5:b2d18c4682e409b5837edf796bef3957"/>
+    <branch repo="local" module="NTPoly-2.4.0.tar.gz" version="2.4.0" hash="md5:771ebddfaa7c72306e0384e2d1d028c5"/>
   </cmake>
 
   <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=On -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2019.05.002/modules"'>
