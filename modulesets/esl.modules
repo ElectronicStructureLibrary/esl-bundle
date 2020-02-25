@@ -67,7 +67,7 @@
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
     <branch repo="local" module="elpa-2019.05.001.tar.gz" version="2019.05.001" hash="md5:520c83a70259538f54880016a9818aa8"/>
   </autotools>
-  
+
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
     <branch repo="local" module="NTPoly-ntpoly-v2.3.1.tar.gz" version="2.3.1" hash="md5:b2d18c4682e409b5837edf796bef3957"/>
   </cmake>
@@ -102,6 +102,7 @@
   <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
     <branch repo="local" module="scotch_6.0.0.tar.gz" version="6.0.0" hash="md5:ba117428c0a6cd97d0c93e8b872bb3fe">
       <patch file="scotch_make.patch" strip="0"/>
+      <patch file="scotch-6.0.0-mpi30.patch" strip="1"/>
     </branch>
   </makesys>
 
