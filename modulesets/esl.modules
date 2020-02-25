@@ -57,7 +57,7 @@
   </autotools>
 
   <autotools id="fdf" autogen-sh="autogen.sh+configure">
-    <branch repo="local" module="libfdf-0.1.1.tar.gz" version="0.1.1" hash="md5:e70dca3a799069c153e82e76b3760b40"/>
+    <branch repo="local" module="libfdf-0.2.2.tar.gz" version="0.2.2" hash="md5:ffa39f8640b3dae8962e62b3956f79d9"/>
   </autotools>
 
   <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
