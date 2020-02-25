@@ -21,6 +21,7 @@ Added
 - Flook to v0.8.1.
 - Libfdf to v0.2.2.
 - LibGridXC to v0.9.5
+- NTPoly to v2.4.0
 
 [0.4.2-1] - 25-02-2020
 ======================
