@@ -119,9 +119,7 @@
   </makesys>
 
   <makesys id="flook" makeargs="liball">
-    <branch repo="local" module="flook-0.7.0.tar.gz" version="0.7.0" hash="md5:13a9b47076b11a21b20f76fdc8a360cb">
-      <patch file="flook-install-prefix.patch" strip="1"/>
-      <patch file="flook-install-portability.patch" strip="1"/>
+    <branch repo="local" module="flook-0.8.1.tar.gz" version="0.8.1" hash="md5:5f2addefdcbeb252b9652a8bdfd7a1f6">
     </branch>
   </makesys>
 
