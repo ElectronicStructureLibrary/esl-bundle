@@ -84,20 +84,6 @@ ubuntu-mpi-bionic:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
-ubuntu-mpi-focal:
-  image: eslib/esl-0.5.x:ubuntu-focal
-  stage: test
-  script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
-
-ubuntu-serial-focal:
-  image: eslib/esl-0.5.x:ubuntu-focal
-  stage: test
-  script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor serial esl-bundle
-
 ubuntu-serial-bionic:
   image: eslib/esl-0.5.x:ubuntu-bionic
   stage: test
@@ -119,6 +105,24 @@ fedora-mpi:
     - export PATH=/usr/lib64/openmpi/bin:$PATH
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system fedora --compilers gcc --flavor openmpi esl-bundle-mpi
+
+# The following ones are allowed to fail because they test unreleased distros
+
+ubuntu-mpi-focal:
+  image: eslib/esl-0.5.x:ubuntu-focal
+  stage: test
+  script:
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
+  allow_failure: true
+
+ubuntu-serial-focal:
+  image: eslib/esl-0.5.x:ubuntu-focal
+  stage: test
+  script:
+    - export JHBUILD_DEFAULTS="esl"
+    - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor serial esl-bundle
+  allow_failure: true
 
 # The following ones are disabled because they provide unsupported compilers
 
