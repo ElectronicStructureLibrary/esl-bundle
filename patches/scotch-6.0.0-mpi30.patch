@@ -1,0 +1,166 @@
+--- scotch_6.0.0/src/libscotch/dgraph_halo.c	2011-09-06 17:46:48.000000000 +0100
++++ scotch_6.0.9/src/libscotch/dgraph_halo.c	2019-11-04 11:27:25.000000000 +0000
+@@ -1,4 +1,4 @@
+-/* Copyright 2007-2009,2011 ENSEIRB, INRIA & CNRS
++/* Copyright 2007-2009,2011,2014 IPB, Universite de Bordeaux, INRIA & CNRS
+ **
+ ** This file is part of the Scotch software package for static mapping,
+ ** graph partitioning and sparse matrix ordering.
+@@ -51,6 +51,8 @@
+ /**                                 to     05 feb 2008     **/
+ /**                # Version 5.1  : from : 28 aug 2008     **/
+ /**                                 to     22 feb 2011     **/
++/**                # Version 6.0  : from : 29 oct 2014     **/
++/**                                 to     29 oct 2014     **/
+ /**                                                        **/
+ /************************************************************/
+ 
+@@ -193,6 +195,9 @@ int ** const                  senddspptr
+ int ** const                  recvdspptr,
+ MPI_Request ** const          requptr)            /* Pointer to local request array for point-to-point */
+ {
++#if ! ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100))
++  MPI_Aint              attrglbtmp;               /* Lower bound of attribute datatype (not used)            */
++#endif /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
+   MPI_Aint              attrglbsiz;               /* Extent of attribute datatype                            */
+   int                   procngbsiz;               /* Size of request array for point-to-point communications */
+   int                   procngbnum;
+@@ -206,7 +211,11 @@ MPI_Request ** const          requptr)
+ 
+   procngbsiz = ((grafptr->flagval & DGRAPHCOMMPTOP) != 0) ? grafptr->procngbnbr : 0;
+ 
++#if ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100))
+   MPI_Type_extent (attrglbtype, &attrglbsiz);     /* Get type extent */
++#else /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
++  MPI_Type_get_extent (attrglbtype, &attrglbtmp, &attrglbsiz); /* Get type extent */
++#endif /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
+   if (memAllocGroup ((void **) (void *)
+                      attrsndptr, (size_t) (grafptr->procsndnbr * attrglbsiz),
+                      senddspptr, (size_t) (grafptr->procglbnbr * MAX (sizeof (int), sizeof (byte *))), /* TRICK: use senddsptab (int *) as attrdsptab (byte **) */
+@@ -249,9 +258,12 @@ const MPI_Datatype            attrglbtyp
+   if (dgraphHaloSync2 (grafptr, attrgsttab, attrglbtype, &attrsndtab, &senddsptab, &recvdsptab, &requtab) != 0) /* Prepare communication arrays */
+     return (1);
+ 
+-  o = 0;                                          /* Assume success               */
+-  if ((grafptr->flagval & DGRAPHCOMMPTOP) != 0) { /* If point-to-point exchange   */
+-    MPI_Aint              attrglbsiz;             /* Extent of attribute datatype */
++  o = 0;                                          /* Assume success                               */
++  if ((grafptr->flagval & DGRAPHCOMMPTOP) != 0) { /* If point-to-point exchange                   */
++#if ! ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100))
++    MPI_Aint              attrglbtmp;             /* Lower bound of attribute datatype (not used) */
++#endif /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
++    MPI_Aint              attrglbsiz;             /* Extent of attribute datatype                 */
+     const int * restrict  procrcvtab;
+     const int * restrict  procsndtab;
+     const int * restrict  procngbtab;
+@@ -264,7 +276,11 @@ const MPI_Datatype            attrglbtyp
+     procngbtab = grafptr->procngbtab;
+     procngbnbr = grafptr->procngbnbr;
+     procrcvtab = grafptr->procrcvtab;
++#if ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100))
+     MPI_Type_extent (attrglbtype, &attrglbsiz);   /* Get type extent */
++#else /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
++    MPI_Type_get_extent (attrglbtype, &attrglbtmp, &attrglbsiz); /* Get type extent */
++#endif /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
+     for (procngbnum = procngbnbr - 1, requnbr = 0; procngbnum >= 0; procngbnum --, requnbr ++) { /* Post receives first */
+       int                 procglbnum;
+ 
+--- scotch_6.0.0/src/libscotch/dmapping_io.c	2011-09-06 17:46:48.000000000 +0100
++++ scotch_6.0.9/src/libscotch/dmapping_io.c	2018-05-28 16:05:24.000000000 +0100
+@@ -1,4 +1,4 @@
+-/* Copyright 2008,2010 ENSEIRB, INRIA & CNRS
++/* Copyright 2008,2010,2014 IPB, Universite de Bordeaux, INRIA & CNRS
+ **
+ ** This file is part of the Scotch software package for static mapping,
+ ** graph partitioning and sparse matrix ordering.
+@@ -40,6 +40,8 @@
+ /**                                                        **/
+ /**   DATES      : # Version 5.1  : from : 13 jun 2008     **/
+ /**                                 to     11 aug 2010     **/
++/**                # Version 6.0  : from : 29 oct 2014     **/
++/**                                 to     29 oct 2014     **/
+ /**                                                        **/
+ /************************************************************/
+ 
+@@ -251,13 +253,22 @@ FILE * restrict const           stream)
+         termloctab[fraglocnum] = archDomNum (&dmapptr->archdat, &fragptr->domntab[fragptr->parttab[fraglocnum]]);
+       }
+ 
++#if ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100))
+       MPI_Address (termloctab, &typedsptab[0]);
+       MPI_Address (fragptr->vnumtab, &typedsptab[1]);
++#else /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
++      MPI_Get_address (termloctab, &typedsptab[0]);
++      MPI_Get_address (fragptr->vnumtab, &typedsptab[1]);
++#endif /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
+       typedsptab[1] -= typedsptab[0];
+       typedsptab[0] = 0;
+       typecnttab[0] =
+       typecnttab[1] = (int) fragptr->vertnbr;
++#if ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100))
+       MPI_Type_hindexed (2, typecnttab, typedsptab, GNUM_MPI, &typedat);
++#else /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
++      MPI_Type_create_hindexed (2, typecnttab, typedsptab, GNUM_MPI, &typedat);
++#endif /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
+       MPI_Type_commit   (&typedat);
+ 
+       if (MPI_Send (termloctab, 1, typedat, protnum, 0, grafptr->proccomm) != MPI_SUCCESS) {
+--- scotch_6.0.0/src/libscotch/library_dgraph_stat.c	2012-11-30 00:40:19.000000000 +0000
++++ scotch_6.0.9/src/libscotch/library_dgraph_stat.c	2019-11-04 12:16:49.000000000 +0000
+@@ -1,4 +1,4 @@
+-/* Copyright 2007,2008,2012 IPB, Universite de Bordeaux, INRIA & CNRS
++/* Copyright 2007,2008,2012,2014,2018 IPB, Universite de Bordeaux, INRIA & CNRS
+ **
+ ** This file is part of the Scotch software package for static mapping,
+ ** graph partitioning and sparse matrix ordering.
+@@ -42,7 +42,7 @@
+ /**   DATES      : # Version 5.0  : from : 23 jun 2007     **/
+ /**                                 to     03 apr 2008     **/
+ /**                # Version 6.0  : from : 29 nov 2012     **/
+-/**                                 to     29 nov 2012     **/
++/**                                 to     21 may 2018     **/
+ /**                                                        **/
+ /************************************************************/
+ 
+@@ -240,7 +240,7 @@ double *                    edlodltptr)
+       }
+ 
+       if (MPI_Allreduce (&edlolocsum, &edloglbsum, 1, GNUM_MPI, MPI_SUM, srcgrafptr->proccomm) != MPI_SUCCESS) {
+-        errorPrint ("SCOTCH_dgraphStat: communication error (1)");
++        errorPrint (STRINGIFY (SCOTCH_dgraphStat) ": communication error (1)");
+         return     (1);
+       }
+       edloglbavg = (double) edloglbsum / (double) (2 * srcgrafptr->edgeglbnbr);
+@@ -268,13 +268,22 @@ double *                    edlodltptr)
+   }
+   srclstadat.edlodlt = edlolocdlt;
+ 
++#if ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100))
+   MPI_Address (&srclstadat.velomin, &srcdisptab[0]);
+   MPI_Address (&srclstadat.velodlt, &srcdisptab[1]);
++#else /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
++  MPI_Get_address (&srclstadat.velomin, &srcdisptab[0]);
++  MPI_Get_address (&srclstadat.velodlt, &srcdisptab[1]);
++#endif /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
+   srcdisptab[1] -= srcdisptab[0];
+-  srcdisptab[0] -= srcdisptab[0];
++  srcdisptab[0]  = 0;
+ 
+   o = 1;                                          /* Assume something will go wrong */
++#if ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100))
+   if ((MPI_Type_struct (2, dgraphstatblentab, srcdisptab, dgraphstattypetab, &srctypedat) == MPI_SUCCESS) &&
++#else /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
++  if ((MPI_Type_create_struct (2, dgraphstatblentab, srcdisptab, dgraphstattypetab, &srctypedat) == MPI_SUCCESS) &&
++#endif /* ((defined COMMON_MPI_VERSION) && (COMMON_MPI_VERSION <= 100)) */
+       (MPI_Type_commit (&srctypedat) == MPI_SUCCESS)) {
+     if (MPI_Op_create ((MPI_User_function *) dgraphStatReduceAll, 0, &srcoperdat) == MPI_SUCCESS) {
+       if (MPI_Allreduce (&srclstadat, &srcgstadat, 1, srctypedat, srcoperdat, srcgrafptr->proccomm) == MPI_SUCCESS)
+@@ -285,7 +294,7 @@ double *                    edlodltptr)
+     MPI_Type_free (&srctypedat);
+   }
+   if (o != 0) {
+-    errorPrint ("SCOTCH_dgraphStat: communication error (2)");
++    errorPrint (STRINGIFY (SCOTCH_dgraphStat) ": communication error (2)");
+     return     (1);
+   }
+ 
