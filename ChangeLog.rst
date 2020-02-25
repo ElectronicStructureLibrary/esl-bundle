@@ -23,6 +23,7 @@ Added
 - LibGridXC to v0.9.5
 - NTPoly to v2.4.0
 - SuperLU_DIST to v6.2.0
+- ELSI to v2.5.0
 
 [0.4.2-1] - 25-02-2020
 ======================
