@@ -9,6 +9,7 @@ from __future__ import print_function
 import argparse
 import os
 import re
+import subprocess
 import sys
 
 
@@ -85,12 +86,13 @@ if args.unattended:
     jh_opt.append("--no-interact")
 
 # Run JHBuild
-jh_cmd = [os.path.join(topdir, "bundler", "jhbuild.py")]
+jh_cmd = [sys.executable, os.path.join(topdir, "bundler", "jhbuild.py")]
 jh_cfg = ["-f", cfgfile]
 jh_mod = ["-m", args.moduleset]
 jh_run = ["build"] + args.packages
 print("export JHBUILD_DEFAULTS='%s'" % bundle_profile)
 os.environ["JHBUILD_DEFAULTS"] = bundle_profile
 print(" ".join(jh_cmd + jh_opt + jh_cfg + jh_mod + jh_run))
-ret = os.system(" ".join(jh_cmd + jh_opt + jh_cfg + jh_mod + jh_run))
+ret = subprocess.call(" ".join(jh_cmd + jh_opt + jh_cfg + jh_mod + jh_run),
+        shell=True)
 sys.exit(ret)
