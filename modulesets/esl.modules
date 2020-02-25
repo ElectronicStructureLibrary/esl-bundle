@@ -158,6 +158,38 @@
     </branch>
   </makesys>
 
+  <!-- OMM Bundle BEGIN -->
+  <autotools id="libomm" autogen-sh="configure" autogenargs="--with-msw=$JHBUILD_PREFIX">
+    <branch repo="local" module="libomm-1.0.0.tar.gz" version="1.0.0" hash="md5:7c70acd17478bc09837c18202659c2c7"/>
+    <dependencies>
+      <dep package="matrixswitch"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="libomm-mpi" autogen-sh="configure" autogenargs="--with-psp=$JHBUILD_PREFIX --with-msw=$JHBUILD_PREFIX">
+    <branch repo="local" module="libomm-1.0.0.tar.gz" version="1.0.0" hash="md5:7c70acd17478bc09837c18202659c2c7"/>
+    <dependencies>
+      <dep package="matrixswitch-mpi"/>
+      <dep package="pspblas"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="matrixswitch" autogen-sh="configure">
+    <branch repo="local" module="matrixswitch-1.0.0.tar.gz" version="1.0.0" hash="md5:8767df53916e440300e6761ed9747c1e"/>
+  </autotools>
+
+  <autotools id="matrixswitch-mpi" autogen-sh="configure" autogenargs="--with-psp=$JHBUILD_PREFIX">
+    <branch repo="local" module="matrixswitch-1.0.0.tar.gz" version="1.0.0" hash="md5:8767df53916e440300e6761ed9747c1e"/>
+    <dependencies>
+      <dep package="pspblas"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="pspblas" autogen-sh="configure">
+    <branch repo="local" module="pspblas-1.0.0.tar.gz" version="1.0.0" hash="md5:3fc8dd688deda8c9d1bbb79d9e0a3b30"/>
+  </autotools>
+  <!-- OMM Bundle END -->
+
   <autotools id="fakepc" autogen-sh="configure">
     <branch repo="local" module="fakepc-0.2.0.tar.gz" version="0.2.0" hash="md5:ae032a40153a231d9ba1d639c6cd4e92"/>
     <dependencies>
@@ -188,6 +220,7 @@
       <dep package="psolver"/>
       <dep package="pspio"/>
       <dep package="fdf"/>
+      <dep package="libomm"/>
       <dep package="libpsml"/>
       <dep package="libgridxc"/>
       <dep package="libvdwxc"/>
@@ -208,6 +241,7 @@
       <dep package="psolver-mpi"/>
       <dep package="pspio"/>
       <dep package="fdf"/>
+      <dep package="libomm-mpi"/>
       <dep package="libpsml"/>
       <dep package="elsi"/>
       <dep package="fakepc"/>
