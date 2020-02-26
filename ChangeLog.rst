@@ -12,6 +12,11 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 Changed
 -------
 
+Added
+-----
+- MatrixSwitch v1.0.0.
+- LibOMM v1.0.0.
+
 [0.4.2-1] - 25-02-2020
 ======================
 
