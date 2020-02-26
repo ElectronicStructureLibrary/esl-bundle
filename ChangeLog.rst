@@ -14,6 +14,8 @@ Added
 - sgplib v1.14.1
 - wannier90 v3.0.0
 - ELSI-RCI v0.1.0
+- MatrixSwitch v1.0.0 as a stand-alone library.
+- LibOMM v1.0.0 as a stand-alone library.
 
   Changed
 -------
