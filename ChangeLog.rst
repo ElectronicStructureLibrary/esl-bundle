@@ -11,6 +11,7 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 
 Changed
 -------
+- superlu_dist to v6.2.0
 
 [0.4.2-1] - 25-02-2020
 ======================
