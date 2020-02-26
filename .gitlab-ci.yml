@@ -111,6 +111,7 @@ fedora-mpi:
 ubuntu-mpi-focal:
   image: eslib/esl-0.5.x:ubuntu-focal
   stage: test
+  when: manual
   script:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
@@ -119,6 +120,7 @@ ubuntu-mpi-focal:
 ubuntu-serial-focal:
   image: eslib/esl-0.5.x:ubuntu-focal
   stage: test
+  when: manual
   script:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor serial esl-bundle
