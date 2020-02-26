@@ -9,8 +9,17 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 [0.5.0-1] - To be relesase
 ==========================
 
+Fixed
+-----
+- pexsi fix useage of correct Cnames.h
+- pexsi add patches fixing bugs in release, as per Victor's suggestion
+
 Changed
 -------
+- superlu_dist to 6.2.0
+- elsi to 2.5.0
+- NTPoly to 2.4.0
+- pexsi to 1.2.0
 
 [0.4.2-1] - 25-02-2020
 ======================
