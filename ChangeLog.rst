@@ -13,6 +13,7 @@ Changed
 -------
 - superlu_dist to v6.2.0
 - NTPoly to v2.4.0
+- elsi to v2.5.0
 
 [0.4.2-1] - 25-02-2020
 ======================
