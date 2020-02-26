@@ -50,7 +50,7 @@
   </autotools>
 
   <autotools id="libpsml" autogen-sh="configure" autogenargs="--with-xmlf90=$JHBUILD_PREFIX">
-    <branch repo="local" module="libpsml-1.1.8.tar.gz" version="1.1.8" hash="md5:93835a892feec18d15846ed753ef3fda"/>
+    <branch repo="local" module="libpsml-1.1.9.tar.gz" version="1.1.9" hash="md5:c43fb64fb8bac3f41ca1f04ca1623325"/>
     <dependencies>
       <dep package="xmlf90"/>
     </dependencies>
@@ -61,11 +61,11 @@
   </autotools>
 
   <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
-    <branch repo="local" module="elpa-2019.05.001.tar.gz" version="2019.05.001" hash="md5:520c83a70259538f54880016a9818aa8"/>
+    <branch repo="local" module="elpa-2019.05.002.tar.gz" version="2019.05.002" hash="md5:f2213cebfa8e2ae3a55a2479fa7dab5d"/>
   </autotools>
 
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="elpa-2019.05.001.tar.gz" version="2019.05.001" hash="md5:520c83a70259538f54880016a9818aa8"/>
+    <branch repo="local" module="elpa-2019.05.002.tar.gz" version="2019.05.002" hash="md5:f2213cebfa8e2ae3a55a2479fa7dab5d"/>
   </autotools>
 
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
@@ -150,6 +150,21 @@
     </dependencies>
   </autotools>
 
+  <!-- OMM Bundle BEGIN -->
+
+  <autotools id="libomm" autogen-sh="configure" autogenargs="--with-msw=$JHBUILD_PREFIX">
+    <branch repo="local" module="libomm-1.0.0.tar.gz" version="1.0.0" hash="md5:7c70acd17478bc09837c18202659c2c7"/>
+    <dependencies>
+      <dep package="matrixswitch"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="matrixswitch" autogen-sh="configure">
+    <branch repo="local" module="matrixswitch-1.0.0.tar.gz" version="1.0.0" hash="md5:8767df53916e440300e6761ed9747c1e"/>
+  </autotools>
+
+  <!-- OMM Bundle END -->
+
   <autotools id="fakepc" autogen-sh="configure">
     <branch repo="local" module="fakepc-0.2.0.tar.gz" version="0.2.0" hash="md5:ae032a40153a231d9ba1d639c6cd4e92"/>
     <dependencies>
@@ -168,6 +183,7 @@
       <dep package="psolver"/>
       <dep package="pspio"/>
       <dep package="fdf"/>
+      <dep package="libomm"/>
       <dep package="libpsml"/>
       <dep package="libgridxc"/>
       <dep package="libvdwxc"/>
@@ -185,6 +201,9 @@
       <dep package="psolver-mpi"/>
       <dep package="pspio"/>
       <dep package="fdf"/>
+      <if condition-set="omm">
+        <dep package="libomm"/>
+      </if>
       <dep package="libpsml"/>
       <dep package="elsi"/>
       <dep package="fakepc"/>
