@@ -18,6 +18,7 @@ Changed
 - Fdict to v0.8.0.
 - Flook to v0.8.1.
 - Libfdf to v0.2.2.
+- LibGridXC to v0.9.1
 
 [0.4.2-1] - 25-02-2020
 ======================
