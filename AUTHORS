@@ -75,6 +75,9 @@ The ESL Bundle includes the following libraries:
     the GNU Lesser Public General License version 3.
     https://gitlab.mpcdf.mpg.de/elpa/elpa
 
+  - ELSI_RCI, written by ELSI Team, and distributed under the BSD 3-clause
+    free/libre software license.
+    http://www.elsi-interchange.org:81/elsi-devel/elsi_rci
 
 The ESL Bundle also includes the ELSI Bundle, which contains:
 
