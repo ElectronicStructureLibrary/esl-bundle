@@ -71,7 +71,7 @@ The ESL Bundle includes the following libraries:
     free/libre software license.
     https://www.labri.fr/perso/pelegrin/scotch
 
-- ELPA, written by the ELPA Consortium, and distributed under the
+  - ELPA, written by the ELPA Consortium, and distributed under the
     the GNU Lesser Public General License version 3.
     https://gitlab.mpcdf.mpg.de/elpa/elpa
 
@@ -79,6 +79,10 @@ The ESL Bundle includes the following libraries:
     Dimitar Pashov and distributed under the BSD 3-clause
     free/libre software license.
     https://atztogo.github.io/spglib/
+
+  - Wannier90, written by The Wannier90 Developer Group & Co, and distributed under
+    the GPLv2 free/libre software license.
+    http://www.wannier.org/
 
 The ESL Bundle also includes the ELSI Bundle, which contains:
 
