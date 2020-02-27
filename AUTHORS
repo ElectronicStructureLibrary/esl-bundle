@@ -71,16 +71,9 @@ The ESL Bundle includes the following libraries:
     free/libre software license.
     https://www.labri.fr/perso/pelegrin/scotch
 
-- ELPA, written by the ELPA Consortium, and distributed under the
+  - ELPA, written by the ELPA Consortium, and distributed under the
     the GNU Lesser Public General License version 3.
     https://gitlab.mpcdf.mpg.de/elpa/elpa
-
-
-The ESL Bundle also includes the ELSI Bundle, which contains:
-
-  - ELSI, written by the ELSI Team, and distributed under the BSD 3-clause
-    License.
-    http://elsi-interchange.org/
 
   - LibOMM, written by Fabiano Corsetti, and distributed under the
     BSD 2-clause License.
@@ -94,7 +87,12 @@ The ESL Bundle also includes the ELSI Bundle, which contains:
     and distributed under the BSD 3-clause License.
     https://math.berkeley.edu/~linlin/pexsi/
 
+  The ESL Bundle also includes the ELSI Bundle, which also contains the following libraries:
+
+  - ELSI, written by the ELSI Team, and distributed under the BSD 3-clause
+    License.
+    http://elsi-interchange.org/
+
   - SIPs, written by Murat Keceli, and distributed under the BSD 2-clause
     License.
     http://bitbucket.org/keceli/qetsc
-
