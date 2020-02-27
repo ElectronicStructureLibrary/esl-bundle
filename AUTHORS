@@ -84,6 +84,10 @@ The ESL Bundle includes the following libraries:
     the GPLv2 free/libre software license.
     http://www.wannier.org/
 
+  - ELSI_RCI, written by ELSI Team, and distributed under the BSD 3-clause
+    free/libre software license.
+    http://www.elsi-interchange.org:81/elsi-devel/elsi_rci
+
 The ESL Bundle also includes the ELSI Bundle, which contains:
 
   - ELSI, written by the ELSI Team, and distributed under the BSD 3-clause
