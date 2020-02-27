@@ -15,6 +15,11 @@ Changed
 - NTPoly to v2.4.0
 - elsi to v2.5.0
 
+Added
+-----
+- MatrixSwitch v1.0.0.
+- LibOMM v1.0.0.
+
 [0.4.2-1] - 25-02-2020
 ======================
 
