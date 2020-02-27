@@ -75,6 +75,10 @@ The ESL Bundle includes the following libraries:
     the GNU Lesser Public General License version 3.
     https://gitlab.mpcdf.mpg.de/elpa/elpa
 
+  - spglib, written by Atsushi Togo, with Fortran 2008 interface written by
+    Dimitar Pashov and distributed under the BSD 3-clause
+    free/libre software license.
+    https://atztogo.github.io/spglib/
 
 The ESL Bundle also includes the ELSI Bundle, which contains:
 
