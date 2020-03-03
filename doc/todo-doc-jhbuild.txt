@@ -1,0 +1,33 @@
+BigDFT patches:
+
+- moduleset configuration.
+- install prefix.
+- local repo.
+- tarballs.
+- build root.
+
+
+1. [x] Rebase bundler on JHBuild master. (DC)
+1. [x] Separate changes common to all from those specific to BigDFT.
+1. [x] Have a config file for defaults instead of hard-coding.
+1. [x] defaults.jhbuildrc: read variables from modulesets?
+1. [x] Check that the moduleset is readily parsed after defaults.jhbuildrc.
+
+
+Developer documentation:
+
+- The master branch is upstream JHBuild.
+- Our branch is bundler.
+- Tell people to do a git reset --hard origin/bundler.
+- C_INCLUDE_PATH: JHBuild default for previously installed packages,we export
+  it in configure flags to be able to run make outside JHBuild.
+- LDFLAGS idem.
+- Explain how to synchronize ESL with BigDFT.
+
+User documentation:
+
+- Review existing documents.
+- Plan tutorials for selected targets.
+- Document dist, check, + clean for distutils.
+
+Note: FCFLAGS not supported by JHBuild, must do it manually.
