@@ -150,12 +150,11 @@
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
-    <branch repo="local" module="fakepc-0.2.0.tar.gz" version="0.2.0" hash="md5:ae032a40153a231d9ba1d639c6cd4e92"/>
+    <branch repo="local" module="fakepc-0.2.1.tar.gz" version="0.2.1" hash="md5:da1b8210df02431f727c712483d69fcd"/>
     <dependencies>
-      <dep package="fdict"/>
-      <dep package="flook"/>
+      <dep package="NTPoly"/>
       <dep package="scotch"/>
-      <dep package="superlu_dist"/>
+      <!-- <dep package="wannier90"/> -->
     </dependencies>
   </autotools>
 
