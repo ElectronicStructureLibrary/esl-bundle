@@ -27,15 +27,8 @@
     </dependencies>
   </autotools>
 
-  <autotools id="psolver" autogen-sh="configure" autogenargs="--disable-mpi">
+  <autotools id="psolver" autogen-sh="configure">
     <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.3" hash="md5:0c13d0405c4cc05325b4be61fa1c4dad"/>
-    <dependencies>
-      <dep package="futile"/>
-    </dependencies>
-  </autotools>
-
-  <autotools id="psolver-mpi" autogen-sh="configure" autogenargs="--enable-mpi">
-    <branch repo="local" module="psolver-1.8.tar.gz" version="1.8.3" hash="md5:0c13d0405c4cc05325b4be61fa1c4dad" checkoutdir="psolver-mpi"/>
     <dependencies>
       <dep package="futile"/>
     </dependencies>
@@ -56,18 +49,14 @@
     </dependencies>
   </autotools>
 
-  <autotools id="fdf" autogen-sh="autogen.sh+configure">
+  <autotools id="fdf" autogen-sh="autogen.sh+configure" autogenargs="--without-mpi">
     <branch repo="local" module="libfdf-0.1.1.tar.gz" version="0.1.1" hash="md5:e70dca3a799069c153e82e76b3760b40"/>
   </autotools>
 
-  <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
+  <autotools id="elpa" autogen-sh="configure">
     <branch repo="local" module="elpa-2019.05.002.tar.gz" version="2019.05.002" hash="md5:f2213cebfa8e2ae3a55a2479fa7dab5d"/>
   </autotools>
 
-  <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="elpa-2019.05.002.tar.gz" version="2019.05.002" hash="md5:f2213cebfa8e2ae3a55a2479fa7dab5d"/>
-  </autotools>
-  
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
     <branch repo="local" module="NTPoly-ntpoly-v2.3.1.tar.gz" version="2.3.1" hash="md5:b2d18c4682e409b5837edf796bef3957"/>
   </cmake>
@@ -79,9 +68,7 @@
       <dep package="superlu_dist"/>
       <dep package="NTPoly"/>
       <dep package="pexsi"/>
-      <if condition-unset="no_elpa">
-        <dep package="elpa-mpi"/>
-      </if>
+      <dep package="elpa"/>
     </dependencies>
   </cmake>
 
@@ -99,7 +86,7 @@
     </dependencies>
   </cmake>
 
-  <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch" >
+  <makesys id="scotch" makeargs="-C  src -j 1 scotch ptscotch">
     <branch repo="local" module="scotch_6.0.0.tar.gz" version="6.0.0" hash="md5:ba117428c0a6cd97d0c93e8b872bb3fe">
       <patch file="scotch_make.patch" strip="0"/>
     </branch>
@@ -127,26 +114,15 @@
     </branch>
   </makesys>
 
-  <autotools id="libgridxc" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
+  <autotools id="libgridxc" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX">
     <branch repo="local" module="libgridxc-0.8.5.1.tar.gz" version="0.8.5.1" checkoutdir="libgridxc" hash="md5:bc03b9bb1b17d0e26867fba041affd2b"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
   </autotools>
 
-  <autotools id="libvdwxc" autogen-sh="configure" autogenargs="--with-mpi=no">
+  <autotools id="libvdwxc" autogen-sh="configure">
     <branch repo="local" module="libvdwxc-0.4.0.tar.gz" version="0.4.0" hash="md5:68196798d69d593b62ea9f482468db66"/>
-  </autotools>
-
-  <autotools id="libvdwxc-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="libvdwxc-0.4.0.tar.gz" version="0.4.0" hash="md5:68196798d69d593b62ea9f482468db66"/>
-  </autotools>
-
-  <autotools id="libgridxc-mpi" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
-    <branch repo="local" module="libgridxc-0.8.5.1.tar.gz" version="0.8.5.1" checkoutdir="libgridxc-mpi" hash="md5:bc03b9bb1b17d0e26867fba041affd2b"/>
-    <dependencies>
-      <dep package="libxc"/>
-    </dependencies>
   </autotools>
 
   <autotools id="fakepc" autogen-sh="configure">
@@ -161,37 +137,19 @@
 
   <metamodule id="esl-bundle">
     <dependencies>
+      <if condition-set="mpi">
+        <dep package="elsi"/>
+      </if>
+      <dep package="fakepc"/>
+      <dep package="fdf"/>
       <dep package="fdict"/>
       <dep package="flook"/>
       <dep package="libxc"/>
-      <dep package="psolver"/>
-      <dep package="pspio"/>
-      <dep package="fdf"/>
       <dep package="libpsml"/>
       <dep package="libgridxc"/>
       <dep package="libvdwxc"/>
-      <if condition-unset="no_elpa">
-        <dep package="elpa"/>
-      </if>
-    </dependencies>
-  </metamodule>
-
-  <metamodule id="esl-bundle-mpi">
-    <dependencies>
-      <dep package="fdict"/>
-      <dep package="flook"/>
-      <dep package="libxc"/>
-      <dep package="psolver-mpi"/>
+      <dep package="psolver"/>
       <dep package="pspio"/>
-      <dep package="fdf"/>
-      <dep package="libpsml"/>
-      <dep package="elsi"/>
-      <dep package="fakepc"/>
-      <dep package="libgridxc-mpi"/>
-      <dep package="libvdwxc-mpi"/>
-      <if condition-unset="no_elpa">
-        <dep package="elpa-mpi"/>
-      </if>
     </dependencies>
   </metamodule>
 
