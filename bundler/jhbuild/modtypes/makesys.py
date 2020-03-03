@@ -98,9 +98,11 @@ class MakesysModule(MakeModule, DownloadableModule):
     do_install.depends = [PHASE_BUILD]
 
     def xml_tag_and_attrs(self):
-        return ('makesys',
-                [('id', 'name', None),
-                 ('preset', 'preset make.sys', None)])
+        return 'makesys', [('id', 'name', None),
+                           ('preset', 'preset', None),
+                           ('supports-non-srcdir-builds',
+                            'supports_non_srcdir_builds', False)]
+
 
 def collect_args(instance, node, argtype):
     if node.hasAttribute(argtype):
@@ -119,10 +121,14 @@ def collect_args(instance, node, argtype):
 def parse_makesys(node, config, uri, repositories, default_repo):
     instance = MakesysModule.parse_from_xml(node, config, uri, repositories, default_repo)
 
+    instance.dependencies += [
+            instance.get_makecmd(config),
+    ]
+
     if node.hasAttribute("preset"):
         instance.preset = node.getAttribute('preset')
-    instance.makeargs = collect_args (instance, node, 'makeargs')
-    instance.makeinstallargs = collect_args (instance, node, 'makeinstallargs')
+    instance.makeargs = collect_args(instance, node, 'makeargs')
+    instance.makeinstallargs = collect_args(instance, node, 'makeinstallargs')
 
     return instance
 register_module_type('makesys', parse_makesys)
