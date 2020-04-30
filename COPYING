@@ -32,6 +32,7 @@ Currently the following libraries are included:
 
   - ELPA, distributed under the GNU Lesser Public General License version 3.
 
+  - spglib, distributed under the BSD 2-clause license.
 
 The ESL Bundle also includes the ELSI Bundle, which contains:
 
