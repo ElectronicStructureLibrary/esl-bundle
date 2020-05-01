@@ -115,9 +115,7 @@
   </cmake>
 
   <makesys id="fdict">
-    <branch repo="local" module="fdict-0.7.1.tar.gz" version="0.7.1" hash="md5:2e33af1f541ddf3ef9cddf1839afe0db">
-      <patch file="fdict-0.7.1-install-portability.patch" strip="1"/>
-    </branch>
+    <branch repo="local" module="fdict-0.8.0.tar.gz" version="0.8.0" hash="md5:1836cd21402fbe7927c9ca0351bf9c36"/>
   </makesys>
 
   <makesys id="flook" makeargs="liball">
