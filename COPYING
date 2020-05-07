@@ -34,6 +34,8 @@ Currently the following libraries are included:
 
   - spglib, distributed under the BSD 2-clause license.
 
+  - Wannier90, distributed under the GNU General Public License version 2.
+
 The ESL Bundle also includes the ELSI Bundle, which contains:
 
   - ELSI, distributed under the BSD 3-clause License.
