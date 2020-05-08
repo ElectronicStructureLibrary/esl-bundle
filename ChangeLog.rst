@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`_,
 and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
-[0.5.0-1] - To be released
-==========================
+[0.5.0-1] - 2020-05-08
+======================
 
 Added
 -----
@@ -16,6 +16,7 @@ Added
 - ELSI-RCI v0.1.0
 - MatrixSwitch v1.0.0 as a stand-alone library.
 - LibOMM v1.0.0 as a stand-alone library.
+- install-bundle wrapper to make the use of JHBuild easier.
 
   Changed
 -------
