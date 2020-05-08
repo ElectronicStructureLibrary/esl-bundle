@@ -2,7 +2,7 @@ The ESL Bundle is made of a collection of libraries and JHBuild, a building
 framework to compile and install those libraries. The libraries and JHBuild are
 distributed under their own licenses. The JHbuild copyright notice can be found
 in jhbuild/COPYING file. Separate copyright notices can be found for each
-library in the corresponding sources. 
+library in the corresponding sources.
 
 Currently the following libraries are included:
 
@@ -38,14 +38,14 @@ Currently the following libraries are included:
 
   - ELSI_RCI, distributed under the BSD 3-Clause License.
 
-The ESL Bundle also includes the ELSI Bundle, which contains:
-
-  - ELSI, distributed under the BSD 3-clause License.
-
   - LibOMM, distributed under the BSD 2-clause License.
 
   - MatrixSwitch, distributed under the BSD 2-clause License.
 
   - PEXSI, distributed under the BSD 3-clause License.
+
+The ESL Bundle also includes the ELSI Bundle, which contains:
+
+  - ELSI, distributed under the BSD 3-clause License.
 
   - SIPs, distributed under the BSD 2-clause License.

@@ -14,6 +14,8 @@ Added
 - sgplib v1.14.1
 - wannier90 v3.0.0
 - ELSI-RCI v0.1.0
+- MatrixSwitch v1.0.0 as a stand-alone library.
+- LibOMM v1.0.0 as a stand-alone library.
 
   Changed
 -------
@@ -21,6 +23,9 @@ Added
 - Flook to v0.8.1.
 - Libfdf to v0.2.2.
 - LibGridXC to v0.9.5
+- NTPoly to v2.4.0
+- SuperLU_DIST to v6.2.0
+- ELSI to v2.5.0
 
 [0.4.2-1] - 25-02-2020
 ======================
