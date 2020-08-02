@@ -6,7 +6,7 @@ opensuse-mpi:
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2 pfftw3/3.3.8
+    - module load gnu/7  openmpi/3.1.6 scalapack/2.1.0 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
@@ -17,7 +17,7 @@ opensuse-mpi-python2:
   when: manual
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/7  openmpi/3.0.0 scalapack/2.0.2 pfftw3/3.3.8
+    - module load gnu/7  openmpi/3.1.6 scalapack/2.1.0 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - export JHBUILD_DEFAULTS="esl"
     - python ./install-bundle --no-interact --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
