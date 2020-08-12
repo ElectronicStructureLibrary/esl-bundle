@@ -1,2 +1,2 @@
-docker tag fedora-esl:31 eslib/esl-0.5.x:fedora-31
-docker push eslib/esl-0.5.x:fedora-31
+docker tag fedora-esl:32 eslib/esl-0.6.x:fedora-32
+docker push eslib/esl-0.6.x:fedora-32
