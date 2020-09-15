@@ -55,7 +55,7 @@ This is a complete list of packages included in the `ESL Bundle`.
 |PEXSI          |1.2.0         |C++        |Fortran    |               |<http://www.pexsi.org>                                    |
 |SIPs           |              |           |           |               |<http://bitbucket.org/keceli/qetsc>                       |
 |SuperLU_DIST   |6.2.0         |           |           |               |<http://crd-legacy.lbl.gov/~xiaoye/SuperLU>               |
-|scotch         |6.0.0         |           |           |               |<https://www.labri.fr/perso/pelegrin/scotch>              |
+|scotch         |6.1.0         |           |           |               |<https://www.labri.fr/perso/pelegrin/scotch>              |
 |Spglib         |1.14.1        |           |           |               |<https://github.com/atztogo/spglib>                       |
 |Wannier90      |3.0.0         |           |           |               |<http://www.wannier.org>                                  |
 
