@@ -35,6 +35,7 @@ This is a complete list of packages included in the `ESL Bundle`.
 
 |Package        |Version       |Language   |Bindings   | Other dependencies |Website                                              |
 |-------------- |------------- |---------- |---------- |-------------- |----------------------------------------------------------|
+|BSEPACK        |0.1           |Fortran    |           |               |<https://sites.google.com/a/lbl.gov/bsepack/>             |
 |ELSI-RCI       |0.1.0         |Fortran    |           |               |<http://elsi-interchange.org/>                            |
 |Fdict          |0.8.0         |Fortran    |           |               |<https://github.com/zerothi/fdict>                        |
 |Flook          |0.8.1         |Fortran    |           |Lua            |<https://github.com/ElectronicStructureLibrary/flook>     |

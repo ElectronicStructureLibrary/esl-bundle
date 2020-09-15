@@ -9,6 +9,10 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 [0.6.0-1] - To be released
 ==========================
 
+Added
+-----
+- BSEPACK v0.1.
+
 Changed
 -------
 - Libpsml to v1.1.10.
