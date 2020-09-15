@@ -18,6 +18,7 @@ Changed
 - ELPA to v2020.05.001.
 - scotch to v6.1.0.
 - Sgplib to v1.16.0.
+- Wannier90 to 3.1.0.
 
 [0.5.0-1] - 2020-05-08
 ======================

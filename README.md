@@ -57,7 +57,7 @@ This is a complete list of packages included in the `ESL Bundle`.
 |SuperLU_DIST   |6.2.0         |           |           |               |<http://crd-legacy.lbl.gov/~xiaoye/SuperLU>               |
 |scotch         |6.1.0         |           |           |               |<https://www.labri.fr/perso/pelegrin/scotch>              |
 |Spglib         |1.16.0        |           |           |               |<https://github.com/atztogo/spglib>                       |
-|Wannier90      |3.0.0         |           |           |               |<http://www.wannier.org>                                  |
+|Wannier90      |3.1.0         |           |           |               |<http://www.wannier.org>                                  |
 
 ## Installation
 
