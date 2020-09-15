@@ -49,7 +49,7 @@ This is a complete list of packages included in the `ESL Bundle`.
 |pspio          |0.2.4         |C          |Fortran    |GSL            |<https://gitlab.com/ElectronicStructureLibrary/libpspio>  |
 |xmlf90         |1.5.4         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/xmlf90>      |
 |ELSI           |2.6.4         |Fortran    |C          |               |<http://elsi-interchange.org/>                            |
-|ELPA           |2019.05.002   |           |           |               |<https://gitlab.mpcdf.mpg.de/elpa/elpa>                   |
+|ELPA           |2020.05.001   |           |           |               |<https://gitlab.mpcdf.mpg.de/elpa/elpa>                   |
 |LibOMM         |              |           |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm>       |
 |MatrixSwitch   |              |           |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm>       |
 |PEXSI          |1.2.0         |C++        |Fortran    |               |<http://www.pexsi.org>                                    |

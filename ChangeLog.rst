@@ -15,6 +15,7 @@ Changed
 - LibGridXC to v0.9.6.
 - NTPoly to v2.5.1.
 - ELSI to v2.6.4.
+- ELPA to v2020.05.001.
 
 [0.5.0-1] - 2020-05-08
 ======================
