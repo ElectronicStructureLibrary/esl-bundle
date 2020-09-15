@@ -42,7 +42,7 @@ This is a complete list of packages included in the `ESL Bundle`.
 |Libfdf         |0.2.2         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libfdf>      |
 |Libpsml        |1.1.10        |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
 |Libxc          |4.3.4         |C          |Fortran,C++|               |<http://www.tddft.org/programs/libxc>                     |
-|libGridXC      |0.9.5         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libgridxc>   |
+|libGridXC      |0.9.6         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libgridxc>   |
 |libvdwxc       |0.4.0         |C          |Fortran    |FFTW           |<https://libvdwxc.org/>                                   |
 |NTPoly         |2.4.0         |Fortran    |           |               |<https://github.com/william-dawson/NTPoly>                |
 |PSolver        |1.8.3         |Fortran    |           |               |<https://gitlab.com/l_sim/psolver>                        |

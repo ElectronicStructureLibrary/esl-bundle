@@ -12,6 +12,7 @@ and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0
 Changed
 -------
 - Libpsml to v1.1.10.
+- LibGridXC to v0.9.6.
 
 [0.5.0-1] - 2020-05-08
 ======================
