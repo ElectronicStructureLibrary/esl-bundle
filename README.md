@@ -40,7 +40,7 @@ This is a complete list of packages included in the `ESL Bundle`.
 |Flook          |0.8.1         |Fortran    |           |Lua            |<https://github.com/ElectronicStructureLibrary/flook>     |
 |Futile         |1.8.3         |Fortran    |C          |               |<https://gitlab.com/l_sim/futile>                         |
 |Libfdf         |0.2.2         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libfdf>      |
-|Libpsml        |1.1.9         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
+|Libpsml        |1.1.10        |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
 |Libxc          |4.3.4         |C          |Fortran,C++|               |<http://www.tddft.org/programs/libxc>                     |
 |libGridXC      |0.9.5         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libgridxc>   |
 |libvdwxc       |0.4.0         |C          |Fortran    |FFTW           |<https://libvdwxc.org/>                                   |
