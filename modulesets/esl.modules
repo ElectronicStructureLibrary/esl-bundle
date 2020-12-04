@@ -127,7 +127,7 @@
   </makesys>
 
   <autotools id="libgridxc" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=no">
-    <branch repo="local" module="libgridxc-0.9.5.tar.gz" version="0.9.5" checkoutdir="libgridxc" hash="md5:fa3044ddc9775cb87fde27e046165e85"/>
+    <branch repo="local" module="libgridxc-0.9.6.tar.gz" version="0.9.6" checkoutdir="libgridxc" hash="md5:ab3a7ad69f21d818614fc1691131c188"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
@@ -142,7 +142,7 @@
   </autotools>
 
   <autotools id="libgridxc-mpi" autogen-sh="configure" autogenargs="--enable-multiconfig --with-libxc=$JHBUILD_PREFIX --with-mpi=yes">
-    <branch repo="local" module="libgridxc-0.9.5.tar.gz" version="0.9.5" checkoutdir="libgridxc-mpi" hash="md5:fa3044ddc9775cb87fde27e046165e85"/>
+    <branch repo="local" module="libgridxc-0.9.6.tar.gz" version="0.9.6" checkoutdir="libgridxc-mpi" hash="md5:ab3a7ad69f21d818614fc1691131c188"/>
     <dependencies>
       <dep package="libxc"/>
     </dependencies>
