@@ -19,4 +19,4 @@ module_cmakeargs['NTPoly'] = "-DCMAKE_Fortran_FLAGS_RELEASE='-O3 -march=native -
 module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
 module_autogenargs['libvdwxc-mpi']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx"
 module_makeargs['libvdwxc-mpi']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx VERBOSE=1"
-module_autogenargs['matrixswitch']="--with-mpi LINALG_LIBS='-lopenblas -lscalapack'"
+module_autogenargs['matrixswitch']=" FCFLAGS='-fallow-argument-mismatch' --with-mpi LINALG_LIBS='-lopenblas -lscalapack'"

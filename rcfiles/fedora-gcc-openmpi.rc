@@ -19,4 +19,4 @@ module_cmakeargs['pexsi'] = "-DCMAKE_Fortran_COMPILER=mpifort -DCMAKE_C_COMPILER
 module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
 module_autogenargs['libvdwxc-mpi']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx"
 module_makeargs['libvdwxc-mpi']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx VERBOSE=1"
-module_autogenargs['matrixswitch']="--with-mpi LINALG_LIBS='-lopenblas -lscalapack'"
+module_autogenargs['matrixswitch']=" FCFLAGS='-fallow-argument-mismatch' --with-mpi LINALG_LIBS='-lopenblas -lscalapack'"
