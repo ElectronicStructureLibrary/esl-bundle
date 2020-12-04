@@ -55,9 +55,9 @@ parser.add_argument("--conditions",
         help="Inform JHBuild of specific conditions applying to the" + \
                 " current build, instead of just building everything" + \
                 " unconditionally (EXPERIMENTAL)")
-parser.add_argument("--exit-on-error",
-        dest="stop", action="store_true",
-        help="Tell JHBuild to stop at the first error encountered")
+parser.add_argument("--no-exit-on-error",
+        dest="nostop", action="store_true",
+        help="Tell JHBuild not to stop at the first error encountered")
 parser.add_argument("--no-interact",
         dest="unattended", action="store_true",
         help="Tell JHBuild not to prompt the user for input")
@@ -80,7 +80,7 @@ jh_opt = []
 if args.conditions:
     if len(args.conditions) > 0:
         jh_opt += ["--conditions='%s'" % item for item in args.conditions]
-if args.stop:
+if not args.nostop:
     jh_opt.append("--exit-on-error")
 if args.unattended:
     jh_opt.append("--no-interact")
