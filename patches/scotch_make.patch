@@ -31,7 +31,7 @@
 +	$(MAKE) -C src scotch libscotch
 +
 +install: 
-+	(cd src && $(MAKE) $@) 
++	(cd src && $(MAKE) installstubs $@)
 --- src/Makefile.orig	2020-12-04 10:35:14.682447674 +0100
 +++ src/Makefile	2020-12-04 10:36:28.050344092 +0100
 @@ -56,41 +56,41 @@
@@ -42,7 +42,8 @@
 -includedir	?= $(prefix)/include
 +bindir		?= $(DESTDIR)$(prefix)/bin
 +includedir	?= $(DESTDIR)$(prefix)/include
- includestub     ?= include_stub
+-includestub     ?= include_stub
++includestub     ?= include
 -includestubdir	?= $(prefix)/$(includestub)
 -libdir		?= $(prefix)/lib
 -datarootdir	?= $(prefix)/share
