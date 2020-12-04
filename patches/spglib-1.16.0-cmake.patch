@@ -22,7 +22,7 @@
  
  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 -
-+set(PROJECT_VERSION 1.14.1)
++set(PROJECT_VERSION 1.16.0)
  
  # Version numbers
  file(READ ${PROJECT_SOURCE_DIR}/src/version.h version_file)
