@@ -92,6 +92,7 @@
       <patch file="pexsi_elsi_2.3.1_happy.patch" strip="1"/>
       <patch file="pexsi_cmake.patch" strip="1"/>
       <patch file="pexsi-1.2.0-cname.patch" strip="0"/>
+      <patch file="pexsi-1.2.0-mpi30.patch" strip="0"/>
     </branch>
     <dependencies>
       <dep package="fakepc"/>
