@@ -1,0 +1,42 @@
+--- BSEPACK/make.inc_orig	2020-12-04 15:31:08.783749961 +0100
++++ BSEPACK/make.inc	2020-12-04 15:32:22.151967651 +0100
+@@ -4,9 +4,9 @@
+ # This file needs to be modified according to your computational environment.
+ #
+ 
+-BLASLIB      = $(HOME)/lib/libopenblas.a -lpthread
+-LAPACKLIB    = $(HOME)/lib/libtmglib.a $(HOME)/lib/liblapack.a
+-SCALAPACKLIB = $(HOME)/lib/libscalapack.a
++BLASLIB      = $(LIBS_BLAS)
++LAPACKLIB    = $(LIBS_LAPACK)
++SCALAPACKLIB = $(LIBS_SCALAPACK)
+ LIBS         = $(BSEPACKLIB) $(SSEIGLIB) \
+                $(SCALAPACKLIB) $(LAPACKLIB) $(BLASLIB) -lm
+ 
+@@ -15,11 +15,7 @@
+ RANLIB       = ranlib
+ 
+ DEFS         =
+-CC           = mpicc
+-CFLAGS       = $(DEFS) -O2 -Wall
+-FC           = mpif90
+-FFLAGS       = -cpp $(DEFS) -O2 \
+-               -Wall -fimplicit-none -finit-real=nan -fbounds-check
++FFLAGS       = $(FCFLAGS)
+ NOOPTS       =
+ LOADER       = $(FC)
+ LDFLAGS      =
+--- BSEPACK/Makefile_orig	2020-12-04 16:01:26.150643877 +0100
++++ BSEPACK/Makefile	2016-12-20 00:35:47.000000000 +0100
+@@ -19,3 +19,11 @@
+ 	cd SRC && make clean && cd ..
+ 	cd TESTING && make clean && cd ..
+ 	cd EXAMPLES && make clean && cd ..
++
++libdir ?= $(DESTDIR)$(prefix)/lib
++
++$(libdir):
++	mkdir -p $(libdir)
++
++install: $(libdir)
++	cp lib/libbsepack.a lib/libsseig.a $(libdir)

@@ -68,17 +68,24 @@
     <branch repo="local" module="elpa-2020.05.001.tar.gz" version="2020.05.001" hash="md5:d0f623ffa94b6c1de1c885a63e09a381"/>
   </autotools>
 
+  <makesys id="BSEPACK">
+    <branch repo="local" module="bsepack-0.1.tar.gz" version="0.1" checkoutdir="BSEPACK" hash="md5:f63731359960a1a76b5927660d309afb">
+      <patch file="bsepack_make.patch" strip="1"/>
+    </branch>
+  </makesys>
+
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
     <branch repo="local" module="NTPoly-ntpoly-v2.5.1.tar.gz" version="2.5.1" hash="md5:f022b099119d1039836cb38a40a7d14c"/>
   </cmake>
 
-  <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=On -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2020.05.001/modules"'>
+  <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=ON -DENABLE_BSEPACK=ON -DUSE_EXTERNAL_BSEPACK=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2020.05.001/modules"'>
     <branch repo="local" module="elsi-2.5.0.tar.gz" version="2.5.0" ha2sh="md5:d9d17d1348d40301681c070c56ba29dd"/>
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
       <dep package="NTPoly"/>
       <dep package="pexsi"/>
+      <dep package="BSEPACK"/>
       <if condition-unset="no_elpa">
         <dep package="elpa-mpi"/>
       </if>
