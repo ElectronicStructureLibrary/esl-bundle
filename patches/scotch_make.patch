@@ -1,6 +1,7 @@
 --- /dev/null	2018-02-10 00:11:08.221711737 +0100
 +++ src/Makefile.inc	2018-02-10 14:09:07.351480495 +0100
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,22 @@
++includestub    = include
 +EXE		=
 +LIB		= .so
 +OBJ		= .o
@@ -31,27 +32,37 @@
 +
 +install: 
 +	(cd src && $(MAKE) $@) 
---- src/Makefile.orig	2018-02-10 23:25:22.235848785 +0100
-+++ src/Makefile	2018-02-10 23:24:40.602977495 +0100
-@@ -56,11 +56,11 @@ Makefile.inc			:
+--- src/Makefile.orig	2020-12-04 10:35:14.682447674 +0100
++++ src/Makefile	2020-12-04 10:36:28.050344092 +0100
+@@ -56,41 +56,41 @@
  include Makefile.inc
  
  prefix		?= /usr/local
 -bindir		?= $(prefix)/bin
 -includedir	?= $(prefix)/include
++bindir		?= $(DESTDIR)$(prefix)/bin
++includedir	?= $(DESTDIR)$(prefix)/include
+ includestub     ?= include_stub
+-includestubdir	?= $(prefix)/$(includestub)
 -libdir		?= $(prefix)/lib
 -datarootdir	?= $(prefix)/share
 -mandir		?= $(datarootdir)/man
-+bindir		?= $(DESTDIR)$(prefix)/bin
-+includedir	?= $(DESTDIR)$(prefix)/include
++includestubdir	?= $(DESTDIR)$(prefix)/$(includestub)
 +libdir		?= $(DESTDIR)$(prefix)/lib
 +datarootdir	?= $(DESTDIR)$(prefix)/share
 +mandir		?= $(datarootdir)$(prefix)/man
  
  ../bin				:
- 					-$(MKDIR) ../bin
-@@ -72,22 +72,22 @@ mandir		?= $(datarootdir)/man
- 					-$(MKDIR) ../lib
+-					-$(MKDIR) ../bin
++					-$(MKDIR) -p ../bin
+ 
+ ../include			:
+-					-$(MKDIR) ../include
++					-$(MKDIR) -p ../include
+ 
+ ../lib				:
+-					-$(MKDIR) ../lib
++					-$(MKDIR) -p ../lib
  
  $(bindir)			:
 -					-$(MKDIR) $(bindir)
@@ -63,7 +74,9 @@
  
  $(includedir)			:
 -					-$(MKDIR) $(includedir)
+-					-$(MKDIR) $(includestubdir)
 +					-$(MKDIR) -p $(includedir)
++					-$(MKDIR) -p $(includestubdir)
  
  $(libdir)			:
 -					-$(MKDIR) $(libdir)
@@ -77,13 +90,5 @@
 -					-$(MKDIR) $(mandir)/man1
 +					-$(MKDIR) -p $(mandir)/man1
  
- scotch				:	required
+ libscotch			:	required
  					(cd libscotch ;      $(MAKE) VERSION=$(VERSION) RELEASE=$(RELEASE) PATCHLEVEL=$(PATCHLEVEL) scotch && $(MAKE) install)
-@@ -115,6 +115,7 @@ install				:	required	$(bindir)	$(includ
- 					-$(CP) -f ../bin/[agm]*$(EXE) $(bindir)
- 					-$(CP) -f ../bin/d[agm]*$(EXE) $(bindir)
- 					-$(CP) -f ../include/*scotch*.h $(includedir)
-+					-$(CP) -f ../include/*metis*.h $(includedir)
- 					-$(CP) -f ../lib/*scotch*$(LIB) $(libdir)
- 					-$(CP) -Rf ../man/* $(mandir)
- 
