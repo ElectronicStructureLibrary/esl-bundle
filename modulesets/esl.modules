@@ -149,6 +149,14 @@
     </dependencies>
   </autotools>
 
+  <cmake id="dftbplus" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DWITH_API=True -DWITH_MPI=False'>
+    <branch repo="local" module="DFTB+-20.2.tar.gz" version="20.2" checkoutdir="dftbplus-20.2" hash="md5:bec0f7f133654f7b8cc9a6381afa3ced"/>
+  </cmake>
+
+  <cmake id="dftbplus-mpi" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DWITH_API=True -DWITH_MPI=True'>
+    <branch repo="local" module="DFTB+-20.2.tar.gz" version="20.2" checkoutdir="dftbplus-20.2-mpi" hash="md5:bec0f7f133654f7b8cc9a6381afa3ced"/>
+  </cmake>
+
   <autotools id="fakepc" autogen-sh="configure">
     <branch repo="local" module="fakepc-0.2.0.tar.gz" version="0.2.0" hash="md5:ae032a40153a231d9ba1d639c6cd4e92"/>
     <dependencies>
@@ -173,6 +181,7 @@
       <if condition-unset="no_elpa">
         <dep package="elpa"/>
       </if>
+      <dep package="dftbplus"/>
     </dependencies>
   </metamodule>
 
@@ -192,6 +201,7 @@
       <if condition-unset="no_elpa">
         <dep package="elpa-mpi"/>
       </if>
+      <dep package="dftbplus-mpi+"/>
     </dependencies>
   </metamodule>
 
