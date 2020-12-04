@@ -23,3 +23,4 @@ module_makeargs['libvdwxc-mpi']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx VERBOS
 module_autogenargs['matrixswitch']=" FCFLAGS='-fallow-argument-mismatch' --with-mpi LINALG_LIBS='-lopenblas -lscalapack'"
 module_makeargs['wannier90-mpi']="all COMMS=mpi PREFIX='' FCOPTS?='-O3 -fallow-argument-mismatch'"
 module_cmakeargs['libmbd-mpi'] = "-DSCALAPACK_LIBRARIES='/usr/lib64/openmpi/lib/libscalapack.so'"
+module_cmakeargs['dftbplus-mpi'] = "-DSCALAPACK_LIBRARY='-lscalapack' -DCMAKE_Fortran_COMPILER=mpifort -DCMAKE_C_COMPILER=mpicc"
