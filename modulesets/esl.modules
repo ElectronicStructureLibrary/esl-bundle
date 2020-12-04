@@ -60,11 +60,11 @@
     <branch repo="local" module="libfdf-0.2.2.tar.gz" version="0.2.2" hash="md5:ffa39f8640b3dae8962e62b3956f79d9"/>
   </autotools>
 
-  <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
+  <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no --disable-avx512">
     <branch repo="local" module="elpa-2020.05.001.tar.gz" version="2020.05.001" hash="md5:d0f623ffa94b6c1de1c885a63e09a381"/>
   </autotools>
 
-  <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
+  <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes --disable-avx512">
     <branch repo="local" module="elpa-2020.05.001.tar.gz" version="2020.05.001" hash="md5:d0f623ffa94b6c1de1c885a63e09a381"/>
   </autotools>
 
