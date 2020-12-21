@@ -7,8 +7,8 @@ makeargs="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF
 
 module_autogenargs['fakepc']="linalg='-lscalapack -lopenblas'"
 
-module_autogenargs['futile']=autogenargs+" --with-scalapack=scalapack --with-blacs="
-module_autogenargs['psolver']=autogenargs+" --with-scalapack=scalapack --with-blacs="
+module_autogenargs['futile']=autogenargs+" FCFLAGS='-fallow-argument-mismatch' --with-scalapack=scalapack --with-blacs="
+module_autogenargs['psolver']=autogenargs+" FCFLAGS='-fallow-argument-mismatch' --with-scalapack=scalapack --with-blacs="
 module_autogenargs['fdf']=" FC=gfortran"
 
 module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99' -DCMAKE_C_COMPILER='mpicc' -DCMAKE_CXX_COMPILER='mpicxx' -DCMAKE_Fortran_COMPILER='mpifort'"

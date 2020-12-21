@@ -6,3 +6,5 @@ makeargs="VERBOSE=1"
 
 module_autogenargs['elpa']=" CFLAGS='-march=native' FCFLAGS='-ffree-line-length-none' "
 module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
+module_autogenargs['futile']="FCFLAGS='-fallow-argument-mismatch'"
+module_autogenargs['psolver']="FCFLAGS='-fallow-argument-mismatch'"
