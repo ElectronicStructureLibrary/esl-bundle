@@ -1,0 +1,22 @@
+  # Global arguments
+
+autogenargs="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF90=mpif90"
+makeargs="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx MPIFC=mpif90 MPICC=mpicc MPIF90=mpif90 VERBOSE=1"
+
+# Specific configure arguments for each module
+
+module_autogenargs['fakepc']="linalg='-lscalapack -lopenblas'"
+
+module_autogenargs['futile']=autogenargs+"  --with-scalapack=scalapack --with-blacs="
+module_autogenargs['psolver-mpi']=autogenargs+" --with-scalapack=scalapack --with-blacs="
+module_autogenargs['fdf']=" FC=gfortran"
+
+module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99' -DCMAKE_C_COMPILER='mpicc' -DCMAKE_CXX_COMPILER='mpicxx' -DCMAKE_Fortran_COMPILER='mpifort'"
+module_autogenargs['elpa-mpi']=autogenargs+" CFLAGS='-march=native' FCFLAGS='-ffree-line-length-none '"
+module_cmakeargs['elsi'] = "-DCMAKE_Fortran_COMPILER=mpifort -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_CXX_FLAGS='-std=c++11'"
+module_cmakeargs['pexsi'] = "-DCMAKE_Fortran_COMPILER=mpifort -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx"
+module_cmakeargs['NTPoly'] = "-DCMAKE_Fortran_FLAGS_RELEASE='-O3 -march=native'"
+module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
+module_autogenargs['libvdwxc-mpi']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx"
+module_makeargs['libvdwxc-mpi']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx VERBOSE=1"
+module_autogenargs['matrixswitch']="--with-mpi LINALG_LIBS='-lopenblas -lscalapack'"
