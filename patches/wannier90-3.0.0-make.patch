@@ -29,7 +29,7 @@
 +F90 ?= gfortran
 +COMMS?=mpi
 +MPIF90?=mpif90
-+FCOPTS?=-O3
++FCOPTS?=-O3 
 +LDOPTS?=-O3
 +
 +#=======================

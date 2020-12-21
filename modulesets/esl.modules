@@ -92,6 +92,7 @@
       <patch file="pexsi_elsi_2.3.1_happy.patch" strip="1"/>
       <patch file="pexsi_cmake.patch" strip="1"/>
       <patch file="pexsi-1.2.0-cname.patch" strip="0"/>
+      <patch file="pexsi-1.2.0-mpi30.patch" strip="0"/>
     </branch>
     <dependencies>
       <dep package="fakepc"/>
@@ -181,7 +182,7 @@
     </dependencies>
   </autotools>
 
-  <cmake id="spglib" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DWITH_Fortran=on'>
+  <cmake id="spglib" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DWITH_Fortran=on' makeargs="-j 1">
     <branch repo="local" module="spglib-1.14.1.tar.gz" version="1.14.1" hash="md5:f39a11c43e6967c54b1a73b0149a41a0">
       <patch file="spglib-1.14.1-cmake.patch" strip="0"/>
     </branch>
