@@ -60,12 +60,12 @@
     <branch repo="local" module="libfdf-0.2.2.tar.gz" version="0.2.2" hash="md5:ffa39f8640b3dae8962e62b3956f79d9"/>
   </autotools>
 
-  <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no">
-    <branch repo="local" module="elpa-2019.05.002.tar.gz" version="2019.05.002" hash="md5:f2213cebfa8e2ae3a55a2479fa7dab5d"/>
+  <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no --disable-avx512">
+    <branch repo="local" module="elpa-2020.05.001.tar.gz" version="2020.05.001" hash="md5:d0f623ffa94b6c1de1c885a63e09a381"/>
   </autotools>
 
-  <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes">
-    <branch repo="local" module="elpa-2019.05.002.tar.gz" version="2019.05.002" hash="md5:f2213cebfa8e2ae3a55a2479fa7dab5d"/>
+  <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes --disable-avx512">
+    <branch repo="local" module="elpa-2020.05.001.tar.gz" version="2020.05.001" hash="md5:d0f623ffa94b6c1de1c885a63e09a381"/>
   </autotools>
 
   <makesys id="BSEPACK">
@@ -78,7 +78,7 @@
     <branch repo="local" module="NTPoly-ntpoly-v2.5.1.tar.gz" version="2.5.1" hash="md5:f022b099119d1039836cb38a40a7d14c"/>
   </cmake>
 
-  <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=ON -DENABLE_BSEPACK=ON -DUSE_EXTERNAL_BSEPACK=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2019.05.002/modules"'>
+  <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=ON -DENABLE_BSEPACK=ON -DUSE_EXTERNAL_BSEPACK=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2020.05.001/modules"'>
     <branch repo="local" module="elsi-2.6.5.tar.gz" version="2.6.4" hash="md5:6b9b1bcacfc89e07496e970e2205122c"/>
     <dependencies>
       <dep package="fakepc"/>
