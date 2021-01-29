@@ -68,17 +68,24 @@
     <branch repo="local" module="elpa-2019.05.002.tar.gz" version="2019.05.002" hash="md5:f2213cebfa8e2ae3a55a2479fa7dab5d"/>
   </autotools>
 
+  <makesys id="BSEPACK">
+    <branch repo="local" module="bsepack-0.1.tar.gz" version="0.1" checkoutdir="BSEPACK" hash="md5:f63731359960a1a76b5927660d309afb">
+      <patch file="bsepack_make.patch" strip="1"/>
+    </branch>
+  </makesys>
+
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
     <branch repo="local" module="NTPoly-2.4.0.tar.gz" version="2.4.0" hash="md5:771ebddfaa7c72306e0384e2d1d028c5"/>
   </cmake>
 
-  <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=On -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2019.05.002/modules"'>
-    <branch repo="local" module="elsi-2.6.5.tar.gz" version="2.6.4" ha2sh="md5:6b9b1bcacfc89e07496e970e2205122c"/>
+  <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=ON -DENABLE_BSEPACK=ON -DUSE_EXTERNAL_BSEPACK=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2019.05.002/modules"'>
+    <branch repo="local" module="elsi-2.6.5.tar.gz" version="2.6.4" hash="md5:6b9b1bcacfc89e07496e970e2205122c"/>
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
       <dep package="NTPoly"/>
       <dep package="pexsi"/>
+      <dep package="BSEPACK"/>
       <if condition-unset="no_elpa">
         <dep package="elpa-mpi"/>
       </if>
