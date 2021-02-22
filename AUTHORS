@@ -25,6 +25,10 @@ be found at:
 
 The ESL Bundle includes the following libraries:
 
+  - BSEPACK, written by Meiyue Shao and Chao Yang, and distributed under
+    modified BSD License.
+    https://sites.google.com/a/lbl.gov/bsepack/
+
   - Fdict and Flook, written by Nick Ruebner Papior, and distributed under
     the GNU Lesser Public General License version 3.
     https://github.com/zerothi/fdict

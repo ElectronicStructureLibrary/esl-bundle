@@ -6,6 +6,8 @@ library in the corresponding sources.
 
 Currently the following libraries are included:
 
+  - BSEPACK, distributed under a modified BSD 3-clause License.
+
   - Fdict, distributed under the GNU Lesser Public General License version 3.
 
   - Flook, distributed under the GNU Lesser Public General License version 3.

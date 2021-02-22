@@ -15,6 +15,7 @@ module_cmakeargs['superlu_dist'] = "-DCMAKE_C_FLAGS='-std=c99' -DCMAKE_C_COMPILE
 module_autogenargs['elpa-mpi']=autogenargs+" CFLAGS='-march=native' FCFLAGS='-ffree-line-length-none -fallow-argument-mismatch' "
 module_cmakeargs['elsi'] = "-DCMAKE_Fortran_COMPILER=mpifort -DCMAKE_Fortran_FLAGS='-fallow-argument-mismatch' -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_CXX_FLAGS='-std=c++11'"
 module_cmakeargs['NTPoly'] = "-DCMAKE_Fortran_FLAGS_RELEASE='-O3 -march=native -fallow-argument-mismatch'"
+module_makeargs['BSEPACK'] = makeargs+" LIBS_BLAS='-lopenblas' LIBS_SCALAPACK='-lscalapack' FCFLAGS='-O3 -fallow-argument-mismatch'"
 module_cmakeargs['pexsi'] = "-DCMAKE_Fortran_COMPILER=mpifort -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx"
 module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
 module_autogenargs['libvdwxc-mpi']="F77=mpif90 FC=mpif90 CC=mpicc CXX=mpicxx"
