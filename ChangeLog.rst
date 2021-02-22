@@ -6,6 +6,25 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`_,
 and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
+[0.6.0-1] - To be released
+==========================
+
+Added
+-----
+- BSEPACK v0.1.
+- Libmdb v0.10.2.
+
+Changed
+-------
+- Libpsml to v1.1.10.
+- LibGridXC to v0.9.6.
+- NTPoly to v2.5.1.
+- ELSI to v2.6.4.
+- ELPA to v2020.05.001.
+- scotch to v6.1.0.
+- Sgplib to v1.16.0.
+- Wannier90 to 3.1.0.
+
 [0.5.0-1] - 2020-05-08
 ======================
 

@@ -35,29 +35,31 @@ This is a complete list of packages included in the `ESL Bundle`.
 
 |Package        |Version       |Language   |Bindings   | Other dependencies |Website                                              |
 |-------------- |------------- |---------- |---------- |-------------- |----------------------------------------------------------|
+|BSEPACK        |0.1           |Fortran    |           |               |<https://sites.google.com/a/lbl.gov/bsepack/>             |
 |ELSI-RCI       |0.1.0         |Fortran    |           |               |<http://elsi-interchange.org/>                            |
 |Fdict          |0.8.0         |Fortran    |           |               |<https://github.com/zerothi/fdict>                        |
 |Flook          |0.8.1         |Fortran    |           |Lua            |<https://github.com/ElectronicStructureLibrary/flook>     |
 |Futile         |1.8.3         |Fortran    |C          |               |<https://gitlab.com/l_sim/futile>                         |
 |Libfdf         |0.2.2         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libfdf>      |
-|Libpsml        |1.1.9         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
+|Libmbd         |0.10.2        |Fortran    |C          |               |<https://github.com/jhrmnn/libmbd>                        |
+|Libpsml        |1.1.10        |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
 |Libxc          |4.3.4         |C          |Fortran,C++|               |<http://www.tddft.org/programs/libxc>                     |
-|libGridXC      |0.9.5         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libgridxc>   |
+|libGridXC      |0.9.6         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libgridxc>   |
 |libvdwxc       |0.4.0         |C          |Fortran    |FFTW           |<https://libvdwxc.org/>                                   |
-|NTPoly         |2.4.0         |Fortran    |           |               |<https://github.com/william-dawson/NTPoly>                |
+|NTPoly         |2.5.1         |Fortran    |           |               |<https://github.com/william-dawson/NTPoly>                |
 |PSolver        |1.8.3         |Fortran    |           |               |<https://gitlab.com/l_sim/psolver>                        |
 |pspio          |0.2.4         |C          |Fortran    |GSL            |<https://gitlab.com/ElectronicStructureLibrary/libpspio>  |
 |xmlf90         |1.5.4         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/xmlf90>      |
-|ELSI           |2.5.0         |Fortran    |C          |               |<http://elsi-interchange.org/>                            |
-|ELPA           |2019.05.002   |           |           |               |<https://gitlab.mpcdf.mpg.de/elpa/elpa>                   |
+|ELSI           |2.6.4         |Fortran    |C          |               |<http://elsi-interchange.org/>                            |
+|ELPA           |2020.05.001   |           |           |               |<https://gitlab.mpcdf.mpg.de/elpa/elpa>                   |
 |LibOMM         |              |           |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm>       |
 |MatrixSwitch   |              |           |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm>       |
 |PEXSI          |1.2.0         |C++        |Fortran    |               |<http://www.pexsi.org>                                    |
 |SIPs           |              |           |           |               |<http://bitbucket.org/keceli/qetsc>                       |
 |SuperLU_DIST   |6.2.0         |           |           |               |<http://crd-legacy.lbl.gov/~xiaoye/SuperLU>               |
-|scotch         |6.0.0         |           |           |               |<https://www.labri.fr/perso/pelegrin/scotch>              |
-|Spglib         |1.14.1        |           |           |               |<https://github.com/atztogo/spglib>                       |
-|Wannier90      |3.0.0         |           |           |               |<http://www.wannier.org>                                  |
+|scotch         |6.1.0         |           |           |               |<https://www.labri.fr/perso/pelegrin/scotch>              |
+|Spglib         |1.16.0        |           |           |               |<https://github.com/atztogo/spglib>                       |
+|Wannier90      |3.1.0         |           |           |               |<http://www.wannier.org>                                  |
 
 ## Installation
 
