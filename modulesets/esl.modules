@@ -50,7 +50,7 @@
   </autotools>
 
   <autotools id="libpsml" autogen-sh="configure" autogenargs="--with-xmlf90=$JHBUILD_PREFIX">
-    <branch repo="local" module="libpsml-1.1.9.tar.gz" version="1.1.9" hash="md5:c43fb64fb8bac3f41ca1f04ca1623325"/>
+    <branch repo="local" module="libpsml-1.1.10.tar.gz" version="1.1.10" hash="md5:e5176e95dbe495762b64d0e5661b0258"/>
     <dependencies>
       <dep package="xmlf90"/>
     </dependencies>
