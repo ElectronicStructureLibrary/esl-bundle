@@ -51,6 +51,10 @@ The ESL Bundle includes the following libraries:
     the GNU General Public License version 3.
     http://bigdft.org/
 
+  - LibGridXC, written by the Developers of SIESTA, and distributed under
+    a custom License.
+    https://gitlab.com/siesta-project/libraries/libgridxc
+
   - Pspio, written by Micael Oliveira, Yann Pouillon, Joseba Alberdi
     and Matthieu Verstraete, and distributed under the GNU Lesser
     General Public License version 2.1.
