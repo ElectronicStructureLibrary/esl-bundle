@@ -110,7 +110,7 @@ The ESL Bundle includes the following libraries:
 
   - Libmbd, written by Jan Hermann and distributed under Mozilla Public License
     version 2.0.
-    https://github.com/jhrmnn/libmbd
+    https://github.com/libmbd/libmbd
 
   The ESL Bundle also includes the ELSI Bundle, which also contains the following libraries:
 
