@@ -108,6 +108,10 @@ The ESL Bundle includes the following libraries:
     and distributed under the BSD 3-clause License.
     https://math.berkeley.edu/~linlin/pexsi/
 
+  - Libmbd, written by Jan Hermann and distributed under Mozilla Public License
+    version 2.0.
+    https://github.com/libmbd/libmbd
+
   The ESL Bundle also includes the ELSI Bundle, which also contains the following libraries:
 
   - ELSI, written by the ELSI Team, and distributed under the BSD 3-clause

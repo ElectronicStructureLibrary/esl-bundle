@@ -200,6 +200,17 @@
     </branch>
   </cmake>
 
+  <cmake id="libmbd" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF'>
+    <branch repo="local" module="libmbd-0.10.4.tar.gz" version="0.10.4" hash="md5:ea4cf4e6068a5c84f5ca730f36286eb0"/>
+  </cmake>
+
+  <cmake id="libmbd-mpi" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DENABLE_SCALAPACK_MPI=ON -DENABLE_ELSI=ON'>
+    <branch repo="local" module="libmbd-0.10.4.tar.gz" version="0.10.4" hash="md5:ea4cf4e6068a5c84f5ca730f36286eb0"/>
+    <dependencies>
+      <dep package="elsi"/>
+    </dependencies>
+  </cmake>
+
   <metamodule id="esl-bundle">
     <dependencies>
       <dep package="fdict"/>
@@ -218,6 +229,7 @@
       <dep package="spglib"/>
       <dep package="wannier90"/>
       <dep package="else_rci"/>
+      <dep package="libmbd"/>
     </dependencies>
   </metamodule>
 
@@ -241,6 +253,7 @@
       <dep package="spglib"/>
       <dep package="wannier90-mpi"/>
       <dep package="else_rci"/>
+      <dep package="libmbd-mpi"/>
     </dependencies>
   </metamodule>
 
