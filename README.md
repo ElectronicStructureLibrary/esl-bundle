@@ -13,7 +13,7 @@ ESL stands for Electronic Structure Library, an initiative which
 distributes quality software and promotes open standards for
 high-performance computing applications in the field of electronic
 structure calculations. More details can be found on the [ESL
-Wiki](https://esl.cecam.org/).
+website](https://esl.cecam.org/).
 
 ## Requirements
 
