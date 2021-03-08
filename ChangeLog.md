@@ -1,21 +1,17 @@
-Changelog
-~~~~~~~~~
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
-The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`_,
-and this project adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-[0.6.0-1] - To be released
-==========================
+## [0.6.0-1] - To be released
 
-Added
------
+### Added
 - BSEPACK v0.1.
 - Libmdb v0.10.2.
 
-Changed
--------
+## Changed
 - Libpsml to v1.1.10.
 - LibGridXC to v0.9.6.
 - NTPoly to v2.5.1.
@@ -25,11 +21,9 @@ Changed
 - Sgplib to v1.16.0.
 - Wannier90 to 3.1.0.
 
-[0.5.0-1] - 2020-05-08
-======================
+## [0.5.0-1] - 2020-05-08
 
-Added
------
+### Added
 - sgplib v1.14.1
 - wannier90 v3.0.0
 - ELSI-RCI v0.1.0
@@ -37,8 +31,7 @@ Added
 - LibOMM v1.0.0 as a stand-alone library.
 - install-bundle wrapper to make the use of JHBuild easier.
 
-  Changed
--------
+### Changed
 - Fdict to v0.8.0.
 - Flook to v0.8.1.
 - Libfdf to v0.2.2.
@@ -48,35 +41,27 @@ Added
 - ELSI to v2.5.0
 - JHBuild to a new version supporting Python 3.
 
-[0.4.2-1] - 25-02-2020
-======================
+## [0.4.2-1] - 25-02-2020
 
-Changed
--------
+### Changed
 - LibPSML to v1.1.9.
 - ELPA to v2019.05.002.
 
-[0.4.1-1] - 2020-02-22
-======================
+## [0.4.1-1] - 2020-02-22
 
-Fixed
------
+### Fixed
 - URLs of several package websites.
 
-Changed
--------
+### Changed
 - LibPSML to v1.1.8.
 
-[0.4.0-1] - 2020-02-21
-======================
+## [0.4.0-1] - 2020-02-21
 
-Fixed
------
+### Fixed
 - Compilation of Futile with recent intel compilers.
 - Installation of Flook and Fdict on MacOS.
 
-Changed
--------
+### Changed
 - LibGridXC with autotoolized build system to 0.8.5.1.
 - Fdict to v0.7.1.
 - libvdwxc to v0.4.0.
@@ -87,45 +72,35 @@ Changed
 - ELSI to v2.3.1
 - PEXSI to v1.2.0.
 
-[0.3.1-2] - 2019-01-18
-==========================
+## [0.3.1-2] - 2019-01-18
 
-Added
------
+### Added
 - Documentation about the bundle release process.
 
-[0.3.1-1] - 2019-01-17
-==========================
+## [0.3.1-1] - 2019-01-17
 
-Fixed
------
+### Fixed
 - Name of Libvdwxc in documentatation.
 - ChangeLog.
 - LibGridXC build-system by updating to v0.8.4.2.
 
-Changed
--------
+### Changed
 - Futile to align it with upstream BigDFT/Futile v1.8.3.
 - PSolver to align it with upstream BigDFT/PSolver v1.8.3.
 
-[0.3.0-2] - 2019-01-15
-========================
+## [0.3.0-2] - 2019-01-15
 
-Added
------
+### Added
 - Configuration files: ubuntu-gcc-serial.rc, ubuntu-gcc-openmpi.rc, fedora-gcc-serial.rc, fedora-gcc-openmpi.rc, centos-gcc-serial.rc, centos-gcc-openmpi.rc.
-  
-[0.3.0-1] - 2019-01-14
-========================
 
-Added
------
+## [0.3.0-1] - 2019-01-14
+
+### Added
 - Libvdwxc v0.3.2.
 - NTPoly v2.1.
 - PEXSI as a stand-alone library.
-  
-Changed
--------
+
+### Changed
 - Fdict to v0.6.0.
 - Libxc to v4.2.3.
 - LibGridXC to v0.8.4.
@@ -134,56 +109,43 @@ Changed
 - PEXSI to v1.0.3.
 - scotch to v6.0.0.
 
-Removed
--------
+### Removed
 - libyaml v0.1.6.
 
-[0.2.0-4] - 2019-01-14
-========================
+## [0.2.0-4] - 2019-01-14
 
-Fixed
------
+### Fixed
 - Incorrect Python requirements in documentation.
 
-[0.2.0-3] - 2019-01-12
-========================
+## [0.2.0-3] - 2019-01-12
 
-Fixed
------
+### Fixed
 - Incorrect ELPA version number in documentation.
 - Bug in configuration files:  compilation of xmlf90 was failing with GCC because of long lines.
 
-[0.2.0-2] - 2019-01-12
-========================
+## [0.2.0-2] - 2019-01-12
 
-Fixed
------
+### Fixed
 - Typo in documentation.
-  
-[0.2.0-1] - 2018-07-09
-========================
 
-Added
------
+## [0.2.0-1] - 2018-07-09
+
+### Added
 - ELPA as a stand-alone library.
 - Author and license information for scotch and superlu_dist.
 - Configuration files: debian-gcc-serial.rc, opensuse-gcc-serial.rc.
-  
-Changed
--------
+
+### Changed
 - ELSI to v2.0.2
 - ELPA to v2018.05.001.
 - Configuration files for new ELSI version.
-  
-Fixed
------
-- Incorrect scotch version number in documentation.
-  
-[0.1.0] - 2018-06-07
-========================
 
-Added
------
+### Fixed
+- Incorrect scotch version number in documentation.
+
+## [0.1.0] - 2018-06-07
+
+### Added
 - Fdict v0.5.0.
 - Flook v0.7.0.
 - Futile v1.8.
