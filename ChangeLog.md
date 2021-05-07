@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.1-1] - To be released
 
 ## Changed
+- Spglib to v1.16.1.
 - ELPA to v2020.11.001.
 
 ## [0.6.0-1] - 2020-03-12

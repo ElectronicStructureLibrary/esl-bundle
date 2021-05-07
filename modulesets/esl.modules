@@ -189,8 +189,8 @@
   </autotools>
 
   <cmake id="spglib" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DWITH_Fortran=on'>
-    <branch repo="local" module="spglib-1.16.0.tar.gz" version="1.16.0" hash="md5:e11d35a7c3a85029a833f67f3c89a44a">
-      <patch file="spglib-1.16.0-cmake.patch" strip="0"/>
+    <branch repo="local" module="spglib-1.16.1.tar.gz" version="1.16.1" hash="md5:1933e2252a0e708951ee476eb93f6495">
+      <patch file="spglib-1.16.1-cmake.patch" strip="0"/>
     </branch>
   </cmake>
 
