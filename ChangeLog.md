@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.1-1] - To be released
 
-## Changed
+### Changed
 - Spglib to v1.16.1.
 - ELPA to v2020.11.001.
 
@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - BSEPACK v0.1.
 - Libmdb v0.10.2.
 
-## Changed
+### Changed
 - Libpsml to v1.1.10.
 - LibGridXC to v0.9.6.
 - NTPoly to v2.5.1.
