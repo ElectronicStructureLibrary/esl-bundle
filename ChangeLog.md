@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 =======
 ## [0.7.0-1] - To be released
 
+### Added
+- LibDFTB+ v21.1.
+
 ### Changed
 - ELSI to v2.7.1.
 - Libmdb v0.12.1.

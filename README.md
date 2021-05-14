@@ -41,6 +41,7 @@ This is a complete list of packages included in the `ESL Bundle`.
 |Fdict          |0.8.0         |Fortran    |           |               |<https://github.com/zerothi/fdict>                        |
 |Flook          |0.8.1         |Fortran    |           |Lua            |<https://github.com/ElectronicStructureLibrary/flook>     |
 |Futile         |1.8.3         |Fortran    |C          |               |<https://gitlab.com/l_sim/futile>                         |
+|LibDFTB+       |20.1          |Fortran    |           |               |<https://dftbplus.org>                                    |
 |Libfdf         |0.2.2         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libfdf>      |
 |Libmbd         |0.12.1        |Fortran    |C          |               |<https://github.com/libmbd/libmbd>                        |
 |Libpsml        |1.1.10        |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
