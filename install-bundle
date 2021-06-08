@@ -4,22 +4,19 @@ Wrapper to install bundles with JHBuild
 """
 
 
-from __future__ import print_function
-
 import argparse
 import os
+from pathlib import Path
 import re
 import subprocess
 import sys
 
 
-# Set bundle profile
-bundle_profile = "esl"
-
 # Find relevant directories
-topdir = os.path.abspath(os.path.dirname(__file__))
-cfgdir = os.path.join(topdir, "rcfiles")
-moddir = os.path.join(topdir, "modulesets")
+topdir = Path(__file__).parent.resolve()
+cfgdir = topdir / "rcfiles"
+jhbdir = topdir / ".bundler-esl"
+moddir = topdir / "modulesets"
 
 # Find available module sets
 modulesets = sorted([item.replace(".modules", "") \
@@ -31,6 +28,9 @@ configs = [item.replace(".rc", "") \
 systems = sorted(list(set([item.split("-")[0] for item in configs])))
 vendors = sorted(list(set([item.split("-")[1] for item in configs])))
 flavors = sorted(list(set([item.split("-")[2] for item in configs])))
+
+# Make the custom JHBuild configuration available
+os.environ["JHBUILD_CUSTOM_PATH"] = str(jhbdir)
 
 # Init command-line options
 parser = argparse.ArgumentParser(
@@ -64,34 +64,32 @@ parser.add_argument("--no-interact",
 args = parser.parse_args()
 
 # Check selected options
-modname = "%s.modules" % args.moduleset
-if not os.path.exists(os.path.join(moddir, modname)):
-    parser.error("moduleset file not found: %s" % modname)
-cfgname = "%s-%s-%s.rc" % (args.system, args.compilers, args.flavor)
-cfgfile = os.path.join(cfgdir, cfgname)
-if not os.path.exists(cfgfile):
-    parser.error("config file not found: %s" % cfgname)
-defname = "%s.jhbuildrc" % bundle_profile
-if not os.path.exists(os.path.join(topdir, "bundler", "bundles", defname)):
-    parser.error("default specs not found: %s" % defname)
+modname = f"{args.moduleset}.modules"
+if not (moddir / modname).exists():
+    parser.error(f"moduleset file not found: {modname}")
+cfgname = f"{args.system}-{args.compilers}-{args.flavor}.rc"
+cfgfile = cfgdir / cfgname
+if not cfgfile.exists():
+    parser.error(f"config file not found: {cfgname}")
+defname = jhbdir / "defaults.jhbuildrc"
+if not defname.exists():
+    parser.error(f"default specs not found: {defname}")
 
 # Build command line for pass-through options
 jh_opt = []
 if args.conditions:
     if len(args.conditions) > 0:
-        jh_opt += ["--conditions='%s'" % item for item in args.conditions]
+        jh_opt += [f"--conditions='{item}'" for item in args.conditions]
 if not args.nostop:
     jh_opt.append("--exit-on-error")
 if args.unattended:
     jh_opt.append("--no-interact")
 
 # Run JHBuild
-jh_cmd = [sys.executable, os.path.join(topdir, "bundler", "jhbuild.py")]
-jh_cfg = ["-f", cfgfile]
-jh_mod = ["-m", args.moduleset]
+jh_cmd = [sys.executable, str(topdir / "bundler" / "jhbuild.py")]
+jh_cfg = ["-f", str(cfgfile)]
+jh_mod = ["-m", str(moddir / modname)]
 jh_run = ["build"] + args.packages
-print("export JHBUILD_DEFAULTS='%s'" % bundle_profile)
-os.environ["JHBUILD_DEFAULTS"] = bundle_profile
 print(" ".join(jh_cmd + jh_opt + jh_cfg + jh_mod + jh_run))
 ret = subprocess.call(" ".join(jh_cmd + jh_opt + jh_cfg + jh_mod + jh_run),
         shell=True)
