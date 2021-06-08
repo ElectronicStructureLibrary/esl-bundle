@@ -79,7 +79,7 @@
       <dep package="gettext-bin"/>
       <dep package="xmlcatalog"/>
       <dep package="pkg-config"/>
-      <dep package="python2"/>
+      <dep package="python3"/>
       <dep package="cc"/>
     </dependencies>
   </autotools>
@@ -177,18 +177,19 @@
     </dependencies>
   </autotools>
 
-  <meson id="bijiben">
+  <meson id="gnome-notes">
     <branch/>
     <dependencies>
       <dep package="appstream-glib"/>
-      <dep package="tracker"/>
+      <dep package="tracker-2"/>
       <dep package="clutter-gtk"/>
       <dep package="gtk+-3"/>
-      <dep package="libhandy"/>
+      <dep package="libhandy-1"/>
       <dep package="libxml2"/>
       <dep package="glib"/>
       <dep package="WebKit"/>
       <dep package="evolution-data-server"/>
+      <dep package="gnome-online-accounts"/>
     </dependencies>
   </meson>
 
@@ -272,7 +273,7 @@
       <dep package="gtk+-3"/>
       <dep package="glib"/>
       <dep package="gobject-introspection"/>
-      <dep package="gtksourceview"/>
+      <dep package="gtksourceview-4"/>
       <dep package="gsettings-desktop-schemas"/>
       <dep package="json-glib"/>
       <dep package="libgee"/>
@@ -298,8 +299,8 @@
       <dep package="gobject-introspection"/>
       <dep package="gtk+-3"/>
       <dep package="gnome-desktop"/>
-      <dep package="tracker"/>
-      <dep package="tracker-miners"/>
+      <dep package="tracker-2"/>
+      <dep package="tracker-miners-2"/>
       <dep package="gnome-online-accounts"/>
       <dep package="gnome-online-miners"/>
       <dep package="libgdata"/>
@@ -323,7 +324,7 @@
       <dep package="gnome-code-assistance"/>
       <dep package="gspell"/>
       <dep package="gtk+-3"/>
-      <dep package="gtksourceview"/>
+      <dep package="gtksourceview-4"/>
       <dep package="jsonrpc-glib"/>
       <dep package="libclang"/>
       <dep package="libdazzle"/>
@@ -368,8 +369,8 @@
       <dep package="gobject-introspection"/>
       <dep package="gtk+-3"/>
       <dep package="gnome-desktop"/>
-      <dep package="tracker"/>
-      <dep package="tracker-miners"/>
+      <dep package="tracker-2"/>
+      <dep package="tracker-miners-2"/>
       <dep package="gnome-online-accounts"/>
       <dep package="gnome-online-miners"/>
       <dep package="libgdata"/>
@@ -572,6 +573,7 @@
     <dependencies>
       <dep package="gtk+-3"/>
       <dep package="libgtop"/>
+      <dep package="libhandy-1"/>
       <dep package="accountsservice"/>
     </dependencies>
   </meson>
@@ -635,6 +637,7 @@
       <dep package="clutter"/>
       <dep package="clutter-gtk"/>
       <dep package="vala"/>
+      <dep package="libgnome-games-support"/>
     </dependencies>
   </meson>
 

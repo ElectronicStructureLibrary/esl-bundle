@@ -4,6 +4,8 @@
 
 import os, sys, tempfile
 
+assert sys.version_info[0] == 3, "JHBuild requires Python 3"
+
 if 'GTK_PATH' in os.environ.keys():
     del os.environ['GTK_PATH']
 
@@ -81,6 +83,7 @@ cmakeargs = ''
 mesonargs = '--buildtype=debugoptimized'
 makeargs = ''
 ninjaargs = ''
+setupargs = ''
 cflags = ''
 
 # a alternative install program to use
@@ -96,6 +99,7 @@ module_cmakeargs = {}
 module_mesonargs = {}
 module_makeargs = {}
 module_ninjaargs = {}
+module_setupargs = {}
 module_extra_env = {}
 module_makecheck = {}
 module_nopoison = {}
@@ -145,11 +149,11 @@ export_dir = None
 
 # attempt to detect the system library path
 extra_prefixes = []
-try:
+if hasattr(sys.implementation, '_multiarch') and \
+   os.path.exists('/usr/lib/' + sys.implementation._multiarch):
     # Debian-style multiarch
-    system_libdirs = ['/usr/lib/' + sys._multiarch, '/usr/lib']
-
-except AttributeError:
+    system_libdirs = ['/usr/lib/' + sys.implementation._multiarch, '/usr/lib']
+else:
     # Check the python path and make some reasonable guesses
     system_libdirs = []
     for path in sys.path:

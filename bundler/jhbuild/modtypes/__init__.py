@@ -682,27 +682,33 @@ class MetaModule(Package):
         # We get the full dependencies of this meta-module.
         module_list = buildscript.moduleset.get_module_list((self.name, ), buildscript.config.skip)
 
-        # Scan all available tars to add to the tarball.
+        # Scan all available tars to add to the tarballs dir.
+        tarballdir = os.path.join(destdir, "tarballs")
+        if os.path.exists(tarballdir):
+            shutil.rmtree(tarballdir)
+        os.mkdir(tarballdir)
+        patchdir = os.path.join(destdir, "patches")
+        if os.path.exists(patchdir):
+            shutil.rmtree(patchdir)
+        os.mkdir(patchdir)
         for mod in module_list:
             if mod.branch is None:
                 continue
             if (mod.branch.repository.name == "local" or buildscript.config.nonet):
-                tar = os.path.join(mod.get_builddir(buildscript), os.path.basename(mod.branch.module))
-                try:
-                    shutil.copy(tar, destdir)
-                except OSError:
-                    tar = os.path.join(SRCDIR, os.path.basename(mod.branch.module))
-                    shutil.copy(tar, destdir)
+                tarfile = os.path.basename(mod.branch.module)
+                tar = os.path.join(SRCDIR, "tarballs", tarfile)
+                if not os.path.exists(tar):
+                    tar = os.path.join(mod.get_builddir(buildscript), tarfile)
+                shutil.copy(tar, tarballdir)
             if hasattr(mod.branch, "patches"):
                 for patch in mod.branch.patches:
-                    shutil.copy(os.path.join(SRCDIR, patch[0]), destdir)
+                    shutil.copy(os.path.join(SRCDIR, "patches", patch[0]), patchdir)
 
         # Add jhbuild and config files themselves.
-        listfile=os.path.join(SRCDIR, "bundler", "distfiles")
-        _custom_defaults = os.getenv("JHBUILD_DEFAULTS")
-        if _custom_defaults:
-            listfile=os.path.join(SRCDIR, "bundler", "bundles",
-                    _custom_defaults + ".distfiles")
+        _custom_path = os.getenv("JHBUILD_CUSTOM_PATH")
+        if not _custom_path:
+            _custom_path = os.path.join(SRCDIR, "bundler")
+        listfile = os.path.join(_custom_path, "distfiles")
         distfiles=open(listfile,'r').readlines()
         for archive in distfiles:
             fle=archive.rstrip('\n')
