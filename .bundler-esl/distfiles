@@ -1,0 +1,6 @@
+bin/
+bundler/
+install-bundle
+modulesets/
+patches/
+rcfiles/
