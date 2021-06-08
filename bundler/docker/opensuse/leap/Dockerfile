@@ -1,4 +1,4 @@
-FROM opensuse/leap:15.2
+FROM opensuse/leap:15.3
 #FROM opensuse-esl:tumbleweed
 
 RUN zypper dup -y  && zypper  in -y  gnu-compilers-hpc gnu-compilers-hpc-devel \

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 set -x
-
-docker build -t fedora-esl:32 .
+docker pull fedora:34
+docker build -t fedora-esl:34 .
