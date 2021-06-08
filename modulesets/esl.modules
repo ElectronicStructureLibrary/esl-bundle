@@ -19,6 +19,7 @@
   <autotools id="futile" autogen-sh="configure">
     <branch repo="local" module="futile-1.8.tar.gz" version="1.8.3" hash="md5:f30e354b5bae61ac12127efee5f4412d">
       <patch file="futile_intel_bug.patch" strip="1"/>
+      <patch file="futile_gcc11.patch" strip="0"/>
     </branch>
     <dependencies>
       <if condition-set="yaml">
