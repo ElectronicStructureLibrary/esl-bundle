@@ -88,7 +88,7 @@
     <section id="getting-started-install">
       <title>Installing JHBuild</title>
 
-      <para>JHBuild requires a Python runtime. Verify Python &gt;= 2.3 is
+      <para>JHBuild requires a Python runtime. Verify Python &gt;= 3.5 is
         installed.</para>
 
       <para>The recommended way to download JHBuild is via the version control
@@ -2292,6 +2292,19 @@ Optional packages: (JHBuild will build the missing packages)
             </simpara>
 
 <programlisting>repos['git.gnome.org'] = 'ssh://username@git.gnome.org/git/'</programlisting>
+          </listitem>
+        </varlistentry>
+        <varlistentry id="cfg-shallow-clone">
+          <term>
+            <varname>shallow_clone</varname>
+          </term>
+          <listitem>
+              <simpara>A boolean value specifying if JHBuild should prefer
+                smaller version control downloads. Equivalent to
+                <command>git clone --depth 1</command> or
+                <command>bzr co --light</command>.
+                Defaults to <constant>False</constant>.
+             </simpara>
           </listitem>
         </varlistentry>
         <varlistentry id="cfg-skip">
