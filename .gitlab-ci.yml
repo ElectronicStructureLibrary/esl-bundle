@@ -2,7 +2,7 @@ stages:
   - test
 
 opensuse-mpi:
-  image: eslib/esl-0.6.x:opensuse-leap-15.2
+  image: eslib/esl-0.7.x:opensuse-leap-15.3
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -12,7 +12,7 @@ opensuse-mpi:
     - ./install-bundle --no-interact --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-mpi-python2:
-  image: eslib/esl-0.6.x:opensuse-leap-15.2
+  image: eslib/esl-0.7.x:opensuse-leap-15.3
   stage: test
   when: manual
   script:
@@ -23,7 +23,7 @@ opensuse-mpi-python2:
     - python ./install-bundle --no-interact --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-tumbleweed-mpi:
-  image: eslib/esl-0.6.x:opensuse-tumbleweed
+  image: eslib/esl-0.7.x:opensuse-tumbleweed
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -33,7 +33,7 @@ opensuse-tumbleweed-mpi:
     - ./install-bundle --no-interact --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-serial:
-  image: eslib/esl-0.6.x:opensuse-leap-15.2
+  image: eslib/esl-0.7.x:opensuse-leap-15.3
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -43,7 +43,7 @@ opensuse-serial:
     - ./install-bundle --no-interact --system opensuseleap --compilers gcc --flavor serial esl-bundle
 
 opensuse-serial-python2:
-  image: eslib/esl-0.6.x:opensuse-leap-15.2
+  image: eslib/esl-0.7.x:opensuse-leap-15.3
   stage: test
   when: manual
   script:
@@ -54,7 +54,7 @@ opensuse-serial-python2:
     - python ./install-bundle --no-interact --system opensuseleap --compilers gcc --flavor serial esl-bundle
 
 opensuse-tumbleweed-serial:
-  image: eslib/esl-0.6.x:opensuse-tumbleweed
+  image: eslib/esl-0.7.x:opensuse-tumbleweed
   stage: test
   script:
     - source /etc/profile.d/lmod.sh
@@ -71,35 +71,35 @@ debian-mpi:
     - ./install-bundle --no-interact --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
 
 debian-serial:
-  image: eslib/esl-0.6.x:debian-buster
+  image: eslib/esl-0.7.x:debian-buster
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system debian --compilers gcc --flavor serial esl-bundle
 
 ubuntu-mpi-bionic:
-  image: eslib/esl-0.6.x:ubuntu-bionic
+  image: eslib/esl-0.7.x:ubuntu-bionic
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
 ubuntu-serial-bionic:
-  image: eslib/esl-0.6.x:ubuntu-bionic
+  image: eslib/esl-0.7.x:ubuntu-bionic
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor serial esl-bundle
 
 fedora-serial:
-  image: eslib/esl-0.6.x:fedora-32
+  image: eslib/esl-0.7.x:fedora-34
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
     - ./install-bundle --no-interact --system fedora --compilers gcc --flavor serial esl-bundle
 
 fedora-mpi:
-  image: eslib/esl-0.6.x:fedora-32
+  image: eslib/esl-0.7.x:fedora-34
   stage: test
   script:
     - export PATH=/usr/lib64/openmpi/bin:$PATH
@@ -109,7 +109,7 @@ fedora-mpi:
 # The following ones are allowed to fail because they test unreleased distros
 
 ubuntu-mpi-focal:
-  image: eslib/esl-0.6.x:ubuntu-focal
+  image: eslib/esl-0.7.x:ubuntu-focal
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
@@ -117,7 +117,7 @@ ubuntu-mpi-focal:
 #  allow_failure: true
 
 ubuntu-serial-focal:
-  image: eslib/esl-0.6.x:ubuntu-focal
+  image: eslib/esl-0.7.x:ubuntu-focal
   stage: test
   script:
     - export JHBUILD_DEFAULTS="esl"
