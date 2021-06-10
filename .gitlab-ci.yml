@@ -1,127 +1,146 @@
 stages:
   - test
 
+.bundle-vars:
+  variables:
+    JHBUILD_CUSTOM_PATH: $CI_PROJECT_DIR/.bundler-esl
+    ESL_BUNDLER_OPTS: --no-interact
+
 opensuse-mpi:
   image: eslib/esl-0.6.x:opensuse-leap-15.2
   stage: test
+  extends:
+    - .bundle-vars
   script:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7  openmpi/3.1.6 scalapack/2.1.0 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-mpi-python2:
   image: eslib/esl-0.6.x:opensuse-leap-15.2
   stage: test
   when: manual
+  extends:
+    - .bundle-vars
   script:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7  openmpi/3.1.6 scalapack/2.1.0 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - export JHBUILD_DEFAULTS="esl"
-    - python ./install-bundle --no-interact --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
+    - python ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-tumbleweed-mpi:
   image: eslib/esl-0.6.x:opensuse-tumbleweed
   stage: test
+  extends:
+    - .bundle-vars
   script:
     - source /etc/profile.d/lmod.sh
     - module load gnu/10  openmpi/3.1.6 scalapack/2.1.0 pfftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle $ESL_BUNDLER_OPTS --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-serial:
   image: eslib/esl-0.6.x:opensuse-leap-15.2
   stage: test
+  extends:
+    - .bundle-vars
   script:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7 fftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system opensuseleap --compilers gcc --flavor serial esl-bundle
+    - ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor serial esl-bundle
 
 opensuse-serial-python2:
   image: eslib/esl-0.6.x:opensuse-leap-15.2
   stage: test
   when: manual
+  extends:
+    - .bundle-vars
   script:
     - source /etc/profile.d/lmod.sh
     - module load gnu/7 fftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - export JHBUILD_DEFAULTS="esl"
-    - python ./install-bundle --no-interact --system opensuseleap --compilers gcc --flavor serial esl-bundle
+    - python ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor serial esl-bundle
 
 opensuse-tumbleweed-serial:
   image: eslib/esl-0.6.x:opensuse-tumbleweed
   stage: test
+  extends:
+    - .bundle-vars
   script:
     - source /etc/profile.d/lmod.sh
     - module load gnu/10 fftw3/3.3.8
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system opensuse --compilers gcc --flavor serial esl-bundle
+    - ./install-bundle $ESL_BUNDLER_OPTS --system opensuse --compilers gcc --flavor serial esl-bundle
 
 debian-mpi:
   image: eslib/esl-0.6.x:debian-buster
   stage: test
+  extends:
+    - .bundle-vars
   script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle $ESL_BUNDLER_OPTS --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
 
 debian-serial:
   image: eslib/esl-0.6.x:debian-buster
   stage: test
+  extends:
+    - .bundle-vars
   script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system debian --compilers gcc --flavor serial esl-bundle
+    - ./install-bundle $ESL_BUNDLER_OPTS --system debian --compilers gcc --flavor serial esl-bundle
 
 ubuntu-mpi-bionic:
   image: eslib/esl-0.6.x:ubuntu-bionic
   stage: test
+  extends:
+    - .bundle-vars
   script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
 ubuntu-serial-bionic:
   image: eslib/esl-0.6.x:ubuntu-bionic
   stage: test
+  extends:
+    - .bundle-vars
   script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor serial esl-bundle
+    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor serial esl-bundle
 
 fedora-serial:
   image: eslib/esl-0.6.x:fedora-32
   stage: test
+  extends:
+    - .bundle-vars
   script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system fedora --compilers gcc --flavor serial esl-bundle
+    - ./install-bundle $ESL_BUNDLER_OPTS --system fedora --compilers gcc --flavor serial esl-bundle
 
 fedora-mpi:
   image: eslib/esl-0.6.x:fedora-32
   stage: test
+  extends:
+    - .bundle-vars
   script:
     - export PATH=/usr/lib64/openmpi/bin:$PATH
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system fedora --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle $ESL_BUNDLER_OPTS --system fedora --compilers gcc --flavor openmpi esl-bundle-mpi
 
 # The following ones are allowed to fail because they test unreleased distros
 
 ubuntu-mpi-focal:
   image: eslib/esl-0.6.x:ubuntu-focal
   stage: test
+  extends:
+    - .bundle-vars
   script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 #  allow_failure: true
 
 ubuntu-serial-focal:
   image: eslib/esl-0.6.x:ubuntu-focal
   stage: test
+  extends:
+    - .bundle-vars
   script:
-    - export JHBUILD_DEFAULTS="esl"
-    - ./install-bundle --no-interact --system ubuntu --compilers gcc --flavor serial esl-bundle
+    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor serial esl-bundle
 #  allow_failure: true
 
 # The following ones are disabled because they provide unsupported compilers
@@ -129,14 +148,16 @@ ubuntu-serial-focal:
 #centos-serial:
 #  image: eslib/esl-0.5.x:centos-7
 #  stage: test
+#  extends:
+#    - .bundle-vars
 #  script:
-#    - export JHBUILD_DEFAULTS="esl"
-#    - python ./install-bundle --no-interact --system centos --compilers gcc --flavor serial esl-bundle
+#    - python ./install-bundle $ESL_BUNDLER_OPTS --system centos --compilers gcc --flavor serial esl-bundle
 
 #centos-mpi:
 #  image: eslib/esl-0.5.x:centos-7
 #  stage: test
+#  extends:
+#    - .bundle-vars
 #  script:
 #    - export PATH=/usr/lib64/openmpi/bin:$PATH
-#    - export JHBUILD_DEFAULTS="esl"
-#    - python ./install-bundle --no-interact --system centos --compilers gcc --flavor openmpi esl-bundle-mpi
+#    - python ./install-bundle $ESL_BUNDLER_OPTS --system centos --compilers gcc --flavor openmpi esl-bundle-mpi
