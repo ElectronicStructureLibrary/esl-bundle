@@ -29,9 +29,6 @@ systems = sorted(list(set([item.split("-")[0] for item in configs])))
 vendors = sorted(list(set([item.split("-")[1] for item in configs])))
 flavors = sorted(list(set([item.split("-")[2] for item in configs])))
 
-# Make the custom JHBuild configuration available
-os.environ["JHBUILD_CUSTOM_PATH"] = str(jhbdir)
-
 # Init command-line options
 parser = argparse.ArgumentParser(
         description="Install bundles with JHBuild")
@@ -74,6 +71,19 @@ if not cfgfile.exists():
 defname = jhbdir / "defaults.jhbuildrc"
 if not defname.exists():
     parser.error(f"default specs not found: {defname}")
+
+# Make the custom JHBuild configuration available
+envdir = os.environ.get("JHBUILD_CUSTOM_PATH", None)
+if envdir is None:
+    os.environ["JHBUILD_CUSTOM_PATH"] = str(jhbdir)
+else:
+    jhbdir = Path(envdir)
+if not jhbdir.exists():
+    parser.error(
+        f"JHBuild settings directory not found:\n    {jhbdir}"
+        "\n\nPlease make JHBUILD_CUSTOM_PATH point to a directory"
+        "\ncontaining valid defaults.jhbuildrc and distfiles files."
+    )
 
 # Build command line for pass-through options
 jh_opt = []
