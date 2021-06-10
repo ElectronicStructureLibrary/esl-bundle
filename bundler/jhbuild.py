@@ -33,7 +33,7 @@ import builtins
 pkgdatadir = None
 datadir = None
 import jhbuild
-srcdir = Path(jhbuild.__file__).parent.parent.resolve()
+srcdir = Path(jhbuild.__file__).parent.parent.parent.resolve()
 
 builtins.__dict__['PKGDATADIR'] = pkgdatadir
 builtins.__dict__['DATADIR'] = datadir
