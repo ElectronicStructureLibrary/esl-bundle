@@ -87,19 +87,17 @@
     </dependencies>
   </meson>
 
-  <autotools id="gdm" autogenargs="--with-systemdsystemunitdir=no --with-log-dir=${prefix}/var/log/gdm">
+  <meson id="gdm" mesonargs="-Dsystemdsystemunitdir='' -Dlog-dir=${prefix}/var/log/gdm">
     <if condition-unset="linux">
-      <autogenargs value="--without-plymouth"/>
+      <mesonargs value="-Dplymouth=disabled"/>
     </if>
     <branch/>
     <dependencies>
       <dep package="accountsservice"/>
-      <dep package="dbus-glib"/>
       <dep package="dconf"/>
       <dep package="fontconfig"/>
       <dep package="glib"/>
       <dep package="gtk+-3"/>
-      <dep package="intltool"/>
       <dep package="libcanberra"/>
       <dep package="nss"/>
       <dep package="pam"/>
@@ -111,10 +109,9 @@
       </if>
     </dependencies>
     <suggests>
-      <dep package="upower"/>
       <dep package="yelp-tools"/>
     </suggests>
-  </autotools>
+  </meson>
 
   <meson id="glib-networking" mesonargs="-Dinstalled_tests=true">
     <if condition-set="freebsd">
@@ -208,7 +205,6 @@
       <dep package="smbclient"/>
       <dep package="sound-theme-freedesktop"/>
       <dep package="upower"/>
-      <dep package="grilo"/>
       <if condition-set="linux">
         <dep package="gnome-bluetooth"/>
         <dep package="libnma"/>
@@ -378,6 +374,7 @@
       <dep package="gnome-settings-daemon"/>
       <dep package="gobject-introspection"/>
       <dep package="gtk+-3"/>
+      <dep package="gtk4"/>
       <dep package="intltool"/>
       <dep package="json-glib"/>
       <dep package="libcanberra"/>
@@ -562,6 +559,7 @@
       <dep package="libXrender"/>
       <dep package="libxkbcommon"/>
       <dep package="libxkbfile"/>
+      <dep package="mesa-libEGL"/> <!-- provides EGL/eglmesaext.h -->
       <dep package="mesa-libGLES"/>
       <dep package="pango"/>
       <dep package="sm"/>
@@ -622,7 +620,7 @@
       <dep package="gupnp-av"/>
       <dep package="gupnp-dlna"/>
       <dep package="libgee"/>
-      <dep package="tracker"/>
+      <dep package="tracker-2"/>
       <dep package="libmediaart"/>
     </dependencies>
   </meson>
@@ -748,8 +746,9 @@
       <dep package="iso-codes"/>
       <dep package="json-glib"/>
       <dep package="libdazzle"/>
-      <dep package="libhandy"/>
+      <dep package="libhandy-1"/>
       <dep package="libnotify"/>
+      <dep package="libportal"/>
       <dep package="libsecret"/>
       <dep package="libsoup"/>
       <dep package="libxml2"/>
@@ -767,6 +766,7 @@
       <dep package="glib"/>
       <dep package="gtk+-3"/>
       <dep package="gspell"/>
+      <dep package="libhandy-1"/>
       <dep package="libxml2"/>
       <dep package="adwaita-icon-theme"/>
       <dep package="libsecret"/>
@@ -794,11 +794,10 @@
   <meson id="gedit">
     <branch/>
     <dependencies>
-      <dep package="libsoup"/>
       <dep package="libpeas"/>
       <dep package="yelp-tools"/>
       <dep package="gspell"/>
-      <dep package="gtksourceview"/>
+      <dep package="gtksourceview-4"/>
       <dep package="tepl"/>
       <dep package="gsettings-desktop-schemas"/>
       <dep package="python3-devel"/>
@@ -824,8 +823,8 @@
       <dep package="gtk+-3"/>
       <dep package="spice-gtk"/>
       <dep package="vala"/>
-      <dep package="tracker"/>
-      <dep package="tracker-miners"/>
+      <dep package="tracker-2"/>
+      <dep package="tracker-miners-2"/>
       <if condition-set="udev">
         <dep package="libgudev"/>
       </if>
@@ -838,7 +837,8 @@
       <dep package="appstream-glib"/>
       <dep package="glib"/>
       <dep package="gtk+-3"/>
-      <dep package="gtksourceview"/>
+      <dep package="gtksourceview-4"/>
+      <dep package="libhandy-1"/>
       <dep package="libsoup"/>
       <dep package="libxml2"/>
       <dep package="mpc"/>
@@ -879,7 +879,7 @@
       <dep package="gsound"/>
       <dep package="gnome-desktop"/>
       <dep package="libgweather"/>
-      <dep package="libhandy"/>
+      <dep package="libhandy-1"/>
       <dep package="geoclue"/>
       <dep package="geocode-glib"/>
       <dep package="yelp-tools"/>
@@ -895,7 +895,7 @@
       <dep package="gnome-online-accounts"/>
       <dep package="gtk+-3"/>
       <dep package="libgee"/>
-      <dep package="libhandy"/>
+      <dep package="libhandy-1"/>
       <dep package="telepathy-glib"/>
       <dep package="vala"/>
       <dep package="libchamplain"/>
@@ -999,8 +999,8 @@
       <dep package="libdazzle"/>
       <dep package="libmediaart"/>
       <dep package="pygobject"/>
-      <dep package="tracker"/>
-      <dep package="tracker-miners"/>
+      <dep package="tracker-2"/>
+      <dep package="tracker-miners-2"/>
     </dependencies>
   </meson>
 
@@ -1025,8 +1025,8 @@
       <dep package="libgfbgraph"/>
       <dep package="libjpeg"/>
       <dep package="libpng"/>
-      <dep package="tracker"/>
-      <dep package="tracker-miners"/>
+      <dep package="tracker-2"/>
+      <dep package="tracker-miners-2"/>
     </dependencies>
   </meson>
 
@@ -1047,18 +1047,15 @@
     </if>
     <branch/>
     <dependencies>
-      <dep package="appstream-glib"/>
+      <dep package="appstream"/>
       <dep package="glib"/>
-      <dep package="gnome-desktop"/>
       <dep package="gsettings-desktop-schemas"/>
       <dep package="gspell"/>
       <dep package="gtk+-3"/>
-      <dep package="libsecret"/>
       <dep package="libsoup"/>
       <dep package="libxmlb"/>
       <dep package="malcontent"/>
       <dep package="PackageKit"/>
-      <dep package="sqlite3"/>
       <dep package="valgrind"/>
       <if condition-set="linux">
         <dep package="fwupd"/>
@@ -1081,7 +1078,7 @@
     </dependencies>
   </meson>
 
-  <autotools id="gnome-terminal" autogenargs="--disable-migration">
+  <meson id="gnome-terminal">
     <branch/>
     <dependencies>
       <dep package="dconf"/>
@@ -1098,7 +1095,7 @@
     <suggests>
       <dep package="gnome-shell"/>
     </suggests>
-  </autotools>
+  </meson>
 
   <meson id="gnome-todo">
     <branch/>
@@ -1107,7 +1104,7 @@
       <dep package="gnome-online-accounts"/>
       <dep package="evolution-data-server"/>
       <dep package="glib"/>
-      <dep package="gtk+"/>
+      <dep package="gtk4"/>
       <dep package="libpeas"/>
     </dependencies>
   </meson>
@@ -1136,6 +1133,7 @@
       <dep package="gtk+-3"/>
       <dep package="gnome-autoar"/>
       <dep package="pango"/>
+      <dep package="libhandy-1"/>
       <dep package="libxml2"/>
       <dep package="gnome-desktop"/>
       <dep package="gsettings-desktop-schemas"/>
@@ -1194,7 +1192,7 @@
       <dep package="clutter"/>
       <dep package="clutter-gtk"/>
       <dep package="clutter-gst"/>
-      <dep package="gtksourceview"/>
+      <dep package="gtksourceview-4"/>
       <dep package="WebKit"/>
       <dep package="gstreamer"/>
       <dep package="gst-plugins-base"/>
@@ -1261,10 +1259,11 @@
     </dependencies>
   </meson>
 
-  <autotools id="NetworkManager"
-             autogenargs="PYTHON=python3 --with-udev-dir=${libdir}/udev --with-systemdsystemunitdir=no --with-crypto=gnutls --disable-more-warnings --disable-json-validation --disable-ovs">
+  <meson id="NetworkManager"
+         mesonargs="-Dlibaudit=no -Dovs=false -Dnmtui=false -Dqt=false -Dcrypto=gnutls -Diwd=true">
     <branch repo="gitlab.freedesktop.org"
             module="NetworkManager/NetworkManager.git"
+            revision="main"
             checkoutdir="NetworkManager"/>
     <dependencies>
       <dep package="libndp"/>
@@ -1290,7 +1289,7 @@
         <dep package="libsystemd"/>
       </if>
     </dependencies>
-  </autotools>
+  </meson>
 
   <!-- Vala disabled for https://github.com/hughsie/PackageKit/issues/212 -->
   <meson id="PackageKit" mesonargs="-Dbash_completion=false -Dsystemdsystemunitdir=no">
@@ -1320,8 +1319,8 @@
   </meson>
 
   <meson id="pipewire"
-          mesonargs="-Dpipewire-jack=false -Djack=false -Dvulkan=false">
-    <branch repo="gitlab.freedesktop.org" module="pipewire/pipewire" revision="0.2"/>
+          mesonargs="-Dpipewire-jack=disabled -Djack=disabled -Dvulkan=disabled">
+    <branch repo="gitlab.freedesktop.org" module="pipewire/pipewire"/>
     <dependencies>
       <dep package="alsa"/>
       <dep package="bluez"/>
@@ -1482,8 +1481,8 @@
       <!-- Additional libraries that should be in the release,
            but are not depended on by utilities or core apps yet.
       -->
-      <dep package="gtk+"/>
-      <dep package="gtksourceview"/>
+      <dep package="gtk4"/>
+      <dep package="gtksourceview-4"/>
       <dep package="atkmm"/>
       <dep package="gtkmm"/>
       <dep package="cairomm"/>

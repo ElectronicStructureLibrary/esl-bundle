@@ -1,14 +1,14 @@
 # Basque translation for jhbuild.
 # Copyright (C) 2019 jhbuild's COPYRIGHT HOLDER
 # This file is distributed under the same license as the jhbuild package.
-# Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2019.
+# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2019, 2020, 2021.
 #
 msgid ""
 msgstr "Project-Id-Version: jhbuild master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/jhbuild/issues\n"
-"POT-Creation-Date: 2019-11-02 11:18+0000\n"
-"PO-Revision-Date: 2019-12-08 10:00+0100\n"
-"Last-Translator: Asier Sarasua Garmendia <asier.sarasua@gmail.com>\n"
+"POT-Creation-Date: 2020-11-29 15:49+0000\n"
+"PO-Revision-Date: 2021-04-02 10:00+0100\n"
+"Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -20,89 +20,89 @@ msgstr "Project-Id-Version: jhbuild master\n"
 msgid "Configuring $PKG_NAME without autotools"
 msgstr "$PKG_NAME konfiguratzen autotools gabe"
 
-#: autogen.sh:127 autogen.sh:132
+#: autogen.sh:133 autogen.sh:138
 #, sh-format
 msgid "Unable to create file $srcdir/Makefile.inc"
 msgstr "Ezin izan da $srcdir/Makefile.inc fitxategia sortu"
 
-#: autogen.sh:152
+#: autogen.sh:158
 #, sh-format
 msgid "Unable to read file $makefile"
 msgstr "Ezin izan da $makefile fitxategia irakurri"
 
-#: autogen.sh:157
+#: autogen.sh:163
 #, sh-format
 msgid "Unable to copy $makefile to $srcdir/Makefile"
 msgstr "Ezin izan da $makefile kopiatu $srcdir/Makefile helbidera"
 
-#: autogen.sh:162
+#: autogen.sh:168
 #, sh-format
 msgid "Now type `make' to compile $PKG_NAME"
 msgstr "Orain `make' idatzi $PKG_NAME konpilatzeko"
 
-#: autogen.sh:222
+#: autogen.sh:228
 #, sh-format
 msgid ""
 "**Error**: Directory `$srcdir' does not look like the top-level $PKG_NAME "
 "directory"
 msgstr "**Errorea**: `$srcdir' direktorioak ez dirudi goi mailako $PKG_NAME direktorioa"
 
-#: autogen.sh:276
-msgid "WARNING: aclocal not available (usually part of package 'autoconf')"
-msgstr ""
-
-#: autogen.sh:279
-msgid "WARNING: automake not available (usually part of package 'automake')"
-msgstr ""
-
 #: autogen.sh:282
-msgid "WARNING: autopoint not available (usually part of package 'gettext')"
-msgstr ""
+msgid "WARNING: aclocal not available (usually part of package 'autoconf')"
+msgstr "ABIDSUA: aclocal ez dago erabilgarri (normalean 'autoconf' paketean dago)"
 
 #: autogen.sh:285
-msgid "WARNING: pkg-config not available (usually part of package 'pkgconfig')"
-msgstr ""
+msgid "WARNING: automake not available (usually part of package 'automake')"
+msgstr "ABIDSUA: automake ez dago erabilgarri (normalean 'automake' paketean dago)<129366 segmentua ¶>"
 
 #: autogen.sh:288
+msgid "WARNING: autopoint not available (usually part of package 'gettext')"
+msgstr "ABIDSUA: autopoint ez dago erabilgarri (normalean 'gettext' paketean dago)"
+
+#: autogen.sh:291
+msgid "WARNING: pkg-config not available (usually part of package 'pkgconfig')"
+msgstr "ABIDSUA: pkg-config ez dago erabilgarri (normalean 'pkgconfig' paketean dago)"
+
+#: autogen.sh:294
 msgid ""
 "WARNING: yelp-tools not available (usually part of package 'yelp-tools')"
-msgstr ""
+msgstr "ABIDSUA: yelp-tools ez dago erabilgarri (normalean 'yelp-tools' paketean dago)"
 
 #: jhbuild/commands/autobuild.py:28
 msgid "Build modules non-interactively and upload results to JhAutobuild"
-msgstr ""
+msgstr "Eraiki moduluak modu ez interktiboan eta kargatu emaitzak JhAutobuild-era"
 
 #: jhbuild/commands/autobuild.py:36 jhbuild/commands/base.py:166
-#: jhbuild/commands/base.py:277 jhbuild/commands/make.py:40
+#: jhbuild/commands/base.py:278 jhbuild/commands/make.py:40
 #: jhbuild/commands/tinderbox.py:38
 msgid "always run autogen.sh"
 msgstr "beti exekutatu autogen.sh"
 
 #: jhbuild/commands/autobuild.py:39 jhbuild/commands/base.py:172
-#: jhbuild/commands/base.py:280 jhbuild/commands/make.py:43
+#: jhbuild/commands/base.py:281 jhbuild/commands/make.py:43
 #: jhbuild/commands/tinderbox.py:44
 msgid "run make clean before make"
 msgstr "exekutatu make clean eta gero make"
 
 #: jhbuild/commands/autobuild.py:42 jhbuild/commands/base.py:181
-#: jhbuild/commands/base.py:292
+#: jhbuild/commands/base.py:293
 msgid "run make distcheck after building"
 msgstr "exekutatu make distcheck eraikuntzaren ondoren"
 
 #: jhbuild/commands/autobuild.py:45 jhbuild/commands/base.py:41
-#: jhbuild/commands/base.py:193 jhbuild/commands/base.py:431
-#: jhbuild/commands/clean.py:39 jhbuild/commands/tinderbox.py:53
+#: jhbuild/commands/base.py:193 jhbuild/commands/base.py:443
+#: jhbuild/commands/clean.py:39 jhbuild/commands/tinderbox.py:56
 msgid "treat the given modules as up to date"
 msgstr "hartu emandako moduluak eguneratutzat"
 
 #: jhbuild/commands/autobuild.py:48 jhbuild/commands/base.py:196
-#: jhbuild/commands/clean.py:42 jhbuild/commands/tinderbox.py:56
+#: jhbuild/commands/clean.py:42 jhbuild/commands/tinderbox.py:59
 msgid "start building at the given module"
 msgstr "hasi eraikuntza emandako moduluan"
 
 #: jhbuild/commands/autobuild.py:51
 msgid "jhautobuild report URL"
-msgstr ""
+msgstr "jhautobuild jakinarazpenen URLa"
 
 #: jhbuild/commands/autobuild.py:54
 msgid "verbose mode"
@@ -110,11 +110,11 @@ msgstr "modu xehea"
 
 #: jhbuild/commands/autobuild.py:71
 msgid "report URL for autobuild not specified"
-msgstr ""
+msgstr "ez da zehazty autobuild-erako jakinarazpenen URLa"
 
 #: jhbuild/commands/autobuild.py:82 jhbuild/commands/base.py:67
-#: jhbuild/commands/base.py:243 jhbuild/commands/base.py:469
-#: jhbuild/commands/clean.py:56 jhbuild/commands/tinderbox.py:94
+#: jhbuild/commands/base.py:243 jhbuild/commands/base.py:481
+#: jhbuild/commands/clean.py:56 jhbuild/commands/tinderbox.py:97
 #, python-format
 msgid "%s not in module list"
 msgstr "%s ez dago moduluen zerrendan"
@@ -125,7 +125,7 @@ msgstr "Eguneratu modulu guztiak bertsio-kontroletik"
 
 #: jhbuild/commands/base.py:35 jhbuild/commands/base.py:83
 #: jhbuild/commands/base.py:117 jhbuild/commands/base.py:160
-#: jhbuild/commands/base.py:271 jhbuild/commands/base.py:422
+#: jhbuild/commands/base.py:272 jhbuild/commands/base.py:434
 #: jhbuild/commands/tinderbox.py:32
 msgid "[ options ... ] [ modules ... ]"
 msgstr "[ aukerak … ] [ moduluak … ]"
@@ -139,13 +139,13 @@ msgid "update only modules with the given tags"
 msgstr "eguneratu emandako etiketak dituzten moduluak soilik"
 
 #: jhbuild/commands/base.py:50 jhbuild/commands/base.py:89
-#: jhbuild/commands/base.py:202 jhbuild/commands/base.py:301
-#: jhbuild/commands/tinderbox.py:59
+#: jhbuild/commands/base.py:202 jhbuild/commands/base.py:302
+#: jhbuild/commands/tinderbox.py:62
 msgid "set a sticky date when checking out modules"
-msgstr ""
+msgstr "ezarri data itsaskorra moduluak deskargatzean"
 
 #: jhbuild/commands/base.py:53 jhbuild/commands/base.py:184
-#: jhbuild/commands/base.py:440
+#: jhbuild/commands/base.py:452
 msgid "ignore all soft-dependencies"
 msgstr "ezikusi mendekotasun bigun guztiak"
 
@@ -154,14 +154,14 @@ msgid "Update one or more modules from version control"
 msgstr "Eguneratu modulu bat edo gehiago bertsio-kontroletik"
 
 #: jhbuild/commands/base.py:98 jhbuild/commands/base.py:136
-#: jhbuild/commands/base.py:377 jhbuild/commands/rdepends.py:53
+#: jhbuild/commands/base.py:389 jhbuild/commands/rdepends.py:53
 #: jhbuild/moduleset.py:177
 #, python-format
 msgid "A module called '%s' could not be found."
 msgstr "'%s' izeneko modulua ez da aurkitu."
 
 #: jhbuild/commands/base.py:101 jhbuild/commands/base.py:139
-#: jhbuild/commands/base.py:334 jhbuild/commands/rdepends.py:48
+#: jhbuild/commands/base.py:346 jhbuild/commands/rdepends.py:48
 #: jhbuild/commands/uninstall.py:58
 msgid "This command requires a module parameter."
 msgstr "Komando honek modulu-parametro bat behar du."
@@ -172,10 +172,10 @@ msgstr "Garbitu modulu bat edo gehiago"
 
 #: jhbuild/commands/base.py:123
 msgid "honour the makeclean setting in config file"
-msgstr ""
+msgstr "egin kasu konfigurazio-fitxategiko makeclean ezarpenari"
 
 #: jhbuild/commands/base.py:126 jhbuild/commands/base.py:169
-#: jhbuild/commands/base.py:283 jhbuild/commands/tinderbox.py:41
+#: jhbuild/commands/base.py:284 jhbuild/commands/tinderbox.py:41
 msgid "completely clean source tree"
 msgstr "erabat garbitu iturburu-zuhaitza"
 
@@ -187,160 +187,161 @@ msgstr "clean komandoari deitu zaio makeclean Faltsua denean, saltatzen."
 msgid "Update and compile all modules (the default)"
 msgstr "Eguneratu eta konpilatu modulu guztiak (lehenetsia)"
 
-#: jhbuild/commands/base.py:175 jhbuild/commands/base.py:286
-#: jhbuild/commands/make.py:46
+#: jhbuild/commands/base.py:175 jhbuild/commands/base.py:287
+#: jhbuild/commands/make.py:46 jhbuild/commands/tinderbox.py:47
 msgid "run make check after building"
 msgstr "exekutatu make check eraikuntzaren ondoren"
 
-#: jhbuild/commands/base.py:178 jhbuild/commands/base.py:289
+#: jhbuild/commands/base.py:178 jhbuild/commands/base.py:290
 msgid "run make dist after building"
 msgstr "exekutatu make dist eraikuntzaren ondoren"
 
-#: jhbuild/commands/base.py:187 jhbuild/commands/base.py:295
-#: jhbuild/commands/tinderbox.py:47
+#: jhbuild/commands/base.py:187 jhbuild/commands/base.py:296
+#: jhbuild/commands/tinderbox.py:50
 msgid "skip version control update"
 msgstr "saltatu bertsio-kontrolaren eguneratzea"
 
-#: jhbuild/commands/base.py:190 jhbuild/commands/base.py:298
+#: jhbuild/commands/base.py:190 jhbuild/commands/base.py:299
 #: jhbuild/commands/make.py:49
 msgid "quiet (no output)"
 msgstr "isilik (irteerarik ez)"
 
-#: jhbuild/commands/base.py:199 jhbuild/commands/base.py:437
+#: jhbuild/commands/base.py:199 jhbuild/commands/base.py:449
 msgid "build only modules with the given tags"
-msgstr ""
+msgstr "eraiki emandako etiketak dituzten moduluak soilik"
 
-#: jhbuild/commands/base.py:205 jhbuild/commands/base.py:304
+#: jhbuild/commands/base.py:205 jhbuild/commands/base.py:305
 msgid "run tests in real X and not in Xvfb"
-msgstr ""
+msgstr "exekutatu probak X errealean eta ez Xvfb-n"
 
-#: jhbuild/commands/base.py:208 jhbuild/commands/tinderbox.py:62
+#: jhbuild/commands/base.py:208 jhbuild/commands/tinderbox.py:65
 msgid "try to force checkout and autogen on failure"
-msgstr ""
+msgstr "saiatu erauzketa sorrera automatikoa behartzen hutsegitean"
 
-#: jhbuild/commands/base.py:211 jhbuild/commands/tinderbox.py:65
-msgid "don't poison modules on failure"
-msgstr ""
-
-#: jhbuild/commands/base.py:214 jhbuild/commands/base.py:307
+#: jhbuild/commands/base.py:211 jhbuild/commands/base.py:308
 #: jhbuild/commands/tinderbox.py:68
+msgid "don't poison modules on failure"
+msgstr "ez pozoindu moduluak hutsegitean"
+
+#: jhbuild/commands/base.py:214 jhbuild/commands/base.py:311
+#: jhbuild/commands/tinderbox.py:71
 msgid "build even if policy says not to"
-msgstr ""
+msgstr "eraiki arauek ezetz esaten badute ere"
 
 #: jhbuild/commands/base.py:217
 msgid "also build soft-dependencies that could be skipped"
-msgstr ""
+msgstr "eraiki saltatu daitezkeen mendekotasun bigunak ere bai"
 
-#: jhbuild/commands/base.py:220 jhbuild/commands/base.py:310
+#: jhbuild/commands/base.py:220 jhbuild/commands/base.py:314
 msgid "skip modules installed less than the given time ago"
-msgstr ""
+msgstr "saltatu emandako denbora baino geroago instalatu diren moduluak"
 
-#: jhbuild/commands/base.py:223 jhbuild/commands/tinderbox.py:71
+#: jhbuild/commands/base.py:223 jhbuild/commands/tinderbox.py:74
 msgid "ignore missing system dependencies"
-msgstr ""
+msgstr "ez ikusiarena egin falta diren sistema-mendekotasunei"
 
 #: jhbuild/commands/base.py:247
 msgid "requested module is in the ignore list, nothing to do."
-msgstr ""
+msgstr "eskatutako modulua ez ikusiarena egingo zaien zerrendan dago, ez dago egiteko ezer."
 
-#: jhbuild/commands/base.py:254 jhbuild/commands/tinderbox.py:100
+#: jhbuild/commands/base.py:255 jhbuild/commands/tinderbox.py:103
 #, python-format
 msgid ""
 "Required system dependencies not installed. Install using the command "
 "%(cmd)s or to ignore system dependencies use command-line option %(opt)s"
-msgstr ""
+msgstr "Beharrezkoak diren sistema-mendekotasunak ez daude instalatuta. Instalatu haiek %(cmd)s komandoa erabilita edo, sistema-mendekotasunei ez ikusiarena egiteko, erabili komando-lerroko %(opt)s aukera"
 
-#: jhbuild/commands/base.py:268
+#: jhbuild/commands/base.py:269
 msgid "Update and compile one or more modules"
-msgstr ""
+msgstr "Eguneratu eta konpilatu modulu bat edo gehiago"
 
-#: jhbuild/commands/base.py:329 jhbuild/commands/make.py:100
+#: jhbuild/commands/base.py:341 jhbuild/commands/make.py:100
 #: jhbuild/commands/uninstall.py:50
 #, python-format
 msgid ""
 "module \"%(modname)s\" does not exist, created automatically using "
 "repository \"%(reponame)s\""
-msgstr ""
+msgstr "\"%(modname)s\" modulua ez da existitzen, automatikoki sortu da \"%(reponame)s\" biltegia erabilita"
 
-#: jhbuild/commands/base.py:342
+#: jhbuild/commands/base.py:354
 msgid "Run a command under the JHBuild environment"
-msgstr ""
+msgstr "Exekutatu komando bat JHBuild ingurunean"
 
-#: jhbuild/commands/base.py:345
+#: jhbuild/commands/base.py:357
 msgid "[ options ... ] program [ arguments ... ]"
 msgstr "[ aukerak … ] programa [ argumentuak … ]"
 
-#: jhbuild/commands/base.py:351
+#: jhbuild/commands/base.py:363
 msgid "run command in build dir of the given module"
-msgstr ""
+msgstr "exekutatu komandoa emandako moduluaren eraikuntza-direktorioan"
 
-#: jhbuild/commands/base.py:354
+#: jhbuild/commands/base.py:366
 msgid "run command in checkout dir of the given module"
-msgstr ""
+msgstr "exekutatu komandoa emandako moduluaren deskarga-direktorioan"
 
-#: jhbuild/commands/base.py:367 jhbuild/commands/base.py:397
+#: jhbuild/commands/base.py:379 jhbuild/commands/base.py:409
 #, python-format
 msgid "Unable to execute the command '%(command)s': %(err)s"
-msgstr ""
+msgstr "Ezin izan da '%(command)s' komandoa exekutatu: %(err)s"
 
-#: jhbuild/commands/base.py:388
+#: jhbuild/commands/base.py:400
 #, python-format
 msgid "Unable to execute the command '%s'"
-msgstr ""
+msgstr "Ezin izan da '%s' komandoa exekutatu"
 
-#: jhbuild/commands/base.py:395 jhbuild/frontends/gtkui.py:447
+#: jhbuild/commands/base.py:407 jhbuild/frontends/gtkui.py:447
 #: jhbuild/frontends/terminal.py:172
 msgid "No command given"
 msgstr "Ez da komandorik eman"
 
-#: jhbuild/commands/base.py:404
+#: jhbuild/commands/base.py:416
 msgid "Start a shell under the JHBuild environment"
-msgstr ""
+msgstr "Abiarazi shell bat JHBuild ingurunean"
 
-#: jhbuild/commands/base.py:419
+#: jhbuild/commands/base.py:431
 msgid "List the modules that would be built"
 msgstr "Eraikiko diren moduluen zerrenda"
 
-#: jhbuild/commands/base.py:428
+#: jhbuild/commands/base.py:440
 msgid "show which revision will be built"
 msgstr "erakutsi zein berrikuspen eraikiko den"
 
-#: jhbuild/commands/base.py:434
-msgid "start list at the given module"
-msgstr ""
-
-#: jhbuild/commands/base.py:443
-msgid "also list soft-dependencies that could be skipped"
-msgstr ""
-
 #: jhbuild/commands/base.py:446
+msgid "start list at the given module"
+msgstr "hasi zerrenda emandako moduluan"
+
+#: jhbuild/commands/base.py:455
+msgid "also list soft-dependencies that could be skipped"
+msgstr "zerrendatu saltatu daitezkeen mendekotasun bigunak ere bai"
+
+#: jhbuild/commands/base.py:458
 msgid "list all modules, not only those that would be built"
-msgstr ""
+msgstr "zerrendatu modulu guztiak, ez soilik eraikiko direnak"
 
-#: jhbuild/commands/base.py:453
+#: jhbuild/commands/base.py:465
 msgid "Conflicting options specified ('--start-at' and '--all-modules')"
-msgstr ""
+msgstr "Gatazkan dauden aukerak zehaztu dira ('--start-at' eta '--all-modules')"
 
-#: jhbuild/commands/base.py:485
+#: jhbuild/commands/base.py:497
 msgid "Output a Graphviz dependency graph for one or more modules"
-msgstr ""
+msgstr "Ekoiztu modulu baten edo gehiagoren Graphviz mendekotasunen grafo bat"
 
-#: jhbuild/commands/base.py:488 jhbuild/commands/base.py:521
+#: jhbuild/commands/base.py:500 jhbuild/commands/base.py:533
 #: jhbuild/commands/info.py:43 jhbuild/commands/uninstall.py:34
 msgid "[ modules ... ]"
 msgstr "[ moduluak … ]"
 
-#: jhbuild/commands/base.py:494
+#: jhbuild/commands/base.py:506
 msgid "add dotted lines to soft dependencies"
-msgstr ""
+msgstr "gehitu puntuen marrak mendekotasun bigunei"
 
-#: jhbuild/commands/base.py:497
+#: jhbuild/commands/base.py:509
 msgid "group modules from metamodule together"
 msgstr "taldekatu metamoduluetako moduluak elkarrekin"
 
-#: jhbuild/commands/base.py:518
+#: jhbuild/commands/base.py:530
 msgid "Run post-install triggers for named modules (or all)"
-msgstr ""
+msgstr "Exekutatu instalazio ondoko abiarazleak izendun moduluetarako (edo denetarako)"
 
 #: jhbuild/commands/bootstrap.py:25
 msgid "Build support tools"
@@ -393,47 +394,47 @@ msgstr "egunkari-fitxategiaren kokalekua"
 
 #: jhbuild/commands/bot.py:70
 msgid "directory with slave files (only with --start-server)"
-msgstr ""
+msgstr "fitxategi esklaboak dituen direktorioa (--start-server aukerarekin soilik)"
 
 #: jhbuild/commands/bot.py:73
 msgid "directory with buildbot work files (only with --start-server)"
-msgstr ""
+msgstr "buildbot laneko fitxategiak dituen direktorioa (--start-server aukerarekin soilik)"
 
 #: jhbuild/commands/bot.py:76
 msgid "master cfg file location (only with --start-server)"
-msgstr ""
+msgstr "cfg fitxategi maisuaren kokalekua (--start-server aukerarekin soilik)"
 
 #: jhbuild/commands/bot.py:79
 msgid "exec a buildbot step (internal use only)"
-msgstr ""
+msgstr "exekutatu buildbot urrats bat (barneko erabilera soilik)"
 
 #: jhbuild/commands/bot.py:83
 msgid "buildbot commands are no longer supported"
-msgstr ""
+msgstr "buildbot komandoak ez dira dagoeneko onartzen"
 
 #: jhbuild/commands/checkbranches.py:29
 msgid ""
 "Check modules in GNOME Git repository have the correct branch definition"
-msgstr ""
+msgstr "Egiaztatu GNOME Git biltegiko moduluek adar-definizio zuzena dutela"
 
 #: jhbuild/commands/checkbranches.py:66
 #, python-format
 msgid "%(module)s is missing branch definition for %(branch)s"
-msgstr ""
+msgstr "%(module)s moduluak adar-definizioa falta du %(branch)s adarrerako"
 
 #: jhbuild/commands/checkmodulesets.py:27
 msgid "Check if modules in JHBuild have the correct definition"
-msgstr ""
+msgstr "Egiaztatu JHBuild-eko moduluek adar-definizio zuzena dutela"
 
 #: jhbuild/commands/checkmodulesets.py:40
 #, python-format
 msgid "%(module)s is unreachable (%(href)s)"
-msgstr ""
+msgstr "%(module)s ezin da atzitu (%(href)s)"
 
 #: jhbuild/commands/checkmodulesets.py:43
 #, python-format
 msgid "Cannot check %(module)s (%(href)s)"
-msgstr ""
+msgstr "Ezin da egiaztatu %(module)s (%(href)s)"
 
 #: jhbuild/commands/clean.py:30
 msgid "Clean all modules"
@@ -482,7 +483,7 @@ msgid ""
 "only display information for installed modules. This will not list system "
 "dependencies. If one or more module names are specified and at least one "
 "module is not installed, then the command will return 1."
-msgstr ""
+msgstr "Bistaratu instalatutako moduluen informazioa soilik. Ez ditu sistema-mendekotasunak zerrendatuko. Modulu baten edo gehiagoren izenak zehazten badira eta gutxienez modulu bat instalatuta ez badago, komandoak 1 itzuliko du."
 
 #: jhbuild/commands/info.py:66
 #, python-format
@@ -559,11 +560,11 @@ msgstr "Bertsioa:"
 
 #: jhbuild/commands/info.py:126
 msgid "Tree-ID:"
-msgstr ""
+msgstr "Zuhaitz IDa:"
 
 #: jhbuild/commands/info.py:131
 msgid "Sourcedir:"
-msgstr ""
+msgstr "Iturburu-direktorioa:"
 
 #: jhbuild/commands/info.py:137
 msgid "Requires:"
@@ -588,12 +589,12 @@ msgstr "Aurretik:"
 #: jhbuild/commands/__init__.py:95 jhbuild/commands/sysdeps.py:66
 #, python-format
 msgid "required=%s"
-msgstr ""
+msgstr "beharrezkoa=%s"
 
 #: jhbuild/commands/__init__.py:97 jhbuild/commands/sysdeps.py:68
 #, python-format
 msgid "installed=%s"
-msgstr ""
+msgstr "instalatutakoa=%s"
 
 #. Translators: This is used to separate items of package metadata
 #: jhbuild/commands/__init__.py:99 jhbuild/commands/sysdeps.py:70
@@ -612,7 +613,7 @@ msgstr "Beharrezko paketeak:"
 #: jhbuild/commands/__init__.py:106 jhbuild/commands/sysdeps.py:149
 #: jhbuild/commands/sysdeps.py:180
 msgid "  System installed packages which are too old:"
-msgstr ""
+msgstr "  Zaharregiak diren eta sistemak instalatu dituen paketeak:"
 
 #: jhbuild/commands/__init__.py:116 jhbuild/commands/__init__.py:128
 #: jhbuild/commands/sysdeps.py:158 jhbuild/commands/sysdeps.py:174
@@ -623,7 +624,7 @@ msgstr "    (bat ere ez)"
 #: jhbuild/commands/__init__.py:118 jhbuild/commands/sysdeps.py:160
 #: jhbuild/commands/sysdeps.py:191
 msgid "  No matching system package installed:"
-msgstr ""
+msgstr "  Ez dago bat datorren sistema-paketerik instalatuta:"
 
 #: jhbuild/commands/__init__.py:142
 msgid "JHBuild commands are:"
@@ -640,12 +641,12 @@ msgstr "JHBuild komando erabilgarrien inguruko informazioa"
 #: jhbuild/commands/__init__.py:181
 #, python-format
 msgid "no such command (did you mean \"jhbuild build %s\"?)"
-msgstr "ez dago horrelako komandorik (\"jhbuild build %s\" esan nahi zenuen?)"
+msgstr "Ez dago horrelako komandorik (\"jhbuild build %s\" esan nahi zenuen?)"
 
 #: jhbuild/commands/__init__.py:183
 #, python-format
 msgid "no such command (did you mean \"jhbuild run %s\"?)"
-msgstr "ez dago horrelako komandorik (\"jhbuild run %s\" esan nahi zenuen?)"
+msgstr "Ez dago horrelako komandorik (\"jhbuild run %s\" esan nahi zenuen?)"
 
 #: jhbuild/commands/make.py:31
 msgid "Compile and install the module for the current directory"
@@ -654,16 +655,16 @@ msgstr "Konpilatu eta instalatu uneko direktoriorako modulua"
 #: jhbuild/commands/make.py:76
 #, python-format
 msgid "The current directory is not in the checkout root %r"
-msgstr ""
+msgstr "Uneko direktorioa ez dago erauzketako %r erroan"
 
 #: jhbuild/commands/make.py:88
 #, python-format
 msgid "No module matching current directory %r in the moduleset"
-msgstr ""
+msgstr "Ez dago uneko %r direktorioarekin bat datorren modulurik modulu multzoan"
 
 #: jhbuild/commands/rdepends.py:29
 msgid "Display reverse-dependencies of a module"
-msgstr ""
+msgstr "Bistaratu modulu baten alderantzizko mendekotasunak"
 
 #: jhbuild/commands/rdepends.py:32
 msgid "[ module ]"
@@ -671,29 +672,29 @@ msgstr "[ modulua ]"
 
 #: jhbuild/commands/rdepends.py:38
 msgid "display dependency path next to modules"
-msgstr ""
+msgstr "bistaratu mendekotasun-bidea moduluen alboan"
 
 #: jhbuild/commands/rdepends.py:41
 msgid "limit display to modules directly depending on given module"
-msgstr ""
+msgstr "mugatu bistaratzea emandako moduluaren zuzeneko mendekotasuna duten moduluetara"
 
 #: jhbuild/commands/sanitycheck.py:36
 msgid "Check that required support tools are available"
-msgstr ""
+msgstr "Egiaztatu behar diren euskarri-tresnak erabilgarri daudela"
 
 #: jhbuild/commands/sanitycheck.py:43
 msgid "no extra arguments expected"
-msgstr ""
+msgstr "ez da argumentu gehiagorik espero"
 
 #: jhbuild/commands/sanitycheck.py:55
 #, python-format
 msgid "checkout root (%s) is not writable"
-msgstr ""
+msgstr "deskagen erroa (%s) ez da idazgarria"
 
 #: jhbuild/commands/sanitycheck.py:58
 #, python-format
 msgid "install prefix (%s) is not writable"
-msgstr ""
+msgstr "Instalazio-aurrizkia (%s) ez da idazgarria"
 
 #: jhbuild/commands/sanitycheck.py:65 jhbuild/commands/sanitycheck.py:68
 #: jhbuild/commands/sanitycheck.py:71 jhbuild/commands/sanitycheck.py:75
@@ -704,7 +705,7 @@ msgstr ""
 #: jhbuild/modtypes/cmake.py:96 jhbuild/modtypes/meson.py:94
 #: jhbuild/versioncontrol/bzr.py:219 jhbuild/versioncontrol/cvs.py:302
 #: jhbuild/versioncontrol/darcs.py:105 jhbuild/versioncontrol/fossil.py:103
-#: jhbuild/versioncontrol/git.py:480 jhbuild/versioncontrol/hg.py:105
+#: jhbuild/versioncontrol/git.py:490 jhbuild/versioncontrol/hg.py:105
 #: jhbuild/versioncontrol/mtn.py:142 jhbuild/versioncontrol/svn.py:322
 #, python-format
 msgid "%s not found"
@@ -713,13 +714,13 @@ msgstr "%s ez da aurkitu"
 #: jhbuild/commands/sanitycheck.py:89
 msgid ""
 "Could not find XML catalog (usually part of the package 'libxml2-utils')"
-msgstr ""
+msgstr "Ezin izan da aurkitu XML katalogoa (normalean 'libxml2-utils' paketean dago)"
 
 #: jhbuild/commands/sanitycheck.py:99
 #, python-format
 msgid ""
 "Could not find %s in XML catalog (usually part of package 'docbook-xsl')"
-msgstr ""
+msgstr "Ezin izan da aurkitu %s XML katalogoan (normalean 'docbook-xsl' paketean dago)"
 
 #: jhbuild/commands/sanitycheck.py:106
 #, python-format
@@ -734,23 +735,23 @@ msgstr "ez da aurkitu curl edo wget"
 
 #: jhbuild/commands/sanitycheck.py:120
 msgid "Installed git program is not the right git"
-msgstr ""
+msgstr "Instalatutako git programa ez da git zuzena"
 
 #: jhbuild/commands/sanitycheck.py:126
 msgid "Could not check git program"
-msgstr ""
+msgstr "Ezin da git programa egiaztatu"
 
 #: jhbuild/commands/sanitycheck.py:156
 #, python-format
 msgid "aclocal can't see %s macros"
-msgstr ""
+msgstr "aclocal aplikazioak ezin ditu %s makroak ikusi"
 
 #: jhbuild/commands/sanitycheck.py:161
 #, python-format
 msgid ""
 "Please copy the lacking macros (%(macros)s) in one of the following paths: "
 "%(path)s"
-msgstr ""
+msgstr "Kopiatu falta diren makroak (%(macros)s) honako bideetako batean: %(path)s"
 
 #: jhbuild/commands/snapshot.py:31
 msgid "Print out a moduleset for the exact versions that are checked out"
@@ -758,7 +759,7 @@ msgstr ""
 
 #: jhbuild/commands/sysdeps.py:38
 msgid "Check and install tarball dependencies using system packages"
-msgstr ""
+msgstr "Egiaztatu eta instalatu tarball-aren mendekotasunak sistemaren paketeak erabilita"
 
 #: jhbuild/commands/sysdeps.py:46
 msgid "Machine readable list of missing sysdeps"
@@ -770,17 +771,17 @@ msgstr ""
 
 #: jhbuild/commands/sysdeps.py:52
 msgid "Install pkg-config modules via system"
-msgstr ""
+msgstr "Instalatu pkg-config moduluak sistemaren bidez"
 
 #: jhbuild/commands/sysdeps.py:56
 msgid ""
 "assume yes/the default answer to interactive questions during installation "
-"of system dependencies\""
+"of system dependencies"
 msgstr ""
 
 #: jhbuild/commands/sysdeps.py:137
 msgid "System installed packages which are new enough:"
-msgstr ""
+msgstr "Nahiko berriak diren eta sistemak instalatu dituen paketeak:"
 
 #: jhbuild/commands/sysdeps.py:146
 msgid "  (none)"
@@ -815,11 +816,11 @@ msgstr "Mendekotasunak sisteman instalatzen: %s"
 msgid "Build modules non-interactively and store build logs"
 msgstr ""
 
-#: jhbuild/commands/tinderbox.py:50
+#: jhbuild/commands/tinderbox.py:53
 msgid "directory to store build logs in"
 msgstr ""
 
-#: jhbuild/commands/tinderbox.py:82
+#: jhbuild/commands/tinderbox.py:85
 msgid "output directory for tinderbox build not specified"
 msgstr ""
 
@@ -834,7 +835,7 @@ msgstr "Desinstalatu modulu guztiak"
 #: jhbuild/commands/uninstall.py:48
 #, python-format
 msgid "unknown module %s and no default repository to try an automatic module"
-msgstr ""
+msgstr "%s modulu ezezaguna eta ez dago biltegi lehenetsirik modulu automatiko bat probatzeko"
 
 #: jhbuild/commands/uninstall.py:64
 #, python-format
@@ -865,11 +866,11 @@ msgstr "Konfigurazio-fitxategiaren kokaleku lehenetsia aldatu egin da. Eraman %(
 #: jhbuild/config.py:188
 #, python-format
 msgid "Could not include config file (%s)"
-msgstr ""
+msgstr "Ezin izan da konfigurazio-fitxategia sartu (%s)"
 
 #: jhbuild/config.py:202
 msgid "could not load config file"
-msgstr ""
+msgstr "ezin izan da konfigurazio-fitxategia kargatu"
 
 #: jhbuild/config.py:216
 #, python-format
@@ -891,16 +892,16 @@ msgstr ""
 
 #: jhbuild/config.py:267
 msgid "invalid checkout mode"
-msgstr ""
+msgstr "erauzte-modu baliogabea"
 
 #: jhbuild/config.py:271
 #, python-format
 msgid "invalid checkout mode (module: %s)"
-msgstr ""
+msgstr "erauzte-modu baliogabea (modulua: %s)"
 
 #: jhbuild/config.py:273
 msgid "copy mode requires copy_dir to be set"
-msgstr ""
+msgstr "kopiatze-modua erabitzeko copy_dir ezarri behar da"
 
 #: jhbuild/config.py:278
 #, python-format
@@ -911,17 +912,17 @@ msgstr ""
 #: jhbuild/config.py:290 jhbuild/config.py:293
 #, python-format
 msgid "%s must be an absolute path"
-msgstr ""
+msgstr "%s bide-izenak absolutua izan behar du"
 
 #: jhbuild/config.py:304
 #, python-format
 msgid "install prefix (%s) can not be created"
-msgstr ""
+msgstr "ezin izan da instalazio-aurrizkia (%s) sortu"
 
 #: jhbuild/config.py:311
 #, python-format
 msgid "working directory (%s) can not be created"
-msgstr ""
+msgstr "ezin izan da laneko direktorioa (%s) sortu"
 
 #: jhbuild/config.py:314
 msgid ""
@@ -989,12 +990,12 @@ msgstr "instalazio-aurrizkiak (%s) idazgarria izan behar du"
 #: jhbuild/frontends/buildscript.py:51
 #, python-format
 msgid "checkout root (%s) can not be created"
-msgstr ""
+msgstr "deskagen erroa (%s) ezin izan da sortu"
 
 #: jhbuild/frontends/buildscript.py:53
 #, python-format
 msgid "checkout root (%s) must be writable"
-msgstr ""
+msgstr "deskagen erroak (%s) idazgarria izan behar du"
 
 #: jhbuild/frontends/buildscript.py:60
 #, python-format
@@ -1074,7 +1075,7 @@ msgstr "Eraikuntza amaitu da"
 #: jhbuild/frontends/gtkui.py:377 jhbuild/frontends/terminal.py:316
 #, python-format
 msgid "Error during phase %(phase)s of %(module)s"
-msgstr ""
+msgstr "Errorea %(module)s moduluaren %(phase)s fasean"
 
 #: jhbuild/frontends/gtkui.py:394
 msgid "Pick an Action"
@@ -1083,16 +1084,16 @@ msgstr "Aukeratu ekintza bat"
 #: jhbuild/frontends/gtkui.py:397 jhbuild/frontends/terminal.py:343
 #, python-format
 msgid "Rerun phase %s"
-msgstr ""
+msgstr "Berrexekutatu %s fasea"
 
 #: jhbuild/frontends/gtkui.py:400 jhbuild/frontends/terminal.py:345
 #, python-format
 msgid "Ignore error and continue to %s"
-msgstr ""
+msgstr "Ez ikusiarena egin erroreari eta jarraitu %s modulura"
 
 #: jhbuild/frontends/gtkui.py:403 jhbuild/frontends/terminal.py:347
 msgid "Ignore error and continue to next module"
-msgstr ""
+msgstr "Ez ikusiarena egin eta jarraitu hurrengo modulura"
 
 #: jhbuild/frontends/gtkui.py:405 jhbuild/frontends/terminal.py:348
 msgid "Give up on module"
@@ -1146,7 +1147,8 @@ msgstr ""
 msgid ""
 "\n"
 "Conflicts during checkout:\n"
-msgstr ""
+msgstr "\n"
+"Gatazkak deskargan:\n"
 
 #. it could happen on a really badly-timed ctrl-c (see bug 551641)
 #: jhbuild/frontends/terminal.py:289 jhbuild/frontends/terminal.py:293
@@ -1271,11 +1273,11 @@ msgstr "Egiaztatzen"
 #: jhbuild/modtypes/autotools.py:299 jhbuild/modtypes/cmake.py:131
 #: jhbuild/modtypes/meson.py:141 jhbuild/modtypes/waf.py:122
 msgid "Creating tarball for"
-msgstr ""
+msgstr "Tarball-a sortzen honetarako:"
 
 #: jhbuild/modtypes/autotools.py:305
 msgid "Dist checking"
-msgstr ""
+msgstr "Banaketa egiaztatzen"
 
 #: jhbuild/modtypes/autotools.py:314
 msgid "Uninstalling old installed version"
@@ -1289,12 +1291,12 @@ msgstr "Instalatzen"
 
 #: jhbuild/modtypes/autotools.py:339
 msgid "Distcleaning"
-msgstr ""
+msgstr "Banaketa garbitzen"
 
 #: jhbuild/modtypes/autotools.py:375
 #, python-format
 msgid "<%s/> tag must contain value=''"
-msgstr ""
+msgstr "<%s/> etiketak value='' izan behar du"
 
 #: jhbuild/modtypes/__init__.py:60
 #, python-format
@@ -1314,7 +1316,7 @@ msgstr ""
 #: jhbuild/modtypes/__init__.py:143
 #, python-format
 msgid "no <branch> element found for %s"
-msgstr ""
+msgstr "ez da <branch> elementurik aurkitu %s(e)rako"
 
 #: jhbuild/modtypes/__init__.py:152
 #, python-format
@@ -1360,7 +1362,7 @@ msgstr ""
 #: jhbuild/modtypes/__init__.py:376
 #, python-format
 msgid "%d files remaining from previous build"
-msgstr ""
+msgstr "%d fitxategi geratzen dira aurreko eraikuntzatik"
 
 #: jhbuild/modtypes/__init__.py:379 jhbuild/utils/packagedb.py:218
 #, python-format
@@ -1393,25 +1395,25 @@ msgstr "%s saltatzen (eguneratu gabea)"
 #: jhbuild/modtypes/__init__.py:459
 #, python-format
 msgid "Skipping %s (package and dependencies not updated)"
-msgstr ""
+msgstr "%s saltatzen (paketea eta mendekotasunak ez daude eguneratuta)"
 
 #: jhbuild/modtypes/__init__.py:551
 msgid "ninja not found; use NINJA to point to a specific ninja binary"
-msgstr ""
+msgstr "ez da ninja aurkitu; erabili NINJA\tkomandoa ninja bitar jakin bati apuntatzeko"
 
 #: jhbuild/modtypes/__init__.py:617 jhbuild/modtypes/__init__.py:643
 #: jhbuild/modtypes/linux.py:82 jhbuild/modtypes/linux.py:89
 msgid "Checking out"
-msgstr ""
+msgstr "Deskargatzen"
 
 #: jhbuild/modtypes/__init__.py:621
 #, python-format
 msgid "source directory %s was not created"
-msgstr ""
+msgstr "iturburuko direktorioa (%s) ez da sortu"
 
 #: jhbuild/modtypes/__init__.py:646
 msgid "wipe directory and start over"
-msgstr ""
+msgstr "ezabatu direktorioa eta hasi berriro"
 
 #: jhbuild/modtypes/linux.py:46
 #, python-format
@@ -1466,7 +1468,7 @@ msgstr ""
 #: jhbuild/moduleset.py:143
 #, python-format
 msgid "Circular dependencies detected: %s"
-msgstr ""
+msgstr "Mendekotasun zirkularrak detektatu dira: %s"
 
 #: jhbuild/moduleset.py:292
 msgid "Unknown module:"
@@ -1499,7 +1501,7 @@ msgstr ""
 
 #: jhbuild/utils/cmds.py:42
 msgid "Call to undefined command"
-msgstr ""
+msgstr "Definitu gabeko komandoaren deia"
 
 #: jhbuild/utils/httpcache.py:182
 msgid "file not in cache, but not allowed to check network"
@@ -1522,34 +1524,34 @@ msgstr ""
 msgid "Failed to delete %(file)r: %(msg)s"
 msgstr ""
 
-#: jhbuild/utils/systeminstall.py:231
+#: jhbuild/utils/systeminstall.py:233
 msgid ""
 "No suitable root privilege command found; you should install \"sudo\" or "
 "\"pkexec\" (or the system package that provides it)"
 msgstr ""
 
-#: jhbuild/utils/systeminstall.py:260 jhbuild/utils/systeminstall.py:263
+#: jhbuild/utils/systeminstall.py:262 jhbuild/utils/systeminstall.py:265
 #, python-format
 msgid "PackageKit: %s"
 msgstr "PackageKit: %s"
 
-#: jhbuild/utils/systeminstall.py:270
+#: jhbuild/utils/systeminstall.py:272
 msgid "Error: python-gobject package not found."
 msgstr "Errorea: python-gobject paketea ez da aurkitu."
 
-#: jhbuild/utils/systeminstall.py:276
+#: jhbuild/utils/systeminstall.py:278
 msgid "Error: dbus-python package not found."
 msgstr "Errorea: dbus-python paketea ez da aurkitu."
 
-#: jhbuild/utils/systeminstall.py:293
+#: jhbuild/utils/systeminstall.py:295
 msgid "Computing packages to install. This might be slow. Please wait."
 msgstr "Instalatuko diren paketeak kalkulatzen. Denbora bat behar du, itxaron."
 
-#: jhbuild/utils/systeminstall.py:323
+#: jhbuild/utils/systeminstall.py:325
 msgid "Nothing available to install"
 msgstr "Ez dago ezer eskuragarri instalaziorako"
 
-#: jhbuild/utils/systeminstall.py:326
+#: jhbuild/utils/systeminstall.py:328
 #, python-format
 msgid ""
 "Installing:\n"
@@ -1557,74 +1559,74 @@ msgid ""
 msgstr "Instalatzen:\n"
 "  %s"
 
-#: jhbuild/utils/systeminstall.py:327
+#: jhbuild/utils/systeminstall.py:329
 msgid ""
 "This might take a very long time. Do not turn off your computer. You can run "
 "`pkmon' to monitor progress."
 msgstr "Honek denbora luzea behar dezake. Ez itzali ordenagailua. Nahi baduzu, `pkmon' exekutatu dezakezu aurrerapena behatzeko."
 
-#: jhbuild/utils/systeminstall.py:333
+#: jhbuild/utils/systeminstall.py:335
 msgid "Complete!"
 msgstr "Osatuta!"
 
-#: jhbuild/utils/systeminstall.py:346
+#: jhbuild/utils/systeminstall.py:348
 msgid "pkgfile not found, automatically installing"
 msgstr "pkgfile ez da aurkitu, automatikoki instalatzen"
 
-#: jhbuild/utils/systeminstall.py:348
+#: jhbuild/utils/systeminstall.py:350
 msgid "Failed to install pkgfile"
 msgstr "Ezin izan da pkgfile instalatu"
 
-#: jhbuild/utils/systeminstall.py:354
+#: jhbuild/utils/systeminstall.py:356
 msgid "pkgfile cache is old or doesn't exist, automatically updating"
 msgstr "pkgfile cachea zaharra da edo ez da existitzen, automatikoki instalatzen"
 
-#: jhbuild/utils/systeminstall.py:357
+#: jhbuild/utils/systeminstall.py:359
 msgid "Failed to create pkgfile cache"
-msgstr ""
-
-#: jhbuild/utils/systeminstall.py:360
-msgid "Failed to update pkgfile cache"
-msgstr ""
+msgstr "Huts egin du pkgfile cachea sortzeak"
 
 #: jhbuild/utils/systeminstall.py:362
+msgid "Failed to update pkgfile cache"
+msgstr "Huts egin du pkgfile cachea eguneratzeak"
+
+#: jhbuild/utils/systeminstall.py:364
 msgid "Successfully updated pkgfile cache"
-msgstr ""
+msgstr "pkgfile cachea ondo eguneratu da"
 
-#: jhbuild/utils/systeminstall.py:367
+#: jhbuild/utils/systeminstall.py:369
 msgid "Using pacman to install packages.  Please wait."
-msgstr ""
+msgstr "pacman erabiltzen paketeak instalatzeko. Itxaron."
 
-#: jhbuild/utils/systeminstall.py:371 jhbuild/utils/systeminstall.py:389
-#: jhbuild/utils/systeminstall.py:544
+#: jhbuild/utils/systeminstall.py:373 jhbuild/utils/systeminstall.py:391
+#: jhbuild/utils/systeminstall.py:546
 msgid "Nothing to install"
 msgstr "Ez dago instalatzeko ezer"
 
-#: jhbuild/utils/systeminstall.py:386
+#: jhbuild/utils/systeminstall.py:388
 #, python-format
 msgid "Provider for \"%s\" was not found, ignoring"
 msgstr ""
 
-#: jhbuild/utils/systeminstall.py:394
+#: jhbuild/utils/systeminstall.py:396
 msgid "Install failed"
 msgstr "Instalazioak huts egin du"
 
-#: jhbuild/utils/systeminstall.py:396
+#: jhbuild/utils/systeminstall.py:398
 msgid "Completed!"
 msgstr "Osatuta!"
 
-#: jhbuild/utils/systeminstall.py:478 jhbuild/utils/systeminstall.py:489
-#: jhbuild/utils/systeminstall.py:503
+#: jhbuild/utils/systeminstall.py:480 jhbuild/utils/systeminstall.py:491
+#: jhbuild/utils/systeminstall.py:505
 #, python-format
 msgid "No native package found for %(id)s (%(filename)s)"
 msgstr ""
 
-#: jhbuild/utils/systeminstall.py:508
+#: jhbuild/utils/systeminstall.py:510
 #, python-format
 msgid "Installing: %(pkgs)s"
 msgstr "Instalatzen: %(pkgs)s"
 
-#: jhbuild/utils/systeminstall.py:518
+#: jhbuild/utils/systeminstall.py:520
 msgid ""
 "Using apt-file to search for providers; this may be extremely slow. Please "
 "wait. Patience!"
@@ -1633,22 +1635,22 @@ msgstr ""
 #: jhbuild/utils/trigger.py:55
 #, python-format
 msgid "No keys specified in trigger script %r"
-msgstr ""
+msgstr "Ez da gakorik zehaztu %r abiarazte-scriptean"
 
 #: jhbuild/utils/unpack.py:145
 #, python-format
 msgid "Failed to unpack %s (unknown archive type)"
-msgstr ""
+msgstr "Huts egin du %s deskonprimatzeak (artxibo mota ezezaguna)"
 
 #: jhbuild/utils/unpack.py:147
 #, python-format
 msgid "Failed to unpack %s"
-msgstr ""
+msgstr "Huts egin du %s deskonprimatzeak"
 
 #: jhbuild/utils/unpack.py:153
 #, python-format
 msgid "Failed to unpack %s (empty file?)"
-msgstr ""
+msgstr "huts egin du %s deskonprimatzeak (fitxategi hutsik dago?)"
 
 #: jhbuild/versioncontrol/bzr.py:73 jhbuild/versioncontrol/darcs.py:50
 #: jhbuild/versioncontrol/fossil.py:48 jhbuild/versioncontrol/hg.py:52
@@ -1697,8 +1699,8 @@ msgstr ""
 
 #: jhbuild/versioncontrol/darcs.py:81 jhbuild/versioncontrol/darcs.py:87
 #: jhbuild/versioncontrol/fossil.py:80 jhbuild/versioncontrol/fossil.py:93
-#: jhbuild/versioncontrol/git.py:592 jhbuild/versioncontrol/git.py:632
-#: jhbuild/versioncontrol/git.py:708 jhbuild/versioncontrol/hg.py:89
+#: jhbuild/versioncontrol/git.py:602 jhbuild/versioncontrol/git.py:642
+#: jhbuild/versioncontrol/git.py:718 jhbuild/versioncontrol/hg.py:89
 #: jhbuild/versioncontrol/hg.py:95
 msgid "date based checkout not yet supported\n"
 msgstr ""
@@ -1715,46 +1717,46 @@ msgstr ""
 msgid "Unexpected: Checkoutdir is not a git repository:"
 msgstr ""
 
-#: jhbuild/versioncontrol/git.py:274
+#: jhbuild/versioncontrol/git.py:284
 #, python-format
 msgid ""
 "The requested branch \"%s\" is not available. Neither locally, nor remotely "
 "in the origin remote."
 msgstr ""
 
-#: jhbuild/versioncontrol/git.py:282
+#: jhbuild/versioncontrol/git.py:292
 msgid "Refusing to switch a dirty tree."
 msgstr ""
 
-#: jhbuild/versioncontrol/git.py:360
+#: jhbuild/versioncontrol/git.py:370
 #, python-format
 msgid "Command %s returned no output"
 msgstr ""
 
-#: jhbuild/versioncontrol/git.py:365
+#: jhbuild/versioncontrol/git.py:375
 #, python-format
 msgid "Command %s did not include commit line: %r"
 msgstr ""
 
-#: jhbuild/versioncontrol/git.py:452
+#: jhbuild/versioncontrol/git.py:462
 msgid ""
 "Failed to update module as it switched to git (you should check for changes "
 "then remove the directory)."
 msgstr ""
 
-#: jhbuild/versioncontrol/git.py:453
+#: jhbuild/versioncontrol/git.py:463
 msgid ""
 "Failed to update module (missing .git) (you should check for changes then "
 "remove the directory)."
 msgstr ""
 
-#: jhbuild/versioncontrol/git.py:557
+#: jhbuild/versioncontrol/git.py:567
 msgid ""
 "External handling failed\n"
 " If you are running git version < 1.5.6 it is recommended you update.\n"
 msgstr ""
 
-#: jhbuild/versioncontrol/git.py:604
+#: jhbuild/versioncontrol/git.py:614
 #, python-format
 msgid "Cannot get last revision from %s. Check the module location."
 msgstr ""
@@ -1844,31 +1846,31 @@ msgstr ""
 #: jhbuild/versioncontrol/tarball.py:205
 #, python-format
 msgid "tarball dir (%s) must be writable"
-msgstr ""
+msgstr "tarball-aren direktorioak (%s) idazgarria izan behar du"
 
 #: jhbuild/versioncontrol/tarball.py:217
 msgid "unable to find wget or curl"
-msgstr ""
+msgstr "ez da aurkitu wget edo curl"
 
 #: jhbuild/versioncontrol/tarball.py:233
 #, python-format
 msgid "tarball dir (%s) can not be created"
-msgstr ""
+msgstr "tarballa-aren direktorioa (%s) ezin izan da sortu"
 
 #: jhbuild/versioncontrol/tarball.py:245
 #, python-format
 msgid "failed to unpack %s"
-msgstr ""
+msgstr "huts egin du %s deskonprimatzeak"
 
 #: jhbuild/versioncontrol/tarball.py:248
 #, python-format
 msgid "could not unpack tarball (expected %s dir)"
-msgstr ""
+msgstr "ezin izan da tarball-a deskonprimatu (%s direktorioa espero zen)"
 
 #: jhbuild/versioncontrol/tarball.py:265
 #, python-format
 msgid "could not download patch (error: %s)"
-msgstr ""
+msgstr "ezin izan da adabakia deskargatu (errorea: %s)"
 
 #: jhbuild/versioncontrol/tarball.py:267
 msgid "could not download patch"
@@ -1877,7 +1879,7 @@ msgstr "adabakia ezin izan da deskargatu"
 #: jhbuild/versioncontrol/tarball.py:299
 #, python-format
 msgid "Failed to find patch: %s"
-msgstr ""
+msgstr "Huts egin du adabakia aurkitzeak: %s"
 
 #: jhbuild/versioncontrol/tarball.py:309
 msgid "Applying patch"
@@ -1885,7 +1887,7 @@ msgstr "Adabakia aplikatzen"
 
 #: jhbuild/versioncontrol/tarball.py:317
 msgid "unable to find quilt"
-msgstr ""
+msgstr "ez da quilt aurkitu"
 
 #: jhbuild/versioncontrol/tarball.py:328
 msgid "could not checkout quilt patch set"

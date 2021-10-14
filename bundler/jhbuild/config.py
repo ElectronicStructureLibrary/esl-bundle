@@ -40,11 +40,10 @@ if sys.platform.startswith('win'):
 
 __all__ = [ 'Config' ]
 
-_defaults_file = os.path.join(os.path.dirname(__file__), 'defaults.jhbuildrc')
-_custom_defaults = os.getenv("JHBUILD_DEFAULTS")
-if _custom_defaults:
-    _defaults_file = os.path.join(os.path.dirname(__file__), "..", "bundles",
-            _custom_defaults + ".jhbuildrc")
+_default_path = os.getenv("JHBUILD_CUSTOM_PATH")
+if not _default_path:
+    _default_path = os.path.dirname(__file__)
+_defaults_file = os.path.join(_default_path, 'defaults.jhbuildrc')
 
 _known_keys = [ 'moduleset', 'modules', 'skip', 'tags', 'prefix',
                 'partial_build', 'checkoutroot', 'buildroot', 'top_builddir',
@@ -65,6 +64,7 @@ _known_keys = [ 'moduleset', 'modules', 'skip', 'tags', 'prefix',
                 'mirror_policy', 'module_mirror_policy', 'dvcs_mirror_dir',
                 'shallow_clone', 'build_targets', 'cmakeargs', 'module_cmakeargs',
                 'mesonargs', 'module_mesonargs',
+                'setupargs', 'module_setupargs',
                 'print_command_pattern', 'static_analyzer',
                 'module_static_analyzer', 'static_analyzer_template',
                 'static_analyzer_outputdir', 'check_sysdeps', 'system_prefix',

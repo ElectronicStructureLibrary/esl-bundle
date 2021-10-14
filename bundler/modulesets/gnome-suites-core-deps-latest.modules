@@ -16,8 +16,6 @@
     href="https://pagure.io/"/>
 <repository type="git" name="salsa.debian.org"
     href="https://salsa.debian.org/"/>
-  <repository type="git" name="source.puri.sm"
-      href="https://source.puri.sm"/>
 
 <!--
   WARNING: You should use github-tar and build from a release tarball;
@@ -72,13 +70,26 @@
 
 <!-- Please try to keep organized alphabetically -->
 
-  <autotools id="amtk">
+  <meson id="amtk">
     <branch/>
     <dependencies>
       <dep package="gtk-doc"/>
       <dep package="gtk+-3"/>
     </dependencies>
-  </autotools>
+  </meson>
+
+  <meson id="appstream" mesonargs="-Dstemming=false -Dvapi=true">
+    <branch repo="github.com" checkoutdir="appstream" module="ximion/appstream.git"/>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="gobject-introspection"/>
+      <dep package="libcurl"/>
+      <dep package="libxml2"/>
+      <dep package="libyaml"/>
+      <dep package="lmdb"/>
+      <dep package="vala"/>
+    </dependencies>
+  </meson>
 
   <meson id="appstream-glib" mesonargs="-Dstemmer=false -Drpm=false">
     <branch repo="github.com" checkoutdir="appstream-glib" module="hughsie/appstream-glib.git"/>
@@ -108,21 +119,21 @@
     </dependencies>
   </meson>
 
-  <autotools id="atkmm-1.6">
-    <branch repo="gitlab.gnome.org" checkoutdir="atkmm-1.6" module="GNOME/atkmm.git" revision="atkmm-2-28"/>
+  <meson id="atkmm-1.6">
+    <branch checkoutdir="atkmm-1.6" module="atkmm" revision="atkmm-2-28"/>
     <dependencies>
       <dep package="glibmm-2.4"/>
       <dep package="atk"/>
     </dependencies>
-  </autotools>
+  </meson>
 
-  <autotools id="atkmm">
+  <meson id="atkmm">
     <branch/>
     <dependencies>
       <dep package="glibmm"/>
       <dep package="atk"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="babl">
     <branch/>
@@ -139,9 +150,9 @@
     </branch>
   </cmake>
 
-  <autotools id="cairo" autogenargs="--enable-gl">
+  <meson id="cairo">
     <if condition-set="quartz">
-      <autogenargs value="--enable-quartz --disable-gl"/>
+      <mesonargs value="-Dgl-backend=disabled"/>
     </if>
     <branch repo="gitlab.freedesktop.org"
             module="cairo/cairo.git"
@@ -161,21 +172,20 @@
       <dep package="libpng"/>
       <dep package="zlib"/>
     </dependencies>
-  </autotools>
+  </meson>
 
-  <autotools id="cairomm-1.0" autogen-sh="configure">
-    <branch module="releases/cairomm-${version}.tar.gz"
-            version="1.13.1"
-            repo="cairo.org"
-            hash="sha256:97a78bd7de6baf8af3da1f9b39f1317f8da9f1145b7694e928fbd5521da08ef6">
-     </branch>
+  <meson id="cairomm-1.0">
+    <branch repo="gitlab.freedesktop.org"
+            module="cairo/cairomm.git"
+            checkoutdir="cairomm-1.0"
+            revision="cairomm-1-14"/>
      <dependencies>
         <dep package="cairo"/>
         <dep package="libsigcplusplus-2.0"/>
      </dependencies>
-  </autotools>
+  </meson>
 
-  <autotools id="cairomm">
+  <meson id="cairomm">
     <branch repo="gitlab.freedesktop.org"
             module="cairo/cairomm.git"
             checkoutdir="cairomm"/>
@@ -183,7 +193,7 @@
        <dep package="cairo"/>
        <dep package="libsigcplusplus"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="cantarell-fonts">
     <branch/>
@@ -346,9 +356,9 @@
       <autogenargs value="--with-hunspell-dir=/usr/local/share/hunspell"/>
     </if>
     <branch repo="github-tar"
-            version="2.2.6"
+            version="2.2.12"
             module="AbiWord/enchant/releases/download/v${version}/enchant-${version}.tar.gz"
-            hash="sha256:8048c5bd26190b21279745cfecd05808c635bc14912e630340cd44a49b87d46d">
+            hash="sha256:6b9bc58ae714ee7f5335ade966f4ac5718d5339e280cc9e1cca9ab278c06227e">
     </branch>
     <dependencies>
       <dep package="hunspell"/>
@@ -595,21 +605,21 @@
     </after>
   </meson>
 
-  <autotools id="glibmm-2.4">
-    <branch checkoutdir="glibmm-2.4" module="glibmm" revision="glibmm-2-62"/>
+  <meson id="glibmm-2.4">
+    <branch checkoutdir="glibmm-2.4" module="glibmm" revision="glibmm-2-66"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="libsigcplusplus-2.0"/>
     </dependencies>
-  </autotools>
+  </meson>
 
-  <autotools id="glibmm">
+  <meson id="glibmm">
     <branch/>
     <dependencies>
       <dep package="glib"/>
       <dep package="libsigcplusplus"/>
     </dependencies>
-  </autotools>
+  </meson>
 
 <!-- This is a special module: it's needed to build from git, but not
      needed to build from tarballs, so it doesn't need to be in our suites
@@ -645,7 +655,7 @@
       <dep package="libgdata"/>
       <dep package="libgfbgraph"/>
       <dep package="libzapojit"/>
-      <dep package="tracker"/>
+      <dep package="tracker-2"/>
     </dependencies>
   </autotools>
 
@@ -667,7 +677,7 @@
     <dependencies>
       <dep package="dbus-glib"/>
       <dep package="gobject-introspection"/>
-      <dep package="mozjs68"/>
+      <dep package="mozjs78"/>
       <dep package="readline"/>
       <if condition-set="linux">
         <dep package="sysprof"/>
@@ -686,6 +696,7 @@
       <dep package="glib"/>
       <dep package="cairo"/>
       <dep package="python3-devel"/>
+      <dep package="python3-markdown"/>
     </dependencies>
   </meson>
 
@@ -724,7 +735,7 @@
     </dependencies>
   </autotools>
 
-  <meson id="grilo-plugins">
+  <meson id="grilo-plugins" mesonargs="-Denable-tracker3=yes -Denable-tracker=no">
     <branch/>
     <dependencies>
       <dep package="grilo"/>
@@ -768,7 +779,6 @@
     <dependencies>
       <dep package="gtk+-3"/>
       <dep package="enchant-2"/>
-      <dep package="iso-codes"/>
       <if condition-set="macos">
         <dep package="gtk-mac-integration"/>
       </if>
@@ -828,6 +838,9 @@
       <dep package="gstreamer"/>
       <dep package="graphene"/>
       <dep package="iso-codes"/>
+      <if condition-set="x11">
+        <dep package="x11-xcb"/>
+      </if>
     </dependencies>
     <suggests>
       <if condition-set="udev">
@@ -877,7 +890,7 @@
     </suggests>
   </meson>
 
-  <meson id="gtk+" mesonargs="-Dbroadway-backend=true">
+  <meson id="gtk4" mesonargs="-Dbroadway-backend=true">
     <if condition-set="x11">
       <mesonargs value="-Dx11-backend=true"/>
     </if>
@@ -896,9 +909,8 @@
     <if condition-unset="quartz">
       <mesonargs value="-Dquartz-backend=false"/>
     </if>
-    <branch repo="gitlab.gnome.org" checkoutdir="gtk+" module="GNOME/gtk.git"/>
+    <branch repo="gitlab.gnome.org" checkoutdir="gtk" module="GNOME/gtk.git"/>
     <dependencies>
-      <dep package="atk"/>
       <dep package="glib"/>
       <dep package="cairo"/>
       <dep package="pango"/>
@@ -1023,7 +1035,7 @@
     <branch />
     <dependencies>
       <dep package="gobject-introspection"/>
-      <dep package="gtk+"/>
+      <dep package="gtk+-3"/>
       <dep package="pygobject"/>
     </dependencies>
   </autotools>
@@ -1040,30 +1052,38 @@
     </dependencies>
   </meson>
 
-  <autotools id="gtkmm">
+  <meson id="gtkmm">
     <branch/>
     <dependencies>
       <dep package="cairomm"/>
       <dep package="pangomm"/>
-      <dep package="atkmm"/>
-      <dep package="gtk+"/>
-      <dep package="glib"/>
+      <dep package="glibmm"/>
+      <dep package="gtk4"/>
     </dependencies>
-  </autotools>
+  </meson>
 
-  <autotools id="gtkmm-3">
-    <branch repo="gitlab.gnome.org" checkoutdir="gtkmm-3" module="GNOME/gtkmm.git" revision="gtkmm-3-24"/>
+  <meson id="gtkmm-3">
+    <branch checkoutdir="gtkmm-3" module="gtkmm" revision="gtkmm-3-24"/>
     <dependencies>
       <dep package="cairomm-1.0"/>
       <dep package="pangomm-1.4"/>
       <dep package="atkmm-1.6"/>
+      <dep package="glibmm-2.4"/>
       <dep package="gtk+-3"/>
-      <dep package="glib"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="gtksourceview">
     <branch/>
+    <dependencies>
+      <dep package="libxml2"/>
+      <dep package="shared-mime-info"/>
+      <dep package="gtk4"/>
+    </dependencies>
+  </meson>
+
+  <meson id="gtksourceview-4">
+    <branch checkoutdir="gtksourceview-4" module="gtksourceview" revision="gtksourceview-4-8"/>
     <dependencies>
       <dep package="libxml2"/>
       <dep package="shared-mime-info"/>
@@ -1071,7 +1091,7 @@
     </dependencies>
   </meson>
 
-  <autotools id="libgudev" autogenargs="--disable-umockdev">
+  <meson id="libgudev" mesonargs="-Dtests=disabled">
     <branch />
     <dependencies>
       <dep package="glib"/>
@@ -1079,7 +1099,7 @@
     <suggests>
       <dep package="gobject-introspection"/>
     </suggests>
-  </autotools>
+  </meson>
 
   <meson id="gupnp"
              mesonargs="-Dcontext_manager=network-manager">
@@ -1122,16 +1142,15 @@
     </suggests>
  </autotools>
 
-  <autotools id="gupnp-igd"
-             autogenargs="--disable-python">
+  <meson id="gupnp-igd">
     <branch/>
     <dependencies>
       <dep package="glib"/>
       <dep package="gupnp"/>
     </dependencies>
-  </autotools>
+  </meson>
 
-  <autotools id="harfbuzz" autogenargs="--with-gobject=yes">
+  <meson id="harfbuzz" mesonargs="-Dintrospection=enabled -Dgobject=enabled">
     <branch repo="github.com"
             module="harfbuzz/harfbuzz"
             checkoutdir="harfbuzz"/>
@@ -1139,10 +1158,11 @@
       <dep package="c++"/>
       <dep package="freetype2"/>
       <dep package="glib"/>
+      <dep package="gobject-introspection"/>
       <dep package="libicu"/>
       <dep package="ragel"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <autotools id="hicolor-icon-theme" supports-non-srcdir-builds="no"
              check-target="false">
@@ -1308,7 +1328,18 @@
   </meson>
 
   <meson id="libhandy" mesonargs="-Dglade_catalog=disabled">
-    <branch repo="source.puri.sm" module="Librem5/libhandy"/>
+    <branch repo="gitlab.gnome.org" module="GNOME/libhandy" revision="libhandy-0-0"/>
+    <dependencies>
+      <dep package="glade"/>
+      <dep package="glib"/>
+      <dep package="gobject-introspection"/>
+      <dep package="gtk+-3"/>
+      <dep package="vala"/>
+    </dependencies>
+  </meson>
+
+  <meson id="libhandy-1" mesonargs="-Dglade_catalog=disabled">
+    <branch repo="gitlab.gnome.org" checkoutdir="libhandy-1" module="GNOME/libhandy"/>
     <dependencies>
       <dep package="glade"/>
       <dep package="glib"/>
@@ -1428,11 +1459,11 @@
                     -DICAL_GLIB_VAPI:BOOL=true
                     -DSHARED_ONLY:BOOL=true">
     <branch repo="github-tar"
-            version="3.0.7"
+            version="3.0.9"
             checkoutdir="libical-${version}"
             module="libical/libical/releases/download/v${version}/libical-${version}.tar.gz"
-            hash="sha256:0abe66df1ea826e57db7f281c704ede834c84139012e6c686ea7adafd4e763fc"
-            size="881352">
+            hash="sha256:bd26d98b7fcb2eb0cd5461747bbb02024ebe38e293ca53a7dfdcb2505265a728"
+            size="886500">
     </branch>
   </cmake>
 
@@ -1461,7 +1492,7 @@
     </dependencies>
   </autotools>
 
-  <autotools id="libmediaart" autogenargs="--disable-qt">
+  <meson id="libmediaart" mesonargs="-Dimage_library=gdk-pixbuf">
     <branch/>
     <dependencies>
       <dep package="gdk-pixbuf"/>
@@ -1469,7 +1500,7 @@
       <dep package="gtk-doc"/>
       <dep package="vala"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="libnma">
     <branch/>
@@ -1493,6 +1524,9 @@
       <dep package="glib"/>
       <dep package="gtk+-3"/>
       <dep package="gobject-introspection"/>
+      <dep package="docbook-xsl"/>
+      <dep package="docbook-xml"/>
+      <dep package="xsltproc"/>
     </dependencies>
   </meson>
 
@@ -1536,6 +1570,13 @@
       <dep package="gobject-introspection"/>
       <dep package="gtk+-3"/>
       <dep package="pygobject"/>
+    </dependencies>
+  </meson>
+
+  <meson id="libportal">
+    <branch repo="github.com" checkoutdir="libportal" module="flatpak/libportal.git"/>
+    <dependencies>
+      <dep package="glib"/>
     </dependencies>
   </meson>
 
@@ -1614,19 +1655,19 @@
     </dependencies>
   </meson>
 
-  <autotools id="libpsl" autogenargs="--enable-runtime=libicu --enable-builtin=libicu">
+  <meson id="libpsl" mesonargs="-Druntime=libicu -Dbuiltin=libicu">
     <branch repo="github-tar"
-            version="0.21.0"
-            module="rockdaboot/libpsl/releases/download/libpsl-${version}/libpsl-${version}.tar.gz"
+            version="0.21.1"
+            module="rockdaboot/libpsl/releases/download/${version}/libpsl-${version}.tar.gz"
             checkoutdir="libpsl-${version}"
-            hash="sha256:41bd1c75a375b85c337b59783f5deb93dbb443fb0a52d257f403df7bd653ee12"/>
+            hash="sha256:ac6ce1e1fbd4d0254c4ddb9d37f1fa99dec83619c1253328155206b896210d4c"/>
     <dependencies>
       <dep package="libicu"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="libsoup" mesonargs="-Dtls_check=false -Dvapi=enabled">
-    <branch/>
+    <branch revision="gnome-3-38"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="libxml2"/>
@@ -1641,7 +1682,24 @@
     </suggests>
   </meson>
 
-  <autotools id="libvirt-glib" autogenargs="--enable-werror=no">
+  <meson id="libsoup3" mesonargs="-Dtls_check=false -Dvapi=enabled">
+    <branch module="libsoup.git"
+            checkoutdir="libsoup3"/>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="libxml2"/>
+      <dep package="libpsl"/>
+      <dep package="sqlite3"/>
+      <dep package="gobject-introspection"/>
+      <dep package="vala"/>
+      <dep package="brotli"/>
+    </dependencies>
+    <suggests>
+      <dep package="glib-networking"/>
+    </suggests>
+  </meson>
+
+  <meson id="libvirt-glib" mesonargs="-Dgit_werror=disabled">
     <branch repo="github.com"
             checkoutdir="libvirt"
             module="libvirt/libvirt-glib.git"/>
@@ -1651,13 +1709,12 @@
       <dep package="libvirt"/>
       <dep package="vala"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <autotools id="libwacom">
-    <branch repo="sourceforge.net"
-            module="linuxwacom/files/libwacom/libwacom-${version}.tar.bz2" version="0.23"
-            hash="sha256:a08ac59ff26dbdf5888a6ad7bd97a66741807cda6bb1c7e7f299a555129c3162"
-            size="473700"/>
+    <branch repo="github.com"
+            checkoutdir="libwacom"
+            module="linuxwacom/libwacom.git"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="libgudev"/>
@@ -1736,6 +1793,28 @@
     </branch>
   </distutils>
 
+  <distutils id="python3-lxml" python3="1">
+    <branch repo="pypi.org"
+            version="4.6.2"
+            module="l/lxml/lxml-${version}.tar.gz"
+            checkoutdir="python3-lxml-${version}"
+            hash="sha256:cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc">
+    </branch>
+    <dependencies>
+      <dep package="python3-setuptools"/>
+      <dep package="python3-devel"/>
+    </dependencies>
+  </distutils>
+
+  <distutils id="python3-markdown" python3="1">
+    <branch repo="pypi.org"
+            version="3.2.2"
+            module="m/markdown/Markdown-${version}.tar.gz"
+            checkoutdir="python3-markdown-${version}"
+            hash="sha256:1fafe3f1ecabfb514a5285fca634a53c1b32a81cb0feb154264d55bf2ff22c17">
+    </branch>
+  </distutils>
+
   <distutils id="python3-setuptools" python3="1">
     <branch repo="pypi.org"
             module="s/setuptools/setuptools-${version}.zip"
@@ -1746,10 +1825,10 @@
 
   <distutils id="meson" python3="1">
     <branch repo="github-tar"
-            version="0.53.1"
+            version="0.57.2"
             module="mesonbuild/meson/releases/download/${version}/meson-${version}.tar.gz"
             checkoutdir="meson-${version}"
-            hash="sha256:ec1ba33eea701baca2c1607dac458152dc8323364a51fdef6babda2623413b04">
+            hash="sha256:3a83e7b1c5de94fa991ec34d9b198d94f38ed699d3524cb0fdf3b99fd23d4cc5">
       <patch file="meson-dont-use-rpath-on-pkg-config-deps.patch" strip="1"/>
       <patch file="meson-revert-change-pkgconfig-directory-freebsd.patch" strip="1"/>
     </branch>
@@ -1784,38 +1863,20 @@
     </dependencies>
   </autotools>
 
-  <autotools id="mozjs60" autogen-sh="js/src/configure"
+  <autotools id="mozjs78" autogen-sh="js/src/configure"
              force-non-srcdir-builds="yes"
              supports-unknown-configure-options="no"
              autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s %(autogenargs)s"
-             autogenargs="--enable-posix-nspr-emulation --with-system-zlib --with-intl-api --disable-jemalloc AUTOCONF=autoconf">
-    <!-- prefix option must have an = sign in mozilla's configure -->
-    <pkg-config>mozjs-60.pc</pkg-config>
-    <branch repo="gnome-download" version="60.8.0"
-            module="teams/releng/tarballs-needing-help/mozjs/mozjs-${version}.tar.bz2"
-            hash="sha256:697331336c3d65b80ded9ca87b4a8ceb804e5342b476eaa133ac638102a9dc5d"
-            size="32802956"/>
-    <dependencies>
-      <dep package="libffi"/>
-      <dep package="python2"/>
-      <dep package="zlib"/>
-    </dependencies>
-  </autotools>
-
-  <autotools id="mozjs68" autogen-sh="js/src/configure"
-             force-non-srcdir-builds="yes"
-             supports-unknown-configure-options="no"
-             autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s %(autogenargs)s"
-             autogenargs="--enable-posix-nspr-emulation --enable-unaligned-private-values --with-system-zlib --with-intl-api --disable-jemalloc AUTOCONF=autoconf">
+             autogenargs="--with-system-zlib --with-intl-api --disable-jemalloc AUTOCONF=autoconf">
     <if condition-set="freebsd">
       <autogenargs value="LLVM_CONFIG=llvm-config90"/>
     </if>
     <!-- prefix option must have an = sign in mozilla's configure -->
-    <pkg-config>mozjs-68.pc</pkg-config>
-    <branch repo="gnome-download" version="68.4.2"
+    <pkg-config>mozjs-78.pc</pkg-config>
+    <branch repo="gnome-download" version="78.11.0"
             module="teams/releng/tarballs-needing-help/mozjs/mozjs-${version}.tar.bz2"
-            hash="sha256:097fb482aa0e57fb117fde6816fbabfedcb862ee81906990363954f47ce93227"
-            size="70569055"/>
+            hash="sha256:5ad54ac2b0368b9748e08756658eb988d65e5bb088d91baf43267486bcbf1d26"
+            size="70531559"/>
     <dependencies>
       <dep package="libffi"/>
       <dep package="zlib"/>
@@ -1845,12 +1906,11 @@
   </meson>
 
   <meson id="pangomm-1.4">
-    <branch checkoutdir="pangomm-1.4" module="pangomm" revision="pangomm-2-42"/>
+    <branch checkoutdir="pangomm-1.4" module="pangomm" revision="pangomm-2-46"/>
     <dependencies>
       <dep package="glibmm-2.4"/>
       <dep package="cairomm-1.0"/>
       <dep package="pango"/>
-      <dep package="atk"/>
     </dependencies>
   </meson>
 
@@ -1860,7 +1920,6 @@
       <dep package="glibmm"/>
       <dep package="cairomm"/>
       <dep package="pango"/>
-      <dep package="atk"/>
     </dependencies>
   </meson>
 
@@ -1899,17 +1958,17 @@
     </suggests>
   </autotools>
 
-  <distutils id="pycairo" python3="1">
+  <meson id="pycairo">
     <branch repo="github.com"
             module="pygobject/pycairo.git"
             checkoutdir="pycairo-python3"/>
     <dependencies>
       <dep package="python3-devel"/>
+      <dep package="cairo"/>
     </dependencies>
-  </distutils>
+  </meson>
 
-  <!-- Python 3 build of pygobject -->
-  <distutils id="pygobject" python3="1">
+  <meson id="pygobject">
     <branch/>
     <dependencies>
       <dep package="glib"/>
@@ -1917,7 +1976,7 @@
       <dep package="python3-devel"/>
       <dep package="gobject-introspection"/>
     </dependencies>
-  </distutils>
+  </meson>
 
   <autotools id="sound-theme-freedesktop">
     <branch repo="people.freedesktop.org"
@@ -1930,7 +1989,7 @@
   <autotools id="libsass" autogen-sh="autoreconf">
     <branch repo="github.com"
             module="sass/libsass.git"
-            revision="3.6.3"/>
+            revision="3.6.4"/>
   </autotools>
 
   <autotools id="sassc" autogen-sh="autoreconf">
@@ -2037,16 +2096,13 @@
     </dependencies>
   </autotools>
 
-  <autotools id="tepl">
+  <meson id="tepl">
     <branch/>
     <dependencies>
-      <dep package="gtk-doc"/>
-      <dep package="gtksourceview"/>
       <dep package="amtk"/>
-      <dep package="libxml2"/>
-      <dep package="uchardet"/>
+      <dep package="gtksourceview-4"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="totem-pl-parser">
     <branch/>
@@ -2063,9 +2119,9 @@
     </suggests>
   </meson>
 
-  <meson id="tracker"
+  <meson id="tracker-2"
          mesonargs="-Dunicode_support=icu -Dbash_completion=${prefix}/share/bash-completion/completions">
-    <branch/>
+    <branch checkoutdir="tracker-2" module="tracker" revision="tracker-2.3"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="json-glib"/>
@@ -2084,11 +2140,11 @@
     </suggests>
   </meson>
 
-  <meson id="tracker-miners">
-    <branch/>
+  <meson id="tracker-miners-2">
+    <branch checkoutdir="tracker-miners-2" module="tracker-miners" revision="tracker-miners-2.3"/>
     <dependencies>
       <dep package="glib"/>
-      <dep package="tracker"/>
+      <dep package="tracker-2"/>
       <dep package="libpng"/>
       <dep package="libgrss"/>
       <dep package="libvorbis"/>
@@ -2097,11 +2153,9 @@
       </if>
     </dependencies>
     <suggests>
-      <dep package="libsecret"/>
       <dep package="gstreamer"/>
       <dep package="gst-plugins-base"/>
       <dep package="libgsf"/>
-      <dep package="gdk-pixbuf"/>
       <dep package="poppler"/>
       <dep package="totem-pl-parser"/>
       <dep package="dconf"/>
@@ -2111,14 +2165,45 @@
     </suggests>
   </meson>
 
-  <cmake id="uchardet">
-    <pkg-config>uchardet.pc</pkg-config>
-    <branch repo="freedesktop.org"
-            hash="sha1:c04257ee7fb5ebbae144311d70b42c1d7efe41b9"
-            module="uchardet/releases/uchardet-${version}.tar.xz"
-            size="169192"
-            version="0.0.6"/>
-  </cmake>
+  <meson id="tracker"
+         mesonargs="-Dunicode_support=icu -Dbash_completion_dir=${prefix}/share/bash-completion/completions">
+    <branch revision="master"/>
+    <dependencies>
+      <dep package="asciidoc"/>
+      <dep package="glib"/>
+      <dep package="json-glib"/>
+      <dep package="libicu"/>
+      <dep package="libsoup"/>
+      <dep package="sqlite3"/>
+      <dep package="vala"/>
+    </dependencies>
+  </meson>
+
+  <meson id="tracker-miners" mesonargs="-Dextract=true -Dminer_apps=false -Dminer_rss=false">
+    <branch revision="master"/>
+    <dependencies>
+      <dep package="asciidoc"/>
+      <dep package="glib"/>
+      <dep package="tracker"/>
+      <dep package="libpng"/>
+      <dep package="libgrss"/>
+      <if condition-set="linux">
+        <dep package="libseccomp"/>
+      </if>
+    </dependencies>
+    <suggests>
+      <dep package="dconf"/>
+      <dep package="gstreamer"/>
+      <dep package="gst-plugins-base"/>
+      <dep package="libgsf"/>
+      <dep package="poppler"/>
+      <dep package="totem-pl-parser"/>
+      <dep package="upower"/>
+      <if condition-set="linux">
+        <dep package="NetworkManager"/>
+      </if>
+    </suggests>
+  </meson>
 
   <autotools id="uhttpmock" supports-non-srcdir-builds="no">
     <branch repo="gitlab.com" checkoutdir="uhttpmock" module="uhttpmock/uhttpmock.git"/>
@@ -2152,37 +2237,40 @@
     </dependencies>
   </autotools>
 
-  <autotools id="wayland"
-             autogenargs="--disable-documentation">
+  <meson id="wayland"
+             mesonargs="-Ddocumentation=false">
     <branch repo="gitlab.freedesktop.org"
             module="wayland/wayland.git"
             checkoutdir="wayland"/>
     <dependencies>
       <dep package="libffi"/>
+      <!-- expat needed by default 'scanner' option -->
+      <dep package="expat"/>
+      <!-- Deps needed for default 'documentation' option -->
       <dep package="doxygen"/>
       <dep package="xmlto"/>
+      <dep package="graphviz"/> <!-- for 'dot' binary -->
+      <dep package="xsltproc"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <cmake id="libwpe">
     <branch repo="wpewebkit.org"
             module="libwpe-${version}.tar.xz"
-            version="1.3.1"
-            hash="sha256:5d5e23ce48b35278201b3b88e5b1a89bd54b38391721b4e74ce472c3905df8b0"/>
+            version="1.10.0"
+            hash="sha256:2415e270d45e3595ed4052bc105f733744dc2d3677e12ff4a831e5029841084d"/>
   </cmake>
 
-  <cmake id="wpebackend-fdo">
+  <meson id="wpebackend-fdo">
     <branch repo="wpewebkit.org"
             module="wpebackend-fdo-${version}.tar.xz"
-            version="1.3.1"
-            hash="sha256:b0d136aa9ce9f94b1d06b258ed68c4a7b588b2e692d448d9c6eedb72edf56739">
-      <patch file="https://github.com/Igalia/WPEBackend-fdo/commit/a67dafa86143ea332824482bd579317be1f0fbe6.patch" strip="1"/>
-    </branch>
+            version="1.10.0"
+            hash="sha256:b89dfd3500a4dec711132cd7bff72599e67d56a419d000730e14bb99547509cc"/>
     <dependencies>
       <dep package="libwpe"/>
       <dep package="glib"/>
     </dependencies>
-  </cmake>
+  </meson>
 
   <cmake id="openjpeg">
     <branch repo="github-tar"
@@ -2192,7 +2280,7 @@
             hash="sha256:63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9"/>
   </cmake>
 
-  <cmake id="WebKit" cmakeargs="-DPORT=GTK -DCMAKE_BUILD_TYPE=RelWithDebInfo">
+  <cmake id="WebKit" cmakeargs="-DPORT=GTK -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUSE_SOUP2=ON">
     <if condition-unset="x11">
       <cmakeargs value="-DENABLE_X11_TARGET=OFF"/>
     </if>
@@ -2201,9 +2289,10 @@
     </if>
     <pkg-config>webkit2gtk-4.0.pc</pkg-config>
     <branch repo="webkitgtk.org"
-            module="webkitgtk-2.27.90.tar.xz" version="2.27.90"
-            hash="sha256:9abcec719f1d2564d1d7deb5507e1a084132492ff0ad4777aa8e2d3e0fba7cc4"
-            size="21411992"/>
+            module="webkitgtk-${version}.tar.xz"
+            version="2.33.2"
+            hash="sha256:32bb0ace3cf4df42ff805e00de3fc13a2287f173d3ff5982816a7c5b4f8b551b"
+            size="24688880"/>
     <dependencies>
       <dep package="c++"/>
       <dep package="at-spi2-core"/>
@@ -2221,6 +2310,7 @@
       <dep package="gtk+-3"/>
       <dep package="harfbuzz"/>
       <dep package="hyphen"/>
+      <dep package="lcms2"/>
       <dep package="libicu"/>
       <dep package="libjpeg"/>
       <dep package="openjpeg"/>
@@ -2281,7 +2371,7 @@
     </dependencies>
   </meson>
 
-  <autotools id="yelp-tools">
+  <meson id="yelp-tools">
     <branch/>
     <dependencies>
       <dep package="libxslt"/>
@@ -2290,8 +2380,9 @@
       <dep package="itstool"/>
       <dep package="xmllint"/>
       <dep package="xsltproc"/>
+      <dep package="python3-lxml"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <autotools id="yelp-xsl">
     <branch/>

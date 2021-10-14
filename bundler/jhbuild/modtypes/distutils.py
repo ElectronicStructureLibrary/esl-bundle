@@ -38,12 +38,12 @@ class DistutilsModule(Package, DownloadableModule):
     PHASE_BUILD = 'build'
     PHASE_INSTALL = 'install'
 
-    def __init__(self, name, branch=None, supports_non_srcdir_builds = True, buildargs=''):
+    def __init__(self, name, branch=None, supports_non_srcdir_builds = True, setupargs=''):
         Package.__init__(self, name, branch=branch)
         self.supports_non_srcdir_builds = supports_non_srcdir_builds
         self.supports_install_destdir = True
         self.python = os.environ.get('PYTHON', 'python2')
-        self.buildargs = buildargs
+        self.setupargs = setupargs
 
     def get_srcdir(self, buildscript):
         return self.branch.srcdir
@@ -63,10 +63,10 @@ class DistutilsModule(Package, DownloadableModule):
         cmd = [self.python, 'setup.py', 'build']
         if srcdir != builddir:
             cmd.extend(['--build-base', builddir])
-        buildargs = (self.buildargs + ' ' + self.config.module_autogenargs.get(
-            self.name, self.config.autogenargs)).strip()
-        if len(buildargs) > 0:
-            cmd.extend(buildargs.split())
+        setupargs = (self.setupargs + ' ' + self.config.module_setupargs.get(
+            self.name, self.config.setupargs)).strip()
+        if len(setupargs) > 0:
+            cmd.extend(setupargs.split())
         buildscript.execute(cmd, cwd = srcdir, extra_env = self.extra_env)
     do_build.depends = [PHASE_CHECKOUT]
     do_build.error_phase = [PHASE_FORCE_CHECKOUT]
@@ -110,7 +110,7 @@ class DistutilsModule(Package, DownloadableModule):
         return 'distutils', [('id', 'name', None),
                              ('supports-non-srcdir-builds',
                               'supports_non_srcdir_builds', True),
-                             ('buildargs', 'buildargs', '')]
+                             ('setupargs', 'setupargs', '')]
 
 
 def parse_distutils(node, config, uri, repositories, default_repo):
@@ -119,8 +119,8 @@ def parse_distutils(node, config, uri, repositories, default_repo):
     if node.hasAttribute('supports-non-srcdir-builds'):
         instance.supports_non_srcdir_builds = \
             (node.getAttribute('supports-non-srcdir-builds') != 'no')
-    if node.hasAttribute('buildargs'):
-        instance.buildargs = node.getAttribute('buildargs')
+    if node.hasAttribute('setupargs'):
+        instance.setupargs = node.getAttribute('setupargs')
 
     if node.hasAttribute('python3'):
         instance.python = os.environ.get('PYTHON3', 'python3')

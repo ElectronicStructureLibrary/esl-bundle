@@ -1,17 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys
 import os
-if sys.version_info[0] == 2:
-    import __builtin__ as builtins
-else:
-    import builtins
+from pathlib import Path
+import builtins
 
-#USE_CHECKOUT_SRC = True
+#if sys.version_info[0] == 2:
+#    import __builtin__ as builtins
+#else:
+#    import builtins
+
+#USE_CHECKOUT_SRC = False
 
 #if USE_CHECKOUT_SRC:
-#    sys.path.insert(0, '/home/caliste/local/jhbuild')
+#    sys.path.insert(0, '@jhbuilddir@')
 #    pkgdatadir = None
 #    datadir = None
 #    import jhbuild
@@ -26,10 +29,11 @@ else:
 #        import jhbuild
 #    except ImportError:
 #        sys.path.insert(0, srcdir)
+
 pkgdatadir = None
 datadir = None
 import jhbuild
-srcdir = os.path.abspath(os.path.join(os.path.dirname(jhbuild.__file__), '../..'))
+srcdir = Path(jhbuild.__file__).parent.parent.parent.resolve()
 
 builtins.__dict__['PKGDATADIR'] = pkgdatadir
 builtins.__dict__['DATADIR'] = datadir
