@@ -1,6 +1,0 @@
-bin/
-jhbuild/
-jhbuild.py
-esl.modules
-rcfiles/
-patches/

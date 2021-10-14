@@ -327,8 +327,16 @@ class cmd_buildone(BuildCommand):
                 default_repo = jhbuild.moduleset.get_default_repo()
                 if not default_repo:
                     continue
-                from jhbuild.modtypes.autotools import AutogenModule
-                module = AutogenModule(modname, default_repo.branch(modname))
+
+                # If the module has not been checkout yet, this will
+                # fail and default to meson
+                if os.path.exists(os.path.join(config.checkoutroot, modname, 'autogen.sh')):
+                    from jhbuild.modtypes.autotools import AutogenModule
+                    module = AutogenModule(modname, default_repo.branch(modname))
+                else:
+                    from jhbuild.modtypes.meson import MesonModule
+                    module = MesonModule(modname, default_repo.branch(modname))
+
                 module.config = config
                 logging.info(_('module "%(modname)s" does not exist, created automatically using repository "%(reponame)s"') % \
                              {'modname': modname, 'reponame': default_repo.name})

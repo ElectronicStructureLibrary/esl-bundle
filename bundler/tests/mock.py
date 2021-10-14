@@ -53,6 +53,8 @@ class Config(jhbuild.config.Config):
     partial_build = True
     autogenargs = ''
     module_autogenargs = {}
+    module_setupargs = {}
+    setupargs = ''
     module_extra_env = {}
     makeargs = ''
     module_makeargs = {}

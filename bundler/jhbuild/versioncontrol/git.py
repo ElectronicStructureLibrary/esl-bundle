@@ -32,7 +32,7 @@ from jhbuild.utils.cmds import get_output, check_version
 from jhbuild.versioncontrol import Repository, Branch, register_repo_type
 from jhbuild.utils import inpath, _
 from jhbuild.utils.sxml import sxml
-from jhbuild.utils import urlutils
+from jhbuild.utils import urlutils, udecode
 from jhbuild.utils.urlutils import urlparse_mod
 from jhbuild.utils.compat import iterkeys
 
@@ -236,9 +236,19 @@ class GitBranch(Branch):
                 extra_env=get_git_extra_env())
         return self.execute_git_predicate( ['git', 'show-ref', wanted_ref])
 
+    def get_default_branch_name(self):
+        try:
+            default_branch = get_output(['git', 'symbolic-ref', '--short',
+                               'refs/remotes/origin/HEAD'],
+                               cwd=self.get_checkoutdir(),
+                               extra_env=get_git_extra_env()).strip()
+        except CommandError:
+            return 'master'
+        return default_branch.replace('origin/', '')
+
     def get_branch_switch_destination(self):
         current_branch = self.get_current_branch()
-        wanted_branch = self.branch or 'master'
+        wanted_branch = self.branch or self.get_default_branch_name()
 
         # Always switch away from a detached head.
         if not current_branch:
@@ -355,7 +365,7 @@ class GitBranch(Branch):
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 cwd=self.get_checkoutdir(),
                                 env=get_git_extra_env())
-        stdout = proc.communicate()[0]
+        stdout = udecode(proc.communicate()[0])
         if not stdout.strip():
             raise CommandError(_('Command %s returned no output') % cmd_desc)
         for line in stdout.splitlines():
