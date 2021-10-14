@@ -1,0 +1,10 @@
+--- flib/f_input_file.f90.orig	2021-06-08 14:45:16.929744540 +0100
++++ flib/f_input_file.f90	2021-06-08 14:47:01.149680320 +0100
+@@ -366,6 +366,7 @@ contains
+       character(max_field_length), dimension(:), allocatable :: keys
+       double precision :: var
+       integer :: dlen, skeys
++      integer :: i
+ 
+       if (associated(dict%child)) then
+          if (dict_len(dict) >= 1) then
