@@ -228,7 +228,7 @@
       </if>
       <dep package="spglib"/>
       <dep package="wannier90"/>
-      <dep package="else_rci"/>
+      <dep package="elsi_rci"/>
       <dep package="libmbd"/>
     </dependencies>
   </metamodule>
@@ -252,7 +252,7 @@
       </if>
       <dep package="spglib"/>
       <dep package="wannier90-mpi"/>
-      <dep package="else_rci"/>
+      <dep package="elsi_rci"/>
       <dep package="libmbd-mpi"/>
     </dependencies>
   </metamodule>
