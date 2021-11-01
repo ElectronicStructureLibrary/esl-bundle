@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ELSI to v2.7.1.
 - Libmdb v0.12.1.
 - Spglib v1.16.2.
+- ELPA v2021.05.002.
 
 ## [0.6.1-2] - 2021-10-15
 
