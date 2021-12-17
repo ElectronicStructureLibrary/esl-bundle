@@ -76,7 +76,7 @@
   </makesys>
 
   <cmake id="NTPoly" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
-    <branch repo="local" module="NTPoly-ntpoly-v2.5.1.tar.gz" version="2.5.1" hash="md5:f022b099119d1039836cb38a40a7d14c"/>
+    <branch repo="local" module="NTPoly-ntpoly-v2.7.0.tar.gz" version="2.7.0" hash="md5:5f177b47178020025f443ecd536756e7"/>
   </cmake>
 
   <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=ON -DENABLE_BSEPACK=ON -DUSE_EXTERNAL_BSEPACK=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2020.11.001/modules"'>
