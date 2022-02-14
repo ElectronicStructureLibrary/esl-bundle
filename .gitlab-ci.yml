@@ -9,6 +9,7 @@ stages:
 opensuse-mpi:
   image: eslib/esl-0.7.x:opensuse-leap-15.3
   stage: test
+  when: manual
   extends:
     - .bundle-vars
   script:
@@ -43,6 +44,7 @@ opensuse-tumbleweed-mpi:
 opensuse-serial:
   image: eslib/esl-0.7.x:opensuse-leap-15.3
   stage: test
+  when: manual
   extends:
     - .bundle-vars
   script:
@@ -93,6 +95,7 @@ debian-serial:
 ubuntu-mpi-bionic:
   image: eslib/esl-0.7.x:ubuntu-bionic
   stage: test
+  when: manual
   extends:
     - .bundle-vars
   script:
@@ -101,6 +104,7 @@ ubuntu-mpi-bionic:
 ubuntu-serial-bionic:
   image: eslib/esl-0.7.x:ubuntu-bionic
   stage: test
+  when: manual
   extends:
     - .bundle-vars
   script:
