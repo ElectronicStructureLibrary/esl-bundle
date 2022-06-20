@@ -62,11 +62,11 @@
   </autotools>
 
   <autotools id="elpa" autogen-sh="configure" autogenargs="--with-mpi=no --disable-avx512">
-    <branch repo="local" module="elpa-2021.05.001.tar.gz" version="2021.05.001" hash="md5:009a74dec8e356ac3a6b32c775ab5518"/>
+    <branch repo="local" module="elpa-2021.11.001.tar.gz" version="2021.11.001" hash="md5:009a74dec8e356ac3a6b32c775ab5518"/>
   </autotools>
 
   <autotools id="elpa-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes --disable-avx512">
-    <branch repo="local" module="elpa-2021.05.001.tar.gz" version="2021.05.001" hash="md5:009a74dec8e356ac3a6b32c775ab5518"/>
+    <branch repo="local" module="elpa-2021.11.001.tar.gz" version="2021.11.001" hash="md5:009a74dec8e356ac3a6b32c775ab5518"/>
   </autotools>
 
   <makesys id="BSEPACK">
@@ -79,7 +79,7 @@
     <branch repo="local" module="NTPoly-ntpoly-v2.7.1.tar.gz" version="2.7.1" hash="md5:43e96dea3429e4588b669c25da73ef09"/>
   </cmake>
 
-  <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=ON -DENABLE_BSEPACK=ON -DUSE_EXTERNAL_BSEPACK=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2021.05.001/modules"'>
+  <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=ON -DENABLE_BSEPACK=ON -DUSE_EXTERNAL_BSEPACK=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2021.11.001/modules"'>
     <branch repo="local" module="elsi-2.9.1.tar.gz" version="2.9.1" hash="md5:779104642bdbdec8f7dd2b57085f9475"/>
     <dependencies>
       <dep package="fakepc"/>
