@@ -6,78 +6,54 @@ stages:
     JHBUILD_CUSTOM_PATH: $CI_PROJECT_DIR/.bundler-esl
     ESL_BUNDLER_OPTS: --no-interact
 
-opensuse-mpi:
-  image: eslib/esl-0.7.x:opensuse-leap-15.3
-  stage: test
-  when: manual
-  extends:
-    - .bundle-vars
-  script:
-    - source /etc/profile.d/lmod.sh
-    - module load gnu/7  openmpi/4.0.5 scalapack/2.1.0 pfftw3/3.3.9
-    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
-
-opensuse-mpi-python2:
-  image: eslib/esl-0.7.x:opensuse-leap-15.3
-  stage: test
-  when: manual
-  extends:
-    - .bundle-vars
-  script:
-    - source /etc/profile.d/lmod.sh
-    - module load gnu/7  openmpi/4.0.5 scalapack/2.1.0 pfftw3/3.3.9
-    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - python ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
+    #opensuse-mpi:
+    #image: eslib/esl-0.8.x:opensuse-leap-15.4
+    #stage: test
+    #when: manual
+    #extends:
+    #- .bundle-vars
+    #script:
+    #- source /etc/profile.d/lmod.sh
+    #- module load gnu/7  openmpi/4.0.5 scalapack/2.1.0 pfftw3/3.3.9
+    #- export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+    #- ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor openmpi esl-bundle-mpi
 
 opensuse-tumbleweed-mpi:
-  image: eslib/esl-0.7.x:opensuse-tumbleweed
+  image: eslib/esl-0.8.x:opensuse-tumbleweed
   stage: test
   extends:
     - .bundle-vars
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/11  openmpi/4.1.1 scalapack/2.1.0 pfftw3/3.3.9
+    - module load gnu/12  openmpi/4.1.1 scalapack/2.1.0 pfftw3/3.3.10
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - ./install-bundle $ESL_BUNDLER_OPTS --system opensuse --compilers gcc --flavor openmpi esl-bundle-mpi
 
-opensuse-serial:
-  image: eslib/esl-0.7.x:opensuse-leap-15.3
-  stage: test
-  when: manual
-  extends:
-    - .bundle-vars
-  script:
-    - source /etc/profile.d/lmod.sh
-    - module load gnu/7 fftw3/3.3.9
-    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor serial esl-bundle
-
-opensuse-serial-python2:
-  image: eslib/esl-0.7.x:opensuse-leap-15.3
-  stage: test
-  when: manual
-  extends:
-    - .bundle-vars
-  script:
-    - source /etc/profile.d/lmod.sh
-    - module load gnu/7 fftw3/3.3.9
-    - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
-    - python ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor serial esl-bundle
+      #opensuse-serial:
+      #image: eslib/esl-0.8.x:opensuse-leap-15.3
+      #stage: test
+      #when: manual
+      #extends:
+      #- .bundle-vars
+      #script:
+      #- source /etc/profile.d/lmod.sh
+      #- module load gnu/7 fftw3/3.3.9
+      #- export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
+      #- ./install-bundle $ESL_BUNDLER_OPTS --system opensuseleap --compilers gcc --flavor serial esl-bundle
 
 opensuse-tumbleweed-serial:
-  image: eslib/esl-0.7.x:opensuse-tumbleweed
+  image: eslib/esl-0.8.x:opensuse-tumbleweed
   stage: test
   extends:
     - .bundle-vars
   script:
     - source /etc/profile.d/lmod.sh
-    - module load gnu/11 fftw3/3.3.9
+    - module load gnu/12 fftw3/3.3.10
     - export LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBRARY_PATH
     - ./install-bundle $ESL_BUNDLER_OPTS --system opensuse --compilers gcc --flavor serial esl-bundle
 
 debian-mpi:
-  image: eslib/esl-0.7.x:debian-bullseye
+  image: eslib/esl-0.8.x:debian-bullseye
   stage: test
   extends:
     - .bundle-vars
@@ -85,7 +61,7 @@ debian-mpi:
     - ./install-bundle $ESL_BUNDLER_OPTS --system debian --compilers gcc --flavor openmpi esl-bundle-mpi
 
 debian-serial:
-  image: eslib/esl-0.7.x:debian-bullseye
+  image: eslib/esl-0.8.x:debian-bullseye
   stage: test
   extends:
     - .bundle-vars
@@ -101,17 +77,8 @@ ubuntu-mpi-bionic:
   script:
     - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
-ubuntu-serial-bionic:
-  image: eslib/esl-0.7.x:ubuntu-bionic
-  stage: test
-  when: manual
-  extends:
-    - .bundle-vars
-  script:
-    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor serial esl-bundle
-
 fedora-serial:
-  image: eslib/esl-0.7.x:fedora-34
+  image: eslib/esl-0.8.x:fedora-36
   stage: test
   extends:
     - .bundle-vars
@@ -119,7 +86,7 @@ fedora-serial:
     - ./install-bundle $ESL_BUNDLER_OPTS --system fedora --compilers gcc --flavor serial esl-bundle
 
 fedora-mpi:
-  image: eslib/esl-0.7.x:fedora-34
+  image: eslib/esl-0.8.x:fedora-36
   stage: test
   extends:
     - .bundle-vars
@@ -130,22 +97,37 @@ fedora-mpi:
 # The following ones are allowed to fail because they test unreleased distros
 
 ubuntu-mpi-focal:
-  image: eslib/esl-0.7.x:ubuntu-focal
+  image: eslib/esl-0.8.x:ubuntu-focal
   stage: test
   extends:
     - .bundle-vars
   script:
-    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
+    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntufocal --compilers gcc --flavor openmpi esl-bundle-mpi
 #  allow_failure: true
 
 ubuntu-serial-focal:
-  image: eslib/esl-0.7.x:ubuntu-focal
+  image: eslib/esl-0.8.x:ubuntu-focal
+  stage: test
+  extends:
+    - .bundle-vars
+  script:
+    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntufocal --compilers gcc --flavor serial esl-bundle
+
+ubuntu-serial-jammy:
+  image: eslib/esl-0.8.x:ubuntu-jammy
   stage: test
   extends:
     - .bundle-vars
   script:
     - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor serial esl-bundle
 #  allow_failure: true
+ubuntu-mpi-jammy:
+  image: eslib/esl-0.8.x:ubuntu-jammy
+  stage: test
+  extends:
+    - .bundle-vars
+  script:
+    - ./install-bundle $ESL_BUNDLER_OPTS --system ubuntu --compilers gcc --flavor openmpi esl-bundle-mpi
 
 # The following ones are disabled because they provide unsupported compilers
 
