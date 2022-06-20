@@ -80,7 +80,7 @@
   </cmake>
 
   <cmake id="elsi" use-ninja="no" cmakeargs='-DUSE_EXTERNAL_OMM=ON -DUSE_EXTERNAL_ELPA=ON -DUSE_EXTERNAL_PEXSI=ON -DUSE_EXTERNAL_NTPOLY=ON -DENABLE_BSEPACK=ON -DUSE_EXTERNAL_BSEPACK=ON -DLIB_PATHS=$JHBUILD_PREFIX/lib -DINC_PATHS="$JHBUILD_PREFIX/include;$JHBUILD_PREFIX/include/elpa-2021.05.001/modules"'>
-    <branch repo="local" module="elsi-2.7.1.tar.gz" version="2.7.1" hash="md5:a36507297c4c910bedc3def8300ac143"/>
+    <branch repo="local" module="elsi-2.9.1.tar.gz" version="2.9.1" hash="md5:779104642bdbdec8f7dd2b57085f9475"/>
     <dependencies>
       <dep package="fakepc"/>
       <dep package="superlu_dist"/>
