@@ -65,9 +65,9 @@ This is a complete list of packages included in the `ESL Bundle`.
 ## Installation
 
 The `ESL Bundle` comes with a version of
-[JHBuild](https://developer.gnome.org/jhbuild/stable/) which has been
+[JHBuild](https://wiki.gnome.org/Projects/Jhbuild/Introduction) which has been
 tuned to fit the context of the ESL.
-[JHBuild](https://developer.gnome.org/jhbuild/stable/) supports a wide
+[JHBuild](https://wiki.gnome.org/Projects/Jhbuild/Introduction) supports a wide
 variety of build systems, although it is not a build system itself. It
 is rather a tool designed to ease the build of collections of related
 source packages, that it calls \"modules\". It was originally written
@@ -75,7 +75,7 @@ for the [Gnome Project](https://www.gnome.org/), but its use has then
 been extended to other situations.
 
 To make the use of
-[JHBuild](https://developer.gnome.org/jhbuild/stable/) easier in the
+[JHBuild](https://wiki.gnome.org/Projects/Jhbuild/Introduction) easier in the
 context of the `ESL Bundle`, we provide a wrapper script called
 `install-bundle` that can be found in the top source directory of the
 bundle. Most of the operations are performed by executing this
