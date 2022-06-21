@@ -6,7 +6,8 @@ makeargs="VERBOSE=1"
 
 module_autogenargs['elpa']=" CFLAGS='-march=native' FCFLAGS='-ffree-line-length-none' "
 module_autogenargs['xmlf90']="FCFLAGS='-ffree-line-length-none'"
-
 module_autogenargs['futile']=autogenargs+" FCFLAGS='-fallow-argument-mismatch' "
+module_autogenargs['matrixswitch']="LINALG_LIBS='-lopenblas'"
+module_autogenargs['libomm']="LINALG_LIBS='-lopenblas'"
 module_autogenargs['psolver']="FCFLAGS='-fallow-argument-mismatch'"
 module_cmakeargs['NTPoly'] = "-DCMAKE_Fortran_FLAGS_RELEASE='-O3 -march=native -fallow-argument-mismatch'"
