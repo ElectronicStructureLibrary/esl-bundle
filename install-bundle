@@ -96,11 +96,12 @@ if args.unattended:
     jh_opt.append("--no-interact")
 
 # Run JHBuild
+jh_env = ["JHBUILD_CUSTOM_PATH=" + str(jhbdir)]
 jh_cmd = [sys.executable, str(topdir / "bundler" / "jhbuild.py")]
 jh_cfg = ["-f", str(cfgfile)]
 jh_mod = ["-m", str(moddir / modname)]
 jh_run = ["build"] + args.packages
-print(" ".join(jh_cmd + jh_opt + jh_cfg + jh_mod + jh_run))
+print(" ".join(jh_env + jh_cmd + jh_opt + jh_cfg + jh_mod + jh_run))
 ret = subprocess.call(" ".join(jh_cmd + jh_opt + jh_cfg + jh_mod + jh_run),
         shell=True)
 sys.exit(ret)
