@@ -4,6 +4,8 @@
 <!-- vim:set ts=2 expandtab: -->
 <moduleset>
 
+  <include href="./omm.modules"/>
+
   <repository name="local" type="tarball" href="./"/>
   <repository name="libyaml" type="tarball" href="http://pyyaml.org/download/libyaml/"/>
 
@@ -168,19 +170,6 @@
     </branch>
   </makesys>
 
-  <!-- OMM Bundle BEGIN -->
-  <autotools id="libomm" autogen-sh="configure" autogenargs="--with-msw=$JHBUILD_PREFIX">
-    <branch repo="local" module="libomm-1.0.0.tar.gz" version="1.0.0" hash="md5:7c70acd17478bc09837c18202659c2c7"/>
-    <dependencies>
-      <dep package="matrixswitch"/>
-    </dependencies>
-  </autotools>
-
-  <autotools id="matrixswitch" autogen-sh="configure">
-    <branch repo="local" module="matrixswitch-1.0.0.tar.gz" version="1.0.0" hash="md5:8767df53916e440300e6761ed9747c1e"/>
-  </autotools>
-  <!-- OMM Bundle END -->
-
   <cmake id="dftbplus" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DHYBRID_CONFIG_METHODS="Find;Fetch" -DWITH_MBD=True -DWITH_API=True -DWITH_MPI=False'>
     <branch repo="local" module="dftbplus-21.1.tar.xz" version="21.1" hash="md5:f63db9f949af97498be0327ef60da362">
       <patch file="dftbplus_cmake_version.patch" strip="0"/>
@@ -262,7 +251,7 @@
       <dep package="psolver-mpi"/>
       <dep package="pspio"/>
       <dep package="fdf"/>
-      <dep package="libomm"/>
+      <dep package="libomm-mpi"/>
       <dep package="libpsml"/>
       <dep package="elsi"/>
       <dep package="fakepc"/>

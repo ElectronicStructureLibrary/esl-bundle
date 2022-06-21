@@ -1,0 +1,53 @@
+<?xml version="1.0"?><!--*- mode: nxml; indent-tabs-mode: nil -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+<!-- vim:set ts=2 expandtab: -->
+<moduleset>
+
+  <repository name="local" type="tarball" href="./"/>
+
+  <cmake id="dbcsr" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
+    <branch repo="local" module="dbcsr-2.2.0.tar.gz" version="2.2.0" hash="md5:f18b58b02bb009a739086965e5c34a3c"/>
+  </cmake>
+
+  <autotools id="matrixswitch" autogen-sh="configure" autogenargs="--with-mpi=no">
+    <branch repo="local" module="matrixswitch-1.0.1.tar.gz" version="1.0.1" hash="md5:dbbd4e957db779320b390c5757633bfe"/>
+  </autotools>
+
+  <autotools id="matrixswitch-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes --with-dbcsr=$JHBUILD_PREFIX">
+    <branch repo="local" module="matrixswitch-1.0.1.tar.gz" version="1.0.1" hash="md5:dbbd4e957db779320b390c5757633bfe"/>
+    <dependencies>
+      <dep package="dbcsr"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="libomm" autogen-sh="configure" autogenargs="--with-mpi=no --with-msw=$JHBUILD_PREFIX">
+    <branch repo="local" module="libomm-1.0.1.tar.gz" version="1.0.1" hash="md5:2ea7ca713794b29f5cf3be33a93e9206"/>
+    <dependencies>
+      <dep package="matrixswitch"/>
+    </dependencies>
+  </autotools>
+
+  <autotools id="libomm-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes --with-msw=$JHBUILD_PREFIX">
+    <branch repo="local" module="libomm-1.0.1.tar.gz" version="1.0.1" hash="md5:2ea7ca713794b29f5cf3be33a93e9206"/>
+    <dependencies>
+      <dep package="matrixswitch"/>
+    </dependencies>
+  </autotools>
+
+  <metamodule id="omm-bundle">
+    <dependencies>
+      <dep package="matrixswitch"/>
+      <dep package="libomm"/>
+    </dependencies>
+  </metamodule>
+
+  <metamodule id="omm-bundle-mpi">
+    <dependencies>
+      <dep package="dbcsr"/>
+      <dep package="matrixswitch-mpi"/>
+      <dep package="libomm-mpi"/>
+    </dependencies>
+  </metamodule>
+
+</moduleset>
