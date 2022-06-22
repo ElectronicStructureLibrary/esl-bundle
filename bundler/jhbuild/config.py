@@ -40,10 +40,9 @@ if sys.platform.startswith('win'):
 
 __all__ = [ 'Config' ]
 
-_default_path = os.getenv("JHBUILD_CUSTOM_PATH")
-if not _default_path:
-    _default_path = os.path.dirname(__file__)
-_defaults_file = os.path.join(_default_path, 'defaults.jhbuildrc')
+_defaults_file = os.path.join(os.getenv("JHBUILD_CUSTOM_PATH", SRCDIR), 'defaults.jhbuildrc')
+if not os.path.exists(_defaults_file):
+    _defaults_file = os.path.join(os.path.dirname(__file__), 'defaults.jhbuildrc')
 
 _known_keys = [ 'moduleset', 'modules', 'skip', 'tags', 'prefix',
                 'partial_build', 'checkoutroot', 'buildroot', 'top_builddir',

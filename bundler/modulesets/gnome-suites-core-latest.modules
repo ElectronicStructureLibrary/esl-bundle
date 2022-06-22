@@ -48,17 +48,6 @@
     </dependencies>
   </autotools>
 
-  <meson id="at-spi2-atk">
-    <branch/>
-    <dependencies>
-      <dep package="dbus"/>
-      <dep package="glib"/>
-      <dep package="atk"/>
-      <dep package="libxml2"/>
-      <dep package="at-spi2-core"/>
-    </dependencies>
-  </meson>
-
   <meson id="at-spi2-core">
     <if condition-unset="x11">
       <mesonargs value="-Denable-x11=false"/>
@@ -68,6 +57,7 @@
       <dep package="dbus"/>
       <dep package="glib"/>
       <dep package="gobject-introspection"/>
+      <dep package="libxml2"/>
       <if condition-set="x11">
         <dep package="libXtst"/>
         <dep package="x11"/>
@@ -143,10 +133,11 @@
   <meson id="gnome-bluetooth">
     <branch/>
     <dependencies>
-      <dep package="gtk+-3"/>
+      <dep package="gtk4"/>
       <dep package="gtk-doc"/>
       <dep package="glib"/>
-      <dep package="libcanberra-gtk3"/>
+      <dep package="gsound"/>
+      <dep package="libadwaita"/>
       <dep package="libnotify"/>
       <dep package="libudev"/>
     </dependencies>
@@ -185,7 +176,7 @@
       <dep package="fontconfig"/>
       <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
-      <dep package="gtk+-3"/>
+      <dep package="gtk4"/>
       <dep package="gnome-desktop"/>
       <dep package="gnome-online-accounts"/>
       <dep package="gnome-settings-daemon"/>
@@ -207,7 +198,7 @@
       <dep package="upower"/>
       <if condition-set="linux">
         <dep package="gnome-bluetooth"/>
-        <dep package="libnma"/>
+        <dep package="libnma-gtk4"/>
         <dep package="libwacom"/>
       </if>
     </dependencies>
@@ -223,11 +214,12 @@
       <if condition-set="linux">
         <dep package="ModemManager"/>
         <dep package="NetworkManager"/>
+        <dep package="console-menu"/>
       </if>
     </suggests>
   </meson>
 
-  <meson id="gnome-desktop" mesonargs="-Dgnome_distributor=JHBuild">
+  <meson id="gnome-desktop">
     <if condition-unset="udev-hwdb">
       <mesonargs  value="-Dudev=disabled"/>
     </if>
@@ -238,6 +230,7 @@
       <dep package="libXrandr"/>
       <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
+      <dep package="gtk4"/>
       <dep package="gtk+-3"/>
       <dep package="gsettings-desktop-schemas"/>
       <dep package="iso-codes"/>
@@ -378,6 +371,7 @@
       <dep package="intltool"/>
       <dep package="json-glib"/>
       <dep package="libcanberra"/>
+      <dep package="libgweather"/>
       <dep package="libsoup"/>
       <dep package="mutter"/>
       <dep package="polkit-agent"/>
@@ -401,7 +395,6 @@
     </dependencies>
     <suggests>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
       <dep package="libgnomekbd"/>
     </suggests>
     <after>
@@ -452,7 +445,7 @@
     </dependencies>
   </meson>
 
-  <meson id="gvfs" mesonargs="-Dsystemduserunitdir=no -Dtmpfilesdir=no -Dinstalled_tests=true -Ddbus_service_dir=${prefix}/share/dbus-1/services">
+  <meson id="gvfs" mesonargs="-Dsystemduserunitdir=no -Dtmpfilesdir=no -Dinstalled_tests=true">
     <if condition-unset="linux">
       <mesonargs value="-Dadmin=false -Dudisks2=false"/>
     </if>
@@ -484,7 +477,7 @@
       <dep package="libnfs"/>
       <dep package="libplist"/>
       <dep package="libsecret"/>
-      <dep package="libsoup"/>
+      <dep package="libsoup3"/>
       <dep package="libxml2"/>
       <dep package="polkit-gobject"/>
       <dep package="smbclient"/>
@@ -536,6 +529,7 @@
     <branch/>
     <dependencies>
       <dep package="cairo"/>
+      <dep package="cvt"/>
       <dep package="egl"/>
       <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
@@ -568,6 +562,7 @@
       <dep package="xcb-randr"/>
       <dep package="xcb-res"/>
       <dep package="xkeyboard-config"/>
+      <dep package="xvfb-run"/>
       <dep package="zenity"/>
       <if condition-set="linux">
         <dep package="sysprof"/>
@@ -690,9 +685,6 @@
       <dep package="glib"/>
       <dep package="gtk+-3"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-bad"/>
-      <dep package="gst-plugins-base"/>
-      <dep package="gst-plugins-good"/>
       <dep package="clutter-gst"/>
       <dep package="clutter-gtk"/>
       <dep package="libcanberra"/>
@@ -878,7 +870,7 @@
       <dep package="gtk+-3"/>
       <dep package="gsound"/>
       <dep package="gnome-desktop"/>
-      <dep package="libgweather"/>
+      <dep package="libgweather-3"/>
       <dep package="libhandy-1"/>
       <dep package="geoclue"/>
       <dep package="geocode-glib"/>
@@ -942,7 +934,7 @@
       <dep package="gnome-keyring"/>
       <dep package="gnome-online-accounts"/>
       <dep package="gstreamer"/>
-      <dep package="libgweather"/>
+      <dep package="libgweather-3"/>
       <dep package="libpwquality"/>
       <dep package="WebKit"/>
       <if condition-set="linux">
@@ -1119,7 +1111,7 @@
       <dep package="gobject-introspection"/>
       <dep package="gtk+-3"/>
       <dep package="intltool"/>
-      <dep package="libgweather"/>
+      <dep package="libgweather-3"/>
       <dep package="gjs"/>
     </dependencies>
   </meson>
@@ -1141,7 +1133,7 @@
       <dep package="tracker-miners"/>
       <dep package="exempi"/>
       <dep package="libexif"/>
-      <dep package="gst-plugins-base"/>
+      <dep package="gstreamer"/>
       <dep package="gobject-introspection"/>
     </dependencies>
   </meson>
@@ -1150,7 +1142,7 @@
     <branch/>
     <dependencies>
       <dep package="gtk+-3"/>
-      <dep package="at-spi2-atk"/> <!-- to make Orca's gui accessible -->
+      <dep package="at-spi2-core"/>
       <dep package="gobject-introspection"/>
       <dep package="intltool"/>
       <dep package="pyatspi2"/>
@@ -1195,7 +1187,6 @@
       <dep package="gtksourceview-4"/>
       <dep package="WebKit"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
       <dep package="gtk+-3"/>
     </dependencies>
   </meson>
@@ -1205,9 +1196,6 @@
     <dependencies>
       <dep package="appstream-glib"/>
       <dep package="cairo"/>
-      <dep package="clutter"/>
-      <dep package="clutter-gst"/>
-      <dep package="clutter-gtk"/>
       <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
       <dep package="gnome-desktop"/>
@@ -1215,12 +1203,10 @@
       <dep package="grilo-plugins"/>
       <dep package="gsettings-desktop-schemas"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
-      <dep package="gst-plugins-good"/>
-      <dep package="gst-plugins-bad"/>
       <dep package="gtk+-3"/>
       <dep package="intltool"/>
       <dep package="iso-codes"/>
+      <dep package="libhandy"/>
       <dep package="libpeas"/>
       <dep package="totem-pl-parser"/>
       <dep package="yelp-tools"/>
@@ -1263,7 +1249,6 @@
          mesonargs="-Dlibaudit=no -Dovs=false -Dnmtui=false -Dqt=false -Dcrypto=gnutls -Diwd=true">
     <branch repo="gitlab.freedesktop.org"
             module="NetworkManager/NetworkManager.git"
-            revision="main"
             checkoutdir="NetworkManager"/>
     <dependencies>
       <dep package="libndp"/>
@@ -1285,6 +1270,7 @@
       <dep package="ppp"/>
       <dep package="vala"/>
       <dep package="wireless-tools"/>
+      <dep package="mobile-broadband-provider-info"/>
       <if condition-set="systemd">
         <dep package="libsystemd"/>
       </if>
@@ -1327,7 +1313,7 @@
       <dep package="sbc"/>
       <dep package="dbus"/>
       <dep package="libv4l"/>
-      <dep package="gst-plugins-base"/>
+      <dep package="gstreamer"/>
       <dep package="pulseaudio"/>
     </dependencies>
   </meson>
@@ -1340,23 +1326,19 @@
     </dependencies>
   </meson>
 
-  <autotools id="upower"
-             supports-non-srcdir-builds="no"
-             autogenargs="--with-systemdsystemunitdir=no">
+  <meson id="upower"
+         mesonargs="-Dsystemdsystemunitdir=no">
     <branch repo="gitlab.freedesktop.org" module="upower/upower.git" />
     <dependencies>
-      <dep package="dbus-glib"/>
+      <dep package="glib"/>
       <dep package="gobject-introspection"/>
-      <if condition-set="linux">
-        <dep package="libusb1"/>
-      </if>
     </dependencies>
     <suggests>
       <if condition-set="udev">
         <dep package="libgudev"/>
       </if>
     </suggests>
-  </autotools>
+  </meson>
 
 
 <!-- Meta Modules -->
@@ -1495,9 +1477,7 @@
   <!-- Platform metamodule -->
   <metamodule id="meta-gnome-devel-platform">
     <dependencies>
-      <dep package="atk"/>
       <dep package="at-spi2-core"/>
-      <dep package="at-spi2-atk"/>
       <dep package="glib"/>
       <dep package="gtk+-3"/>
       <dep package="pango"/>

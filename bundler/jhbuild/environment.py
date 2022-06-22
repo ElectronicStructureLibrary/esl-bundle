@@ -262,6 +262,7 @@ def setup_env(prefix):
     os.environ['CERTIFIED_GNOMIE'] = 'yes'
 
     # PYTHONPATH
+    addpath('PYTHONPATH', get_python_lib(prefix=prefix))
     # We use a sitecustomize script to make sure we get the correct path
     # with the various versions of python that the user may run.
     if PKGDATADIR:
