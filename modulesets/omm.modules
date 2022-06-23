@@ -28,7 +28,7 @@
     </dependencies>
   </autotools>
 
-  <autotools id="libomm-mpi" autogen-sh="configure" autogenargs="--with-mpi=yes --with-msw=$JHBUILD_PREFIX">
+  <autotools id="libomm-mpi" autogen-sh="configure" autogenargs="--with-msw=$JHBUILD_PREFIX">
     <branch repo="local" module="libomm-1.0.1.tar.gz" version="1.0.1" hash="md5:2ea7ca713794b29f5cf3be33a93e9206"/>
     <dependencies>
       <dep package="matrixswitch"/>
