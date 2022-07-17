@@ -326,7 +326,7 @@ class PKSystemInstall(SystemInstall):
             return
 
         logging.info(_('Installing:\n  %s' % ('\n  '.join(pk_package_ids, ))))
-        logging.info(_('This might take a very long time. Do not turn off your computer. You can run `pkmon\' to monitor progress.'))
+        logging.info(_("This might take a very long time. Do not turn off your computer. You can run 'pkmon' to monitor progress."))
 
         txn_tx, txn = self._get_new_transaction()
         txn_tx.InstallPackages(PK_TRANSACTION_FLAG_ENUM_ONLY_TRUSTED, pk_package_ids)
@@ -337,6 +337,43 @@ class PKSystemInstall(SystemInstall):
     @classmethod
     def detect(cls):
         return cmds.has_command('pkcon')
+
+class DNFSystemInstall(SystemInstall):
+    def __init__(self):
+        SystemInstall.__init__(self)
+
+    def install(self, uninstalled, assume_yes):
+        uninstalled_pkgconfigs = get_uninstalled_pkgconfigs(uninstalled)
+        uninstalled_filenames = get_uninstalled_filenames(uninstalled)
+        logging.info(_('Using dnf to install packages.  Please wait.'))
+        package_names = set()
+
+        if not uninstalled_filenames and not uninstalled_pkgconfigs:
+            logging.info(_('Nothing to install'))
+            return
+
+        for name, pkgconfig in uninstalled_pkgconfigs:
+            package_names.add('pkgconfig({})'.format(pkgconfig))
+
+        for name, filename in uninstalled_filenames:
+            package_names.add(filename)
+
+        if not package_names:
+            logging.info(_('Nothing to install'))
+            return
+
+        logging.info('Installing:\n  %s' %('\n  '.join(package_names)))
+        dnf_command = ['dnf', 'install']
+        if assume_yes:
+            dnf_command.append('--assumeyes')
+        if subprocess.call(self._root_command_prefix_args + dnf_command + list(package_names)):
+            logging.error(_('Install failed'))
+        else:
+            logging.info(_('Completed!'))
+
+    @classmethod
+    def detect(cls):
+        return cmds.has_command('dnf')
 
 class PacmanSystemInstall(SystemInstall):
     def __init__(self):
@@ -549,8 +586,7 @@ class AptSystemInstall(SystemInstall):
     def detect(cls):
         return cmds.has_command('apt-file')
 
-# Ordered from best to worst
-_classes = [AptSystemInstall, PacmanSystemInstall, PKSystemInstall]
+_classes = [AptSystemInstall, PacmanSystemInstall, DNFSystemInstall, PKSystemInstall]
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)

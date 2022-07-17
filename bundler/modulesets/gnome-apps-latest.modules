@@ -123,11 +123,11 @@
   </meson>
 
   <cmake id="libgit2"
-         cmakeargs="-DTHREADSAFE:BOOL=1">
+         cmakeargs="-DUSE_THREADS:BOOL=1 -DUSE_SSH:BOOL=1">
     <branch repo="tarball.github.com"
             module="libgit2/libgit2/archive/v${version}.tar.gz"
-            version="0.26.6"
-            hash="sha256:7669dd47ebdab86ced8888816c552596ec923b6e126704a3445b2081cb0e5662"
+            version="1.4.2"
+            hash="sha256:901c2b4492976b86477569502a41c31b274b69adc177149c02099ea88404ef19"
             checkoutdir="libgit2-${version}">
     </branch>
     <dependencies>
@@ -167,7 +167,7 @@
   <autotools id="accerciser">
     <branch/>
     <dependencies>
-      <dep package="at-spi2-atk"/> <!-- to make accerciser's gui accessible -->
+      <dep package="at-spi2-core"/>
       <dep package="intltool"/>
       <dep package="pygobject"/>
       <dep package="pyatspi2"/>
@@ -219,7 +219,7 @@
          cmakeargs="-DENABLE_LIBCRYPTUI=OFF -DENABLE_PST_IMPORT=OFF -DENABLE_YTNEF=OFF -DWITH_ENCHANT_VERSION=2">
     <branch/>
     <dependencies>
-      <dep package="atk"/>
+      <dep package="at-spi2-core"/>
       <dep package="bogofilter"/>
       <dep package="cairo"/>
       <dep package="enchant-2"/>
@@ -238,7 +238,7 @@
       <dep package="libcanberra"/>
       <dep package="libgcrypt"/>
       <dep package="libgdata"/>
-      <dep package="libgweather"/>
+      <dep package="libgweather-3"/>
       <dep package="libical"/>
       <dep package="libnotify"/>
       <dep package="libsoup"/>
@@ -399,8 +399,6 @@
       <dep package="gdk-pixbuf"/>
       <dep package="gtk+-3"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
-      <dep package="gst-plugins-good"/>
     </dependencies>
   </meson>
 
@@ -666,7 +664,6 @@
     <dependencies>
       <dep package="meta-gnome-games"/>
       <dep package="accerciser"/>
-      <dep package="bijiben"/>
       <dep package="dconf-editor"/>
       <dep package="devhelp"/>
       <dep package="evolution"/>
@@ -676,6 +673,7 @@
       <dep package="gnome-devel-docs"/>
       <dep package="gnome-dictionary"/>
       <dep package="gnome-nettool"/>
+      <dep package="gnome-notes"/>
       <dep package="gnome-recipes"/>
       <dep package="gnome-sound-recorder"/>
       <dep package="gnome-tweaks"/>

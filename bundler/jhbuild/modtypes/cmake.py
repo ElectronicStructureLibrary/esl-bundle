@@ -130,9 +130,9 @@ class CMakeModule(MakeModule, NinjaModule, DownloadableModule):
     def do_dist(self, buildscript):
         buildscript.set_action(_('Creating tarball for'), self)
         if self.use_ninja:
-            self.make(buildscript, 'package_source')
-        else:
             self.ninja(buildscript, 'package_source')
+        else:
+            self.make(buildscript, 'package_source')
     do_dist.depends = [PHASE_CONFIGURE]
     do_dist.error_phases = [PHASE_FORCE_CHECKOUT, PHASE_CONFIGURE]
 
@@ -163,12 +163,6 @@ class CMakeModule(MakeModule, NinjaModule, DownloadableModule):
 def parse_cmake(node, config, uri, repositories, default_repo):
     instance = CMakeModule.parse_from_xml(node, config, uri, repositories, default_repo)
 
-    instance.dependencies += [
-        'cmake',
-        instance.get_ninjacmd(config),
-        instance.get_makecmd(config),
-    ]
-
     instance.cmakeargs = collect_args(instance, node, 'cmakeargs')
     instance.makeargs = collect_args(instance, node, 'makeargs')
     instance.ninjaargs = collect_args(instance, node, 'ninjaargs')
@@ -191,6 +185,13 @@ def parse_cmake(node, config, uri, repositories, default_repo):
             instance.use_ninja = False
     if node.hasAttribute('cmakedir'):
         instance.cmakedir = node.getAttribute('cmakedir')
+
+    instance.dependencies.append('cmake')
+    if instance.use_ninja:
+        instance.dependencies.append(instance.get_ninjacmd(config))
+    else:
+        instance.dependencies.append(instance.get_makecmd(config))
+
     return instance
 
 register_module_type('cmake', parse_cmake)

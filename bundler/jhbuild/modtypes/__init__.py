@@ -424,7 +424,7 @@ them into the prefix."""
             # also if in nonet mode extract all the dist files which are available
             domethod = self.branch.repository.name == "local" or buildscript.config.nonet
             if not domethod:
-                tar = os.path.join(SRCDIR, os.path.basename(self.branch.module))
+                tar = os.path.join(SRCDIR, "tarballs", os.path.basename(self.branch.module))
                 domethod = not os.path.exists(tar)
         if phase == 'setup' and self.branch is not None:
             domethod = self.branch.repository.name == "local"
@@ -705,10 +705,7 @@ class MetaModule(Package):
                     shutil.copy(os.path.join(SRCDIR, "patches", patch[0]), patchdir)
 
         # Add jhbuild and config files themselves.
-        _custom_path = os.getenv("JHBUILD_CUSTOM_PATH")
-        if not _custom_path:
-            _custom_path = os.path.join(SRCDIR, "bundler")
-        listfile = os.path.join(_custom_path, "distfiles")
+        listfile = os.path.join(os.getenv("JHBUILD_CUSTOM_PATH", SRCDIR), "distfiles")
         distfiles=open(listfile,'r').readlines()
         for archive in distfiles:
             fle=archive.rstrip('\n')

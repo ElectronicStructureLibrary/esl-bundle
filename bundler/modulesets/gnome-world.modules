@@ -128,7 +128,6 @@
       <dep package="glib"/>
       <dep package="gtk+-3"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
       <dep package="libcanberra"/>
       <dep package="libnotify"/>
       <dep package="libxml2"/>
@@ -191,7 +190,7 @@
       <dep package="vala"/>
       <dep package="WebKit"/>
       <dep package="sqlite3"/>
-      <dep package="librest"/>
+      <dep package="librest-0.7"/>
       <dep package="libnotify"/>
     </dependencies>
   </meson>
@@ -230,12 +229,12 @@
     <branch repo="github.com" checkoutdir="corebird" module="baedert/corebird.git"/>
     <dependencies>
       <dep package="glib-networking"/>
-      <dep package="gst-plugins-base"/>
+      <dep package="gstreamer"/>
       <dep package="gtk+-3"/>
       <dep package="intltool"/>
       <dep package="json-glib"/>
       <dep package="libgee"/>
-      <dep package="librest"/>
+      <dep package="librest-0.7"/>
       <dep package="librsvg"/>
       <dep package="libsoup"/>
       <dep package="sqlite3"/>
@@ -321,20 +320,20 @@
   <autotools id="java-atk-wrapper">
     <branch/>
     <dependencies>
-      <dep package="at-spi2-atk"/>
+      <dep package="at-spi2-core"/>
       <dep package="gobject-introspection"/>
       <dep package="glib"/>
       <dep package="gconf"/>
     </dependencies>
   </autotools>
 
-  <autotools id="libbtctl">
-    <branch/>
+  <meson id="libcloudproviders">
+    <branch repo="gitlab.gnome.org" checkoutdir="libcloudproviders" module="World/libcloudproviders.git"/>
     <dependencies>
-      <dep package="gtk+-2"/>
       <dep package="glib"/>
+      <dep package="gobject-introspection"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <autotools id="libgee-0.6">
     <pkg-config>gee-1.0.pc</pkg-config>
@@ -560,8 +559,6 @@
     <branch repo="github.com" module="01org/gstreamer-vaapi"/>
     <dependencies>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
-      <dep package="gst-plugins-bad"/>
       <dep package="libva"/>
     </dependencies>
   </autotools>
@@ -626,7 +623,6 @@
     <dependencies>
       <dep package="pygobject"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
     </dependencies>
   </autotools>
 
@@ -811,21 +807,10 @@
     <dependencies>
       <dep package="gtkmm-3"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
     </dependencies>
     <suggests>
-      <dep package="gst-plugins-good"/>
-      <dep package="gst-libav"/>
       <dep package="gst-plugins-ugly"/>
     </suggests>
-  </autotools>
-
-  <autotools id="gstreamermm-plugins-good">
-    <branch/>
-    <dependencies>
-      <dep package="gst-plugins-good"/>
-      <dep package="gstreamermm"/>
-    </dependencies>
   </autotools>
 
   <autotools id="geglmm">
@@ -1099,8 +1084,6 @@
     <dependencies>
       <dep package="glib"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
-      <dep package="gst-plugins-bad"/>
     </dependencies>
   </meson>
 
@@ -1111,10 +1094,6 @@
       <dep package="gobject-introspection"/>
       <dep package="gstreamer"/>
       <dep package="gst-editing-services"/>
-      <dep package="gst-libav"/>
-      <dep package="gst-plugins-bad"/>
-      <dep package="gst-plugins-base"/>
-      <dep package="gst-plugins-good"/>
       <dep package="gst-plugins-ugly"/>
       <dep package="gst-python"/>
       <dep package="gtk+-3"/>
@@ -1483,11 +1462,23 @@
     </dependencies>
   </autotools>
 
-  <autotools id="umockdev">
+  <meson id="umockdev">
     <branch repo="github.com"
             module="martinpitt/umockdev.git"
             checkoutdir="umockdev"/>
-  </autotools>
+  </meson>
+
+  <distutils id="python-dbusmock" python3="1">
+    <branch repo="github.com"
+            module="martinpitt/python-dbusmock.git"
+            checkoutdir="python-dbusmock"/>
+  </distutils>
+
+  <distutils id="hotdoc" python3="1">
+    <branch repo="github.com"
+            module="hotdoc/hotdoc.git"
+            checkoutdir="hotdoc"/>
+  </distutils>
 
   <tarball id="gnokii" version="0.6.26">
     <source href="http://www.gnokii.org/download/gnokii/gnokii-0.6.26.tar.bz2"
@@ -1509,19 +1500,17 @@
     </dependencies>
   </tarball>
 
-  <autotools id="transmission">
+  <cmake id="transmission">
     <branch repo="github.com"
             module="transmission/transmission.git"
             checkoutdir="transmission"/>
     <dependencies>
-      <dep package="gtk+-2"/>
-      <dep package="intltool"/>
+      <dep package="gtkmm-3"/>
     </dependencies>
     <suggests>
-      <dep package="dbus-glib"/>
       <dep package="libnotify"/>
     </suggests>
-  </autotools>
+  </cmake>
 
   <autotools id="goocanvas-2.0">
     <branch revision="goocanvas-2.0" module="goocanvas" checkoutdir="goocanvas-2.0"/>
@@ -1721,7 +1710,6 @@
     <dependencies>
       <dep package="glib"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
     </dependencies>
   </meson>
 
@@ -1732,8 +1720,6 @@
      <dep package="gstreamer"/>
      <dep package="gst-rtsp-server"/>
      <dep package="vala"/>
-     <dep package="gst-plugins-good"/>
-     <dep package="gst-plugins-bad"/>
      <dep package="libgee"/>
      <dep package="sqlite3"/>
      <dep package="pygobject"/>
@@ -1884,7 +1870,7 @@
       <dep package="gtk+-3"/>
       <dep package="libchamplain"/>
       <dep package="libpeas"/>
-      <dep package="librest"/>
+      <dep package="librest-0.7"/>
     </dependencies>
   </autotools>
 
@@ -2250,7 +2236,6 @@
             module="gstreamer/gst-plugins-ugly.git"/>
     <dependencies>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
     </dependencies>
   </meson>
 
@@ -2871,21 +2856,14 @@
     </suggests>
   </meson>
 
-  <autotools id="gnome-power-manager">
+  <meson id="gnome-power-manager">
     <branch/>
     <dependencies>
-      <dep package="intltool"/>
       <dep package="glib"/>
-      <dep package="dbus-glib"/>
       <dep package="gtk+-3"/>
-      <dep package="libgnome-keyring"/>
-      <dep package="gnome-doc-utils"/>
       <dep package="upower"/>
-      <dep package="libnotify"/>
-      <dep package="libcanberra"/>
-      <dep package="gnome-control-center"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <autotools id="pygobject2" autogenargs="--disable-introspection">
     <pkg-config>pygobject-2.0.pc</pkg-config>
@@ -2910,14 +2888,14 @@
     </dependencies>
   </meson>
 
-  <autotools id="rhythmbox">
+  <meson id="rhythmbox">
     <branch/>
     <dependencies>
       <dep package="gdk-pixbuf"/>
       <dep package="glib"/>
       <dep package="gobject-introspection"/>
       <dep package="grilo"/>
-      <dep package="gst-plugins-base"/>
+      <dep package="gstreamer"/>
       <dep package="gtk+-3"/>
       <dep package="json-glib"/>
       <dep package="libnotify"/>
@@ -2938,7 +2916,7 @@
       <dep package="libgnome-keyring"/>
       <dep package="vala"/>
     </suggests>
-  </autotools>
+  </meson>
 
   <autotools id="libunique">
     <pkg-config>unique-3.0.pc</pkg-config>
@@ -2962,7 +2940,6 @@
       <dep package="glib"/>
       <dep package="gtk+-3"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
       <dep package="libgudev"/>
       <dep package="json-glib"/>
       <dep package="libgee"/>
@@ -2987,8 +2964,6 @@
       <dep package="gtk+-3"/>
       <dep package="yelp-tools"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
-      <dep package="gst-plugins-good"/>
       <dep package="brasero"/>
       <dep package="libmusicbrainz"/>
       <dep package="libcanberra"/>
@@ -3250,7 +3225,7 @@
       <dep package="glib"/>
       <dep package="cairo"/>
       <dep package="pango"/>
-      <dep package="atk"/>
+      <dep package="at-spi2-core"/>
       <dep package="gdk-pixbuf"/>
       <dep package="gobject-introspection"/>
       <dep package="cups"/>
@@ -3392,7 +3367,7 @@
             hash="sha256:5eabd25ba2b54e817699832826269241abaa1cf78f9b240d1435f936569273f4"/>
     <dependencies>
       <dep package="glib"/>
-      <dep package="gst-plugins-base"/>
+      <dep package="gstreamer"/>
       <dep package="gupnp-igd"/>
     </dependencies>
   </meson>
@@ -3457,7 +3432,7 @@
       <dep package="gtk+-3" />
       <dep package="gucharmap" />
       <dep package="libgtop" />
-      <dep package="libgweather" />
+      <dep package="libgweather-3" />
       <dep package="libnotify" />
       <dep package="libwnck" />
       <dep package="libxml2" />
@@ -3490,7 +3465,7 @@
       <dep package="evolution-data-server" />
       <dep package="gnome-desktop" />
       <dep package="gnome-menus" />
-      <dep package="libgweather" />
+      <dep package="libgweather-3" />
       <dep package="librsvg" />
       <dep package="libwnck" />
       <dep package="m4-common" />
@@ -3559,15 +3534,13 @@
    </suggests>
   </meson>
 
-  <meson id="libadwaita" mesonargs="-Dintrospection=enabled -Dvapi=true">
-    <branch repo="gitlab.gnome.org"
-            module="exalm/libadwaita.git"
-            checkoutdir="libadwaita"/>
+  <meson id="gthree">
+    <branch repo="github.com" module="alexlarsson/gthree.git"/>
     <dependencies>
-       <dep package="glib"/>
-      <dep package="gobject-introspection"/>
-      <dep package="gtk4"/>
-      <dep package="vala"/>
+      <dep package="gtk"/>
+      <dep package="graphene"/>
+      <dep package="libepoxy"/>
+      <dep package="json-glib"/>
     </dependencies>
   </meson>
 </moduleset>

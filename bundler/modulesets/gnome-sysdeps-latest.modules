@@ -171,6 +171,14 @@
             version="0.98"/>
   </systemmodule>
 
+  <systemmodule id="dbus-run-session">
+    <branch repo="system"/>
+    <systemdependencies>
+      <dep type="path"
+           name="dbus-run-session"/>
+    </systemdependencies>
+  </systemmodule>
+
   <systemmodule id="desktop-file-utils">
     <branch repo="system"
             version="0.20"/>
@@ -275,7 +283,7 @@
   <systemmodule id="fontconfig">
     <pkg-config>fontconfig.pc</pkg-config>
     <branch repo="system"
-            version="2.11.0"/>
+            version="2.13.0"/>
   </systemmodule>
 
   <!-- Do not move this to core-deps! There is a circular dependency between
@@ -532,6 +540,8 @@
     <systemdependencies>
       <dep type="c_include" name="clang-c/Index.h">
         <!-- Debian. FIXME: This is definitely broken. https://bugzilla.gnome.org/show_bug.cgi?id=781872 -->
+        <altdep type="c_include" name="../lib/llvm-14/include/clang-c/Index.h"/>
+        <altdep type="c_include" name="../lib/llvm-13/include/clang-c/Index.h"/>
         <altdep type="c_include" name="../lib/llvm-12/include/clang-c/Index.h"/>
         <altdep type="c_include" name="../lib/llvm-11/include/clang-c/Index.h"/>
         <altdep type="c_include" name="../lib/llvm-10/include/clang-c/Index.h"/>
@@ -548,6 +558,10 @@
         <altdep type="c_include" name="../lib/llvm-3.5/include/clang-c/Index.h"/>
         <altdep type="c_include" name="../lib/llvm-3.4/include/clang-c/Index.h"/>
         <!-- FreeBSD -->
+        <altdep type="c_include" name="../llvm13/include/clang-c/Index.h"/>
+        <altdep type="c_include" name="../llvm12/include/clang-c/Index.h"/>
+        <altdep type="c_include" name="../llvm11/include/clang-c/Index.h"/>
+        <altdep type="c_include" name="../llvm10/include/clang-c/Index.h"/>
         <altdep type="c_include" name="../llvm90/include/clang-c/Index.h"/>
         <altdep type="c_include" name="../llvm80/include/clang-c/Index.h"/>
         <altdep type="c_include" name="../llvm70/include/clang-c/Index.h"/>
@@ -953,6 +967,10 @@
     <systemdependencies>
       <dep type="c_include" name="llvm-c/Core.h">
         <!-- Debian -->
+        <altdep type="c_include" name="llvm-c-14/llvm-c/Core.h"/>
+        <altdep type="c_include" name="llvm-c-13/llvm-c/Core.h"/>
+        <altdep type="c_include" name="llvm-c-12/llvm-c/Core.h"/>
+        <altdep type="c_include" name="llvm-c-11/llvm-c/Core.h"/>
         <altdep type="c_include" name="llvm-c-10/llvm-c/Core.h"/>
         <altdep type="c_include" name="llvm-c-9/llvm-c/Core.h"/>
         <altdep type="c_include" name="llvm-c-8/llvm-c/Core.h"/>
@@ -967,6 +985,10 @@
         <altdep type="c_include" name="llvm-c-3.5/llvm-c/Core.h"/>
         <altdep type="c_include" name="llvm-c-3.4/llvm-c/Core.h"/>
         <!-- FreeBSD -->
+        <altdep type="c_include" name="../llvm13/include/llvm-c/Core.h"/>
+        <altdep type="c_include" name="../llvm12/include/llvm-c/Core.h"/>
+        <altdep type="c_include" name="../llvm11/include/llvm-c/Core.h"/>
+        <altdep type="c_include" name="../llvm10/include/llvm-c/Core.h"/>
         <altdep type="c_include" name="../llvm90/include/llvm-c/Core.h"/>
         <altdep type="c_include" name="../llvm80/include/llvm-c/Core.h"/>
         <altdep type="c_include" name="../llvm70/include/llvm-c/Core.h"/>
@@ -1017,6 +1039,11 @@
             version="3.2"/>
   </systemmodule>
 
+  <systemmodule id="libnghttp2">
+    <pkg-config>libnghttp2.pc</pkg-config>
+    <branch repo="system"/>
+  </systemmodule>
+
   <systemmodule id="ninja">
     <branch repo="system"/>
     <systemdependencies>
@@ -1042,6 +1069,12 @@
     <pkg-config>mtdev.pc</pkg-config>
     <branch repo="system"
             version="1.1.1"/>
+  </systemmodule>
+
+  <systemmodule id="openjpeg">
+    <pkg-config>libopenjp2.pc</pkg-config>
+    <branch repo="system"
+            version="2.2.0"/>
   </systemmodule>
 
   <systemmodule id="openldap">
@@ -1340,6 +1373,13 @@
   <systemmodule id="xorg-wacom">
     <pkg-config>xorg-wacom.pc</pkg-config>
     <branch repo="system"/>
+  </systemmodule>
+
+  <systemmodule id="xvfb-run">
+    <branch repo="system"/>
+    <systemdependencies>
+      <dep type="path" name="xvfb-run"/>
+    </systemdependencies>
   </systemmodule>
 
   <systemmodule id="yasm">

@@ -110,20 +110,11 @@
     </dependencies>
   </meson>
 
-  <meson id="atk">
-    <branch/>
-    <dependencies>
-      <dep package="glib"/>
-      <dep package="gobject-introspection"/>
-      <dep package="gtk-doc"/>
-    </dependencies>
-  </meson>
-
   <meson id="atkmm-1.6">
     <branch checkoutdir="atkmm-1.6" module="atkmm" revision="atkmm-2-28"/>
     <dependencies>
       <dep package="glibmm-2.4"/>
-      <dep package="atk"/>
+      <dep package="at-spi2-core"/>
     </dependencies>
   </meson>
 
@@ -131,7 +122,7 @@
     <branch/>
     <dependencies>
       <dep package="glibmm"/>
-      <dep package="atk"/>
+      <dep package="at-spi2-core"/>
     </dependencies>
   </meson>
 
@@ -215,7 +206,7 @@
     <branch/>
     <dependencies>
       <dep package="cogl"/>
-      <dep package="atk"/>
+      <dep package="at-spi2-core"/>
       <dep package="glib"/>
       <dep package="cairo"/>
       <dep package="json-glib"/>
@@ -245,7 +236,6 @@
       <dep package="cogl"/>
       <dep package="clutter"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
     </dependencies>
     <suggests>
       <dep package="gobject-introspection"/>
@@ -277,7 +267,6 @@
       <dep package="gtk-doc"/>
       <dep package="pango"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
       <if condition-unset="quartz">
         <dep package="libdrm"/>
       </if>
@@ -382,7 +371,7 @@
       <dep package="gtk+-3"/>
       <dep package="sqlite3"/>
       <dep package="gcr"/>
-      <dep package="libgweather"/>
+      <dep package="libgweather-3"/>
       <dep package="libical"/>
       <dep package="libgdata"/>
       <dep package="gnome-online-accounts"/>
@@ -427,7 +416,7 @@
   </meson>
 
   <meson id="fwupd"
-         mesonargs="-Denable-colorhug=false -Denable-dell=false -Denable-synaptics=false">
+         mesonargs="-Dplugin_dell=false -Dplugin_synaptics_mst=false">
     <branch repo="github.com" checkoutdir="fwupd" module="hughsie/fwupd"/>
     <dependencies>
       <dep package="appstream-glib"/>
@@ -457,7 +446,7 @@
   </meson>
 
   <meson id="gexiv2"
-         mesonargs="-Dgtk_doc=false -Dpython2_girdir=no">
+         mesonargs="-Dgtk_doc=false">
     <branch/>
     <dependencies>
       <dep package="exiv2"/>
@@ -465,6 +454,18 @@
       <dep package="gobject-introspection"/>
       <dep package="vala"/>
       <dep package="pygobject"/>
+    </dependencies>
+  </meson>
+
+  <meson id="gi-docgen">
+    <branch/>
+    <dependencies>
+      <dep package="python3-jinja2"/>
+      <dep package="python3-markdown"/>
+      <dep package="python3-pygments"/>
+      <dep package="python3-toml"/>
+      <dep package="python3-typogrify"/>
+      <dep package="python3-markupsafe"/>
     </dependencies>
   </meson>
 
@@ -483,7 +484,7 @@
     </dependencies>
   </meson>
 
- <autotools id="gnome-autoar">
+ <meson id="gnome-autoar" mesonargs="-Dvapi=true">
    <branch/>
     <dependencies>
       <dep package="glib"/>
@@ -491,7 +492,7 @@
       <dep package="libarchive"/>
       <dep package="gnome-common"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="gcr" mesonargs="-Dgtk_doc=false">
     <if condition-unset="x11">
@@ -502,6 +503,7 @@
       <dep package="gnome-common"/>
       <dep package="glib"/>
       <dep package="libgcrypt" />
+      <dep package="libsecret"/>
       <dep package="libtasn1" />
       <dep package="p11-kit"/>
       <dep package="vala"/>
@@ -628,23 +630,22 @@
     <branch/>
   </autotools>
 
-  <autotools id="gnome-online-accounts">
+  <meson id="gnome-online-accounts">
     <if condition-set="freebsd">
-      <autogenargs value="--disable-kerberos --disable-fedora"/>
+      <mesonargs value="-Dkerberos=false -Dfedora=false"/>
     </if>
     <branch/>
     <dependencies>
       <dep package="gtk+-3"/>
-      <dep package="WebKit"/>
+      <dep package="WebKit4.1"/>
       <dep package="librest"/>
-      <dep package="libsoup"/>
+      <dep package="libsoup3"/>
       <dep package="libsecret"/>
       <dep package="json-glib"/>
       <dep package="libsecret"/>
       <dep package="libxml2"/>
-      <dep package="m4-common"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <autotools id="gnome-online-miners">
     <branch/>
@@ -675,9 +676,9 @@
     </if>
     <branch/>
     <dependencies>
-      <dep package="dbus-glib"/>
+      <dep package="dbus-run-session"/>
       <dep package="gobject-introspection"/>
-      <dep package="mozjs78"/>
+      <dep package="mozjs91"/>
       <dep package="readline"/>
       <if condition-set="linux">
         <dep package="sysprof"/>
@@ -747,9 +748,6 @@
       <dep package="gmime3"/>
       <dep package="gnome-online-accounts"/>
       <dep package="gom"/>
-      <dep package="gssdp"/>
-      <dep package="gupnp"/>
-      <dep package="gupnp-av"/>
       <dep package="json-glib"/>
       <dep package="libarchive"/>
       <dep package="libdmapsharing"/>
@@ -757,14 +755,14 @@
       <dep package="libgdata"/>
       <dep package="libmediaart"/>
       <dep package="liboauth"/>
-      <dep package="librest"/>
+      <dep package="librest-0.7"/>
       <dep package="libsoup"/>
       <dep package="sqlite3"/>
       <dep package="tracker"/>
     </suggests>
   </meson>
 
-  <autotools id="gsound" autogenargs="--disable-gtk-doc">
+  <meson id="gsound" mesonargs="-Dgtk_doc=false">
     <branch/>
     <dependencies>
       <dep package="glib"/>
@@ -772,7 +770,7 @@
       <dep package="libcanberra"/>
       <dep package="vala"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <autotools id="gspell">
     <branch/>
@@ -786,17 +784,23 @@
   </autotools>
 
   <meson id="gssdp">
-    <branch />
+    <branch revision="master"/>
     <dependencies>
       <dep package="glib"/>
-      <dep package="libsoup"/>
+      <dep package="libsoup3"/>
     </dependencies>
     <suggests>
       <dep package="gobject-introspection"/>
     </suggests>
   </meson>
 
-  <meson id="gstreamer" mesonargs="-Dgtk_doc=disabled">
+  <meson id="libmicrodns">
+    <branch repo="github.com"
+            module="videolabs/libmicrodns.git"
+            checkoutdir="libmicrodns"/>
+  </meson>
+
+  <meson id="gstreamer" mesonargs="-Dgtk_doc=disabled -Dbase=enabled -Dgood=enabled -Dbad=enabled -Dlibav=enabled">
     <branch repo="gitlab.freedesktop.org"
             module="gstreamer/gstreamer.git"
             checkoutdir="gstreamer"/>
@@ -804,7 +808,36 @@
       <dep package="glib"/>
       <dep package="libxml2"/>
       <dep package="gobject-introspection"/>
+      <dep package="graphene"/>
+      <dep package="iso-codes"/>
+      <if condition-set="x11">
+        <dep package="x11-xcb"/>
+      </if>
+      <dep package="flac"/>
+      <dep package="libvpx"/>
+      <dep package="taglib"/>
+      <dep package="wavpack"/>
+      <if condition-unset="macos">
+        <dep package="libv4l"/>
+      </if>
+      <dep package="libavfilter"/>
+      <dep package="libavformat"/>
+      <dep package="libavcodec"/>
+      <dep package="libavutil"/>
     </dependencies>
+    <suggests>
+      <if condition-set="linux">
+        <dep package="vulkan"/>
+      </if>
+      <if condition-set="udev">
+        <dep package="libgudev"/>
+      </if>
+      <!-- The examples require GTK+ 3, but they are optional -->
+      <dep package="gtk+-3"/>
+      <dep package="pulseaudio"/>
+      <dep package="yasm"/>
+      <dep package="libmicrodns"/>
+    </suggests>
   </meson>
 
   <meson id="graphene">
@@ -813,81 +846,6 @@
       <dep package="glib"/>
       <dep package="gobject-introspection"/>
     </dependencies>
-  </meson>
-
-  <meson id="gst-plugins-bad">
-    <branch repo="gitlab.freedesktop.org"
-            checkoutdir="gst-plugins-bad"
-            module="gstreamer/gst-plugins-bad.git"/>
-    <dependencies>
-      <dep package="gst-plugins-base"/>
-    </dependencies>
-    <suggests>
-      <dep package="graphene"/>
-      <if condition-set="linux">
-        <dep package="vulkan"/>
-      </if>
-    </suggests>
-  </meson>
-
-  <meson id="gst-plugins-base" mesonargs="-Dgtk_doc=disabled">
-    <branch repo="gitlab.freedesktop.org"
-            module="gstreamer/gst-plugins-base.git"
-            checkoutdir="gst-plugins-base"/>
-    <dependencies>
-      <dep package="gstreamer"/>
-      <dep package="graphene"/>
-      <dep package="iso-codes"/>
-      <if condition-set="x11">
-        <dep package="x11-xcb"/>
-      </if>
-    </dependencies>
-    <suggests>
-      <if condition-set="udev">
-        <dep package="libgudev"/>
-      </if>
-      <!-- The examples require GTK+ 3, but they are optional -->
-      <dep package="gtk+-3"/>
-    </suggests>
-  </meson>
-
-  <meson id="gst-plugins-good">
-    <branch repo="gitlab.freedesktop.org"
-            module="gstreamer/gst-plugins-good.git"
-            checkoutdir="gst-plugins-good"/>
-    <dependencies>
-      <dep package="gst-plugins-base"/>
-      <dep package="flac"/>
-      <dep package="libvpx"/>
-      <dep package="taglib"/>
-      <dep package="wavpack"/>
-      <if condition-unset="macos">
-        <dep package="libv4l"/>
-      </if>
-    </dependencies>
-    <suggests>
-      <dep package="pulseaudio"/>
-      <dep package="gdk-pixbuf"/>
-      <if condition-set="udev">
-        <dep package="libgudev"/>
-      </if>
-    </suggests>
-  </meson>
-
-  <meson id="gst-libav">
-    <branch repo="gitlab.freedesktop.org"
-            checkoutdir="gst-libav"
-            module="gstreamer/gst-libav.git"/>
-    <dependencies>
-      <dep package="gst-plugins-base"/>
-      <dep package="libavfilter"/>
-      <dep package="libavformat"/>
-      <dep package="libavcodec"/>
-      <dep package="libavutil"/>
-    </dependencies>
-    <suggests>
-      <dep package="yasm"/>
-    </suggests>
   </meson>
 
   <meson id="gtk4" mesonargs="-Dbroadway-backend=true">
@@ -904,10 +862,10 @@
       <mesonargs value="-Dwayland-backend=false"/>
     </if>
     <if condition-set="quartz">
-      <mesonargs value="-Dquartz-backend=true"/>
+      <mesonargs value="-Dmacos-backend=true"/>
     </if>
     <if condition-unset="quartz">
-      <mesonargs value="-Dquartz-backend=false"/>
+      <mesonargs value="-Dmacos-backend=false"/>
     </if>
     <branch repo="gitlab.gnome.org" checkoutdir="gtk" module="GNOME/gtk.git"/>
     <dependencies>
@@ -922,9 +880,6 @@
       <dep package="cups"/>
       <if condition-set="x11">
         <dep package="libXcursor"/>
-      </if>
-      <if condition-unset="quartz">
-        <dep package="at-spi2-atk"/>
       </if>
       <if condition-set="wayland">
         <dep package="libxkbcommon"/>
@@ -946,8 +901,6 @@
       <dep package="desktop-file-utils"/>
       <dep package="shared-mime-info"/>
       <!-- GStreamer is the default media backend, but it is optional -->
-      <dep package="gst-plugins-bad"/>
-      <dep package="gst-plugins-base"/>
       <dep package="gstreamer"/>
     </suggests>
   </meson>
@@ -965,12 +918,6 @@
     <if condition-unset="wayland">
       <mesonargs value="-Dwayland_backend=false"/>
     </if>
-    <if condition-set="mir">
-      <mesonargs value="-Dmir_backend=true"/>
-    </if>
-    <if condition-unset="mir">
-      <mesonargs value="-Dmir_backend=false"/>
-    </if>
     <if condition-set="quartz">
       <mesonargs value="-Dquartz_backend=true"/>
     </if>
@@ -982,7 +929,7 @@
     </if>
     <branch repo="gitlab.gnome.org" checkoutdir="gtk+-3" module="GNOME/gtk.git" revision="gtk-3-24"/>
     <dependencies>
-      <dep package="atk"/>
+      <dep package="at-spi2-core"/>
       <dep package="glib"/>
       <dep package="cairo"/>
       <dep package="pango"/>
@@ -993,9 +940,6 @@
       <dep package="cups"/>
       <if condition-set="x11">
         <dep package="libXcursor"/>
-      </if>
-      <if condition-unset="quartz">
-        <dep package="at-spi2-atk"/>
       </if>
       <if condition-set="wayland">
         <dep package="libxkbcommon"/>
@@ -1103,11 +1047,11 @@
 
   <meson id="gupnp"
              mesonargs="-Dcontext_manager=network-manager">
-    <branch />
+    <branch revision="master"/>
     <dependencies>
       <dep package="gssdp"/>
       <dep package="glib"/>
-      <dep package="libsoup"/>
+      <dep package="libsoup3"/>
       <dep package="libxml2"/>
       <dep package="shared-mime-info"/>
     </dependencies>
@@ -1129,18 +1073,14 @@
     </suggests>
   </meson>
 
-  <autotools id="gupnp-dlna">
+  <meson id="gupnp-dlna">
     <branch />
     <dependencies>
       <dep package="libxml2"/>
       <dep package="glib"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
     </dependencies>
-    <suggests>
-      <dep package="gst-plugins-good"/>
-    </suggests>
- </autotools>
+ </meson>
 
   <meson id="gupnp-igd">
     <branch/>
@@ -1349,6 +1289,17 @@
     </dependencies>
   </meson>
 
+  <meson id="libadwaita" mesonargs="-Dintrospection=enabled -Dvapi=true">
+    <branch/>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="gobject-introspection"/>
+      <dep package="gtk4"/>
+      <dep package="vala"/>
+      <dep package="appstream-glib"/>
+    </dependencies>
+  </meson>
+
   <autotools id="libgnomekbd">
     <branch/>
     <dependencies>
@@ -1362,7 +1313,7 @@
     <dependencies>
       <dep package="glib"/>
       <dep package="json-glib"/>
-      <dep package="librest"/>
+      <dep package="librest-0.7"/>
       <dep package="libsoup"/>
       <dep package="gnome-online-accounts"/>
     </dependencies>
@@ -1371,7 +1322,7 @@
   <autotools id="libgovirt">
     <branch/>
     <dependencies>
-      <dep package="librest"/>
+      <dep package="librest-0.7"/>
       <dep package="gobject-introspection"/>
     </dependencies>
   </autotools>
@@ -1414,6 +1365,19 @@
       <dep package="gobject-introspection"/>
       <dep package="vala"/>
       <dep package="libusb1"/>
+    </dependencies>
+  </meson>
+
+  <meson id="libgweather-3">
+    <branch checkoutdir="libgweather-3" module="libgweather" revision="libgweather-3"/>
+    <dependencies>
+      <dep package="libxml2"/>
+      <dep package="geocode-glib"/>
+      <dep package="glib"/>
+      <dep package="gobject-introspection"/>
+      <dep package="gtk+-3"/>
+      <dep package="libsoup"/>
+      <dep package="pygobject"/>
     </dependencies>
   </meson>
 
@@ -1481,16 +1445,17 @@
     </dependencies>
   </meson>
 
-  <autotools id="libmbim">
+  <meson id="libmbim">
     <branch repo="gitlab.freedesktop.org"
             module="mobile-broadband/libmbim.git"
             checkoutdir="libmbim"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="gtk-doc"/>
+      <dep package="help2man"/>
       <dep package="libgudev"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="libmediaart" mesonargs="-Dimage_library=gdk-pixbuf">
     <branch/>
@@ -1518,7 +1483,23 @@
     </suggests>
   </meson>
 
-  <meson id="libnotify">
+  <meson id="libnma-gtk4" mesonargs="-Dlibnma_gtk4=true">
+    <branch repo="gitlab.gnome.org" checkoutdir="libnma-gtk4" module="GNOME/libnma"/>
+    <dependencies>
+      <dep package="file"/>
+      <dep package="gcr"/>
+      <dep package="glib"/>
+      <dep package="gobject-introspection"/>
+      <dep package="gtk4"/>
+      <dep package="iso-codes"/>
+      <dep package="NetworkManager"/>
+    </dependencies>
+    <suggests>
+      <dep package="mobile-broadband-provider-info"/>
+    </suggests>
+  </meson>
+
+  <meson id="libnotify" mesonargs="-Dgtk_doc=false -Dman=false -Ddocbook_docs=disabled">
     <branch/>
     <dependencies>
       <dep package="glib"/>
@@ -1580,24 +1561,53 @@
     </dependencies>
   </meson>
 
-  <autotools id="libqmi">
+  <meson id="libqrtr-glib">
+    <branch repo="gitlab.freedesktop.org"
+            module="mobile-broadband/libqrtr-glib.git"
+            checkoutdir="libqrtr-glib"/>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="gobject-introspection"/>
+      <dep package="gtk-doc"/>
+    </dependencies>
+  </meson>
+
+  <meson id="libqmi">
     <branch repo="gitlab.freedesktop.org"
             module="mobile-broadband/libqmi.git"
             checkoutdir="libqmi"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="gtk-doc"/>
+      <dep package="libqrtr-glib"/>
     </dependencies>
-  </autotools>
+  </meson>
 
-  <autotools id="librest">
+  <meson id="librest" mesonargs="-Dsoup2=false">
+    <if condition-set="freebsd">
+      <mesonargs value="-Dca_certificates=true -Dca_certificates_path=/usr/local/share/certs/ca-root-nss.crt"/>
+    </if>
+    <if condition-set="macos">
+      <mesonargs value="-Dca_certificates=false"/>
+    </if>
+    <branch/>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="libsoup"/>
+      <dep package="libxml2"/>
+    </dependencies>
+  </meson>
+
+  <autotools id="librest-0.7">
     <if condition-set="freebsd">
       <autogenargs value="--with-ca-certificates=/usr/local/share/certs/ca-root-nss.crt"/>
     </if>
     <if condition-set="macos">
       <autogenargs value="--without-ca-certificates"/>
     </if>
-    <branch revision="librest-0-7"/>
+    <branch revision="librest-0-7"
+            module="librest"
+            checkoutdir="librest-0.7"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="libsoup"/>
@@ -1612,12 +1622,14 @@
     <branch/>
     <dependencies>
       <dep package="cargo"/>
-      <dep package="libxml2"/>
-      <dep package="glib"/>
       <dep package="gdk-pixbuf"/>
+      <dep package="gi-docgen"/>
+      <dep package="glib"/>
       <dep package="gnome-common"/>
-      <dep package="pango"/>
       <dep package="gobject-introspection"/>
+      <dep package="libxml2"/>
+      <dep package="pango"/>
+      <dep package="python3-docutils"/>
       <dep package="vala"/>
     </dependencies>
   </autotools>
@@ -1630,6 +1642,9 @@
     <dependencies>
       <dep package="glib"/>
       <dep package="gobject-introspection"/>
+      <dep package="python3-jinja2"/>
+      <dep package="python3-toml"/>
+      <dep package="python3-typogrify"/>
     </dependencies>
     <suggests>
       <dep package="libgcrypt"/>
@@ -1640,7 +1655,7 @@
     <branch repo="github.com"
             checkoutdir="libsigcplusplus-2.0"
             module="libsigcplusplus/libsigcplusplus.git"
-            revision="libsigc++-2-10"/>
+            revision="libsigc++-2-12"/>
     <dependencies>
       <dep package="mm-common"/>
     </dependencies>
@@ -1667,7 +1682,7 @@
   </meson>
 
   <meson id="libsoup" mesonargs="-Dtls_check=false -Dvapi=enabled">
-    <branch revision="gnome-3-38"/>
+    <branch revision="libsoup-2-74"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="libxml2"/>
@@ -1693,6 +1708,7 @@
       <dep package="gobject-introspection"/>
       <dep package="vala"/>
       <dep package="brotli"/>
+      <dep package="libnghttp2"/>
     </dependencies>
     <suggests>
       <dep package="glib-networking"/>
@@ -1711,15 +1727,18 @@
     </dependencies>
   </meson>
 
-  <autotools id="libwacom">
+  <meson id="libwacom">
     <branch repo="github.com"
             checkoutdir="libwacom"
             module="linuxwacom/libwacom.git"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="libgudev"/>
+      <dep package="python3-libevdev"/>
+      <dep package="python3-pyudev"/>
+      <dep package="python3-pytest"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="libxmlb" mesonargs="-Dgtkdoc=false">
     <branch repo="github.com"
@@ -1737,7 +1756,7 @@
     <dependencies>
       <dep package="glib"/>
       <dep package="json-glib"/>
-      <dep package="librest"/>
+      <dep package="librest-0.7"/>
       <dep package="libsoup"/>
       <dep package="gnome-online-accounts"/>
     </dependencies>
@@ -1784,13 +1803,28 @@
     </dependencies>
   </cmake>
 
-  <distutils id="python3-pygments" python3="1">
+  <distutils id="python3-docutils" python3="1">
     <branch repo="pypi.org"
-            version="2.4.2"
-            module="p/pygments/Pygments-${version}.tar.gz"
-            checkoutdir="python3-pygments-${version}"
-            hash="sha256:881c4c157e45f30af185c1ffe8d549d48ac9127433f2c380c24b84572ad66297">
-    </branch>
+            module="d/docutils/docutils-${version}.tar.gz"
+            version="0.18.1"
+            checkoutdir="python3-docutils-${version}"
+            hash="sha256:679987caf361a7539d76e584cbeddc311e3aee937877c87346f31debc63e9d06"/>
+  </distutils>
+
+  <distutils id="python3-jinja2" python3="1">
+    <branch repo="pypi.org"
+            module="j/jinja2/Jinja2-${version}.tar.gz"
+            version="3.0.3"
+            checkoutdir="python3-jinja2-${version}"
+            hash="sha256:611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7"/>
+  </distutils>
+
+  <distutils id="python3-libevdev" python3="1">
+    <branch repo="pypi.org"
+            module="l/libevdev/libevdev-${version}.tar.gz"
+            version="0.10"
+            checkoutdir="python3-libevdev-${version}"
+            hash="sha256:f4b33616dafaaa6418cac0b1b28f97252b61c0974e534d49fb22fc6566edc113"/>
   </distutils>
 
   <distutils id="python3-lxml" python3="1">
@@ -1815,26 +1849,99 @@
     </branch>
   </distutils>
 
+  <distutils id="python3-markupsafe" python3="1">
+    <branch repo="pypi.org"
+            module="m/markupsafe/MarkupSafe-${version}.tar.gz"
+            version="2.1.1"
+            checkoutdir="python3-markupsafe-${version}"
+            hash="sha256:7f91197cc9e48f989d12e4e6fbc46495c446636dfc81b9ccf50bb0ec74b91d4b"/>
+  </distutils>
+
+  <distutils id="python3-pygments" python3="1">
+    <branch repo="pypi.org"
+            version="2.4.2"
+            module="p/pygments/Pygments-${version}.tar.gz"
+            checkoutdir="python3-pygments-${version}"
+            hash="sha256:881c4c157e45f30af185c1ffe8d549d48ac9127433f2c380c24b84572ad66297">
+    </branch>
+  </distutils>
+
+  <distutils id="python3-pytest" python3="1">
+    <branch repo="pypi.org"
+            module="p/pytest/pytest-${version}.tar.gz"
+            version="7.1.1"
+            checkoutdir="python3-pytest-${version}"
+            hash="sha256:841132caef6b1ad17a9afde46dc4f6cfa59a05f9555aae5151f73bdf2820ca63"/>
+  </distutils>
+
+  <distutils id="python3-pyudev" python3="1">
+    <branch repo="pypi.org"
+            module="p/pyudev/pyudev-${version}.tar.gz"
+            version="0.23.2"
+            checkoutdir="python3-pyudev-${version}"
+            hash="sha256:32ae3585b320a51bc283e0a04000fd8a25599edb44541e2f5034f6afee5d15cc"/>
+  </distutils>
+
   <distutils id="python3-setuptools" python3="1">
     <branch repo="pypi.org"
-            module="s/setuptools/setuptools-${version}.zip"
-            version="41.2.0"
+            module="s/setuptools/setuptools-${version}.tar.gz"
+            version="59.3.0"
             checkoutdir="python3-setuptools-${version}"
-            hash="sha256:66b86bbae7cc7ac2e867f52dc08a6bd064d938bac59dfec71b9b565dd36d6012"/>
+            hash="sha256:da27016d4b3b89cc9b672d93597520e44afa3f87a9aac32d3f084f37fa667ce7"/>
+  </distutils>
+
+  <distutils id="python3-toml" python3="1">
+    <branch repo="pypi.org"
+            module="t/toml/toml-${version}.tar.gz"
+            version="0.10.2"
+            checkoutdir="python3-toml-${version}"
+            hash="sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"/>
+  </distutils>
+
+  <distutils id="python3-typogrify" python3="1">
+    <branch repo="pypi.org"
+            module="t/typogrify/typogrify-${version}.tar.gz"
+            version="2.0.7"
+            checkoutdir="python3-typogrify-${version}"
+            hash="sha256:8be4668cda434163ce229d87ca273a11922cb1614cb359970b7dc96eed13cb38"/>
   </distutils>
 
   <distutils id="meson" python3="1">
     <branch repo="github-tar"
-            version="0.57.2"
+            version="0.60.3"
             module="mesonbuild/meson/releases/download/${version}/meson-${version}.tar.gz"
             checkoutdir="meson-${version}"
-            hash="sha256:3a83e7b1c5de94fa991ec34d9b198d94f38ed699d3524cb0fdf3b99fd23d4cc5">
+            hash="sha256:87ca5fa9358a01864529392bd64e027158eb94afca7c7766b1866ef27eccb98e">
       <patch file="meson-dont-use-rpath-on-pkg-config-deps.patch" strip="1"/>
       <patch file="meson-revert-change-pkgconfig-directory-freebsd.patch" strip="1"/>
     </branch>
     <dependencies>
       <dep package="ninja"/>
       <dep package="python3-setuptools"/>
+    </dependencies>
+  </distutils>
+
+  <distutils id="textwrap3" python3="1">
+    <branch repo="github.com"
+            module="jonathaneunice/textwrap3.git"
+            checkoutdir="textwrap3"/>
+  </distutils>
+
+  <distutils id="ansiwrap" python3="1">
+    <branch repo="github.com"
+            module="jonathaneunice/ansiwrap.git"
+            checkoutdir="ansiwrap"/>
+    <dependencies>
+      <dep package="textwrap3"/>
+    </dependencies>
+  </distutils>
+
+  <distutils id="console-menu" python3="1">
+    <branch repo="github.com"
+            module="aegirhall/console-menu.git"
+            checkoutdir="console-menu"/>
+    <dependencies>
+      <dep package="ansiwrap"/>
     </dependencies>
   </distutils>
 
@@ -1845,6 +1952,17 @@
   <autotools id="mobile-broadband-provider-info">
     <branch/>
   </autotools>
+
+  <meson id="polkit">
+    <branch repo="gitlab.freedesktop.org"
+             module="polkit/polkit.git"
+             checkoutdir="polkit"/>
+    <dependencies>
+      <dep package="glib"/>
+      <dep package="expat"/>
+      <dep package="pam"/>
+    </dependencies>
+  </meson>
 
   <autotools id="ModemManager"
              autogenargs="--with-udev-base-dir=${libdir}/udev --with-systemdsystemunitdir=no --disable-more-warnings">
@@ -1863,20 +1981,20 @@
     </dependencies>
   </autotools>
 
-  <autotools id="mozjs78" autogen-sh="js/src/configure"
+  <autotools id="mozjs91" autogen-sh="js/src/configure"
              force-non-srcdir-builds="yes"
              supports-unknown-configure-options="no"
              autogen-template="%(srcdir)s/%(autogen-sh)s --prefix=%(prefix)s %(autogenargs)s"
-             autogenargs="--with-system-zlib --with-intl-api --disable-jemalloc AUTOCONF=autoconf">
+             autogenargs="--with-system-zlib --with-intl-api --disable-jemalloc">
+    <!-- prefix option must have an = sign in mozilla's configure -->
     <if condition-set="freebsd">
       <autogenargs value="LLVM_CONFIG=llvm-config90"/>
     </if>
-    <!-- prefix option must have an = sign in mozilla's configure -->
-    <pkg-config>mozjs-78.pc</pkg-config>
-    <branch repo="gnome-download" version="78.11.0"
-            module="teams/releng/tarballs-needing-help/mozjs/mozjs-${version}.tar.bz2"
-            hash="sha256:5ad54ac2b0368b9748e08756658eb988d65e5bb088d91baf43267486bcbf1d26"
-            size="70531559"/>
+    <pkg-config>mozjs-91.pc</pkg-config>
+    <branch repo="gnome-download" version="91.5.0"
+            module="teams/releng/tarballs-needing-help/mozjs/mozjs-${version}.tar.xz"
+            hash="sha256:2f57cde35246a54a7abd25454ab5adfa076a8e6515509475eb6a37d048b7a156"
+            size="70715356"/>
     <dependencies>
       <dep package="libffi"/>
       <dep package="zlib"/>
@@ -1925,11 +2043,11 @@
 
   <autotools id="pcre2"
              autogenargs="--enable-jit --enable-pcre2-8 --enable-pcre2-16 --enable-pcre2-32">
-    <branch repo="pcre"
-            module="pcre2-${version}.tar.bz2"
-            version="10.33"
-            hash="sha256:35514dff0ccdf02b55bd2e9fa586a1b9d01f62332c3356e379eabb75f789d8aa"
-            size="1690739"/>
+    <branch repo="github-tar"
+            module="PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2"
+            version="10.39"
+            hash="sha256:0f03caf57f81d9ff362ac28cd389c055ec2bf0678d277349a1a4bee00ad6d440"
+            size="1730729"/>
   </autotools>
 
   <meson id="phodav">
@@ -2154,7 +2272,6 @@
     </dependencies>
     <suggests>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
       <dep package="libgsf"/>
       <dep package="poppler"/>
       <dep package="totem-pl-parser"/>
@@ -2179,7 +2296,7 @@
     </dependencies>
   </meson>
 
-  <meson id="tracker-miners" mesonargs="-Dextract=true -Dminer_apps=false -Dminer_rss=false">
+  <meson id="tracker-miners" mesonargs="-Dextract=true -Dminer_rss=false">
     <branch revision="master"/>
     <dependencies>
       <dep package="asciidoc"/>
@@ -2194,7 +2311,6 @@
     <suggests>
       <dep package="dconf"/>
       <dep package="gstreamer"/>
-      <dep package="gst-plugins-base"/>
       <dep package="libgsf"/>
       <dep package="poppler"/>
       <dep package="totem-pl-parser"/>
@@ -2205,14 +2321,13 @@
     </suggests>
   </meson>
 
-  <autotools id="uhttpmock" supports-non-srcdir-builds="no">
+  <meson id="uhttpmock">
     <branch repo="gitlab.com" checkoutdir="uhttpmock" module="uhttpmock/uhttpmock.git"/>
     <dependencies>
       <dep package="glib"/>
       <dep package="libsoup"/>
-      <dep package="m4-common"/>
     </dependencies>
-  </autotools>
+  </meson>
 
   <autotools id="vala" supports-non-srcdir-builds="no">
     <branch/>
@@ -2226,7 +2341,7 @@
     </dependencies>
   </autotools>
 
-  <autotools id="wayland-protocols">
+  <meson id="wayland-protocols">
     <branch repo="gitlab.freedesktop.org"
             module="wayland/wayland-protocols.git"
             checkoutdir="wayland-protocols"/>
@@ -2235,7 +2350,7 @@
         <dep package="wayland"/>
       </if>
     </dependencies>
-  </autotools>
+  </meson>
 
   <meson id="wayland"
              mesonargs="-Ddocumentation=false">
@@ -2272,14 +2387,6 @@
     </dependencies>
   </meson>
 
-  <cmake id="openjpeg">
-    <branch repo="github-tar"
-            module="uclouvain/openjpeg/archive/v${version}.tar.gz"
-            checkoutdir="openjpeg-${version}"
-            version="2.3.1"
-            hash="sha256:63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9"/>
-  </cmake>
-
   <cmake id="WebKit" cmakeargs="-DPORT=GTK -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUSE_SOUP2=ON">
     <if condition-unset="x11">
       <cmakeargs value="-DENABLE_X11_TARGET=OFF"/>
@@ -2290,9 +2397,9 @@
     <pkg-config>webkit2gtk-4.0.pc</pkg-config>
     <branch repo="webkitgtk.org"
             module="webkitgtk-${version}.tar.xz"
-            version="2.33.2"
-            hash="sha256:32bb0ace3cf4df42ff805e00de3fc13a2287f173d3ff5982816a7c5b4f8b551b"
-            size="24688880"/>
+            version="2.36.1"
+            hash="sha256:0149ea5fb1d20f2a9981677d45c952a047330001ea24a8dc29035239f12c0c8f"
+            size="27149816"/>
     <dependencies>
       <dep package="c++"/>
       <dep package="at-spi2-core"/>
@@ -2304,16 +2411,13 @@
       <dep package="geoclue"/>
       <dep package="gobject-introspection"/>
       <dep package="gperf"/>
-      <dep package="gst-plugins-bad"/>
-      <dep package="gst-plugins-base"/>
-      <dep package="gst-plugins-good"/>
+      <dep package="gstreamer"/>
       <dep package="gtk+-3"/>
       <dep package="harfbuzz"/>
       <dep package="hyphen"/>
       <dep package="lcms2"/>
       <dep package="libicu"/>
       <dep package="libjpeg"/>
-      <dep package="openjpeg"/>
       <dep package="libnotify"/>
       <dep package="libpng"/>
       <dep package="libsecret"/>
@@ -2323,6 +2427,7 @@
       <dep package="libxslt"/>
       <!-- Either libGL or libGLES is required. -->
       <dep package="mesa-libGLES"/>
+      <dep package="openjpeg"/>
       <dep package="pango"/>
       <dep package="ruby"/>
       <dep package="sqlite3"/>
@@ -2341,9 +2446,67 @@
         <dep package="wpebackend-fdo"/>
       </if>
     </dependencies>
-    <suggests>
-      <dep package="gst-libav"/>
-    </suggests>
+  </cmake>
+
+  <cmake id="WebKit4.1" cmakeargs="-DPORT=GTK -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_GAMEPAD=OFF">
+    <if condition-unset="x11">
+      <cmakeargs value="-DENABLE_X11_TARGET=OFF"/>
+    </if>
+    <if condition-unset="wayland">
+      <cmakeargs value="-DENABLE_WAYLAND_TARGET=OFF"/>
+    </if>
+    <!--<pkg-config>webkit2gtk-4.1.pc</pkg-config>-->
+    <branch repo="webkitgtk.org"
+            module="webkitgtk-${version}.tar.xz"
+            version="2.36.3"
+            hash="sha256:732fcf8c4ec644b8ed28b46ebbd7c1ebab9d9e0afea9bdf5e5d12786afc478d1"
+            size="26600236"/>
+    <dependencies>
+      <dep package="c++"/>
+      <dep package="at-spi2-core"/>
+      <dep package="brotli"/>
+      <dep package="cairo"/>
+      <dep package="enchant-2"/>
+      <dep package="fontconfig"/>
+      <dep package="freetype2"/>
+      <dep package="geoclue"/>
+      <dep package="gobject-introspection"/>
+      <dep package="gperf"/>
+      <dep package="gstreamer"/>
+      <dep package="gtk+-3"/>
+      <dep package="harfbuzz"/>
+      <dep package="hyphen"/>
+      <dep package="lcms2"/>
+      <dep package="libicu"/>
+      <dep package="libjpeg"/>
+      <dep package="libnotify"/>
+      <dep package="libpng"/>
+      <dep package="libsecret"/>
+      <dep package="libsoup3"/>
+      <dep package="libwebp"/>
+      <dep package="libxml2"/>
+      <dep package="libxslt"/>
+      <!-- Either libGL or libGLES is required. -->
+      <dep package="mesa-libGLES"/>
+      <dep package="openjpeg"/>
+      <dep package="pango"/>
+      <dep package="ruby"/>
+      <dep package="sqlite3"/>
+      <dep package="upower"/>
+      <dep package="woff2"/>
+      <if condition-set="x11">
+        <dep package="libXcomposite"/>
+        <dep package="libXdamage"/>
+        <dep package="libXrender"/>
+        <dep package="libXt"/>
+      </if>
+      <if condition-set="wayland">
+        <if condition-set="linux">
+          <dep package="wayland"/>
+        </if>
+        <dep package="wpebackend-fdo"/>
+      </if>
+    </dependencies>
   </cmake>
 
   <cmake id="woff2">
@@ -2394,12 +2557,12 @@
     </dependencies>
   </autotools>
 
-  <autotools id="zenity">
+  <meson id="zenity">
     <branch/>
     <dependencies>
       <dep package="gtk+-3"/>
       <dep package="yelp-tools"/>
     </dependencies>
-  </autotools>
+  </meson>
 
 </moduleset>
