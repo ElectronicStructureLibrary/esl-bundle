@@ -86,6 +86,7 @@
       <dep package="NTPoly"/>
       <dep package="pexsi"/>
       <dep package="BSEPACK"/>
+      <dep package="libomm"/>
       <if condition-unset="no_elpa">
         <dep package="elpa-mpi"/>
       </if>
