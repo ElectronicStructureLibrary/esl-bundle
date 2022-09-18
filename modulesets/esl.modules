@@ -190,7 +190,7 @@
     </dependencies>
   </cmake>
 
-  <cmake id="dftbplus-mpi" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX  -DHYBRID_CONFIG_METHODS="Find;Fetch" -DWITH_MBD=True -DWITH_API=True -DWITH_MPI=True -DWITH_ELSI=True'>
+  <cmake id="dftbplus-mpi" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX  -DHYBRID_CONFIG_METHODS="Find;Fetch" -DWITH_MBD=True -DWITH_API=True -DWITH_MPI=True -DWITH_ELSI=False'>
     <branch repo="local" module="dftbplus-21.1.tar.xz" version="21.1" checkoutdir="dftbplus-mpi" hash="md5:f63db9f949af97498be0327ef60da362">
       <patch file="dftbplus_cmake_version.patch" strip="0"/>
     </branch>
@@ -224,7 +224,7 @@
     <branch repo="local" module="libmbd-0.12.1.tar.gz" version="0.12.1" hash="md5:e13ae114803e1f11a0fc2404aa44a906"/>
   </cmake>
 
-  <cmake id="libmbd-mpi" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DENABLE_SCALAPACK_MPI=ON -DENABLE_ELSI=ON'>
+  <cmake id="libmbd-mpi" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DENABLE_SCALAPACK_MPI=ON -DENABLE_ELSI=OFF'>
     <branch repo="local" module="libmbd-0.12.1.tar.gz" version="0.12.1" hash="md5:e13ae114803e1f11a0fc2404aa44a906"/>
     <dependencies>
       <dep package="elsi"/>
