@@ -43,14 +43,14 @@ This is a complete list of packages included in the `ESL Bundle`.
 |LibDFTB+       |20.1          |Fortran    |           |               |<https://dftbplus.org>                                    |
 |Libfdf         |0.2.2         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libfdf>      |
 |Libmbd         |0.12.1        |Fortran    |C          |               |<https://github.com/libmbd/libmbd>                        |
-|Libpsml        |1.1.10        |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
+|Libpsml        |1.1.12        |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
 |Libxc          |4.3.4         |C          |Fortran,C++|               |<http://www.tddft.org/programs/libxc>                     |
 |libGridXC      |0.9.6         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libgridxc>   |
 |libvdwxc       |0.4.0         |C          |Fortran    |FFTW           |<https://libvdwxc.org/>                                   |
 |NTPoly         |2.7.0         |Fortran    |           |               |<https://github.com/william-dawson/NTPoly>                |
 |PSolver        |1.8.3         |Fortran    |           |               |<https://gitlab.com/l_sim/psolver>                        |
 |pspio          |0.2.4         |C          |Fortran    |GSL            |<https://gitlab.com/ElectronicStructureLibrary/libpspio>  |
-|xmlf90         |1.5.4         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/xmlf90>      |
+|xmlf90         |1.5.6         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/xmlf90>      |
 |ELSI           |2.7.1         |Fortran    |C          |               |<http://elsi-interchange.org/>                            |
 |ELPA           |2021.05.001   |           |           |               |<https://gitlab.mpcdf.mpg.de/elpa/elpa>                   |
 |LibOMM         |              |           |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm>       |

@@ -46,16 +46,16 @@
     <branch repo="local" module="libpspio-0.2.4.tar.gz" version="0.2.4" hash="md5:740861617e1feb50a9e00609769b12d8"/>
   </autotools>
 
-  <autotools id="xmlf90" autogen-sh="configure">
-    <branch repo="local" module="xmlf90-1.5.4.tar.gz" version="1.5.4" hash="md5:61b513a40d6e64ddf8cc7a029341be86"/>
-  </autotools>
+  <cmake id="xmlf90" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
+    <branch repo="local" module="xmlf90-1.5.6.tar.gz" version="1.5.6" hash="md5:cac855959ebbecfe2787f4389172f177"/>
+  </cmake>
 
-  <autotools id="libpsml" autogen-sh="configure" autogenargs="--with-xmlf90=$JHBUILD_PREFIX">
-    <branch repo="local" module="libpsml-1.1.10.tar.gz" version="1.1.10" hash="md5:e5176e95dbe495762b64d0e5661b0258"/>
+  <cmake id="libpsml" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX'>
+    <branch repo="local" module="libpsml-1.1.12.tar.gz" version="1.1.12" hash="md5:5e399d4d7acfbc4a13b2b343f498f0b0"/>
     <dependencies>
       <dep package="xmlf90"/>
     </dependencies>
-  </autotools>
+  </cmake>
 
   <autotools id="fdf" autogen-sh="autogen.sh+configure">
     <branch repo="local" module="libfdf-0.2.2.tar.gz" version="0.2.2" hash="md5:ffa39f8640b3dae8962e62b3956f79d9"/>
