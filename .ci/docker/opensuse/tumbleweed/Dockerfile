@@ -5,7 +5,7 @@ RUN zypper dup -y  && zypper  in -y  gnu-compilers-hpc gnu-compilers-hpc-devel \
 openmpi4-gnu-hpc openmpi4-gnu-hpc-devel libscalapack2-gnu-openmpi4-hpc libscalapack2-gnu-openmpi4-hpc-devel libhdf5-gnu-openmpi4-hpc \
 hdf5-gnu-openmpi4-hpc-devel cmake make autoconf automake libtool python3 python3-xml sudo git wget curl blas-devel lapack-devel \
 gsl-devel patch lua54-devel zlib-devel readline-devel libopenblas-gnu-hpc-devel vim \
-check-devel hdf5-gnu-openmpi4-hpc-devel fftw3-gnu-openmpi4-hpc-devel fftw3-gnu-hpc-devel libyaml-devel shadow
+ninja check-devel hdf5-gnu-openmpi4-hpc-devel fftw3-gnu-openmpi4-hpc-devel fftw3-gnu-hpc-devel libyaml-devel shadow
 
 RUN /usr/sbin/groupadd -g 999 drFaustroll && /usr/sbin/useradd -r -u 999 -g drFaustroll drFaustroll &&  mkdir /home/drFaustroll && chown -R drFaustroll:drFaustroll /home/drFaustroll
 WORKDIR /home/drFaustroll
