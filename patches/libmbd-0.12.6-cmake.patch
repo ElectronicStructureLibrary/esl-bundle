@@ -1,0 +1,11 @@
+--- src/CMakeLists.txt.orig	2023-02-08 10:55:31.714106229 +1100
++++ src/CMakeLists.txt	2023-02-08 10:56:03.061408455 +1100
+@@ -63,7 +63,7 @@
+ )
+ 
+ if(ENABLE_SCALAPACK_MPI)
+-    target_link_libraries(mbd PRIVATE MPI::MPI_Fortran scalapack)
++    target_link_libraries(mbd PRIVATE MPI::MPI_Fortran ${SCALAPACK_LIBRARY})
+     set_property(TARGET mbd APPEND PROPERTY COMPILE_DEFINITIONS WITH_MPI WITH_SCALAPACK)
+     if(MPI_Fortran_HAVE_F08_MODULE)
+         set_property(TARGET mbd APPEND PROPERTY COMPILE_DEFINITIONS WITH_MPIF08)
