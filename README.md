@@ -42,7 +42,7 @@ This is a complete list of packages included in the `ESL Bundle`.
 |Futile         |1.8.3         |Fortran    |C          |               |<https://gitlab.com/l_sim/futile>                         |
 |LibDFTB+       |20.1          |Fortran    |           |               |<https://dftbplus.org>                                    |
 |Libfdf         |0.2.2         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libfdf>      |
-|Libmbd         |0.12.1        |Fortran    |C          |               |<https://github.com/libmbd/libmbd>                        |
+|Libmbd         |0.12.6        |Fortran    |C          |               |<https://github.com/libmbd/libmbd>                        |
 |Libpsml        |1.1.10        |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libpsml>     |
 |Libxc          |4.3.4         |C          |Fortran,C++|               |<http://www.tddft.org/programs/libxc>                     |
 |libGridXC      |0.9.6         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/libgridxc>   |
