@@ -221,11 +221,13 @@
   </cmake>
 
   <cmake id="libmbd" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF'>
-    <branch repo="local" module="libmbd-0.12.1.tar.gz" version="0.12.1" hash="md5:e13ae114803e1f11a0fc2404aa44a906"/>
+    <branch repo="local" module="libmbd-0.12.6.tar.gz" version="0.12.6" hash="md5:fbda62bd60819549c35b33cb57600d0f"/>
   </cmake>
 
   <cmake id="libmbd-mpi" use-ninja="no" cmakeargs='-DCMAKE_INSTALL_PREFIX=$JHBUILD_PREFIX -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF -DENABLE_SCALAPACK_MPI=ON -DENABLE_ELSI=OFF'>
-    <branch repo="local" module="libmbd-0.12.1.tar.gz" version="0.12.1" hash="md5:e13ae114803e1f11a0fc2404aa44a906"/>
+    <branch repo="local" module="libmbd-0.12.6.tar.gz" version="0.12.6" hash="md5:fbda62bd60819549c35b33cb57600d0f">
+      <patch file="libmbd-0.12.6-cmake.patch" strip="0"/>
+    </branch>
     <dependencies>
       <dep package="elsi"/>
     </dependencies>
