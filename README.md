@@ -53,8 +53,9 @@ This is a complete list of packages included in the `ESL Bundle`.
 |xmlf90         |1.5.4         |Fortran    |           |               |<https://gitlab.com/siesta-project/libraries/xmlf90>      |
 |ELSI           |2.7.1         |Fortran    |C          |               |<http://elsi-interchange.org/>                            |
 |ELPA           |2021.05.001   |           |           |               |<https://gitlab.mpcdf.mpg.de/elpa/elpa>                   |
-|LibOMM         |              |           |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm>       |
-|MatrixSwitch   |              |           |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm>       |
+|DBCSR          |2.2.0         |Fortran    |           |               |<https://github.com/cp2k/dbcsr>   |
+|LibOMM         |1.1.0         |Fortran    |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm/libomm>       |
+|MatrixSwitch   |1.1.0         |Fortran    |           |               |<https://gitlab.com/ElectronicStructureLibrary/omm/matrixswitch>       |
 |PEXSI          |1.2.0         |C++        |Fortran    |               |<http://www.pexsi.org>                                    |
 |SIPs           |              |           |           |               |<http://bitbucket.org/keceli/qetsc>                       |
 |SuperLU_DIST   |6.2.0         |           |           |               |<http://crd-legacy.lbl.gov/~xiaoye/SuperLU>               |
